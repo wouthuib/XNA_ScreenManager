@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="47" height="41" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="forest_village" tilewidth="32" tileheight="32">
+  <properties>
+   <property name="Wall" value="1"/>
+  </properties>
+  <image source="gfx\gameobjects\forest_village.png" width="1504" height="1312"/>
+ </tileset>
+ <tileset firstgid="1928" name="village_layer2" tilewidth="32" tileheight="32">
+  <image source="gfx\gameobjects\village_layer2.png" width="160" height="160"/>
+ </tileset>
+ <layer name="Tile Layer 1" width="47" height="41">
+  <data encoding="base64" compression="gzip">
+   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
+  </data>
+ </layer>
+ <objectgroup name="Object Layer 1" width="47" height="41">
+  <object name="hero" x="704" y="800">
+   <ellipse/>
+  </object>
+  <object name="wall01" x="288" y="448" width="96" height="224"/>
+  <object name="wall02" x="384" y="448" width="32" height="160"/>
+  <object name="wall03" x="672" y="416" width="32" height="128"/>
+  <object name="wall04" x="704" y="416" width="96" height="128"/>
+  <object name="wall05" x="512" y="704" width="32" height="64"/>
+  <object name="wall06" x="544" y="672" width="32" height="128"/>
+  <object name="wall07" x="576" y="640" width="32" height="128"/>
+  <object name="wall08" x="608" y="544" width="32" height="192"/>
+  <object name="wall09" x="640" y="576" width="32" height="160"/>
+  <object name="wall10" x="672" y="608" width="224" height="96"/>
+  <object name="wall11" x="768" y="736" width="32" height="96"/>
+  <object name="wall12" x="800" y="704" width="32" height="128"/>
+  <object name="wall13" x="832" y="704" width="32" height="96"/>
+  <object name="wall14" x="832" y="416" width="32" height="192"/>
+  <object name="wall15" x="864" y="320" width="32" height="288"/>
+  <object name="wall16" x="896" y="288" width="32" height="192"/>
+  <object name="wall17" x="928" y="288" width="32" height="160"/>
+  <object name="wall18" x="960" y="352" width="32" height="128"/>
+  <object name="wall19" x="992" y="384" width="32" height="96"/>
+  <object name="wall20" x="1024" y="416" width="288" height="64"/>
+  <object name="wall21" x="1312" y="416" width="96" height="32"/>
+  <object name="wall22" x="1248" y="384" width="160" height="32"/>
+  <object name="wall23" x="896" y="160" width="64" height="64"/>
+  <object name="wall24" x="832" y="96" width="224" height="64"/>
+  <object name="wall25" x="640" y="96" width="96" height="64"/>
+  <object name="wall26" x="704" y="0" width="32" height="96"/>
+  <object name="wall27" x="832" y="32" width="32" height="64"/>
+  <object name="wall28" x="816" y="0" width="16" height="32"/>
+  <object name="wall29" x="736" y="0" width="32" height="32"/>
+  <object name="wall30" x="608" y="96" width="32" height="192"/>
+  <object name="wall31" x="576" y="256" width="32" height="64"/>
+  <object name="wall32" x="544" y="224" width="32" height="64"/>
+  <object name="wall33" x="512" y="224" width="32" height="32"/>
+  <object name="wall34" x="288" y="256" width="224" height="32"/>
+  <object name="wall35" x="256" y="256" width="32" height="64"/>
+  <object name="wall36" x="224" y="256" width="32" height="32"/>
+  <object name="wall37" x="128" y="288" width="96" height="32"/>
+  <object name="wall38" x="128" y="320" width="32" height="160"/>
+  <object name="wall39" x="64" y="448" width="64" height="32"/>
+  <object name="wall40" x="64" y="480" width="32" height="256"/>
+  <object name="wall41" x="64" y="800" width="32" height="64"/>
+  <object name="wall42" x="128" y="768" width="32" height="96"/>
+  <object name="wall43" x="160" y="640" width="32" height="160"/>
+  <object name="wall44" x="192" y="672" width="32" height="128"/>
+  <object name="wall45" x="224" y="704" width="32" height="96"/>
+  <object name="wall46" x="256" y="736" width="32" height="96"/>
+  <object name="wall47" x="288" y="768" width="96" height="64"/>
+  <object name="wall48" x="384" y="800" width="64" height="288"/>
+  <object name="wall49" x="320" y="832" width="64" height="160"/>
+  <object name="wall50" x="352" y="992" width="32" height="32"/>
+  <object name="wall51" x="416" y="448" width="32" height="128"/>
+  <object name="wall52" x="448" y="448" width="64" height="160"/>
+  <object name="wall53" x="384" y="640" width="96" height="32"/>
+  <object name="wall54" x="1056" y="352" width="224" height="32"/>
+  <object name="wall55" x="1152" y="256" width="160" height="64"/>
+  <object name="wall56" x="1216" y="320" width="96" height="32"/>
+  <object name="wall57" x="1152" y="192" width="32" height="64"/>
+  <object name="wall58" x="1120" y="160" width="32" height="64"/>
+  <object name="wall59" x="1056" y="96" width="64" height="160"/>
+  <object name="wall60" x="1024" y="288" width="64" height="32"/>
+  <object name="wall61" x="1024" y="192" width="32" height="96"/>
+  <object name="wall62" x="1120" y="480" width="192" height="32"/>
+  <object name="wall63" x="896" y="480" width="192" height="32"/>
+  <object name="wall64" x="896" y="512" width="32" height="320"/>
+  <object name="wall65" x="864" y="704" width="32" height="128"/>
+  <object name="wall66" x="928" y="704" width="64" height="96"/>
+  <object name="wall67" x="960" y="800" width="32" height="32"/>
+  <object name="wall68" x="1024" y="704" width="96" height="64"/>
+  <object name="wall69" x="1024" y="768" width="32" height="32"/>
+  <object name="wall70" x="1088" y="768" width="32" height="32"/>
+  <object name="wall71" x="992" y="736" width="32" height="96"/>
+  <object name="wall72" x="1120" y="704" width="32" height="128"/>
+  <object name="wall73" x="1152" y="608" width="96" height="96"/>
+  <object name="wall74" x="1152" y="704" width="32" height="32"/>
+  <object name="wall75" x="1216" y="704" width="96" height="32"/>
+  <object name="wall76" x="1312" y="672" width="32" height="160"/>
+  <object name="wall77" x="1344" y="768" width="32" height="32"/>
+  <object name="wall78" x="1376" y="768" width="32" height="64"/>
+  <object name="wall79" x="1344" y="672" width="64" height="32"/>
+  <object name="wall80" x="1376" y="576" width="32" height="96"/>
+  <object name="wall81" x="1344" y="512" width="32" height="96"/>
+  <object name="wall82" x="1312" y="448" width="32" height="96"/>
+  <object name="wall83" x="1408" y="832" width="32" height="96"/>
+  <object name="wall84" x="1440" y="896" width="64" height="32"/>
+  <object name="wall85" x="1408" y="992" width="96" height="32"/>
+  <object name="wall86" x="1408" y="928" width="32" height="32"/>
+  <object name="wall87" x="1360" y="1024" width="80" height="32"/>
+  <object name="wall88" x="1360" y="1056" width="16" height="32"/>
+  <object name="wall89" x="1248" y="1024" width="64" height="64"/>
+  <object name="wall90" x="896" y="1056" width="64" height="96"/>
+  <object name="wall91" x="896" y="1152" width="32" height="64"/>
+  <object name="wall92" x="960" y="1056" width="64" height="32"/>
+  <object name="wall93" x="1024" y="1024" width="288" height="64"/>
+  <object name="wall94" x="1024" y="1088" width="32" height="32"/>
+  <object name="wall95" x="1088" y="1088" width="96" height="32"/>
+  <object name="wall96" x="1216" y="1088" width="32" height="32"/>
+  <object name="wall97" x="1152" y="1120" width="32" height="64"/>
+  <object name="wall98" x="1184" y="1152" width="64" height="32"/>
+  <object name="wall99" x="1216" y="1184" width="32" height="64"/>
+  <object name="wall100" x="1248" y="1216" width="160" height="32"/>
+  <object name="wall101" x="1408" y="1056" width="32" height="192"/>
+  <object name="wall102" x="1248" y="1184" width="64" height="32"/>
+  <object name="wall103" x="704" y="896" width="128" height="96"/>
+  <object name="wall104" x="736" y="992" width="64" height="32"/>
+  <object name="wall105" x="800" y="992" width="32" height="160"/>
+  <object name="wall106" x="832" y="960" width="32" height="224"/>
+  <object name="wall107" x="864" y="1088" width="32" height="128"/>
+  <object name="wall108" x="832" y="896" width="32" height="64"/>
+  <object name="wall109" x="864" y="960" width="32" height="64"/>
+  <object name="wall110" x="896" y="960" width="64" height="32"/>
+  <object name="wall111" x="928" y="992" width="64" height="32"/>
+  <object name="wall112" x="1248" y="992" width="32" height="32"/>
+  <object name="wall113" x="1376" y="992" width="32" height="32"/>
+  <object name="wall114" x="1344" y="896" width="64" height="32"/>
+  <object name="wall115" x="448" y="864" width="32" height="160"/>
+  <object name="wall116" x="480" y="896" width="32" height="128"/>
+  <object name="wall117" x="512" y="896" width="32" height="96"/>
+  <object name="wall118" x="544" y="864" width="32" height="128"/>
+  <object name="wall119" x="576" y="864" width="32" height="96"/>
+  <object name="wall120" x="608" y="896" width="64" height="64"/>
+  <object name="wall121" x="608" y="960" width="32" height="32"/>
+  <object name="wall122" x="448" y="1024" width="160" height="64"/>
+  <object name="wall123" x="704" y="1024" width="96" height="64"/>
+  <object name="wall124" x="768" y="1088" width="32" height="128"/>
+  <object name="wall125" x="448" y="1088" width="32" height="128"/>
+  <object name="wall126" x="448" y="1216" width="64" height="32"/>
+  <object name="wall127" x="544" y="1216" width="256" height="32"/>
+  <object name="wall128" x="512" y="1248" width="32" height="32"/>
+  <object name="wall129" x="352" y="1056" width="32" height="96"/>
+  <object name="wall130" x="288" y="1088" width="64" height="64"/>
+  <object name="wall131" x="64" y="1024" width="160" height="32"/>
+  <object name="wall132" x="128" y="1056" width="160" height="64"/>
+  <object name="wall133" x="160" y="832" width="96" height="160"/>
+  <object name="wall134" x="256" y="928" width="32" height="32"/>
+  <object name="wall135" x="288" y="928" width="32" height="64"/>
+  <object name="wall136" x="32" y="832" width="32" height="224"/>
+  <object name="wall137" x="64" y="896" width="32" height="48"/>
+  <object name="wall138" x="32" y="736" width="32" height="64"/>
+  <object name="wall139" x="736" y="320" width="32" height="96"/>
+  <object name="wall140" x="768" y="320" width="96" height="32"/>
+  <object name="wall141" x="768" y="384" width="96" height="32"/>
+  <object name="wall142" x="832" y="160" width="64" height="64"/>
+  <object name="wall143" x="704" y="160" width="32" height="32"/>
+  <object name="wall144" x="640" y="224" width="32" height="32"/>
+  <object name="wall145" x="768" y="288" width="32" height="32"/>
+  <object name="wall146" x="960" y="288" width="32" height="64"/>
+  <object name="wall147" x="608" y="768" width="32" height="32"/>
+  <object name="wall148" x="576" y="1088" width="32" height="64"/>
+  <object name="wall149" x="448" y="608" width="32" height="32"/>
+  <object name="wall150" x="384" y="768" width="32" height="32"/>
+  <object name="wall151" x="512" y="768" width="32" height="32"/>
+  <object name="wall152" x="960" y="160" width="32" height="32"/>
+  <object name="wall153" x="1216" y="736" width="32" height="32"/>
+  <object name="wall154" x="1280" y="736" width="32" height="32"/>
+  <object name="wall155" x="1024" y="960" width="32" height="32"/>
+  <object name="wall156" x="1088" y="960" width="32" height="32"/>
+  <object name="wall157" x="1152" y="960" width="32" height="32"/>
+  <object name="wall158" x="1248" y="960" width="32" height="32"/>
+  <object name="wall159" x="1120" y="992" width="32" height="32"/>
+  <object name="wall160" x="1120" y="992" width="32" height="32"/>
+  <object name="wall161" x="672" y="160" width="32" height="32"/>
+  <object name="wall162" x="96" y="480" width="32" height="32"/>
+  <object name="wall163" x="96" y="992" width="32" height="32"/>
+  <object name="wall164" x="288" y="672" width="32" height="32"/>
+  <object name="wall165" x="352" y="672" width="32" height="32"/>
+  <object name="wall166" x="704" y="544" width="32" height="32"/>
+  <object name="wall167" x="768" y="544" width="32" height="32"/>
+  <object name="wall168" x="672" y="704" width="32" height="32"/>
+ </objectgroup>
+ <layer name="Tile Layer 2" width="47" height="41">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3XyQmAMBSE4SCIxdmLWxXuxbmX46h4VJAcovJ/MOQkDOQFE2MA4FvqwHUDbK72gf3BX5Sa5dBz3eKQq0ukLrGSKKmSKQXnDQAAK3d314r/LLCzfeNt3/NOxFPnzDRa2xfMT+cb0yuDMiqTMiuL77oZAADPrSvvPlwcHgAA
+  </data>
+ </layer>
+ <objectgroup name="Object Layer 2" width="47" height="41">
+  <object name="NPC01" x="736" y="224" width="32" height="32">
+   <properties>
+    <property name="OffsetX" value="0"/>
+    <property name="OffsetY" value="0"/>
+    <property name="State" value="animate"/>
+    <property name="Texture" value="gfx\gameobjects\npc01"/>
+    <property name="WaitSec" value="0"/>
+    <property name="spriteSizeX" value="32"/>
+    <property name="spriteSizeY" value="48"/>
+   </properties>
+  </object>
+  <object name="NPC02" x="704" y="1120" width="32" height="32">
+   <properties>
+    <property name="OffsetX" value="0"/>
+    <property name="OffsetY" value="48"/>
+    <property name="State" value="animate"/>
+    <property name="Texture" value="gfx\gameobjects\npc01"/>
+    <property name="WaitSec" value="0"/>
+    <property name="spriteSizeX" value="32"/>
+    <property name="spriteSizeY" value="48"/>
+   </properties>
+  </object>
+  <object name="NPC03" x="576" y="448" width="32" height="32">
+   <properties>
+    <property name="OffsetX" value="0"/>
+    <property name="OffsetY" value="96"/>
+    <property name="State" value="animate"/>
+    <property name="Texture" value="gfx\gameobjects\npc01"/>
+    <property name="WaitSec" value="0"/>
+    <property name="spriteSizeX" value="32"/>
+    <property name="spriteSizeY" value="48"/>
+   </properties>
+  </object>
+  <object name="NPC04" x="128" y="928" width="32" height="32">
+   <properties>
+    <property name="OffsetX" value="0"/>
+    <property name="OffsetY" value="0"/>
+    <property name="State" value="frozen"/>
+    <property name="Texture" value="gfx\gameobjects\char02"/>
+    <property name="WaitSec" value="4"/>
+    <property name="spriteSizeX" value="32"/>
+    <property name="spriteSizeY" value="48"/>
+   </properties>
+  </object>
+  <object name="NPC05" x="160" y="544" width="32" height="32">
+   <properties>
+    <property name="OffsetX" value="0"/>
+    <property name="OffsetY" value="0"/>
+    <property name="State" value="walk"/>
+    <property name="Texture" value="gfx\gameobjects\char03"/>
+    <property name="WaitSec" value="5"/>
+    <property name="spriteSizeX" value="32"/>
+    <property name="spriteSizeY" value="48"/>
+   </properties>
+  </object>
+  <object name="NPC06" x="1120" y="832" width="32" height="32">
+   <properties>
+    <property name="OffsetX" value="0"/>
+    <property name="OffsetY" value="0"/>
+    <property name="State" value="walk"/>
+    <property name="Texture" value="gfx\gameobjects\char04"/>
+    <property name="WaitSec" value="6"/>
+    <property name="spriteSizeX" value="32"/>
+    <property name="spriteSizeY" value="48"/>
+   </properties>
+  </object>
+  <object name="NPC07" x="1312" y="1120" width="32" height="32">
+   <properties>
+    <property name="OffsetX" value="0"/>
+    <property name="OffsetY" value="0"/>
+    <property name="State" value="walk"/>
+    <property name="Texture" value="gfx\gameobjects\char05"/>
+    <property name="WaitSec" value="7"/>
+    <property name="spriteSizeX" value="32"/>
+    <property name="spriteSizeY" value="48"/>
+   </properties>
+  </object>
+  <object name="NPC08" x="352" y="352" width="32" height="32">
+   <properties>
+    <property name="OffsetX" value="0"/>
+    <property name="OffsetY" value="0"/>
+    <property name="State" value="walk"/>
+    <property name="Texture" value="gfx\gameobjects\char06"/>
+    <property name="WaitSec" value="8"/>
+    <property name="spriteSizeX" value="32"/>
+    <property name="spriteSizeY" value="48"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="Object Layer 3" width="47" height="41">
+  <properties>
+   <property name="warpmap" value="maps\wouter_map01.tmx"/>
+   <property name="newposx" value="4"/>
+   <property name="newposy" value="12"/>
+  </properties>
+  <object name="warp01" x="768" y="0" width="48" height="16">
+   <properties>
+    <property name="newmap" value="maps\indoor.tmx"/>
+   <property name="newposx" value="4"/>
+   <property name="newposy" value="12"/>
+   </properties>
+  </object>
+  <object name="warp02" x="1488" y="928" width="16" height="64">
+   <properties>
+    <property name="newmap" value="maps\indoor.tmx"/>
+   <property name="newposx" value="4"/>
+   <property name="newposy" value="12"/>
+   </properties>
+  </object>
+  <object name="warp03" x="512" y="256" width="32" height="16">
+   <properties>
+    <property name="newmap" value="maps\indoor.tmx"/>
+   <property name="newposx" value="4"/>
+   <property name="newposy" value="12"/>
+   </properties>
+  </object>
+  <object name="warp04" x="736" y="544" width="32" height="32">
+   <properties>
+    <property name="newmap" value="maps\indoor.tmx"/>
+   <property name="newposx" value="4"/>
+   <property name="newposy" value="12"/>
+   </properties>
+  </object>
+  <object name="warp05" x="320" y="672" width="32" height="32">
+   <properties>
+    <property name="newmap" value="maps\indoor.tmx"/>
+   <property name="newposx" value="4"/>
+   <property name="newposy" value="12"/>
+   </properties>
+  </object>
+  <object name="warp06" x="224" y="288" width="32" height="32">
+   <properties>
+    <property name="newmap" value="maps\indoor.tmx"/>
+   <property name="newposx" value="4"/>
+   <property name="newposy" value="12"/>
+   </properties>
+  </object>
+  <object name="warp07" x="928" y="800" width="32" height="32">
+   <properties>
+    <property name="newmap" value="maps\indoor.tmx"/>
+   <property name="newposx" value="4"/>
+   <property name="newposy" value="12"/>
+   </properties>
+  </object>
+  <object name="warp08" x="1056" y="768" width="32" height="32">
+   <properties>
+    <property name="newmap" value="maps\indoor.tmx"/>
+   <property name="newposx" value="4"/>
+   <property name="newposy" value="12"/>
+   </properties>
+  </object>
+  <object name="warp09" x="1184" y="704" width="32" height="32">
+   <properties>
+    <property name="newmap" value="maps\indoor.tmx"/>
+   <property name="newposx" value="4"/>
+   <property name="newposy" value="12"/>
+   </properties>
+  </object>
+  <object name="warp10" x="1344" y="800" width="32" height="32">
+   <properties>
+    <property name="newmap" value="maps\indoor.tmx"/>
+   <property name="newposx" value="4"/>
+   <property name="newposy" value="12"/>
+   </properties>
+  </object>
+  <object name="warp11" x="1120" y="224" width="32" height="32">
+   <properties>
+    <property name="newmap" value="maps\indoor.tmx"/>
+   <property name="newposx" value="4"/>
+   <property name="newposy" value="12"/>
+   </properties>
+  </object>
+  <object name="warp12" x="256" y="960" width="32" height="32">
+   <properties>
+    <property name="newmap" value="maps\indoor.tmx"/>
+   <property name="newposx" value="4"/>
+   <property name="newposy" value="12"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>
