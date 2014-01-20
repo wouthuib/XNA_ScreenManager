@@ -30,7 +30,8 @@ namespace XNA_ScreenManager.CharacterClasses
         Color color = Color.White;                                                                  // Sprite color
         private Vector2 Direction = Vector2.Zero;                                                   // Sprite Move direction
         private float Speed;                                                                        // Speed used in functions
-        bool ani_forward = true;                                                                    // if we play for or backward
+        private bool ani_forward = true;                                                            // if we play for or backward
+        private bool frozen = false;                                                                // frozen switch during hit
 
         // Movement properties
         const int WALK_SPEED = 100;                                                                 // The actual speed of the entity
@@ -41,10 +42,12 @@ namespace XNA_ScreenManager.CharacterClasses
         // Clocks and Timers
         int previousAnimateTimeMsec,                                                                // Animation in Miliseconds
             previousAnimateTimeSec;                                                                 // Animation in Seconds
-        int previousWalkTimeSec,                                                                    // WalkTime in Miliseconds
-            previousWalkTimeMin;                                                                    // WalkTime in Seconds
-        int previousIdleTimeSec,                                                                    // IdleTime in Miliseconds
-            previousIdleTimeMin;                                                                    // IdleTime in Seconds
+        int previousWalkTimeSec,                                                                    // WalkTime in Seconds
+            previousWalkTimeMin;                                                                    // WalkTime in Minutes
+        int previousIdleTimeSec,                                                                    // IdleTime in Seconds
+            previousIdleTimeMin;                                                                    // IdleTime in Minutes
+        int previousHitTimeMSec,                                                                    // IdleTime in Miliseconds
+            previousHitTimeSec;                                                                     // IdleTime in Seconds
 
         #endregion
 
@@ -57,6 +60,7 @@ namespace XNA_ScreenManager.CharacterClasses
             SpriteFrame = new Rectangle((int)spriteOfset.X, (int)spriteOfset.Y, spriteWidth, spriteHeight);
             Position = position;
             OldPosition = position;
+            entityType = EntityType.Monster;
 
             // Local properties
             Direction = new Vector2();                                                              // Move direction
@@ -257,6 +261,37 @@ namespace XNA_ScreenManager.CharacterClasses
                     }
                     else
                        state = EntityState.Stand;
+
+                    break;
+                #endregion
+                #region hit
+                case EntityState.Hit:
+
+                    // Apply Gravity 
+                    Position += new Vector2(0, 1) * 250 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                    // monster animation
+                    spriteOfset = new Vector2(0, 180);
+                    spriteFrame.X = Convert.ToInt32(spriteOfset.X);
+                    spriteFrame.Y = Convert.ToInt32(spriteOfset.Y);
+
+                    if (previousHitTimeMSec <= (int)gameTime.TotalGameTime.Milliseconds
+                        || previousHitTimeSec != (int)gameTime.TotalGameTime.Seconds)
+                    {
+                        previousHitTimeMSec = (int)gameTime.TotalGameTime.Milliseconds + 700;
+                        previousHitTimeSec = (int)gameTime.TotalGameTime.Seconds;
+
+                        if (frozen)
+                        {
+                            frozen = false;
+
+                            // reset sprite frame
+                            spriteFrame.X = 0;
+                            state = EntityState.Stand;
+                        }
+                        else
+                            frozen = true;
+                    }
 
                     break;
                 #endregion

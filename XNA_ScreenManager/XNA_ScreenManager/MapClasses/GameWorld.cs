@@ -129,13 +129,23 @@ namespace XNA_ScreenManager.MapClasses
                     obj.Update(gameTime);
 
                 // Update all enitities map collisions
-                UpdatePlayeronMap(gameTime);
+                UpdateMapEntities(gameTime);
 
+                // remove timeout entities
+                for (int i = 0; i < listEntity.Count -1; i++)
+                {
+                    var obj = listEntity[i];
+
+                    if (obj.KeepAliveTime != -1 && obj.KeepAliveTime <= (int)gameTime.TotalGameTime.Seconds)
+                        listEntity.Remove(obj);
+                }
+                
+                // create new entities
                 createEntities();
-                //base.Update(gameTime);
             }
         }
-        public void UpdatePlayeronMap(GameTime gameTime)
+
+        public void UpdateMapEntities(GameTime gameTime)
         {
             string newmap = null;
             Vector2 newpos = Vector2.Zero;
@@ -149,6 +159,7 @@ namespace XNA_ScreenManager.MapClasses
             {
                 foreach (Entity entity in listEntity)
                 {
+                    // start with the collision check
                     if (entity.Position != entity.OldPosition)
                     {
                         entity.CollideLadder = false;
@@ -359,6 +370,31 @@ namespace XNA_ScreenManager.MapClasses
                                     newmap = warp.newMap;
                                     newpos = warp.newPosition;
                                     campos = warp.camPosition;
+                                }
+                            }
+                        }
+                        #endregion
+                        #region Arrow collision
+                        // Check for Arrow collision (monsters only!)
+                        if (entity.EntityType == EntityType.Monster)
+                        {
+                            foreach (Entity arrow in listEntity)
+                            {
+                                if (arrow.EntityType == EntityType.Arrow)
+                                {
+                                    if (new Rectangle((int)entity.Position.X + (int)(entity.SpriteFrame.Width * 0.30f),
+                                                      (int)entity.Position.Y + (int)(entity.SpriteFrame.Height * 0.40f),
+                                                      (int)entity.SpriteFrame.Width - (int)(entity.SpriteFrame.Width * 0.30f),
+                                                      (int)entity.SpriteFrame.Height).                                       
+                                        Intersects(
+                                            new Rectangle((int)arrow.Position.X, 
+                                                (int)arrow.Position.Y,
+                                                (int)arrow.SpriteFrame.Width, 
+                                                (int)arrow.SpriteFrame.Height)))
+                                    {
+                                        entity.State = EntityState.Hit;
+                                        arrow.KeepAliveTime = 0;        // remove arrow
+                                    }
                                 }
                             }
                         }

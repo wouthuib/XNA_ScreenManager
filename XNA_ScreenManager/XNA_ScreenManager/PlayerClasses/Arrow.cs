@@ -31,6 +31,7 @@ namespace XNA_ScreenManager.PlayerClasses
             OldPosition = position;
             Speed = speed;
             Direction = direction;
+            entityType = EntityType.Arrow;
 
             if (Direction.X >= 1)
                 spriteEffect = SpriteEffects.FlipHorizontally;
@@ -40,6 +41,10 @@ namespace XNA_ScreenManager.PlayerClasses
 
         public override void Update(GameTime gameTime)
         {
+            // Start timer (default is -1)
+            if (KeepAliveTime < 0)
+                KeepAliveTime = (int)gameTime.TotalGameTime.Seconds + 5;
+
             // Move the Monster
             OldPosition = Position;
 

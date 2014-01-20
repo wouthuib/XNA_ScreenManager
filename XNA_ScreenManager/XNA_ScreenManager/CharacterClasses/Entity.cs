@@ -27,7 +27,7 @@ namespace XNA_ScreenManager.CharacterClasses
         Frozen, 
         Animate
     };
-    public enum EntityType { Player, Friend, Monster, NPC, Warp, Wall, Slope };
+    public enum EntityType { Player, Friend, Monster, NPC, Warp, Wall, Slope, Bullet, Arrow };
 
     public abstract class Entity
     {
@@ -78,6 +78,7 @@ namespace XNA_ScreenManager.CharacterClasses
         protected bool collideWarp = false;
         protected bool collideNPC = false;
         protected bool collideSlope = false;
+        protected float keepAliveTime = -1;
 
         public Vector2 Position
         {
@@ -158,6 +159,11 @@ namespace XNA_ScreenManager.CharacterClasses
         {
             get { return collideSlope; }
             set { collideSlope = value; }
+        }
+        public float KeepAliveTime
+        {
+            get { return keepAliveTime; }
+            set { keepAliveTime = value; }
         }
 
         #endregion
