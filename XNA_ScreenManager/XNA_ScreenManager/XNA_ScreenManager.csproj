@@ -125,6 +125,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CharacterClasses\Entity.cs" />
+    <Compile Include="CharacterClasses\Monster.cs" />
     <Compile Include="CharacterClasses\NPCharacter.cs" />
     <Compile Include="ItemClasses\Equipment.cs" />
     <Compile Include="ItemClasses\Inventory.cs" />
@@ -132,6 +133,7 @@
     <Compile Include="ItemClasses\ItemStore.cs" />
     <Compile Include="MapClasses\GameWorld.cs" />
     <Compile Include="MapClasses\warp.cs" />
+    <Compile Include="PlayerClasses\Arrow.cs" />
     <Compile Include="PlayerClasses\PlayerInfo.cs" />
     <Compile Include="ScreenClasses\ActionScreen.cs" />
     <Compile Include="ScreenClasses\BackgroundComponent.cs" />

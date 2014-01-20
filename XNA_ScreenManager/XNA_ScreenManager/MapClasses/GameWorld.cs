@@ -18,7 +18,7 @@ namespace XNA_ScreenManager.MapClasses
     /// <summary>
     /// This is a game component that implements IUpdateable.
     /// </summary>
-    public class GameWorld : DrawableGameComponent
+    public class GameWorld// : DrawableGameComponent
     {
         #region properties
         // Game Services
@@ -44,20 +44,50 @@ namespace XNA_ScreenManager.MapClasses
         List<Entity> listEntity = new List<Entity>();
         List<Warp> listWarp = new List<Warp>();
 
+        // dynamic items
+        ArrowProperties arrowprop = new ArrowProperties(false, null, new Vector2(0,0), 0 , new Vector2(0,0));
+
         public bool Active { get; set; }
         public bool Paused { get; set; }
         #endregion
 
         #region contructor
-        public GameWorld(Game game, Camera2d camref)
-            : base(game)
+
+        private static GameWorld mInstance;
+        private static System.Object _mutex = new System.Object();
+
+        private GameWorld(Game game, Camera2d camref)
         {
-            spriteBatch = (SpriteBatch)Game.Services.GetService(typeof(SpriteBatch));
-            Content = (ContentManager)Game.Services.GetService(typeof(ContentManager));
-            gfxdevice = (GraphicsDevice)Game.Services.GetService(typeof(GraphicsDevice));
+            spriteBatch = (SpriteBatch)game.Services.GetService(typeof(SpriteBatch));
+            Content = (ContentManager)game.Services.GetService(typeof(ContentManager));
+            gfxdevice = (GraphicsDevice)game.Services.GetService(typeof(GraphicsDevice));
 
             cam = camref;
             LoadObjects();
+        }
+
+        public static GameWorld CreateInstance(Game game, Camera2d camref)
+        {
+            lock (_mutex) // now I can claim some form of thread safety...
+            {
+                if (mInstance == null)
+                {
+                    mInstance = new GameWorld(game, camref);
+                }
+            }
+            return mInstance;
+        }
+
+        public static GameWorld GetInstance
+        {
+            get
+            {
+                if (mInstance == null)
+                {
+                    throw new Exception("The GameWorld is called, but has not yet been created!!");
+                }
+                return mInstance;
+            }
         }
 
         protected void LoadObjects()
@@ -81,16 +111,12 @@ namespace XNA_ScreenManager.MapClasses
 
             playerInfo.InitNewGame();
 
-            base.Initialize();
-        }
-
-        protected override void LoadContent()
-        {
+            //base.Initialize();
         }
         #endregion
 
         #region update
-        public override void Update(GameTime gameTime)
+        public void Update(GameTime gameTime)
         {
             if (Active && !Paused)
             {
@@ -105,7 +131,8 @@ namespace XNA_ScreenManager.MapClasses
                 // Update all enitities map collisions
                 UpdatePlayeronMap(gameTime);
 
-                base.Update(gameTime);
+                createEntities();
+                //base.Update(gameTime);
             }
         }
         public void UpdatePlayeronMap(GameTime gameTime)
@@ -360,9 +387,9 @@ namespace XNA_ScreenManager.MapClasses
         #endregion
 
         #region draw
-        public override void Draw(GameTime gameTime)
+        public void Draw(GameTime gameTime)
         {
-            base.Draw(gameTime);
+            //base.Draw(gameTime);
 
             if (Active)
             {
@@ -483,13 +510,55 @@ namespace XNA_ScreenManager.MapClasses
                         }
                     }
                 }
-            }
-
-            foreach (var groups in map.ObjectGroups)
-            {
-                if (groups.Key == "Warps")
+                else if (group.Key == "Monsters")
                 {
-                    foreach (var obj in groups.Value.Objects)
+                    foreach (var obj in group.Value.Objects)
+                    {
+                        char[] chars = obj.Value.Name.ToCharArray();
+                        string objname = new string(chars).Substring(0, 3); // max 3 chars to skip numbers
+
+                        int borderX = 0, borderY = 0;
+                        string texture = null;
+
+                        if (objname == "mob")
+                        {
+                            foreach (var objprop in obj.Value.Properties)
+                            {
+                                string objkey = objprop.Key.ToString();
+                                string objvalue = objprop.Value.ToString();
+
+                                switch (objkey)
+                                {
+                                    case "Texture":
+                                        texture = objvalue.ToString();
+                                        break;
+                                    case "BorderL":
+                                        borderX = Convert.ToInt32(objvalue);
+                                        break;
+                                    case "BorderR":
+                                        borderY = Convert.ToInt32(objvalue);
+                                        break;
+                                }
+                            }
+                            try
+                            {
+                                // properties are filled now check the state
+                                listEntity.Add(new Monster(
+                                            Content.Load<Texture2D>(@"gfx\Mobs\" + texture),
+                                            new Vector2(obj.Value.X, obj.Value.Y),
+                                            new Vector2(borderX, borderY)));
+                            }
+                            catch (Exception ee)
+                            {
+                                // bug handler for Monster properties
+                                string aa = ee.ToString();
+                            }
+                        }
+                    }
+                }
+                else if (group.Key == "Warps")
+                {
+                    foreach (var obj in group.Value.Objects)
                     {
                         char[] chars = obj.Value.Name.ToCharArray();
                         string objname = new string(chars).Substring(0, 4); // max 4 chars to skip numbers
@@ -525,6 +594,7 @@ namespace XNA_ScreenManager.MapClasses
                 }
             }
         }
+
         public void loadnewmap(string newmap, Vector2 newpos, Vector2 campos)
         {
             map = Map.Load(Path.Combine(Content.RootDirectory, @newmap), Content);
@@ -557,6 +627,41 @@ namespace XNA_ScreenManager.MapClasses
             LoadEntities();
         }
 
+        public void createEntities()
+        {
+            if (arrowprop.active)
+            {
+                arrowprop.active = false;
+                listEntity.Add(new Arrow(Content.Load<Texture2D>(arrowprop.sprite), arrowprop.position, arrowprop.speed, arrowprop.direction));
+            }
+        }
+
+        public void createArrow(Vector2 arg0, float arg1, Vector2 arg2)
+        {
+            arrowprop.active = true;
+            arrowprop.sprite = @"gfx\gameobjects\arrow";
+            arrowprop.position = arg0;
+            arrowprop.speed = arg1;
+            arrowprop.direction = arg2;
+        }
+
+        private struct ArrowProperties
+        {
+            public bool active;
+            public string sprite;
+            public Vector2 position;
+            public float speed;
+            public Vector2 direction;
+
+            public ArrowProperties(bool arg0, string arg1, Vector2 arg2, float arg3, Vector2 arg4)
+            {
+                active = arg0;
+                sprite = arg1;
+                position = arg2;
+                speed = arg3;
+                direction = arg4;
+            }
+        }
         #endregion
     }
 }

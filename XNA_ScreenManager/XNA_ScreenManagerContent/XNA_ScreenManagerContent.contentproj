@@ -165,13 +165,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="gfx\gameobjects\maple_sprite01.png">
-      <Name>maple_sprite01</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="gfx\gameobjects\maps\100000501.png">
       <Name>100000501</Name>
       <Importer>TextureImporter</Importer>
@@ -344,7 +337,13 @@
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Compile Include="gfx\gameobjects\arrow.png">
+      <Name>arrow</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
   <ItemGroup>
     <Compile Include="gfx\loadings\0_0.png">
       <Name>0_0</Name>
@@ -355,6 +354,13 @@
   <ItemGroup>
     <Compile Include="gfx\loadings\0_1.png">
       <Name>0_1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="gfx\Mobs\monster001.png">
+      <Name>monster001</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

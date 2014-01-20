@@ -37,6 +37,7 @@ namespace XNA_ScreenManager.ScreenClasses
                 if (start)
                 {
                     previousEffectTimeSec = (int)gameTime.TotalGameTime.Seconds + 5;
+                    previousEffectTimeMin = (int)gameTime.TotalGameTime.Minutes;
                     start = false;
                 }
                 else

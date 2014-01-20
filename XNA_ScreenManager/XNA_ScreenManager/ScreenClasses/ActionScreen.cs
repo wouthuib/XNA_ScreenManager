@@ -18,7 +18,7 @@ namespace XNA_ScreenManager
 
         ScreenManager screenManager = ScreenManager.Instance;
         HUDScreen hud;
-        public GameWorld world;
+        GameWorld world;
         public Camera2d cam;
 
         public ActionScreen(Game game, SpriteFont gameFont)
@@ -32,8 +32,8 @@ namespace XNA_ScreenManager
 
             cam = new Camera2d();
 
-            world = new GameWorld(game, cam);
-            Components.Add(world);
+            GameWorld createworld = GameWorld.CreateInstance(game, cam);
+            world = createworld;
             world.Active = true;
 
             hud = new HUDScreen(game, spriteFont);
@@ -49,6 +49,7 @@ namespace XNA_ScreenManager
 
             if (world.Active)
             {
+                world.Update(gameTime);
                 moveCamera();
                 manageScreens();
             }
@@ -88,6 +89,8 @@ namespace XNA_ScreenManager
                                      null,
                                      cam.get_transformation(gfxdevice));
 
+            if(world.Active)
+                world.Draw(gameTime);
 
             base.Draw(gameTime);
         }

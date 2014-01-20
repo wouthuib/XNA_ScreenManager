@@ -5,12 +5,16 @@ using Microsoft.Xna.Framework.Input;
 using XNA_ScreenManager.CharacterClasses;
 using XNA_ScreenManager.ItemClasses;
 using XNA_ScreenManager.ScriptClasses;
+using XNA_ScreenManager.MapClasses;
 
 namespace XNA_ScreenManager
 {
     public class PlayerSprite : Entity
     {
         #region properties
+        // The Gameworld
+        GameWorld world;
+
         // Keyboard- and Mousestate
         KeyboardState keyboardStateCurrent, keyboardStatePrevious;
 
@@ -42,7 +46,7 @@ namespace XNA_ScreenManager
             previousGameTimeSec;                                                                    // GameTime in Seconds
         int previousEffectTimeSec,                                                                  // GameTime in Miliseconds
             previousEffectTimeMin;                                                                  // GameTime in Seconds
-        bool landed;                                                                                // Player Sprite 
+        bool landed;                                                                                // land switch, arrow switch
 
         //map properties
         private Vector2 TileSize = Vector2.Zero;
@@ -94,7 +98,7 @@ namespace XNA_ScreenManager
                         if (previousGameTimeMsec <= (int)gameTime.TotalGameTime.Milliseconds
                             || previousGameTimeSec != (int)gameTime.TotalGameTime.Seconds)
                         {
-                            previousGameTimeMsec = (int)gameTime.TotalGameTime.Milliseconds + ANIMATION_SPEED * 5;
+                            previousGameTimeMsec = (int)gameTime.TotalGameTime.Milliseconds + ANIMATION_SPEED / 4;
                             previousGameTimeSec = (int)gameTime.TotalGameTime.Seconds;
                             spriteFrame.X += spriteWidth;
 
@@ -109,6 +113,18 @@ namespace XNA_ScreenManager
                                 {
                                     previousGameTimeMsec = (int)gameTime.TotalGameTime.Milliseconds;
                                     previousGameTimeSec = (int)gameTime.TotalGameTime.Seconds;
+
+                                    // make sure the world is connected
+                                    if (world == null)
+                                        world = GameWorld.GetInstance;
+
+                                    // create and release an arrow
+                                    if(spriteEffect == SpriteEffects.FlipHorizontally)
+                                        world.createArrow(new Vector2(this.Position.X, this.Position.Y + this.spriteFrame.Height * 0.6f), 800, new Vector2(1, 0));
+                                    else
+                                        world.createArrow(new Vector2(this.Position.X, this.Position.Y + this.spriteFrame.Height * 0.6f), 800, new Vector2(-1, 0));
+
+                                    // reset sprite frame and change state
                                     spriteFrame.X = 0;
                                     state = EntityState.Stand;
                                 }
