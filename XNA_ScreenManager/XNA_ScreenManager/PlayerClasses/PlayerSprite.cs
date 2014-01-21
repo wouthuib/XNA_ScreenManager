@@ -6,6 +6,7 @@ using XNA_ScreenManager.CharacterClasses;
 using XNA_ScreenManager.ItemClasses;
 using XNA_ScreenManager.ScriptClasses;
 using XNA_ScreenManager.MapClasses;
+using XNA_ScreenManager.PlayerClasses;
 
 namespace XNA_ScreenManager
 {
@@ -22,6 +23,7 @@ namespace XNA_ScreenManager
         Inventory inventory = Inventory.Instance;
         ItemStore itemStore = ItemStore.Instance;
         ScriptInterpreter scriptManager = ScriptInterpreter.Instance;
+        PlayerInfo playerinfo = PlayerInfo.Instance;
 
         // Player properties
         public Rectangle spriteScale;
@@ -62,6 +64,12 @@ namespace XNA_ScreenManager
             SpriteSize = new Rectangle(0, 0, spriteWidth, spriteHeight);
             Position = new Vector2(_X, _Y);
             OldPosition = new Vector2(_X, _Y);
+
+            // temporary parameters these should eventually be imported from the Monster Database
+            playerinfo.health = 10; playerinfo.mana = 0; 
+            playerinfo.atk = 100; playerinfo.def = 50;
+            playerinfo.hit = 10; playerinfo.flee = 5;
+            playerinfo.level = 1;
             
             // Local properties
             TileSize = _tileSize;

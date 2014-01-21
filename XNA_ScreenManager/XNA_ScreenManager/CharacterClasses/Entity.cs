@@ -64,6 +64,51 @@ namespace XNA_ScreenManager.CharacterClasses
 
         #endregion
 
+        #region health and Stat properties
+        private int hp, mp, atk, def, exp, lvl, hit, flee;
+
+        public int HP
+        {
+            get { return hp; }
+            set { hp = value; }
+        }
+        public int MP
+        {
+            get { return mp; }
+            set { mp = value; }
+        }
+        public int ATK
+        {
+            get { return atk; }
+            set { atk = value; }
+        }
+        public int DEF
+        {
+            get { return def; }
+            set { def = value; }
+        }
+        public int EXP
+        {
+            get { return exp; }
+            set { exp = value; }
+        }
+        public int LVL
+        {
+            get { return lvl; }
+            set { lvl = value; }
+        }
+        public int HIT
+        {
+            get { return hit; }
+            set { hit = value; }
+        }
+        public int FLEE
+        {
+            get { return flee; }
+            set { flee = value; }
+        }
+        #endregion
+
         #region Drawable properties
 
         protected Vector2 position;

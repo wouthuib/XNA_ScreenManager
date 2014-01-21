@@ -581,6 +581,7 @@ namespace XNA_ScreenManager.MapClasses
                                 // properties are filled now check the state
                                 listEntity.Add(new Monster(
                                             Content.Load<Texture2D>(@"gfx\Mobs\" + texture),
+                                            Content.Load<SpriteFont>(@"font\gamefont"),
                                             new Vector2(obj.Value.X, obj.Value.Y),
                                             new Vector2(borderX, borderY)));
                             }

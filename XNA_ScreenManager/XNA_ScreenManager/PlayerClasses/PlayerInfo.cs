@@ -8,7 +8,7 @@ namespace XNA_ScreenManager.PlayerClasses
     public sealed class PlayerInfo
     {
         private string NAME, GENDER, CLASS;
-        private int MAXHP, HP, MAXSP, SP, EXP, NLEXP, LVL, Gold, ATK, DEF, MATK, MDEF;
+        private int MAXHP, HP, MAXSP, SP, EXP, NLEXP, LVL, Gold, ATK, DEF, MATK, MDEF, HIT, FLEE;
         private int STR, AGI, VIT, INT, DEX, LUK;
 
         // General Info
@@ -68,6 +68,16 @@ namespace XNA_ScreenManager.PlayerClasses
         {
             get { return this.MDEF; }
             set { this.MDEF = value; }
+        }
+        public int hit
+        {
+            get { return this.HIT; }
+            set { this.HIT = value; }
+        }
+        public int flee
+        {
+            get { return this.FLEE; }
+            set { this.FLEE = value; }
         }
         public int health
         {
