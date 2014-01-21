@@ -18,7 +18,6 @@ namespace XNA_ScreenManager.CharacterClasses
 
         // static randomizer
         randomizer Randomizer = randomizer.Instance;                                                // generate unique random ID
-        GameWorld world = GameWorld.GetInstance;
 
         // Drawing properties
         private int spriteWidth = 90;

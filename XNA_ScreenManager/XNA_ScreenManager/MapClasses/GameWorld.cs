@@ -132,7 +132,7 @@ namespace XNA_ScreenManager.MapClasses
                 UpdateMapEntities(gameTime);
 
                 // remove timeout entities
-                for (int i = 0; i < listEntity.Count -1; i++)
+                for (int i = 0; i < listEntity.Count; i++)
                 {
                     var obj = listEntity[i];
 
@@ -387,9 +387,9 @@ namespace XNA_ScreenManager.MapClasses
                                                       (int)entity.SpriteFrame.Width - (int)(entity.SpriteFrame.Width * 0.30f),
                                                       (int)entity.SpriteFrame.Height).                                       
                                         Intersects(
-                                            new Rectangle((int)arrow.Position.X, 
+                                            new Rectangle((int)arrow.Position.X + (int)(entity.SpriteFrame.Width * 0.30f), 
                                                 (int)arrow.Position.Y,
-                                                (int)arrow.SpriteFrame.Width, 
+                                                (int)arrow.SpriteFrame.Width - (int)(entity.SpriteFrame.Width * 0.30f), 
                                                 (int)arrow.SpriteFrame.Height)))
                                     {
                                         entity.State = EntityState.Hit;
