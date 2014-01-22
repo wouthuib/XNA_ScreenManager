@@ -12,7 +12,9 @@ namespace XNA_ScreenManager.MapClasses
         SpriteFont damagefont;
         int damage = 0;
         //Vector2 spriteSize = new Vector2(50, 50);
-        int previousDmgTimeMSec, previousDmgTimeSec;
+        float transperancy = 1;
+        public Vector2 Velocity = new Vector2(0, 1);
+        int previousDmgTimeMSec = 0, previousDmgTimeSec = 0;
         bool settimer = false;
 
         public DamageBaloon(Texture2D getsprite, SpriteFont getspriteFont, Vector2 getposition, int getdamage)
@@ -29,19 +31,36 @@ namespace XNA_ScreenManager.MapClasses
         public override void Update(GameTime gameTime)
         {
             if (previousDmgTimeMSec <= (int)gameTime.TotalGameTime.Milliseconds
-                || previousDmgTimeSec != (int)gameTime.TotalGameTime.Seconds)
+                || previousDmgTimeSec < (int)gameTime.TotalGameTime.Seconds - 1)
             {
                 if (!settimer)
                 {
                     settimer = true;
+                    Velocity = new Vector2(0, -1.6f);
+                    transperancy = 1;
+
                     previousDmgTimeMSec = (int)gameTime.TotalGameTime.Milliseconds + 700;
                     previousDmgTimeSec = (int)gameTime.TotalGameTime.Seconds;
                 }
                 else
                 {
-                    keepAliveTime = (int)gameTime.TotalGameTime.Seconds;
+                    // will remove the object
+                    keepAliveTime = 0;
                 }
             }
+
+            // Update Color transperancy
+            transperancy -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            // Reduce velocity
+            Velocity.Y += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            // Apply jumping
+            if (Velocity.Y < -1.2f)
+                Position += Velocity * 150 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            // Apply Gravity 
+            Position += new Vector2(0, 1) * 100 * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             base.Update(gameTime);
         }
@@ -60,11 +79,11 @@ namespace XNA_ScreenManager.MapClasses
             if (damage > 0)
                 spriteBatch.DrawString(damagefont, dmgtxt,
                     new Vector2(position.X + spriteFrame.Width * 0.45f - dmgtxt.Length, position.Y + spriteFrame.Height * 0.2f),
-                        Color.White);
+                        Color.White * transperancy);
             else
                 spriteBatch.DrawString(damagefont, "MISS",
                     new Vector2(position.X + spriteFrame.Width * 0.35f, position.Y + spriteFrame.Height * 0.2f),
-                         Color.White);
+                         Color.White * transperancy);
 
             base.Draw(spriteBatch);
         }

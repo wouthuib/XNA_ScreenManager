@@ -67,7 +67,7 @@ namespace XNA_ScreenManager.CharacterClasses
             entityType = EntityType.Monster;
 
             // temporary parameters these should eventually be imported from the Monster Database
-            HP = 10; MP = 0; ATK = 50; DEF = 50; LVL = 1; HIT = 10; FLEE = 5;
+            HP = 10; MP = 0; ATK = 60; DEF = 30; LVL = 1; HIT = 10; FLEE = 5;
 
             // Local properties
             Direction = new Vector2();                                                              // Move direction

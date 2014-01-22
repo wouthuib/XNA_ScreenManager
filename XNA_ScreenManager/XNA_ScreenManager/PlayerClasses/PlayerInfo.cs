@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using XNA_ScreenManager.ItemClasses;
 
 namespace XNA_ScreenManager.PlayerClasses
 {
     public sealed class PlayerInfo
     {
+        Equipment equipment = Equipment.Instance;   // Equipment
+
         #region properties
         private string name, gender, jobclass;
-        private int maxhp, hp, maxsp, sp, exp, nlexp, lvl, gold, atk, def, matk, mdef;
+        private int maxhp, hp, maxsp, sp, exp, nlexp, lvl, gold;
         private int str, agi, vit, intel, dex, luk;
         #endregion
 
@@ -54,33 +57,46 @@ namespace XNA_ScreenManager.PlayerClasses
 
         #region battleinfo
         // Battle Info
+        // for more info http://irowiki.org/wiki/ATK#Status_ATK
         public int Atk
         {
-            get { return this.atk; }
-            set { this.atk = value; }
+            get { return (int)(StatusATK * 2 + WeaponATK + EquipATK + MasteryATK); }
         }
         public int MAtk
         {
-            get { return this.matk; }
-            set { this.matk = value; }
+            get { return (int)(intel + (intel/2) + (dex/5) + (luk/3) + (lvl/4)); }
         }
         public int Def
         {
-            get { return this.def; }
-            set { this.def = value; }
+            get { return (int)((4000 + HardDef) / (4000 + HardDef * 10)); }
+        }
+        public int SoftDef
+        {
+            get { return (int)((vit / 2) + Math.Max((vit * 0.3), (vit ^ 2 / 150) - 1)); }
+        }
+        public int HardDef
+        {
+            get
+            {
+                int defmod = 0;
+                foreach (Item item in equipment.item_list.FindAll(delegate(Item item) { return item.itemType == ItemType.Armor; }))
+                {
+                    defmod += item.defModifier;
+                }
+                return defmod;
+            }
         }
         public int MDef
         {
-            get { return this.mdef; }
-            set { this.mdef = value; }
+            get { return (int)(intel + vit / 5 + dex / 5 + lvl / 4); }
         }
         public int Hit
         {
-            get { return this.Level + this.dex + 175; }
+            get { return (int)(this.Level + this.dex + 175); }
         }
         public int Flee
         {
-            get { return this.Level + this.agi + 100; }
+            get { return (int)(this.Level + this.agi + 100); }
         }
         public int Health
         {
@@ -102,6 +118,67 @@ namespace XNA_ScreenManager.PlayerClasses
             get { return this.maxsp; }
             set { this.maxsp = value; }
         }
+        public int StatusATK
+        {
+            get { return (int)(Level / 4 + str + dex / 5 + luk / 3); }
+        }
+        public int WeaponATK
+        {
+            get { return (int)((BaseWeaponATK + Variance + STRBonus + RefinementBonus ) * SizePenalty / 100); }
+        }
+        public int SizePenalty
+        {
+            get { return 100; } // to do monster size table
+        }
+        public int EquipATK
+        {
+            get { return 1; } // to do (buffs + cards etc)
+        }
+        public int MasteryATK
+        {
+            get { return 1; } // to do
+        }
+        public int Variance
+        {
+            get 
+            { 
+                int WeaponLevel = 0;
+                foreach(Item item in equipment.item_list.FindAll(delegate(Item item) { return item.itemType == ItemType.Weapon; }))
+                {
+                    WeaponLevel += item.WeaponLevel;
+                }
+                return (int)(0.05f * WeaponLevel * BaseWeaponATK); 
+            }
+        }
+        public int BaseWeaponATK
+        {
+            get 
+            {
+                int atkmod = 0;
+                foreach(Item item in equipment.item_list.FindAll(delegate(Item item) { return item.itemType == ItemType.Weapon; }))
+                {
+                    atkmod += item.atkModifier;
+                }
+                return atkmod; 
+            }
+        }
+        public int RefinementBonus
+        {
+            get
+            {
+                int atkmod = 0;
+                foreach (Item item in equipment.item_list.FindAll(delegate(Item item) { return item.itemType == ItemType.Weapon; }))
+                {
+                    atkmod += item.RefinementBonus;
+                }
+                return atkmod;
+            }
+        }
+        public int STRBonus
+        {
+            get { return (int)(BaseWeaponATK * str * 200);}
+        }
+
         #endregion
 
         #region player stats

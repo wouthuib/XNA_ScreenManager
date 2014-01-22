@@ -61,6 +61,8 @@ namespace XNA_ScreenManager.ItemClasses
         public int magicModifier { get; set; }
         public int speedModifier { get; set; }
         public int Value { get; set; }
+        public int WeaponLevel { get; set; }
+        public int RefinementBonus { get; set; }
 
         public ItemType itemType { get; set; }
         public ItemClass itemClass { get; set; }
@@ -85,6 +87,8 @@ namespace XNA_ScreenManager.ItemClasses
             results.Value = value;
             results.itemClass = itemclass;
             results.itemSlot = slot;
+            results.WeaponLevel = 1;
+            results.RefinementBonus = 0;
 
             return results;
         }
