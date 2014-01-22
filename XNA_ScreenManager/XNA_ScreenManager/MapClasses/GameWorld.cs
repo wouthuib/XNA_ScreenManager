@@ -688,7 +688,7 @@ namespace XNA_ScreenManager.MapClasses
 
         public void createEffects(int getdamage, Vector2 getposition)
         {
-            listEffect.Add(new DamageBaloon(Content.Load<Texture2D>(@"gfx\effects\arrow"),
+            listEffect.Add(new DamageBaloon(Content.Load<Texture2D>(@"gfx\effects\damage_counter1"),
                                             Content.Load<SpriteFont>(@"font\gamefont"), 
                                             getposition, getdamage));
         }

@@ -14,24 +14,24 @@ namespace XNA_ScreenManager.MapClasses
         {
             randomizer Randomizer = randomizer.Instance;
 
-            int damage = 0,
-                hit = Randomizer.generateRandom(0, playerinfo.Hit),
-                flee = Randomizer.generateRandom(0, monsterinfo.FLEE),
-                atk = Randomizer.generateRandom(0, playerinfo.Atk),
-                def = Randomizer.generateRandom(0, monsterinfo.DEF);
+            int finalDamage = 0, bDamage = 0, wDamage = 0;
 
-            if (hit >= flee && hit - flee > 0)
+            int dodgerate = 100 - (playerinfo.Hit - monsterinfo.FLEE);
+
+            if (Randomizer.generateRandom(0, 100) >= dodgerate)
             {
-                damage = (int)(atk - def);
+                bDamage = (playerinfo.Atk * 2) - monsterinfo.DEF;
+                wDamage = playerinfo.WeaponATK - monsterinfo.DEF;
+                finalDamage = bDamage + wDamage;
             }
             else
-                damage = 0;
+                finalDamage = 0;
 
             // return damage
-            if (damage < 0)
+            if (finalDamage < 0)
                 return 0;
             else
-                return damage;
+                return finalDamage;
         }
     }
 }

@@ -66,12 +66,12 @@ namespace XNA_ScreenManager
             OldPosition = new Vector2(_X, _Y);
 
             // temporary parameters these should eventually be imported from the Monster Database
-            playerinfo.Health = 10;
-            playerinfo.Strength = 30;
-            playerinfo.Dexterity = 30;
+            playerinfo.Health = 12;
+            playerinfo.Strength = 40;
+            playerinfo.Dexterity = 80;
             playerinfo.Luck = 10;
-            playerinfo.Agility = 30;
-            playerinfo.Level = 1;
+            playerinfo.Agility = 40;
+            playerinfo.Level = 60;
             
             // Local properties
             TileSize = _tileSize;
@@ -108,12 +108,15 @@ namespace XNA_ScreenManager
                         if (previousGameTimeMsec <= (int)gameTime.TotalGameTime.Milliseconds
                             || previousGameTimeSec != (int)gameTime.TotalGameTime.Seconds)
                         {
-                            previousGameTimeMsec = (int)gameTime.TotalGameTime.Milliseconds + ANIMATION_SPEED / 4;
+
+                            previousGameTimeMsec = (int)gameTime.TotalGameTime.Milliseconds + 5;
                             previousGameTimeSec = (int)gameTime.TotalGameTime.Seconds;
+
                             spriteFrame.X += spriteWidth;
 
                             if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.LeftAlt))
                             {
+                                // Later = charge arrow skill
                                 if (spriteFrame.X > spriteOfset.X + (spriteWidth * 1))
                                     spriteFrame.X = (int)spriteOfset.X + spriteWidth;
                             }
@@ -339,7 +342,7 @@ namespace XNA_ScreenManager
                         else if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.LeftAlt))
                         {
                             // check player jobclass (if archer or wizard)
-                            previousGameTimeMsec = (int)gameTime.TotalGameTime.Milliseconds + ANIMATION_SPEED * 2;
+                            previousGameTimeMsec = (int)gameTime.TotalGameTime.Milliseconds + (350 - playerinfo.BaseASPD * 12);
                             previousGameTimeSec = (int)gameTime.TotalGameTime.Seconds;
                             spriteFrame.X = 0;
                             state = EntityState.Shoot;

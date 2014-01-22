@@ -273,6 +273,28 @@ namespace XNA_ScreenManager.CharacterClasses
                 #endregion
                 #region hit
                 case EntityState.Hit:
+                    
+                    // Start freeze timer 
+                    previousHitTimeMSec = (int)gameTime.TotalGameTime.Milliseconds + 700;
+                    previousHitTimeSec = (int)gameTime.TotalGameTime.Seconds;
+
+                    // Check of world instance is created
+                    if (world == null)
+                        world = GameWorld.GetInstance;
+
+                    // Start damage controll
+                    damage = Battle.battle_calc_damage(PlayerInfo, this);
+
+                    // create a damage baloon
+                    world.createEffects(damage, new Vector2((this.position.X + this.SpriteFrame.Width * 0.45f) - damage.ToString().Length * 5,
+                                                             this.position.Y + this.SpriteFrame.Height * 0.20f));
+
+                    state = EntityState.Frozen;
+
+                    break;
+                #endregion
+                #region frozen
+                case EntityState.Frozen:
 
                     // Apply Gravity 
                     Position += new Vector2(0, 1) * 250 * (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -285,35 +307,10 @@ namespace XNA_ScreenManager.CharacterClasses
                     if (previousHitTimeMSec <= (int)gameTime.TotalGameTime.Milliseconds
                         || previousHitTimeSec != (int)gameTime.TotalGameTime.Seconds)
                     {
-                        previousHitTimeMSec = (int)gameTime.TotalGameTime.Milliseconds + 700;
-                        previousHitTimeSec = (int)gameTime.TotalGameTime.Seconds;
-
-                        if (frozen)
-                        {
-                            frozen = false;
-
-                            // reset sprite frame
-                            spriteFrame.X = 0;
-                            state = EntityState.Stand;
-                        }
-                        else
-                        {
-                            // Check of world instance is created
-                            if (world == null)
-                                world = GameWorld.GetInstance;
-
-                            // Freeze the monster
-                            frozen = true;
-
-                            // Start damage controll
-                            damage = Battle.battle_calc_damage(PlayerInfo, this);
-
-                            // create a damage baloon
-                            world.createEffects(damage, new Vector2((this.position.X + this.SpriteFrame.Width * 0.45f) - damage.ToString().Length * 5,
-                                                                     this.position.Y + this.SpriteFrame.Height * 0.20f));
-                        }
+                        // reset sprite frame
+                        spriteFrame.X = 0;
+                        state = EntityState.Stand;
                     }
-
                     break;
                 #endregion
             }

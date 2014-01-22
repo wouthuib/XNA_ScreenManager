@@ -11,7 +11,6 @@ namespace XNA_ScreenManager.MapClasses
     {
         SpriteFont damagefont;
         int damage = 0;
-        //Vector2 spriteSize = new Vector2(50, 50);
         float transperancy = 1;
         public Vector2 Velocity = new Vector2(0, 1);
         int previousDmgTimeMSec = 0, previousDmgTimeSec = 0;
@@ -25,6 +24,7 @@ namespace XNA_ScreenManager.MapClasses
             damagefont = getspriteFont;
             position = getposition;
             damage = getdamage;
+            spriteSize = new Vector2(40, 40);
             spriteFrame = new Rectangle((int)position.X, (int)position.Y, (int)spriteSize.X, (int)spriteSize.Y);
         }
 
@@ -68,21 +68,29 @@ namespace XNA_ScreenManager.MapClasses
         public override void Draw(SpriteBatch spriteBatch)
         {
             int[] dmg = new int[damage.ToString().Length];
-            string dmgtxt = null;
-
-            for (int i = 1; i <= dmg.Length; i++)
-            {
-                if (dmgtxt != null || getDamageCount(damage, i) >= 1)
-                    dmgtxt = dmgtxt + getDamageCount(damage, i).ToString();
-            }
 
             if (damage > 0)
-                spriteBatch.DrawString(damagefont, dmgtxt,
-                    new Vector2(position.X + spriteFrame.Width * 0.45f - dmgtxt.Length, position.Y + spriteFrame.Height * 0.2f),
-                        Color.White * transperancy);
+            {
+                for (int i = dmg.Length; i >= 1 ; i--)
+                {
+                    Rectangle destin = new Rectangle(
+                                          (int)((position.X - (dmg.Length * 8)) + (i * 20)),
+                                          (int)(position.Y + spriteFrame.Height * 0.2f),
+                                          (int)(spriteFrame.Width * 0.75f),
+                                          (int)(spriteFrame.Height * 0.75f));
+
+                    Rectangle source = new Rectangle(
+                                      (int)(getDamageCount(damage, i) * spriteFrame.Width), 0,
+                                      (int)spriteFrame.Width,
+                                      (int)spriteFrame.Height);
+
+                    spriteBatch.Draw(sprite, destin, source,
+                        Color.White * transperancy, 0f, Vector2.Zero, SpriteEffects.None, 0);
+                }
+            }
             else
                 spriteBatch.DrawString(damagefont, "MISS",
-                    new Vector2(position.X + spriteFrame.Width * 0.35f, position.Y + spriteFrame.Height * 0.2f),
+                    new Vector2(position.X + spriteFrame.Width * 0.10f, position.Y + spriteFrame.Height * 0.2f),
                          Color.White * transperancy);
 
             base.Draw(spriteBatch);

@@ -72,7 +72,7 @@ namespace XNA_ScreenManager.PlayerClasses
         }
         public int SoftDef
         {
-            get { return (int)((vit / 2) + Math.Max((vit * 0.3), (vit ^ 2 / 150) - 1)); }
+            get { return (int)((lvl /2) + (vit / 2) + (agi /2)); }
         }
         public int HardDef
         {
@@ -84,6 +84,25 @@ namespace XNA_ScreenManager.PlayerClasses
                     defmod += item.defModifier;
                 }
                 return defmod;
+            }
+        }
+        public float DamageReduced
+        {
+            get
+            {
+                return (1 - (600 / (HardDef + RefineDef + 600))) * 100;
+            }
+        }
+        public int RefineDef
+        {
+            get
+            {
+                int refmod = 0;
+                foreach (Item item in equipment.item_list.FindAll(delegate(Item item) { return item.itemType == ItemType.Armor; }))
+                {
+                    refmod += item.RefinementBonus;
+                }
+                return refmod;
             }
         }
         public int MDef
@@ -120,7 +139,7 @@ namespace XNA_ScreenManager.PlayerClasses
         }
         public int StatusATK
         {
-            get { return (int)(Level / 4 + str + dex / 5 + luk / 3); }
+            get { return (int)(str + (dex / 5) + (luk / 3) + (lvl / 4)); }
         }
         public int WeaponATK
         {
@@ -176,7 +195,11 @@ namespace XNA_ScreenManager.PlayerClasses
         }
         public int STRBonus
         {
-            get { return (int)(BaseWeaponATK * str * 200);}
+            get { return (int)((200 * str) / 200);}
+        }
+        public int BaseASPD
+        {
+            get { return (int)((Math.Sqrt(Math.Pow(agi, 2) / 2) + Math.Sqrt(Math.Pow(dex, 2) / 5)) / 4); }
         }
 
         #endregion
