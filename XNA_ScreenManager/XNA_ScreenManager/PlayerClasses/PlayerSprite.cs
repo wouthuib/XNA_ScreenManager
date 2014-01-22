@@ -66,10 +66,10 @@ namespace XNA_ScreenManager
             OldPosition = new Vector2(_X, _Y);
 
             // temporary parameters these should eventually be imported from the Monster Database
-            playerinfo.health = 10; playerinfo.mana = 0; 
-            playerinfo.atk = 100; playerinfo.def = 50;
-            playerinfo.hit = 10; playerinfo.flee = 5;
-            playerinfo.level = 1;
+            playerinfo.Health = 10; playerinfo.Mana = 0; 
+            playerinfo.Atk = 100; playerinfo.Def = 50;
+            playerinfo.Dexterity = 5; playerinfo.Agility = 5;
+            playerinfo.Level = 1;
             
             // Local properties
             TileSize = _tileSize;

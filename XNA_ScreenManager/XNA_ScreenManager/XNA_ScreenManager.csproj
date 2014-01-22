@@ -131,6 +131,9 @@
     <Compile Include="ItemClasses\Inventory.cs" />
     <Compile Include="ItemClasses\Item.cs" />
     <Compile Include="ItemClasses\ItemStore.cs" />
+    <Compile Include="MapClasses\Battle.cs" />
+    <Compile Include="MapClasses\DamageBaloon.cs" />
+    <Compile Include="MapClasses\Effect.cs" />
     <Compile Include="MapClasses\GameWorld.cs" />
     <Compile Include="MapClasses\warp.cs" />
     <Compile Include="PlayerClasses\Arrow.cs" />

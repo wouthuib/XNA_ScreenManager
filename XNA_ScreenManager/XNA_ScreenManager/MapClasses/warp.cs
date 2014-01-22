@@ -11,22 +11,19 @@ using XNA_ScreenManager.CharacterClasses;
 
 namespace XNA_ScreenManager.MapClasses
 {
-    public class Warp
+    public class Warp : Effect
     {
-        Texture2D sprite;
-        public Vector2 position;                                                                  // Position is a rectangle to calculate intersection
-        public Vector2 camPosition;
-        public Vector2 spriteSize;
-        public Rectangle spriteFrame;
-        public Vector2 newPosition;
-        public string newMap;
         public bool active;
+        public Vector2 newPosition;
+        public Vector2 camPosition;
+        public string newMap;
 
         const int ANIMATION_SPEED = 120;                                                            // Animation speed, 120 = default 
         int previousGameTimeMsec,                                                                   // GameTime in Miliseconds
             previousGameTimeSec;                                                                    // GameTime in Seconds
 
-        public Warp (Texture2D Sprite, Vector2 Position, string newmap, Vector2 newposition, Vector2 camposition)
+        public Warp (Texture2D Sprite, Vector2 Position, string newmap, Vector2 newposition, Vector2 camposition) :
+            base()
         {
             position = Position;
             camPosition = camposition;
@@ -38,7 +35,7 @@ namespace XNA_ScreenManager.MapClasses
             active = true;
         }
 
-        public void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             if (previousGameTimeMsec <= (int)gameTime.TotalGameTime.Milliseconds
                 || previousGameTimeSec != (int)gameTime.TotalGameTime.Seconds)
@@ -51,7 +48,7 @@ namespace XNA_ScreenManager.MapClasses
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch)
         {
             if (active)
                 spriteBatch.Draw(sprite, new Rectangle((int)position.X, (int)position.Y, (int)spriteSize.X, (int)spriteSize.Y),

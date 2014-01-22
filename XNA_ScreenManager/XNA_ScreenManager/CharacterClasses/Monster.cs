@@ -14,14 +14,14 @@ using System.Text;
 
 namespace XNA_ScreenManager.CharacterClasses
 {
-    class Monster : Entity
+    public class Monster : Entity
     {
         #region properties
 
         // static randomizer
         randomizer Randomizer = randomizer.Instance;                                                // generate unique random ID
         PlayerInfo PlayerInfo = PlayerInfo.Instance;                                                // get battle information of player
-        SpriteFont damagefont;
+        GameWorld world;
 
         // Drawing properties
         private int spriteWidth = 90;
@@ -36,7 +36,6 @@ namespace XNA_ScreenManager.CharacterClasses
         private float Speed;                                                                        // Speed used in functions
         private bool ani_forward = true;                                                            // if we play for or backward
         private bool frozen = false;                                                                // frozen switch during hit
-        private bool ani_damage = false;                                                            // display damage
 
         // Movement properties
         const int WALK_SPEED = 100;                                                                 // The actual speed of the entity
@@ -53,12 +52,10 @@ namespace XNA_ScreenManager.CharacterClasses
             previousIdleTimeMin;                                                                    // IdleTime in Minutes
         int previousHitTimeMSec,                                                                    // IdleTime in Miliseconds
             previousHitTimeSec;                                                                     // IdleTime in Seconds
-        int previousDmgTimeMSec,                                                                    // IdleTime in Miliseconds
-            previousDmgTimeSec;                                                                     // IdleTime in Seconds
 
         #endregion
 
-        public Monster(Texture2D texture, SpriteFont spriteFont, Vector2 position, Vector2 borders)
+        public Monster(Texture2D texture, Vector2 position, Vector2 borders)
             : base()
         {
             // Derived properties
@@ -71,7 +68,6 @@ namespace XNA_ScreenManager.CharacterClasses
 
             // temporary parameters these should eventually be imported from the Monster Database
             HP = 10; MP = 0; ATK = 50; DEF = 50; LVL = 1; HIT = 10; FLEE = 5;
-            damagefont = spriteFont;
 
             // Local properties
             Direction = new Vector2();                                                              // Move direction
@@ -85,9 +81,6 @@ namespace XNA_ScreenManager.CharacterClasses
             {
                 update_movement(gameTime);
                 update_animation(gameTime);
-
-                if (ani_damage)
-                    update_damage(gameTime);
             }
         }
 
@@ -305,10 +298,19 @@ namespace XNA_ScreenManager.CharacterClasses
                         }
                         else
                         {
+                            // Check of world instance is created
+                            if (world == null)
+                                world = GameWorld.GetInstance;
+
+                            // Freeze the monster
                             frozen = true;
 
-                            // start damage controll
-                            damageControll(gameTime);
+                            // Start damage controll
+                            damage = Battle.battle_calc_damage(PlayerInfo, this);
+
+                            // create a damage baloon
+                            world.createEffects(damage, new Vector2((this.position.X + this.SpriteFrame.Width * 0.45f) - damage.ToString().Length * 5,
+                                                                     this.position.Y + this.SpriteFrame.Height * 0.20f));
                         }
                     }
 
@@ -317,74 +319,11 @@ namespace XNA_ScreenManager.CharacterClasses
             }
         }
 
-        private void update_damage(GameTime gameTime)
-        {
-            if (previousDmgTimeMSec <= (int)gameTime.TotalGameTime.Milliseconds
-                || previousDmgTimeSec != (int)gameTime.TotalGameTime.Seconds)
-            {
-                damage = 0;
-                ani_damage = false;
-            }
-        }
-
         public override void Draw(SpriteBatch spriteBatch)
         {
             if (Active)
                 spriteBatch.Draw(sprite, new Rectangle((int)Position.X, (int)Position.Y, SpriteFrame.Width, SpriteFrame.Height),
                     SpriteFrame, Color.White, 0f, Vector2.Zero, spriteEffect, 0f);
-
-            if (ani_damage)
-                draw_damage(spriteBatch);
-        }
-
-        private void draw_damage(SpriteBatch spriteBatch)
-        {
-            int[] dmg = new int[4];
-            string dmgtxt = null;
-
-            if (damage / 1000 >= 1)
-                dmg[3] = (int)damage / 1000;
-            if ((damage - dmg[3] * 1000) / 100 >= 1)
-                dmg[2] = (int)((damage - dmg[2] * 1000) / 100);
-            if (((damage - dmg[3] * 1000) - dmg[2] * 100) / 10 >= 1)
-                dmg[1] = (int)(((damage - dmg[3] * 1000) - dmg[2] * 100) / 10);
-
-            dmg[0] = (int)((((damage - dmg[3] * 1000) - dmg[2] * 100) - dmg[1] * 10));
-
-            for(int i = 0; i < dmg.Length; i++)
-            {
-                if (dmg[i] >= 1)
-                    dmgtxt = dmgtxt + dmg[i].ToString();
-            }
-
-            if (damage > 0)
-                spriteBatch.DrawString(damagefont, dmgtxt,
-                    new Vector2(PositionX + spriteFrame.Width * 0.45f - dmgtxt.Length, PositionY + spriteFrame.Height * 0.2f), 
-                        Color.White);
-            else
-                spriteBatch.DrawString(damagefont, "MISS",
-                    new Vector2(PositionX + spriteFrame.Width * 0.35f, PositionY + spriteFrame.Height * 0.2f),
-                         Color.White);
-
-        }
-
-        private void damageControll(GameTime gameTime)
-        {
-            ani_damage = true;
-            int hit = Randomizer.generateRandom(0, PlayerInfo.hit),
-                flee = Randomizer.generateRandom(0, this.FLEE);
-
-            if (hit >= flee && hit - flee > 0)
-            {
-                hit -= flee;
-                damage = (int)((PlayerInfo.atk - this.DEF) / hit);
-            }
-            else
-                damage = 0;
-
-            // set damage display timer
-            previousDmgTimeMSec = (int)gameTime.TotalGameTime.Milliseconds + 700;
-            previousDmgTimeSec = (int)gameTime.TotalGameTime.Seconds;
         }
 
         private struct Border

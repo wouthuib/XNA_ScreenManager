@@ -7,131 +7,138 @@ namespace XNA_ScreenManager.PlayerClasses
 {
     public sealed class PlayerInfo
     {
-        private string NAME, GENDER, CLASS;
-        private int MAXHP, HP, MAXSP, SP, EXP, NLEXP, LVL, Gold, ATK, DEF, MATK, MDEF, HIT, FLEE;
-        private int STR, AGI, VIT, INT, DEX, LUK;
+        #region properties
+        private string name, gender, jobclass;
+        private int maxhp, hp, maxsp, sp, exp, nlexp, lvl, gold, atk, def, matk, mdef;
+        private int str, agi, vit, intel, dex, luk;
+        #endregion
 
+        #region general info
         // General Info
-        public string name
+        public string Name
         {
-            get { return this.NAME; }
-            set { this.NAME = value; }
+            get { return this.name; }
+            set { this.name = value; }
         }
-        public string gender
+        public string Gender
         {
-            get { return this.GENDER; }
-            set { this.GENDER = value; }
+            get { return this.gender; }
+            set { this.gender = value; }
         }
-        public string job
+        public string Jobclass
         {
-            get { return this.CLASS; }
-            set { this.CLASS = value; }
+            get { return this.jobclass; }
+            set { this.jobclass = value; }
         }
-        public int exp
+        public int Exp
         {
-            get { return this.EXP; }
-            set { this.EXP = value; }
+            get { return this.exp; }
+            set { this.exp = value; }
         }
-        public int nextlevelexp
+        public int NextLevelExp
         {
-            get { return this.NLEXP; }
-            set { this.NLEXP = value; }
+            get { return this.nlexp; }
+            set { this.nlexp = value; }
         }
-        public int level
+        public int Level
         {
-            get { return this.LVL; }
-            set { this.LVL = value; }
+            get { return this.lvl; }
+            set { this.lvl = value; }
         }
-        public int gold
+        public int Gold
         {
-            get { return this.Gold; }
-            set { this.Gold = value; }
+            get { return this.gold; }
+            set { this.gold = value; }
         }
+#endregion
 
+        #region battleinfo
         // Battle Info
-        public int atk
+        public int Atk
         {
-            get { return this.ATK; }
-            set { this.ATK = value; }
+            get { return this.atk; }
+            set { this.atk = value; }
         }
-        public int matk
+        public int MAtk
         {
-            get { return this.MATK; }
-            set { this.MATK = value; }
+            get { return this.matk; }
+            set { this.matk = value; }
         }
-        public int def
+        public int Def
         {
-            get { return this.DEF; }
-            set { this.DEF = value; }
+            get { return this.def; }
+            set { this.def = value; }
         }
-        public int mdef
+        public int MDef
         {
-            get { return this.MDEF; }
-            set { this.MDEF = value; }
+            get { return this.mdef; }
+            set { this.mdef = value; }
         }
-        public int hit
+        public int Hit
         {
-            get { return this.HIT; }
-            set { this.HIT = value; }
+            get { return this.Level + this.dex + 175; }
         }
-        public int flee
+        public int Flee
         {
-            get { return this.FLEE; }
-            set { this.FLEE = value; }
+            get { return this.Level + this.agi + 100; }
         }
-        public int health
+        public int Health
         {
-            get { return this.HP; }
-            set { this.HP = value; }
+            get { return this.hp; }
+            set { this.hp = value; }
         }
-        public int maxhealth
+        public int MaxHealth
         {
-            get { return this.MAXHP; }
-            set { this.MAXHP = value; }
+            get { return this.maxhp; }
+            set { this.maxhp = value; }
         }
-        public int mana
+        public int Mana
         {
-            get { return this.SP; }
-            set { this.SP = value; }
+            get { return this.sp; }
+            set { this.sp = value; }
         }
-        public int maxmana
+        public int MaxMana
         {
-            get { return this.MAXSP; }
-            set { this.MAXSP = value; }
+            get { return this.maxsp; }
+            set { this.maxsp = value; }
         }
-        
-        // Player Stats
-        public int strength
-        {
-            get { return this.STR; }
-            set { this.STR = value; }
-        }
-        public int agility
-        {
-            get { return this.AGI; }
-            set { this.AGI = value; }
-        }
-        public int vitality
-        {
-            get { return this.VIT; }
-            set { this.VIT = value; }
-        }
-        public int intelligence
-        {
-            get { return this.INT; }
-            set { this.INT = value; }
-        }
-        public int dexterity
-        {
-            get { return this.DEX; }
-            set { this.DEX = value; }
-        }
-        public int luck
-        {
-            get { return this.LUK; }
-            set { this.LUK = value; }
-        }
+        #endregion
 
+        #region player stats
+        // Player Stats
+        public int Strength
+        {
+            get { return this.str; }
+            set { this.str = value; }
+        }
+        public int Agility
+        {
+            get { return this.agi; }
+            set { this.agi = value; }
+        }
+        public int Vitality
+        {
+            get { return this.vit; }
+            set { this.vit = value; }
+        }
+        public int Intelligence
+        {
+            get { return this.intel; }
+            set { this.intel = value; }
+        }
+        public int Dexterity
+        {
+            get { return this.dex; }
+            set { this.dex = value; }
+        }
+        public int Luck
+        {
+            get { return this.luk; }
+            set { this.luk = value; }
+        }
+        #endregion
+
+        #region constructor
         private static PlayerInfo instance;
         private PlayerInfo(){}
 
@@ -146,17 +153,18 @@ namespace XNA_ScreenManager.PlayerClasses
                 return instance;
             }
         }
+        #endregion
 
         // init player values
         public void InitNewGame()
         {
             this.name = "Wouter";
-            this.job = "Fighter";
+            this.jobclass = "Fighter";
             this.gold = 100;
             this.exp = 0;
-            this.nextlevelexp = 1200;
-            this.health = 100;
-            this.maxhealth = 100;
+            this.nlexp = 1200;
+            this.hp = 100;
+            this.maxhp = 100;
         }
     }
 }

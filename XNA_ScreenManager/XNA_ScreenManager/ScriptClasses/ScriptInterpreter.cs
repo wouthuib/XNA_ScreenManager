@@ -412,13 +412,13 @@ namespace XNA_ScreenManager.ScriptClasses
                     switch (Values[index].ToString())
                     {
                         case "baselevel":
-                                intValues.Add(PlayerClasses.PlayerInfo.Instance.level);
+                                intValues.Add(PlayerClasses.PlayerInfo.Instance.Level);
                             continue;
                         case "gold":
-                                intValues.Add(PlayerClasses.PlayerInfo.Instance.gold);
+                                intValues.Add(PlayerClasses.PlayerInfo.Instance.Gold);
                             continue;
                         case "experience":
-                                intValues.Add(PlayerClasses.PlayerInfo.Instance.exp);
+                                intValues.Add(PlayerClasses.PlayerInfo.Instance.Exp);
                             continue;
                         case "item":
                                 intValues.Add(ItemClasses.Inventory.Instance.item_list.FindAll(delegate(ItemClasses.Item item) 
@@ -428,7 +428,7 @@ namespace XNA_ScreenManager.ScriptClasses
                                 index++;
                             continue;
                         case "profession":
-                                strValues.Add(PlayerClasses.PlayerInfo.Instance.job);
+                                strValues.Add(PlayerClasses.PlayerInfo.Instance.Jobclass);
                             continue;
                         #region operators
                         case "EQ":

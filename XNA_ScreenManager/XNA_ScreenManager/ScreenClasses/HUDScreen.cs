@@ -79,10 +79,10 @@ namespace XNA_ScreenManager.ScreenClasses
                 spriteBatch.Draw(rect, new Vector2(position.X, position.Y + 0), Color.White * 0.5f);
 
                 spriteBatch.Draw(HudPicture, new Vector2(position.X + 5, position.Y + 5), new Rectangle(0, 58, 96, 40), Color.White * 0.75f);
-                spriteBatch.DrawString(spriteFont, "Name: " + playerInfo.name, new Vector2(Position.X + 5, Position.Y + 50), Color.White);
-                spriteBatch.DrawString(spriteFont, "Level: " + playerInfo.level, new Vector2(Position.X + 5, Position.Y + 65), Color.White);
-                spriteBatch.DrawString(spriteFont, "Gold: " + playerInfo.gold, new Vector2(Position.X + 5, Position.Y + 80), Color.White);
-                spriteBatch.DrawString(spriteFont, "Exp: " + playerInfo.exp, new Vector2(Position.X + 5, Position.Y + 95), Color.White);
+                spriteBatch.DrawString(spriteFont, "Name: " + playerInfo.Name, new Vector2(Position.X + 5, Position.Y + 50), Color.White);
+                spriteBatch.DrawString(spriteFont, "Level: " + playerInfo.Level, new Vector2(Position.X + 5, Position.Y + 65), Color.White);
+                spriteBatch.DrawString(spriteFont, "Gold: " + playerInfo.Gold, new Vector2(Position.X + 5, Position.Y + 80), Color.White);
+                spriteBatch.DrawString(spriteFont, "Exp: " + playerInfo.Exp, new Vector2(Position.X + 5, Position.Y + 95), Color.White);
             }
         }
     }

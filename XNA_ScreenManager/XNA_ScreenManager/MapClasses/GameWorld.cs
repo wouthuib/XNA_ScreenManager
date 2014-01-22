@@ -42,7 +42,7 @@ namespace XNA_ScreenManager.MapClasses
         // Map entities
         Texture2D Background;
         List<Entity> listEntity = new List<Entity>();
-        List<Warp> listWarp = new List<Warp>();
+        List<Effect> listEffect = new List<Effect>();
 
         // dynamic items
         ArrowProperties arrowprop = new ArrowProperties(false, null, new Vector2(0,0), 0 , new Vector2(0,0));
@@ -125,7 +125,7 @@ namespace XNA_ScreenManager.MapClasses
                     obj.Update(gameTime);
                 
                 // Update Warp objects
-                foreach (Warp obj in listWarp)
+                foreach (Effect obj in listEffect)
                     obj.Update(gameTime);
 
                 // Update all enitities map collisions
@@ -138,6 +138,15 @@ namespace XNA_ScreenManager.MapClasses
 
                     if (obj.KeepAliveTime != -1 && obj.KeepAliveTime <= (int)gameTime.TotalGameTime.Seconds)
                         listEntity.Remove(obj);
+                }
+
+                // remove timeout effects
+                for (int i = 0; i < listEffect.Count; i++)
+                {
+                    var obj = listEffect[i];
+
+                    if (obj.KeepAliveTime != -1 && obj.KeepAliveTime <= (int)gameTime.TotalGameTime.Seconds)
+                        listEffect.Remove(obj);
                 }
                 
                 // create new entities
@@ -351,25 +360,30 @@ namespace XNA_ScreenManager.MapClasses
                         #endregion
                         #region warp collision
                         // Check for warp collision (player only!)
-                        if (listWarp.Count > 0)
+                        if (listEffect.FindAll(delegate(Effect obj) { return obj.GetType().IsSubclassOf(typeof(Effect)); }).Count > 0)
                         {
-                            foreach (var warp in listWarp)
+                            foreach (Effect effect in listEffect)
                             {
-                                Rectangle Warp = new Rectangle((int)warp.position.X, (int)warp.position.Y, 
-                                    (int)warp.spriteFrame.Width, (int)warp.spriteFrame.Height);
-
-                                if (Warp.Intersects(
-                                    new Rectangle(
-                                        (int)playerSprite.Position.X + (int)(playerSprite.SpriteSize.Width * 0.25f),
-                                        (int)playerSprite.Position.Y,
-                                        (int)playerSprite.SpriteFrame.Width - (int)(playerSprite.SpriteSize.Width * 0.25f),
-                                        ((int)playerSprite.SpriteFrame.Height)
-                                        )))
+                                if (effect is Warp)
                                 {
-                                    entity.CollideWarp = true;
-                                    newmap = warp.newMap;
-                                    newpos = warp.newPosition;
-                                    campos = warp.camPosition;
+                                    Warp warp = (Warp)effect;
+
+                                    Rectangle Warp = new Rectangle((int)warp.Position.X, (int)warp.Position.Y,
+                                        (int)warp.SpriteFrame.Width, (int)warp.SpriteFrame.Height);
+
+                                    if (Warp.Intersects(
+                                        new Rectangle(
+                                            (int)playerSprite.Position.X + (int)(playerSprite.SpriteSize.Width * 0.25f),
+                                            (int)playerSprite.Position.Y,
+                                            (int)playerSprite.SpriteFrame.Width - (int)(playerSprite.SpriteSize.Width * 0.25f),
+                                            ((int)playerSprite.SpriteFrame.Height)
+                                            )))
+                                    {
+                                        entity.CollideWarp = true;
+                                        newmap = warp.newMap;
+                                        newpos = warp.newPosition;
+                                        campos = warp.camPosition;
+                                    }
                                 }
                             }
                         }
@@ -462,7 +476,7 @@ namespace XNA_ScreenManager.MapClasses
                 playerSprite.Draw(spriteBatch);
 
                 // Draw all Warp Effects
-                foreach (Warp obj in listWarp)
+                foreach (Effect obj in listEffect)
                 {
                     obj.Draw(spriteBatch);
                 }
@@ -581,7 +595,6 @@ namespace XNA_ScreenManager.MapClasses
                                 // properties are filled now check the state
                                 listEntity.Add(new Monster(
                                             Content.Load<Texture2D>(@"gfx\Mobs\" + texture),
-                                            Content.Load<SpriteFont>(@"font\gamefont"),
                                             new Vector2(obj.Value.X, obj.Value.Y),
                                             new Vector2(borderX, borderY)));
                             }
@@ -622,7 +635,7 @@ namespace XNA_ScreenManager.MapClasses
                                     camposy = Convert.ToInt32(objvalue);
 
                             }
-                            listWarp.Add(new Warp(Content.Load<Texture2D>(@"gfx\gameobjects\warp"),
+                            listEffect.Add(new Warp(Content.Load<Texture2D>(@"gfx\gameobjects\warp"),
                                                         new Vector2(obj.Value.X - 20, obj.Value.Y - 225),
                                                         newmap, new Vector2(newposx, newposy),
                                                         new Vector2(camposx, camposy)));
@@ -652,11 +665,11 @@ namespace XNA_ScreenManager.MapClasses
             for (int i = 0; i < listEntity.Count; i++)
                 listEntity.Remove(listEntity[i]);
 
-            for (int i = 0; i < listWarp.Count; i++)
-                listWarp.Remove(listWarp[i]);
+            for (int i = 0; i < listEffect.Count; i++)
+                listEffect.Remove(listEffect[i]);
 
             listEntity.Clear();
-            listWarp.Clear();
+            listEffect.Clear();
 
             // do not forget to put the player back in the entity list
             listEntity.Add(playerSprite);
@@ -671,6 +684,13 @@ namespace XNA_ScreenManager.MapClasses
                 arrowprop.active = false;
                 listEntity.Add(new Arrow(Content.Load<Texture2D>(arrowprop.sprite), arrowprop.position, arrowprop.speed, arrowprop.direction));
             }
+        }
+
+        public void createEffects(int getdamage, Vector2 getposition)
+        {
+            listEffect.Add(new DamageBaloon(Content.Load<Texture2D>(@"gfx\effects\arrow"),
+                                            Content.Load<SpriteFont>(@"font\gamefont"), 
+                                            getposition, getdamage));
         }
 
         public void createArrow(Vector2 arg0, float arg1, Vector2 arg2)
