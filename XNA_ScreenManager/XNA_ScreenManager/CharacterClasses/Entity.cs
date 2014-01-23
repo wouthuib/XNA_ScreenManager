@@ -25,7 +25,8 @@ namespace XNA_ScreenManager.CharacterClasses
         Hit,
         Died, 
         Frozen, 
-        Animate
+        Animate,
+        Spawn
     };
     public enum EntityType { Player, Friend, Monster, NPC, Warp, Wall, Slope, Bullet, Arrow };
 

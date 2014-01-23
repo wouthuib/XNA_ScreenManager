@@ -29,13 +29,19 @@ namespace XNA_ScreenManager.CharacterClasses
         private Vector2 spriteOfset = new Vector2(90, 0);
         private SpriteEffects spriteEffect = SpriteEffects.None;
         private int damage = 0;
+        private float transperancy = 0;
+
+        // Respawn properties
+        private Vector2 resp_pos = Vector2.Zero,                                                    // Respawn Position
+                        resp_bord = Vector2.Zero;                                                   // Walking Border
+        private bool spawn = false;                                                                 // Spawn Activator
+        private int RESPAWN_TIME = 8;                                                               // 8 seconds respawn
 
         // Sprite Animation Properties
         Color color = Color.White;                                                                  // Sprite color
         private Vector2 Direction = Vector2.Zero;                                                   // Sprite Move direction
         private float Speed;                                                                        // Speed used in functions
         private bool ani_forward = true;                                                            // if we play for or backward
-        private bool frozen = false;                                                                // frozen switch during hit
 
         // Movement properties
         const int WALK_SPEED = 100;                                                                 // The actual speed of the entity
@@ -52,6 +58,10 @@ namespace XNA_ScreenManager.CharacterClasses
             previousIdleTimeMin;                                                                    // IdleTime in Minutes
         int previousHitTimeMSec,                                                                    // IdleTime in Miliseconds
             previousHitTimeSec;                                                                     // IdleTime in Seconds
+        int previousDiedTimeMin,                                                                    // IdleTime in Minutes
+            previousDiedTimeSec;                                                                    // IdleTime in Seconds
+        int previousSpawnTimeMSec,                                                                  // IdleTime in Miliseconds
+            previousSpawnTimeSec;                                                                   // IdleTime in Seconds
 
         #endregion
 
@@ -66,12 +76,16 @@ namespace XNA_ScreenManager.CharacterClasses
             OldPosition = position;
             entityType = EntityType.Monster;
 
+            // Save for respawning
+            resp_pos = position;
+            resp_bord = borders;
+
             // temporary parameters these should eventually be imported from the Monster Database
-            HP = 10; MP = 0; ATK = 60; DEF = 30; LVL = 1; HIT = 10; FLEE = 5;
+            HP = 1500; MP = 0; ATK = 60; DEF = 30; LVL = 1; HIT = 10; FLEE = 5;
 
             // Local properties
             Direction = new Vector2();                                                              // Move direction
-            state = EntityState.Stand;                                                              // Player state
+            state = EntityState.Spawn;                                                              // Player state
             Borders = new Border(borders.X, borders.Y);                                             // Max Tiles from center
         }
 
@@ -130,7 +144,7 @@ namespace XNA_ScreenManager.CharacterClasses
         {
             switch (state)
             {
-                #region state stand
+                #region stand
                 case EntityState.Stand:
 
                     Speed = 0;
@@ -179,7 +193,7 @@ namespace XNA_ScreenManager.CharacterClasses
 
                     break;
                 #endregion
-                #region state walk
+                #region walk
                 case EntityState.Walk:
 
                     Speed = 0;
@@ -284,12 +298,21 @@ namespace XNA_ScreenManager.CharacterClasses
 
                     // Start damage controll
                     damage = Battle.battle_calc_damage(PlayerInfo, this);
+                    this.HP -= damage;
 
                     // create a damage baloon
                     world.createEffects(damage, new Vector2((this.position.X + this.SpriteFrame.Width * 0.45f) - damage.ToString().Length * 5,
                                                              this.position.Y + this.SpriteFrame.Height * 0.20f));
 
-                    state = EntityState.Frozen;
+                    // change state (freeze or kill)
+                    if (this.HP <= 0)
+                    {
+                        previousDiedTimeSec = (int)gameTime.TotalGameTime.Seconds + RESPAWN_TIME;
+                        previousDiedTimeMin = (int)gameTime.TotalGameTime.Minutes;
+                        state = EntityState.Died;
+                    }
+                    else
+                        state = EntityState.Frozen;
 
                     break;
                 #endregion
@@ -313,6 +336,80 @@ namespace XNA_ScreenManager.CharacterClasses
                     }
                     break;
                 #endregion
+                #region died
+                case EntityState.Died:
+
+                    // Apply Gravity 
+                    Position += new Vector2(0, 1) * 250 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                    // monster animation
+                    spriteOfset = new Vector2(0, 270);
+                    spriteFrame.Y = Convert.ToInt32(spriteOfset.Y);
+
+                    // Monster fades away
+                    transperancy -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                    if (previousAnimateTimeMsec <= (int)gameTime.TotalGameTime.Milliseconds
+                        || previousAnimateTimeSec != (int)gameTime.TotalGameTime.Seconds)
+                    {
+                        previousAnimateTimeMsec = (int)gameTime.TotalGameTime.Milliseconds + ANIMATION_SPEED;
+                        previousAnimateTimeSec = (int)gameTime.TotalGameTime.Seconds;
+
+                        spriteFrame.X += spriteWidth;
+
+                        if (spriteFrame.X > spriteOfset.X + (spriteWidth * 3))
+                        {
+                            spriteFrame.X = (int)spriteOfset.X + (spriteWidth * 3);
+                        }
+                    }
+
+                    // removing counter
+                    if (previousDiedTimeSec <= (int)gameTime.TotalGameTime.Seconds
+                        || previousDiedTimeMin < (int)gameTime.TotalGameTime.Minutes - 1)
+                    {
+                        // link to world
+                        if (world == null)
+                            world = GameWorld.GetInstance;
+
+                        // spawn monster drops !!!
+
+                        // respawn a new monster
+                        world.createMonster(sprite, resp_pos, (int)resp_bord.X, (int)resp_bord.Y);
+
+                        // remove monster from map
+                        this.keepAliveTime = 0;
+                    }
+                    break;
+                #endregion
+                #region spawn
+                case EntityState.Spawn:
+
+                    // Apply Gravity 
+                    Position += new Vector2(0, 1) * 250 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                    // Monster fadesin
+                    if (transperancy < 1)
+                        transperancy += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                    // Monster Spawn Timer
+                    if (previousSpawnTimeMSec <= (int)gameTime.TotalGameTime.Milliseconds
+                        || previousSpawnTimeSec < (int)gameTime.TotalGameTime.Seconds - 1)
+                    {
+                        if (spawn)
+                        {
+                            transperancy = 1;
+                            state = EntityState.Stand;
+                        }
+                        else
+                        {
+                            spawn = true;
+                            previousSpawnTimeMSec = (int)gameTime.TotalGameTime.Milliseconds + 1100;
+                            previousSpawnTimeSec = (int)gameTime.TotalGameTime.Seconds;
+                        }
+                    }
+
+                    break;
+                #endregion
             }
         }
 
@@ -320,7 +417,7 @@ namespace XNA_ScreenManager.CharacterClasses
         {
             if (Active)
                 spriteBatch.Draw(sprite, new Rectangle((int)Position.X, (int)Position.Y, SpriteFrame.Width, SpriteFrame.Height),
-                    SpriteFrame, Color.White, 0f, Vector2.Zero, spriteEffect, 0f);
+                    SpriteFrame, Color.White * transperancy, 0f, Vector2.Zero, spriteEffect, 0f);
         }
 
         private struct Border

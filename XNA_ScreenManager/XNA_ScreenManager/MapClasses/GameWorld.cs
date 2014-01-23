@@ -45,7 +45,8 @@ namespace XNA_ScreenManager.MapClasses
         List<Effect> listEffect = new List<Effect>();
 
         // dynamic items
-        ArrowProperties arrowprop = new ArrowProperties(false, null, new Vector2(0,0), 0 , new Vector2(0,0));
+        ArrowProperties arrowprop = new ArrowProperties(false, null, Vector2.Zero, 0, new Vector2(0, 0));
+        MonsterProperties mobsprop = new MonsterProperties(false, null, Vector2.Zero, 0, 0);
 
         public bool Active { get; set; }
         public bool Paused { get; set; }
@@ -406,8 +407,14 @@ namespace XNA_ScreenManager.MapClasses
                                                 (int)arrow.SpriteFrame.Width - (int)(entity.SpriteFrame.Width * 0.30f), 
                                                 (int)arrow.SpriteFrame.Height)))
                                     {
-                                        entity.State = EntityState.Hit;
-                                        arrow.KeepAliveTime = 0;        // remove arrow
+                                        // make the monster suffer :-)
+                                        // and remove the arrow
+                                        if (entity.State != EntityState.Died &&
+                                            entity.State != EntityState.Spawn)
+                                        {
+                                            entity.State = EntityState.Hit;
+                                            arrow.KeepAliveTime = 0;   
+                                        }
                                     }
                                 }
                             }
@@ -495,6 +502,7 @@ namespace XNA_ScreenManager.MapClasses
 
         #region functions load / save
 
+        // initial load map functions
         public void LoadEntities()
         {
             foreach (var group in map.ObjectGroups)
@@ -554,7 +562,7 @@ namespace XNA_ScreenManager.MapClasses
                             }
                             catch (Exception ee)
                             {
-                                // bug handler for NPC properties
+                                // bug handler for NPC import properties
                                 string aa = ee.ToString();
                             }
                         }
@@ -600,7 +608,7 @@ namespace XNA_ScreenManager.MapClasses
                             }
                             catch (Exception ee)
                             {
-                                // bug handler for Monster properties
+                                // bug handler for Monster import properties
                                 string aa = ee.ToString();
                             }
                         }
@@ -635,16 +643,23 @@ namespace XNA_ScreenManager.MapClasses
                                     camposy = Convert.ToInt32(objvalue);
 
                             }
-                            listEffect.Add(new Warp(Content.Load<Texture2D>(@"gfx\gameobjects\warp"),
+                            try
+                            {
+                                listEffect.Add(new Warp(Content.Load<Texture2D>(@"gfx\gameobjects\warp"),
                                                         new Vector2(obj.Value.X - 20, obj.Value.Y - 225),
                                                         newmap, new Vector2(newposx, newposy),
                                                         new Vector2(camposx, camposy)));
+                            }
+                            catch (Exception ee)
+                            {
+                                // bug handler for Warp import properties
+                                string aa = ee.ToString();
+                            }
                         }
                     }
                 }
             }
         }
-
         public void loadnewmap(string newmap, Vector2 newpos, Vector2 campos)
         {
             map = Map.Load(Path.Combine(Content.RootDirectory, @newmap), Content);
@@ -677,15 +692,24 @@ namespace XNA_ScreenManager.MapClasses
             LoadEntities();
         }
 
-        public void createEntities()
+        // actual creation and add to list voids
+        private void createEntities()
         {
             if (arrowprop.active)
             {
                 arrowprop.active = false;
                 listEntity.Add(new Arrow(Content.Load<Texture2D>(arrowprop.sprite), arrowprop.position, arrowprop.speed, arrowprop.direction));
             }
+            else if (mobsprop.active)
+            {
+                mobsprop.active = false;
+                listEntity.Add(new Monster(
+                                    mobsprop.sprite,
+                                    new Vector2(mobsprop.position.X, mobsprop.position.Y),
+                                    new Vector2(mobsprop.borderL, mobsprop.borderR)
+                                    ));
+            }
         }
-
         public void createEffects(int getdamage, Vector2 getposition)
         {
             listEffect.Add(new DamageBaloon(Content.Load<Texture2D>(@"gfx\effects\damage_counter1"),
@@ -693,6 +717,7 @@ namespace XNA_ScreenManager.MapClasses
                                             getposition, getdamage));
         }
 
+        // public creation request voids
         public void createArrow(Vector2 arg0, float arg1, Vector2 arg2)
         {
             arrowprop.active = true;
@@ -701,7 +726,16 @@ namespace XNA_ScreenManager.MapClasses
             arrowprop.speed = arg1;
             arrowprop.direction = arg2;
         }
+        public void createMonster(Texture2D arg0, Vector2 arg1, int arg2, int arg3)
+        {
+            mobsprop.active = true;
+            mobsprop.sprite = arg0;
+            mobsprop.position = arg1;
+            mobsprop.borderL = arg2;
+            mobsprop.borderR = arg3;
+        }
 
+        // Structures to store information
         private struct ArrowProperties
         {
             public bool active;
@@ -717,6 +751,22 @@ namespace XNA_ScreenManager.MapClasses
                 position = arg2;
                 speed = arg3;
                 direction = arg4;
+            }
+        }
+        private struct MonsterProperties
+        {
+            public bool active;
+            public Texture2D sprite;
+            public Vector2 position;
+            public int borderL, borderR;
+
+            public MonsterProperties(bool arg0, Texture2D arg1, Vector2 arg2, int arg3, int arg4)
+            {
+                active = arg0;
+                sprite = arg1;
+                position = arg2;
+                borderL = arg3;
+                borderR = arg4;
             }
         }
         #endregion
