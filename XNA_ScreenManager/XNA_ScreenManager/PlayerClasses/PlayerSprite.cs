@@ -67,10 +67,10 @@ namespace XNA_ScreenManager
 
             // temporary parameters these should eventually be imported from the Monster Database
             playerinfo.Health = 150;
-            playerinfo.Strength = 15;
-            playerinfo.Dexterity = 15;
+            playerinfo.Strength = 99;
+            playerinfo.Dexterity = 99;
             playerinfo.Luck = 10;
-            playerinfo.Agility = 15;
+            playerinfo.Agility = 99;
             playerinfo.Level = 10;
             
             // Local properties

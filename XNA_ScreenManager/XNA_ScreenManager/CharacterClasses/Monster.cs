@@ -1,16 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
-using XNA_ScreenManager.CharacterClasses;
 using XNA_ScreenManager.MapClasses;
 using XNA_ScreenManager.PlayerClasses;
-using System.Text;
 
 namespace XNA_ScreenManager.CharacterClasses
 {
@@ -301,14 +293,22 @@ namespace XNA_ScreenManager.CharacterClasses
                     this.HP -= damage;
 
                     // create a damage baloon
-                    world.createEffects(damage, new Vector2((this.position.X + this.SpriteFrame.Width * 0.45f) - damage.ToString().Length * 5,
-                                                             this.position.Y + this.SpriteFrame.Height * 0.20f));
+                    world.createEffects(EffectType.DamageBaloon, new Vector2((this.position.X + this.SpriteFrame.Width * 0.45f) - damage.ToString().Length * 5,
+                                                             this.position.Y + this.SpriteFrame.Height * 0.20f), damage);
 
                     // change state (freeze or kill)
                     if (this.HP <= 0)
                     {
+                        // Monster respawn timer
                         previousDiedTimeSec = (int)gameTime.TotalGameTime.Seconds + RESPAWN_TIME;
                         previousDiedTimeMin = (int)gameTime.TotalGameTime.Minutes;
+
+                        // Spawn monster drops
+                        world.createEffects(EffectType.ItemSprite, 
+                        new Vector2(Randomizer.generateRandom((int)this.position.X - 50, (int)this.position.X + 50),
+                                    (int)(this.position.Y + this.spriteFrame.Height * 0.5f)), 1201);
+
+                        // Change state monster
                         state = EntityState.Died;
                     }
                     else
@@ -370,8 +370,6 @@ namespace XNA_ScreenManager.CharacterClasses
                         // link to world
                         if (world == null)
                             world = GameWorld.GetInstance;
-
-                        // spawn monster drops !!!
 
                         // respawn a new monster
                         world.createMonster(sprite, resp_pos, (int)resp_bord.X, (int)resp_bord.Y);

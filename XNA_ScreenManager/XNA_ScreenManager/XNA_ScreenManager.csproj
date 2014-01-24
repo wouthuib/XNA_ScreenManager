@@ -130,6 +130,7 @@
     <Compile Include="ItemClasses\Equipment.cs" />
     <Compile Include="ItemClasses\Inventory.cs" />
     <Compile Include="ItemClasses\Item.cs" />
+    <Compile Include="ItemClasses\ItemSprite.cs" />
     <Compile Include="ItemClasses\ItemStore.cs" />
     <Compile Include="MapClasses\Battle.cs" />
     <Compile Include="MapClasses\DamageBaloon.cs" />

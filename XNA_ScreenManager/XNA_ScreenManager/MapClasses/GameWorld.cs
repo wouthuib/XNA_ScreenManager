@@ -10,7 +10,6 @@ using XNA_ScreenManager.CharacterClasses;
 using XNA_ScreenManager.ItemClasses;
 using XNA_ScreenManager.PlayerClasses;
 using XNA_ScreenManager.ScreenClasses;
-using System.Threading;
 
 
 namespace XNA_ScreenManager.MapClasses
@@ -137,7 +136,7 @@ namespace XNA_ScreenManager.MapClasses
                 {
                     var obj = listEntity[i];
 
-                    if (obj.KeepAliveTime != -1 && obj.KeepAliveTime <= (int)gameTime.TotalGameTime.Seconds)
+                    if (obj.KeepAliveTime == 0)
                         listEntity.Remove(obj);
                 }
 
@@ -146,7 +145,7 @@ namespace XNA_ScreenManager.MapClasses
                 {
                     var obj = listEffect[i];
 
-                    if (obj.KeepAliveTime != -1 && obj.KeepAliveTime <= (int)gameTime.TotalGameTime.Seconds)
+                    if (obj.KeepAliveTime == 0)
                         listEffect.Remove(obj);
                 }
                 
@@ -424,7 +423,8 @@ namespace XNA_ScreenManager.MapClasses
                         // check maps bounds (player and NPC!)
                         if (EntityRec.Right > map.Width * map.TileWidth || EntityRec.Bottom > map.Height * map.TileHeight ||
                             EntityRec.Left < 0 || EntityRec.Top < 0)
-                            entity.Position = entity.OldPosition;
+                            if (entity.EntityType != EntityType.Arrow)
+                                entity.Position = entity.OldPosition;
                         #endregion
 
                     }
@@ -710,11 +710,22 @@ namespace XNA_ScreenManager.MapClasses
                                     ));
             }
         }
-        public void createEffects(int getdamage, Vector2 getposition)
+        public void createEffects(EffectType type, Vector2 getposition, int value = 0)
         {
-            listEffect.Add(new DamageBaloon(Content.Load<Texture2D>(@"gfx\effects\damage_counter1"),
-                                            Content.Load<SpriteFont>(@"font\gamefont"), 
-                                            getposition, getdamage));
+            switch(type)
+            {
+                case EffectType.DamageBaloon:
+                    listEffect.Add(new DamageBaloon(Content.Load<Texture2D>(@"gfx\effects\damage_counter1"),
+                                            Content.Load<SpriteFont>(@"font\gamefont"),
+                                            getposition, value));
+                break;
+                case EffectType.ItemSprite:
+                listEffect.Add(new ItemSprite(Content.Load<Texture2D>(@"gfx\effects\item_spritesheet1"),
+                                            new Vector2(1, 1), getposition, value));
+                    break;
+                default:
+                    break;
+            }
         }
 
         // public creation request voids

@@ -1,14 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.GamerServices;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
 using XNA_ScreenManager.CharacterClasses;
-using XNA_ScreenManager.MapClasses;
 
 namespace XNA_ScreenManager.PlayerClasses
 {
@@ -43,12 +35,15 @@ namespace XNA_ScreenManager.PlayerClasses
         {
             // Start timer (default is -1)
             if (KeepAliveTime < 0)
-                KeepAliveTime = (int)gameTime.TotalGameTime.Seconds + 5;
+                KeepAliveTime = (float)gameTime.TotalGameTime.Seconds + 2;
 
-            // Move the Monster
+            // Remove Arrow Timer
+            KeepAliveTime -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            // Move the Arrow
             OldPosition = Position;
 
-            // Walk speed
+            // Arrow speed
             Position += Direction * Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
 

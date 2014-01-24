@@ -7,6 +7,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace XNA_ScreenManager.MapClasses
 {
+    public enum EffectType { DamageBaloon, ItemSprite };
+
     public abstract class Effect
     {
         #region Drawable properties
@@ -14,6 +16,7 @@ namespace XNA_ScreenManager.MapClasses
         protected Vector2 spriteSize;
         protected Rectangle spriteFrame;
         protected Vector2 position;
+        protected EffectType type;
 
         public Texture2D Sprite
         {
@@ -34,6 +37,11 @@ namespace XNA_ScreenManager.MapClasses
         {
             get { return position; }
             set { position = value; }
+        }
+        public EffectType Type
+        {
+            get { return type; }
+            set { type = value; }
         }
         #endregion
 
