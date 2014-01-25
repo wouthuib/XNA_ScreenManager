@@ -56,6 +56,10 @@ namespace XNA_ScreenManager.ItemClasses
         public string itemName { get; set; }
         public string itemDescription { get; set; }
 
+        public string itemSpritePath { get; set; }
+        public int SpriteFrameX { get; set; }
+        public int SpriteFrameY { get; set; }
+
         public int defModifier { get; set; }
         public int atkModifier { get; set; }
         public int magicModifier { get; set; }
@@ -68,25 +72,13 @@ namespace XNA_ScreenManager.ItemClasses
         public ItemClass itemClass { get; set; }
         public ItemSlot itemSlot { get; set; }
 
-        public static Item create(
-            int identifier,
-            string name, string description,
-            int defMod, int atkMod, int mgcMod, int spdMod, int value,
-            ItemType type, ItemClass itemclass, ItemSlot slot)
+        public static Item create(int identifier, string name, ItemType type)
         {
             var results = new Item();
 
             results.itemID = identifier;
             results.itemType = type;
             results.itemName = name;
-            results.itemDescription = description;
-            results.defModifier = defMod;
-            results.atkModifier = atkMod;
-            results.magicModifier = mgcMod;
-            results.speedModifier = spdMod;
-            results.Value = value;
-            results.itemClass = itemclass;
-            results.itemSlot = slot;
             results.WeaponLevel = 1;
             results.RefinementBonus = 0;
 

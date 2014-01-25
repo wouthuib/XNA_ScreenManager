@@ -16,43 +16,45 @@ namespace XNA_ScreenManager.ItemClasses
         ItemStore itemDB;
         Inventory inventory;
         GameWorld world;
+        Item item;
 
-        Vector2 spriteoffSet = new Vector2(60, 10);
-        Vector2 spritesize = new Vector2(34, 34);
-        Vector2 cellspace = new Vector2(60, 22);
+        Vector2 spritesize = new Vector2(32, 32);
         Vector2 circleOrigin = Vector2.Zero;
-        private int item;
+
         private float transperant = 0;
-        private float angle = 0;
+        private float angle = 1;
+        private bool angledirection = false;
         #endregion
 
-        public ItemSprite(Texture2D getsprite, Vector2 spriteFrame, Vector2 position, int itemID) : 
+        public ItemSprite(Vector2 position, int itemID) : 
             base()
         {
-            // general properties
-            this.sprite = getsprite;
-            this.position = position;
-            this.item = itemID;
-
-            /*this.spriteFrame = new Rectangle(
-                (int)(spriteoffSet.X + (cellspace.X * spriteFrame.X)),
-                (int)(spriteoffSet.Y + (cellspace.Y * spriteFrame.Y)),
-                (int)spritesize.X, (int)spritesize.Y);*/
-
-            this.SpriteFrame = new Rectangle(60, 10, 34, 34);
-
-            circleOrigin = new Vector2(SpriteFrame.X + SpriteFrame.Width * 0.5f, SpriteFrame.Y + SpriteFrame.Height * 0.5f);
-
             // Link properties to instance
             this.itemDB = ItemStore.Instance;
             this.inventory = Inventory.Instance;
             this.world = GameWorld.GetInstance;
+
+            // get item information from general DB
+            item = itemDB.getItem(itemID);
+
+            // general properties
+            this.sprite = world.Content.Load<Texture2D>(@"" + item.itemSpritePath);
+            this.position = position;
+
+            // set the correct item sprite in item spritesheet
+            this.spriteFrame = new Rectangle(
+                (int)(spritesize.X * item.SpriteFrameX),
+                (int)(spritesize.Y * item.SpriteFrameY),
+                (int)spritesize.X, (int)spritesize.Y);
+
+            //this.SpriteFrame = new Rectangle(60, 10, 34, 34);
+            circleOrigin = new Vector2(SpriteFrame.Width * 0.5f, SpriteFrame.Height * 0.5f);
         }
 
         public void pickupItem()
         {
             // add item to inventory
-            inventory.addItem(itemDB.getItem(item));
+            inventory.addItem(this.item);
 
             // remove this sprite
             this.KeepAliveTime = 0;
@@ -72,12 +74,23 @@ namespace XNA_ScreenManager.ItemClasses
                 transperant += (float)gameTime.ElapsedGameTime.TotalSeconds / 2;
 
             // Make it slowly rotate
-            angle += (float)gameTime.ElapsedGameTime.TotalSeconds / 2;
+            if (angledirection)
+            {
+                angle += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (angle >= 1.5f)
+                    angledirection = false;
+            }
+            else
+            {
+                angle -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (angle <= 0)
+                    angledirection = true;
+            }
 
             // Check player collision
-            if (new Rectangle((int)(world.playerSprite.Position.X + world.playerSprite.SpriteFrame.Width * 0.40f), 
+            if (new Rectangle((int)(world.playerSprite.Position.X + world.playerSprite.SpriteFrame.Width * 0.60f), 
                 (int)world.playerSprite.Position.Y,
-                (int)(world.playerSprite.SpriteFrame.Width * 0.40f), 
+                (int)(world.playerSprite.SpriteFrame.Width * 0.30f), 
                 (int)world.playerSprite.SpriteFrame.Height).
                 Intersects(new Rectangle(
                     (int)Position.X, (int)Position.Y,

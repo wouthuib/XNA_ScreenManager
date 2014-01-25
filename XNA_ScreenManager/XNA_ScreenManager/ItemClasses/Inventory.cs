@@ -46,7 +46,7 @@ namespace XNA_ScreenManager.ItemClasses
 
         public void loadItems(string file)
         {
-            string dir = @"c:\Temp";
+            string dir = @"..\..\..\..\XNA_ScreenManagerContent\itemDB";
             string serializationFile = Path.Combine(dir, file);
 
             //deserialize
@@ -60,7 +60,7 @@ namespace XNA_ScreenManager.ItemClasses
 
         public void saveItem(string file)
         {
-            string dir = @"c:\Temp";
+            string dir = @"..\..\..\..\XNA_ScreenManagerContent\itemDB";
             string serializationFile = Path.Combine(dir, file);
 
             //serialize

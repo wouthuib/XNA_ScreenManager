@@ -570,12 +570,7 @@ namespace XNA_ScreenManager
 
             // temporary global function buttons 
             // should be handles by singleton class keyboard manager
-            if (keyboardStateCurrent.IsKeyUp(Microsoft.Xna.Framework.Input.Keys.F1) == true &&
-                keyboardStatePrevious.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.F1) == true)
-            {
-                inventory.addItem(itemStore.getItem(new Random().Next(1200, 1210)));
-            }
-            else if (keyboardStateCurrent.IsKeyUp(Microsoft.Xna.Framework.Input.Keys.F3) == true &&
+            if (keyboardStateCurrent.IsKeyUp(Microsoft.Xna.Framework.Input.Keys.F3) == true &&
                      keyboardStatePrevious.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.F3) == true)
             {
                 inventory.loadItems("inventory.bin");

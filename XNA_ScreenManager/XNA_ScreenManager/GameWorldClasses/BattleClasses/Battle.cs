@@ -10,7 +10,7 @@ namespace XNA_ScreenManager.MapClasses
     // static battle calculation class
     public static class Battle
     {
-        public static int battle_calc_damage(PlayerInfo playerinfo, Monster monsterinfo)
+        public static int battle_calc_damage(PlayerInfo playerinfo, MonsterSprite monsterinfo)
         {
             randomizer Randomizer = randomizer.Instance;
 

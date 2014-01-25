@@ -6,7 +6,7 @@ using XNA_ScreenManager.PlayerClasses;
 
 namespace XNA_ScreenManager.CharacterClasses
 {
-    public class Monster : Entity
+    public class MonsterSprite : Entity
     {
         #region properties
 
@@ -57,7 +57,7 @@ namespace XNA_ScreenManager.CharacterClasses
 
         #endregion
 
-        public Monster(Texture2D texture, Vector2 position, Vector2 borders)
+        public MonsterSprite(Texture2D texture, Vector2 position, Vector2 borders)
             : base()
         {
             // Derived properties
@@ -303,10 +303,10 @@ namespace XNA_ScreenManager.CharacterClasses
                         previousDiedTimeSec = (int)gameTime.TotalGameTime.Seconds + RESPAWN_TIME;
                         previousDiedTimeMin = (int)gameTime.TotalGameTime.Minutes;
 
-                        // Spawn monster drops
+                        // Monster Item Drops
                         world.createEffects(EffectType.ItemSprite, 
-                        new Vector2(Randomizer.generateRandom((int)this.position.X - 50, (int)this.position.X + 50),
-                                    (int)(this.position.Y + this.spriteFrame.Height * 0.5f)), 1201);
+                        new Vector2(Randomizer.generateRandom((int)this.position.X + 20, (int)this.position.X + this.spriteFrame.Width - 20),
+                                    (int)(this.position.Y + this.spriteFrame.Height * 0.70f)), Randomizer.generateRandom(1200, 1210));
 
                         // Change state monster
                         state = EntityState.Died;

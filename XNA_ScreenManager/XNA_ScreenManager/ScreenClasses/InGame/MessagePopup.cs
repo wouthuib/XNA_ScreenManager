@@ -71,7 +71,7 @@ namespace XNA_ScreenManager.ScreenClasses
             t_complete.Capacity = 0;
             t_index = 0;
 
-            scriptfile = @"C:\Temp\npc01.txt";
+            scriptfile = @"..\..\..\..\XNA_ScreenManagerContent\scriptDB\npc01.txt";
             scriptManager.loadFile(scriptfile);
             this.scriptActive = false;
 

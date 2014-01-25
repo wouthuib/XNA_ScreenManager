@@ -33,6 +33,11 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.ItemsTab = new System.Windows.Forms.TabPage();
+            this.label16 = new System.Windows.Forms.Label();
+            this.itemSpriteFrameY = new System.Windows.Forms.NumericUpDown();
+            this.itemSpriteFrameX = new System.Windows.Forms.NumericUpDown();
+            this.label15 = new System.Windows.Forms.Label();
+            this.ItemSpritePath = new System.Windows.Forms.TextBox();
             this.ItemIDNum = new System.Windows.Forms.NumericUpDown();
             this.ItemName = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
@@ -76,6 +81,8 @@
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.ItemsTab.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.itemSpriteFrameY)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.itemSpriteFrameX)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ItemIDNum)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ItemDEFNum)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ItemATKNum)).BeginInit();
@@ -133,6 +140,11 @@
             // 
             // ItemsTab
             // 
+            this.ItemsTab.Controls.Add(this.label16);
+            this.ItemsTab.Controls.Add(this.itemSpriteFrameY);
+            this.ItemsTab.Controls.Add(this.itemSpriteFrameX);
+            this.ItemsTab.Controls.Add(this.label15);
+            this.ItemsTab.Controls.Add(this.ItemSpritePath);
             this.ItemsTab.Controls.Add(this.ItemIDNum);
             this.ItemsTab.Controls.Add(this.LoadXMLButton);
             this.ItemsTab.Controls.Add(this.SaveXMLButton);
@@ -167,6 +179,56 @@
             this.ItemsTab.Text = "Create Items";
             this.ItemsTab.UseVisualStyleBackColor = true;
             // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(522, 107);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(88, 13);
+            this.label16.TabIndex = 32;
+            this.label16.Text = "Sprite Frame X/Y";
+            // 
+            // itemSpriteFrameY
+            // 
+            this.itemSpriteFrameY.Location = new System.Drawing.Point(696, 105);
+            this.itemSpriteFrameY.Maximum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.itemSpriteFrameY.Name = "itemSpriteFrameY";
+            this.itemSpriteFrameY.Size = new System.Drawing.Size(33, 20);
+            this.itemSpriteFrameY.TabIndex = 31;
+            // 
+            // itemSpriteFrameX
+            // 
+            this.itemSpriteFrameX.Location = new System.Drawing.Point(634, 105);
+            this.itemSpriteFrameX.Maximum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.itemSpriteFrameX.Name = "itemSpriteFrameX";
+            this.itemSpriteFrameX.Size = new System.Drawing.Size(38, 20);
+            this.itemSpriteFrameX.TabIndex = 30;
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(522, 81);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(59, 13);
+            this.label15.TabIndex = 29;
+            this.label15.Text = "Sprite Path";
+            // 
+            // ItemSpritePath
+            // 
+            this.ItemSpritePath.Location = new System.Drawing.Point(634, 78);
+            this.ItemSpritePath.Name = "ItemSpritePath";
+            this.ItemSpritePath.Size = new System.Drawing.Size(180, 20);
+            this.ItemSpritePath.TabIndex = 28;
+            this.ItemSpritePath.Text = "gfx\\effects\\item_spritesheet1";
+            // 
             // ItemIDNum
             // 
             this.ItemIDNum.Location = new System.Drawing.Point(138, 21);
@@ -181,7 +243,7 @@
             // 
             // ItemName
             // 
-            this.ItemName.Location = new System.Drawing.Point(462, 20);
+            this.ItemName.Location = new System.Drawing.Point(634, 20);
             this.ItemName.Name = "ItemName";
             this.ItemName.Size = new System.Drawing.Size(180, 20);
             this.ItemName.TabIndex = 26;
@@ -208,7 +270,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(350, 23);
+            this.label1.Location = new System.Drawing.Point(522, 23);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(58, 13);
             this.label1.TabIndex = 0;
@@ -254,7 +316,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(350, 54);
+            this.label9.Location = new System.Drawing.Point(522, 54);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(56, 13);
             this.label9.TabIndex = 21;
@@ -265,7 +327,7 @@
             this.ItemDescription.Location = new System.Drawing.Point(138, 102);
             this.ItemDescription.Multiline = true;
             this.ItemDescription.Name = "ItemDescription";
-            this.ItemDescription.Size = new System.Drawing.Size(524, 94);
+            this.ItemDescription.Size = new System.Drawing.Size(289, 94);
             this.ItemDescription.TabIndex = 5;
             // 
             // ItemSlotBox
@@ -302,7 +364,7 @@
             "WizardPriestMonk",
             "FighterMonk",
             "All"});
-            this.ItemJobBox.Location = new System.Drawing.Point(462, 51);
+            this.ItemJobBox.Location = new System.Drawing.Point(634, 51);
             this.ItemJobBox.Name = "ItemJobBox";
             this.ItemJobBox.Size = new System.Drawing.Size(180, 21);
             this.ItemJobBox.TabIndex = 19;
@@ -349,7 +411,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(350, 260);
+            this.label8.Location = new System.Drawing.Point(522, 260);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(59, 13);
             this.label8.TabIndex = 17;
@@ -357,7 +419,7 @@
             // 
             // ItemMATKNum
             // 
-            this.ItemMATKNum.Location = new System.Drawing.Point(462, 204);
+            this.ItemMATKNum.Location = new System.Drawing.Point(634, 204);
             this.ItemMATKNum.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -370,7 +432,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(350, 233);
+            this.label7.Location = new System.Drawing.Point(522, 233);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(67, 13);
             this.label7.TabIndex = 16;
@@ -378,7 +440,7 @@
             // 
             // ItemSPDNum
             // 
-            this.ItemSPDNum.Location = new System.Drawing.Point(462, 231);
+            this.ItemSPDNum.Location = new System.Drawing.Point(634, 231);
             this.ItemSPDNum.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -391,7 +453,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(350, 206);
+            this.label6.Location = new System.Drawing.Point(522, 206);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(77, 13);
             this.label6.TabIndex = 15;
@@ -399,7 +461,7 @@
             // 
             // ItemGoldNum
             // 
-            this.ItemGoldNum.Location = new System.Drawing.Point(462, 258);
+            this.ItemGoldNum.Location = new System.Drawing.Point(634, 258);
             this.ItemGoldNum.Maximum = new decimal(new int[] {
             1000000000,
             0,
@@ -612,6 +674,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ItemsTab.ResumeLayout(false);
             this.ItemsTab.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.itemSpriteFrameY)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.itemSpriteFrameX)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ItemIDNum)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ItemDEFNum)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ItemATKNum)).EndInit();
@@ -673,6 +737,11 @@
         private System.Windows.Forms.ListBox listBox2;
         private System.Windows.Forms.ComboBox comboBoxCondition;
         private System.Windows.Forms.Label labelValue;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.TextBox ItemSpritePath;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.NumericUpDown itemSpriteFrameY;
+        private System.Windows.Forms.NumericUpDown itemSpriteFrameX;
     }
 }
 

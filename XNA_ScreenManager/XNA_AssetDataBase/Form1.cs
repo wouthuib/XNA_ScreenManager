@@ -15,9 +15,7 @@ namespace XNA_AssetDataBase
     public partial class Form1 : Form
     {
         // we use the inventory class for the ITEM database
-        Inventory inventory = Inventory.Instance;
-        ScriptInterpreter scriptManager = ScriptInterpreter.Instance;
-        //int scriptIndex = 1;
+        ItemStore itemDB = ItemStore.Instance;
 
         public Form1()
         {
@@ -26,36 +24,33 @@ namespace XNA_AssetDataBase
 
         private void ItemAddButton_Click(object sender, EventArgs e)
         {
-            int itemID = Convert.ToInt32(this.ItemIDNum.Value);
-            string itemName = this.ItemName.Text.ToString();
-            
+            // String builder
             StringBuilder description = new StringBuilder();
             foreach(var line in this.ItemDescription.Lines)
                 description.Append(line.ToString() + Environment.NewLine);
 
-            int itemDEF = Convert.ToInt32(this.ItemDEFNum.Value),
-                itemATK = Convert.ToInt32(this.ItemATKNum.Value),
-                itemMATK = Convert.ToInt32(this.ItemMATKNum.Value),
-                itemSPD = Convert.ToInt32(this.ItemSPDNum.Value),
-                itemGold = Convert.ToInt32(this.ItemGoldNum.Value);
-
+            // Get the itemtype text to enum
             ItemType itemType = (ItemType)Enum.Parse(typeof(ItemType), this.ItemTypeBox.Text.ToString());
-            ItemClass itemJob = (ItemClass)Enum.Parse(typeof(ItemClass), this.ItemJobBox.Text.ToString());
-            ItemSlot itemSlot = (ItemSlot)Enum.Parse(typeof(ItemSlot), this.ItemSlotBox.Text.ToString());
 
+            // Create the an empty item in item database
+            itemDB.addItem(Item.create(Convert.ToInt32(this.ItemIDNum.Value), this.ItemName.Text.ToString(), itemType));
 
-            inventory.addItem(Item.create(
-                                       itemID, 
-                                       itemName,
-                                       description.ToString(),
-                                       itemDEF,
-                                       itemATK,
-                                       itemMATK,
-                                       itemSPD,
-                                       itemGold,
-                                       itemType,
-                                       itemJob,
-                                       itemSlot));
+            // Link item to item database
+            Item item = itemDB.getItem(Convert.ToInt32(this.ItemIDNum.Value));
+
+            // Fill in the item properties if applicable
+            item.itemDescription = description.ToString();
+            item.itemSpritePath = @"" + ItemSpritePath.Text;
+            item.SpriteFrameX = Convert.ToInt32(this.itemSpriteFrameX.Value);
+            item.SpriteFrameY = Convert.ToInt32(this.itemSpriteFrameY.Value);
+            item.defModifier = Convert.ToInt32(this.ItemDEFNum.Value);
+            item.atkModifier = Convert.ToInt32(this.ItemATKNum.Value);
+            item.atkModifier = Convert.ToInt32(this.ItemMATKNum.Value);
+            item.atkModifier = Convert.ToInt32(this.ItemSPDNum.Value);
+            item.atkModifier = Convert.ToInt32(this.ItemGoldNum.Value);
+            item.itemClass = (ItemClass)Enum.Parse(typeof(ItemClass), this.ItemJobBox.Text.ToString());
+            item.itemSlot = (ItemSlot)Enum.Parse(typeof(ItemSlot), this.ItemSlotBox.Text.ToString());
+
             updateGrid();
         }
 
@@ -66,13 +61,13 @@ namespace XNA_AssetDataBase
 
         private void LoadXMLButton_Click(object sender, EventArgs e)
         {
-            inventory.loadItems("itemtable.bin");
+            itemDB.loadItems(@"..\..\..\XNA_ScreenManagerContent\itemDB\","itemtable.bin");
             updateGrid();
         }
 
         private void SaveXMLButton_Click(object sender, EventArgs e)
         {
-            inventory.saveItem("itemtable.bin");
+            itemDB.saveItem(@"..\..\..\XNA_ScreenManagerContent\itemDB\", "itemtable.bin");
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -83,7 +78,7 @@ namespace XNA_AssetDataBase
         private void updateGrid()
         {
             this.dataGridView1.DataSource = null;
-            this.dataGridView1.DataSource = inventory.item_list;
+            this.dataGridView1.DataSource = itemDB.item_list;
             clearInput();
         }
 
@@ -95,12 +90,15 @@ namespace XNA_AssetDataBase
             this.ItemMATKNum.Value = 0;
             this.ItemSPDNum.Value = 0;
             this.ItemGoldNum.Value = 0;
+            this.itemSpriteFrameX.Value = 0;
+            this.itemSpriteFrameY.Value = 0;
 
             this.ItemSlotBox.Text = null;
             this.ItemJobBox.Text = null;
             this.ItemTypeBox.Text = null;
             this.ItemName.Text = null;
             this.ItemDescription.Text = null;
+            this.ItemSpritePath.Text = @"gfx\effects\item_spritesheet1";
 
         }
     }

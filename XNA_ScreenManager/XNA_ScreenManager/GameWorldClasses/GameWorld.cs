@@ -17,16 +17,13 @@ namespace XNA_ScreenManager.MapClasses
     /// <summary>
     /// This is a game component that implements IUpdateable.
     /// </summary>
-    public class GameWorld// : DrawableGameComponent
+    public class GameWorld
     {
         #region properties
         // Game Services
         SpriteBatch spriteBatch = null;
-        ContentManager Content;
+        public ContentManager Content;
         GraphicsDevice gfxdevice;
-
-        // Keyboard- and Mousestate
-        KeyboardState keyboardStateCurrent, keyboardStatePrevious;
 
         // Class Instances
         public Map map;
@@ -107,7 +104,7 @@ namespace XNA_ScreenManager.MapClasses
             listEntity.Add(playerSprite);
 
             LoadEntities();
-            itemStore.loadItems("itemtable.bin");
+            itemStore.loadItems(@"..\..\..\..\XNA_ScreenManagerContent\itemDB\", "itemtable.bin");
 
             playerInfo.InitNewGame();
 
@@ -289,15 +286,6 @@ namespace XNA_ScreenManager.MapClasses
                                     ))
                             {
                                 playerSprite.CollideNPC = true;
-
-                                // Check for Keyboard input
-                                if (keyboardStateCurrent.IsKeyUp(Microsoft.Xna.Framework.Input.Keys.Space) == true &&
-                                    keyboardStatePrevious.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Space) == true &&
-                                    playerSprite.State == EntityState.Stand)
-                                {
-                                    // call NPC script
-                                    screenManager.messageScreen(true, entity.EntityFace, entity.EntityScript);
-                                }
                             }
                         }
                         #endregion
@@ -601,7 +589,7 @@ namespace XNA_ScreenManager.MapClasses
                             try
                             {
                                 // properties are filled now check the state
-                                listEntity.Add(new Monster(
+                                listEntity.Add(new MonsterSprite(
                                             Content.Load<Texture2D>(@"gfx\Mobs\" + texture),
                                             new Vector2(obj.Value.X, obj.Value.Y),
                                             new Vector2(borderX, borderY)));
@@ -703,7 +691,7 @@ namespace XNA_ScreenManager.MapClasses
             else if (mobsprop.active)
             {
                 mobsprop.active = false;
-                listEntity.Add(new Monster(
+                listEntity.Add(new MonsterSprite(
                                     mobsprop.sprite,
                                     new Vector2(mobsprop.position.X, mobsprop.position.Y),
                                     new Vector2(mobsprop.borderL, mobsprop.borderR)
@@ -720,8 +708,7 @@ namespace XNA_ScreenManager.MapClasses
                                             getposition, value));
                 break;
                 case EffectType.ItemSprite:
-                listEffect.Add(new ItemSprite(Content.Load<Texture2D>(@"gfx\effects\item_spritesheet1"),
-                                            new Vector2(1, 1), getposition, value));
+                listEffect.Add(new ItemSprite(getposition, value));
                     break;
                 default:
                     break;

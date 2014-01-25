@@ -4,47 +4,48 @@ using System.Linq;
 using System.Text;
 using System.IO;
 
-namespace XNA_ScreenManager.ItemClasses
+namespace XNA_ScreenManager.MonsterClasses
 {
-    public sealed class ItemStore
+    public sealed class MonsterStore
     {
-        public List<Item> item_list { get; set; }
+        public List<Monster> monster_list { get; set; }
 
-        private static ItemStore instance;
-        private ItemStore()
+        private static MonsterStore instance;
+        private MonsterStore()
         {
-            item_list = new List<Item>();
+            monster_list = new List<Monster>();
         }
 
-        public static ItemStore Instance
+        public static MonsterStore Instance
         {
             get
             {
                 if (instance == null)
                 {
-                    instance = new ItemStore();
+                    instance = new MonsterStore();
                 }
                 return instance;
             }
         }
 
-        public void addItem(Item addItem)
+        public void addMonster(Monster addItem)
         {
-            item_list.Add(addItem);
+            monster_list.Add(addItem);
         }
 
-        public void removeItem(string name)
+        public void removeMonster(string name)
         {
-            item_list.Remove(new Item() { itemName = name });
+            monster_list.Remove(new Monster() { monsterName = name });
         }
 
-        public Item getItem(int ID)
+        public Monster getMonster(int ID)
         {
-            return this.item_list.Find(delegate(Item item) { return item.itemID == ID; });
+            return this.monster_list.Find(delegate(Monster mob) { return mob.monsterID == ID; });
         }
 
-        public void loadItems(string dir, string file)
+        public void loadMonster(string file)
         {
+            string dir = @"c:\Temp";
             string serializationFile = Path.Combine(dir, file);
 
             //deserialize
@@ -52,12 +53,13 @@ namespace XNA_ScreenManager.ItemClasses
             {
                 var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
 
-                item_list = (List<Item>)bformatter.Deserialize(stream);
+                monster_list = (List<Monster>)bformatter.Deserialize(stream);
             }
         }
 
-        public void saveItem(string dir, string file)
+        public void saveMonster(string file)
         {
+            string dir = @"c:\Temp";
             string serializationFile = Path.Combine(dir, file);
 
             //serialize
@@ -65,7 +67,7 @@ namespace XNA_ScreenManager.ItemClasses
             {
                 var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
 
-                bformatter.Serialize(stream, item_list);
+                bformatter.Serialize(stream, monster_list);
             }
         }
     }

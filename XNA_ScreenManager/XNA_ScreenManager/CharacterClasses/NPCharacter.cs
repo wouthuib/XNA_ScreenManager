@@ -1,18 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.GamerServices;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
-using XNA_ScreenManager.CharacterClasses;
+using XNA_ScreenManager.MapClasses;
+using XNA_ScreenManager.ScreenClasses;
 
 namespace XNA_ScreenManager.CharacterClasses
 {
     class NPCharacter : Entity
     {
+        #region properties
+        // Global staic classes
+        GameWorld world;
+        ScreenManager screenmanager;
+
+        // Keyboard State
+        KeyboardState keyboardStateCurrent, keyboardStatePrevious;
+
         // Sprite properties
         public int spriteWidth = 32;
         public int spriteHeight = 48;
@@ -23,7 +26,7 @@ namespace XNA_ScreenManager.CharacterClasses
         const int NPC_SPEED = 80;                                                                   // The actual speed of the player
         const int NPC_WALK_TIME = 1;                                                                // The actual speed of the player
         const int ANIMATION_SPEED = 120;                                                            // Animation speed, 120 = default 
-
+        #endregion
 
         public NPCharacter(Texture2D _Sprite, Vector2 _spriteoffset, Vector2 _spriteSize, 
             Vector2 _position, Texture2D face, string script)
@@ -47,8 +50,32 @@ namespace XNA_ScreenManager.CharacterClasses
 
         public override void Update(GameTime gameTime)
         {
+            // Connect Global instances
+            if (screenmanager == null)
+                screenmanager = ScreenManager.Instance;
+
+            if (world == null)
+                world = GameWorld.GetInstance;
+
             // Apply Gravity 
             Position += new Vector2(0, 1) * 250 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            if (world.playerSprite.CollideNPC)
+            {
+                // Update keyboard states
+                keyboardStateCurrent = Keyboard.GetState();
+
+                // Check for Keyboard input
+                if (keyboardStateCurrent.IsKeyUp(Microsoft.Xna.Framework.Input.Keys.Space) == true &&
+                    keyboardStatePrevious.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Space) == true &&
+                    world.playerSprite.State == EntityState.Stand)
+                {
+                    screenmanager.messageScreen(true, this.entityFace, this.entityScript);
+                }
+
+                // Save keyboard states
+                keyboardStatePrevious = keyboardStateCurrent;
+            }
         }
 
         public override void Draw(SpriteBatch spriteBatch)
