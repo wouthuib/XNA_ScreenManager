@@ -5,13 +5,14 @@ using System.Collections.Specialized;
 
 using XNA_ScreenManager.ItemClasses;
 using System.Collections.Generic;
+using XNA_ScreenManager.ScreenClasses.SubComponents;
 
 namespace XNA_ScreenManager.ScreenClasses
 {
     public class ItemMenuScreen : GameScreen
     {
         #region properties
-        MenuComponent menu;
+        ItemlistComponent itemlist;
         MenuComponent options;
         Inventory inventory = Inventory.Instance;
         Equipment equipment = Equipment.Instance;
@@ -52,14 +53,14 @@ namespace XNA_ScreenManager.ScreenClasses
             spriteBatch = (SpriteBatch)Game.Services.GetService(typeof(SpriteBatch));
             graphics = (GraphicsDevice)Game.Services.GetService(typeof(GraphicsDevice));
             this.spriteFont = spriteFont;
-            menu = new MenuComponent(game, spriteFont);
+            itemlist = new ItemlistComponent(game, spriteFont);
             options = new MenuComponent(game, spriteFont);
 
             SetmenuCategories(categories);
             updateItemList();
 
             Components.Add(new BackgroundComponent(game, background));
-            Components.Add(menu);
+            Components.Add(itemlist);
         }
         #endregion
 
@@ -67,18 +68,21 @@ namespace XNA_ScreenManager.ScreenClasses
 
         public int SelectedItem
         {
-            get { return menu.SelectedIndex; }
+            get { return itemlist.SelectedIndex; }
         }
 
         public void updateItemList()
         {
-            string[] displayitems = new string[filterItemList().Count];
+            /*string[] displayitems = new string[filterItemList().Count];
 
             for (int id = 0; id < filterItemList().Count; id++)
             {
                 displayitems[id] = filterItemList()[id].itemName;
             }
-            menu.SetMenuItems(displayitems);
+
+            menu.SetMenuItems(displayitems);*/
+
+            itemlist.SetMenuItems(filterItemList());
         }
 
         // Fetch Invetory and place this in Menu Item list
@@ -241,16 +245,16 @@ namespace XNA_ScreenManager.ScreenClasses
         // BasicEffect Class functions
         public override void Show()
         {
-            menu.Position = new Vector2((Game.Window.ClientBounds.Width - menu.Width) / 6, 130);
+            itemlist.Position = new Vector2(150, 130);
             base.Show();
         }
 
         public override void Draw(GameTime gameTime)
         {
             if (itemOptions)
-                menu.NormalColor = Color.DarkGray;
+                itemlist.NormalColor = Color.DarkGray;
             else
-                menu.NormalColor = Color.Yellow;
+                itemlist.NormalColor = Color.Yellow;
 
             // Draw the base first
             base.Draw(gameTime);
@@ -281,7 +285,7 @@ namespace XNA_ScreenManager.ScreenClasses
             if (filterItemList().Count > 0)
             {
                 // item description
-                spriteBatch.DrawString(spriteFont, filterItemList()[menu.SelectedIndex].itemDescription, new Vector2(80, 450), normalColor);
+                spriteBatch.DrawString(spriteFont, filterItemList()[itemlist.SelectedIndex].itemDescription, new Vector2(80, 450), normalColor);
 
                 // item options
                 if (itemOptions)
@@ -292,13 +296,13 @@ namespace XNA_ScreenManager.ScreenClasses
                     for (int i = 0; i < data.Length; ++i) data[i] = Color.Black;
                     rect.SetData(data);
 
-                    spriteBatch.Draw(rect, new Vector2(menu.selectPos.X + 150, menu.selectPos.Y + 0),
+                    spriteBatch.Draw(rect, new Vector2(itemlist.selectPos.X + 150, itemlist.selectPos.Y + 0),
                         Color.White * 0.8f);
 
 
                     Vector2 optionPos = new Vector2();
-                    optionPos.X = menu.selectPos.X + 150;
-                    optionPos.Y = menu.selectPos.Y;
+                    optionPos.X = itemlist.selectPos.X + 150;
+                    optionPos.Y = itemlist.selectPos.Y;
 
                     options.Position = optionPos;
                     options.Draw(gameTime);
@@ -312,18 +316,18 @@ namespace XNA_ScreenManager.ScreenClasses
 
         private void itemEquip()
         {
-            if (equipment.getEquip(filterItemList()[menu.SelectedIndex].itemSlot) == null)
+            if (equipment.getEquip(filterItemList()[itemlist.SelectedIndex].itemSlot) == null)
             {
-                equipment.addItem(filterItemList()[menu.SelectedIndex]);
-                inventory.removeItem(filterItemList()[menu.SelectedIndex].itemID);
+                equipment.addItem(filterItemList()[itemlist.SelectedIndex]);
+                inventory.removeItem(filterItemList()[itemlist.SelectedIndex].itemID);
 
-                if (menu.SelectedIndex > filterItemList().Count -1)
-                    menu.SelectedIndex--;
+                if (itemlist.SelectedIndex > filterItemList().Count - 1)
+                    itemlist.SelectedIndex--;
             }
             else
             {
-                Item getequip = equipment.getEquip(filterItemList()[menu.SelectedIndex].itemSlot);
-                Item getinvent = filterItemList()[menu.SelectedIndex];
+                Item getequip = equipment.getEquip(filterItemList()[itemlist.SelectedIndex].itemSlot);
+                Item getinvent = filterItemList()[itemlist.SelectedIndex];
 
                 equipment.removeItem(getinvent.itemSlot);
                 equipment.addItem(getinvent);
@@ -344,10 +348,10 @@ namespace XNA_ScreenManager.ScreenClasses
 
         private void itemRemove()
         {
-            inventory.removeItem(filterItemList()[menu.SelectedIndex].itemID);
+            inventory.removeItem(filterItemList()[itemlist.SelectedIndex].itemID);
 
-            if (menu.SelectedIndex > filterItemList().Count - 1)
-                menu.SelectedIndex--;
+            if (itemlist.SelectedIndex > filterItemList().Count - 1)
+                itemlist.SelectedIndex--;
 
             updateItemList();       // update item menu
             itemOptions = false;    // close options
