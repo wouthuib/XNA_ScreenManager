@@ -25,7 +25,7 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
 
 
         List<Item> menuItems = new List<Item>();
-        List<Item> menuItemsnoDupes;
+        List<Item> menuItemsnoDupes = new List<Item>();
         int width, height;
 
         public ItemlistComponent(Game game, SpriteFont spriteFont)
@@ -53,7 +53,8 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
                 selectedIndex = (int)MathHelper.Clamp(
                 value,
                 0,
-                menuItems.Count - 1);
+                    ///menuItems.Count - 1);
+                menuItemsnoDupes.Count - 1);
             }
         }
 
@@ -99,6 +100,11 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
             menuItems.AddRange(items);
 
             // create new list here without duplicates
+            for(int i = 0; i < menuItems.Count; i++)
+            {
+                if (menuItemsnoDupes.FindAll(delegate(Item item) { return item.itemID == menuItems[i].itemID; }).Count == 0)
+                    menuItemsnoDupes.Add(menuItems[i]);
+            }
 
             CalculateBounds();
         }
@@ -130,7 +136,7 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
                 if (CheckKey(Keys.Down))
                 {
                     selectedIndex++;
-                    if (selectedIndex == menuItems.Count)
+                    if (selectedIndex == menuItemsnoDupes.Count)
                         selectedIndex = 0;
                 }
 
@@ -139,7 +145,7 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
                     selectedIndex--;
                     if (selectedIndex == -1)
                     {
-                        selectedIndex = menuItems.Count - 1;
+                        selectedIndex = menuItemsnoDupes.Count - 1;
                     }
                 }
 
@@ -162,7 +168,7 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
 
             if (show)
             {
-                for (int i = 0; i < menuItems.Count; i++)
+                for (int i = 0; i < menuItemsnoDupes.Count; i++)
                 {
                     if (i == SelectedIndex)
                     {
@@ -171,32 +177,28 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
                     }
                     else
                         myColor = NormalColor;
-
-                    bool draw = true;
-
+                                        
                     // check if already writen on screen
-                    for (int a = 0; a < i; a++)
-                        if (menuItems[i].itemID == menuItems[a].itemID)
-                            draw = false;
+                    // for (int a = 0; a < i; a++)
+                    //    if (menuItems[i].itemID == menuItems[a].itemID)
+                    //        draw = false;
 
-                    if (draw)
-                    {
-                        // black back color counter
-                        spriteBatch.DrawString(spriteFont, menuItems.FindAll(delegate(Item item) { return item.itemID == menuItems[i].itemID; }).Count.ToString() + "x",
-                        new Vector2(menuPosition.X - 40, menuPosition.Y) + Vector2.One, Color.Black);
+                    
+                    // black back color counter
+                    spriteBatch.DrawString(spriteFont, menuItems.FindAll(delegate(Item item) { return item.itemID == menuItemsnoDupes[i].itemID; }).Count.ToString() + "x",
+                    new Vector2(menuPosition.X - 40, menuPosition.Y) + Vector2.One, Color.Black);
 
-                        // black back color name
-                        spriteBatch.DrawString(spriteFont, menuItems[i].itemName,
-                        menuPosition + Vector2.One, Color.Black);
+                    // black back color name
+                    spriteBatch.DrawString(spriteFont, menuItemsnoDupes[i].itemName,
+                    menuPosition + Vector2.One, Color.Black);
 
-                        // normal color counter
-                        spriteBatch.DrawString(spriteFont, menuItems.FindAll(delegate(Item item) { return item.itemID == menuItems[i].itemID; }).Count.ToString() + "x",
-                        new Vector2(menuPosition.X - 40, menuPosition.Y), myColor);
+                    // normal color counter
+                    spriteBatch.DrawString(spriteFont, menuItems.FindAll(delegate(Item item) { return item.itemID == menuItemsnoDupes[i].itemID; }).Count.ToString() + "x",
+                    new Vector2(menuPosition.X - 40, menuPosition.Y), myColor);
 
-                        // normal color name
-                        spriteBatch.DrawString(spriteFont, menuItems[i].itemName,
-                        menuPosition, myColor);
-                    }
+                    // normal color name
+                    spriteBatch.DrawString(spriteFont, menuItemsnoDupes[i].itemName,
+                    menuPosition, myColor);
 
                     menuPosition.Y += spriteFont.LineSpacing;
 
