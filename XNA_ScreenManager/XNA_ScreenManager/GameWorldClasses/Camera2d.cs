@@ -17,11 +17,24 @@ namespace XNA_ScreenManager
         public Vector2 _pos; // Camera Position
         protected float _rotation; // Camera Rotation
 
-        public Camera2d()
+        private static Camera2d instance;
+
+        private Camera2d()
         {
             _zoom = 1.0f;
             _rotation = 0.0f;
             _pos = Vector2.Zero;
+        }
+
+        public static Camera2d Instance
+        {
+            get
+            {
+                if (instance == null)
+                    instance = new Camera2d();
+
+                return instance;
+            }
         }
 
         // Sets and gets zoom

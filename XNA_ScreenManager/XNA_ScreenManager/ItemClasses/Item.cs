@@ -33,17 +33,11 @@ namespace XNA_ScreenManager.ItemClasses
 
     public enum ItemSlot
     {
-        UpperHead,
-        LowerHead,
         Head,           // complete head i.e. helmet
         Neck,           // necklace and scarf
         Shoulders,      // shoulds i.e. cape
-        UpperBody,
-        LowerBody,
         Body,           // complete body i.e. cloak
         Feet,           // Feet i.e. boots
-        leftHand,
-        rightHand,
         Hands,          // both hands i.e. two-handed sword and bows
         accessory1,
         accessory2
@@ -57,6 +51,7 @@ namespace XNA_ScreenManager.ItemClasses
         public string itemDescription { get; set; }
 
         public string itemSpritePath { get; set; }
+        public string equipSpritePath { get; set; }
         public int SpriteFrameX { get; set; }
         public int SpriteFrameY { get; set; }
 

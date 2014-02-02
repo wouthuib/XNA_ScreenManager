@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using XNA_ScreenManager.ScreenClasses;
 using XNA_ScreenManager.ItemClasses;
+using XNA_ScreenManager.MapClasses;
 
 namespace XNA_ScreenManager
 {
@@ -58,6 +59,7 @@ namespace XNA_ScreenManager
 
             normalFont = Content.Load<SpriteFont>(@"font\normalfont");
 
+            // create screens
             ingameMenuScreen = new InGameMainMenuScreen(this, normalFont, Content.Load<Texture2D>(@"gfx\screens\game_menu2"));
             ScreenManager.Instance.ingameMenuScreen = ingameMenuScreen;
             Components.Add(ingameMenuScreen);
@@ -90,6 +92,7 @@ namespace XNA_ScreenManager
             ScreenManager.Instance.MessagePopupScreen = MessagePopupScreen;
             Components.Add(MessagePopupScreen);
 
+            // Create Screen Manager
             ScreenManager.Instance.StartManager();
         }
 

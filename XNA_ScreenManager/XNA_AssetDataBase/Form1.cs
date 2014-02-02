@@ -29,29 +29,41 @@ namespace XNA_AssetDataBase
             foreach(var line in this.ItemDescription.Lines)
                 description.Append(line.ToString() + Environment.NewLine);
 
-            // Get the itemtype text to enum
-            ItemType itemType = (ItemType)Enum.Parse(typeof(ItemType), this.ItemTypeBox.Text.ToString());
-
             // Create the an empty item in item database
-            itemDB.addItem(Item.create(Convert.ToInt32(this.ItemIDNum.Value), this.ItemName.Text.ToString(), itemType));
+            if (itemDB.item_list.FindAll(delegate(Item item) { return item.itemID == Convert.ToInt32(this.ItemIDNum.Value); }).Count == 0)
+            {
+                try
+                {
+                    // Get the itemtype text to enum
+                    ItemType itemType = (ItemType)Enum.Parse(typeof(ItemType), this.ItemTypeBox.Text.ToString());
 
-            // Link item to item database
-            Item item = itemDB.getItem(Convert.ToInt32(this.ItemIDNum.Value));
+                    itemDB.addItem(Item.create(Convert.ToInt32(this.ItemIDNum.Value), this.ItemName.Text.ToString(), itemType));
 
-            // Fill in the item properties if applicable
-            item.itemDescription = description.ToString();
-            item.itemSpritePath = @"" + ItemSpritePath.Text;
-            item.SpriteFrameX = Convert.ToInt32(this.itemSpriteFrameX.Value);
-            item.SpriteFrameY = Convert.ToInt32(this.itemSpriteFrameY.Value);
-            item.defModifier = Convert.ToInt32(this.ItemDEFNum.Value);
-            item.atkModifier = Convert.ToInt32(this.ItemATKNum.Value);
-            item.atkModifier = Convert.ToInt32(this.ItemMATKNum.Value);
-            item.atkModifier = Convert.ToInt32(this.ItemSPDNum.Value);
-            item.atkModifier = Convert.ToInt32(this.ItemGoldNum.Value);
-            item.itemClass = (ItemClass)Enum.Parse(typeof(ItemClass), this.ItemJobBox.Text.ToString());
-            item.itemSlot = (ItemSlot)Enum.Parse(typeof(ItemSlot), this.ItemSlotBox.Text.ToString());
+                    // Link item to item database
+                    Item item = itemDB.getItem(Convert.ToInt32(this.ItemIDNum.Value));
 
-            updateGrid();
+                    // Fill in the item properties if applicable
+                    item.itemDescription = description.ToString();
+                    item.itemSpritePath = @"" + ItemSpritePath.Text;
+                    item.equipSpritePath = @"" + EquipSpitePath.Text;
+                    item.SpriteFrameX = Convert.ToInt32(this.itemSpriteFrameX.Value);
+                    item.SpriteFrameY = Convert.ToInt32(this.itemSpriteFrameY.Value);
+                    item.defModifier = Convert.ToInt32(this.ItemDEFNum.Value);
+                    item.atkModifier = Convert.ToInt32(this.ItemATKNum.Value);
+                    item.magicModifier = Convert.ToInt32(this.ItemMATKNum.Value);
+                    item.speedModifier = Convert.ToInt32(this.ItemSPDNum.Value);
+                    item.Value = Convert.ToInt32(this.ItemGoldNum.Value);
+                    item.itemClass = (ItemClass)Enum.Parse(typeof(ItemClass), this.ItemJobBox.Text.ToString());
+                    item.itemSlot = (ItemSlot)Enum.Parse(typeof(ItemSlot), this.ItemSlotBox.Text.ToString());
+                }
+                catch (Exception ee)
+                {
+                    WinformPopup popup = new WinformPopup(ee.ToString());
+                    DialogResult dialogresult = popup.ShowDialog();
+                }
+
+                updateGrid();
+            }
         }
 
         private void ItemClearButton_Click(object sender, EventArgs e)
@@ -99,6 +111,7 @@ namespace XNA_AssetDataBase
             this.ItemName.Text = null;
             this.ItemDescription.Text = null;
             this.ItemSpritePath.Text = @"gfx\effects\item_spritesheet1";
+            this.EquipSpitePath.Text = @"gfx\player\costume\hunter_clothes01";
 
         }
     }

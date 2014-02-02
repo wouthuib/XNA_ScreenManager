@@ -3,12 +3,68 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using XNA_ScreenManager.ItemClasses;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Content;
 
 namespace XNA_ScreenManager.PlayerClasses
 {
     public sealed class PlayerInfo
     {
         Equipment equipment = Equipment.Instance;   // Equipment
+
+        #region texture properties
+
+        public string body_sprite;
+        public string hair_sprite;
+        public string faceset_sprite;
+
+        public string hatgear_sprite
+        {
+            get
+            {
+                string equip = null;
+
+                if (equipment.item_list.FindAll(delegate(Item item) { return item.itemSlot == ItemSlot.Head; }).Count > 0)
+                    equip = equipment.item_list.Find(delegate(Item item) { return item.itemSlot == ItemSlot.Head; }).equipSpritePath;
+
+                if (equip != null)
+                    return equip;
+                else
+                    return null;
+            }
+        }
+        public string costume_sprite
+        {
+            get 
+            {
+                string equip = null;
+
+                if (equipment.item_list.FindAll(delegate(Item item) { return item.itemSlot == ItemSlot.Body; }).Count > 0)
+                    equip = equipment.item_list.Find(delegate(Item item) { return item.itemSlot == ItemSlot.Body; }).equipSpritePath;
+
+                if (equip != null)
+                    return equip;
+                else
+                    return null;
+            }
+        }
+        public string weapon_sprite
+        {
+            get
+            {
+                string equip = null;
+
+                if (equipment.item_list.FindAll(delegate(Item item) { return item.itemSlot == ItemSlot.Hands; }).Count > 0)
+                    equip = equipment.item_list.Find(delegate(Item item) { return item.itemSlot == ItemSlot.Hands; }).equipSpritePath;
+
+                if (equip != null)
+                    return equip;
+                else
+                    return null;
+            }
+        }
+
+        #endregion
 
         #region properties
         private string name, gender, jobclass;

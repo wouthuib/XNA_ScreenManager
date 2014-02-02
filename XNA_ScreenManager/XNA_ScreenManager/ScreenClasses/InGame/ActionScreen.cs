@@ -30,7 +30,7 @@ namespace XNA_ScreenManager
             spriteBatch = (SpriteBatch)Game.Services.GetService(typeof(SpriteBatch));
             gfxdevice = (GraphicsDevice)Game.Services.GetService(typeof(GraphicsDevice));
 
-            cam = new Camera2d();
+            cam = Camera2d.Instance;
 
             GameWorld createworld = GameWorld.CreateInstance(game, cam);
             world = createworld;

@@ -380,13 +380,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="gfx\effects\item_spritesheet1.png">
-      <Name>item_spritesheet1</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="itemDB\itemtable.bin">
       <Name>itemtable</Name>
     </None>
@@ -398,6 +391,67 @@
     <None Include="itemDB\inventory.bin">
       <Name>inventory</Name>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="gfx\player\player_complete.png">
+      <Name>player_complete</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="gfx\player\costume\hunter_clothes01.png">
+      <Name>hunter_clothes01</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="gfx\player\hairset\hairset01.png">
+      <Name>hairset01</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="gfx\player\faceset\faceset01.png">
+      <Name>faceset01</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="gfx\player\weapon\bow01.png">
+      <Name>bow01</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="gfx\player\body\player_basic.png">
+      <Name>player_basic</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="gfx\effects\itemicons\armor_hunter.png">
+      <Name>armor_hunter</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\effects\itemicons\bows01.png">
+      <Name>bows01</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="gfx\effects\itemicons\daggers01.png">
+      <Name>daggers01</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
   <!--  To modify your build process, add your task inside one of the targets below and uncomment it. 

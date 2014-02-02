@@ -4,12 +4,14 @@ using Microsoft.Xna.Framework.Input;
 using System.Collections.Specialized;
 using System.Collections.Generic;
 using XNA_ScreenManager.ItemClasses;
+using XNA_ScreenManager.MapClasses;
 
 namespace XNA_ScreenManager.ScreenClasses.SubComponents
 {
     class ItemlistComponent : DrawableGameComponent
     {
         Inventory inventory = Inventory.Instance;
+        GameWorld world;
 
         SpriteBatch spriteBatch = null;
         SpriteFont spriteFont;
@@ -23,9 +25,8 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
         int selectedIndex = 0;
         bool show = true, active = true;
 
-
         List<Item> menuItems = new List<Item>();
-        List<Item> menuItemsnoDupes = new List<Item>();
+        public List<Item> menuItemsnoDupes = new List<Item>();
         int width, height;
 
         public ItemlistComponent(Game game, SpriteFont spriteFont)
@@ -33,6 +34,7 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
         {
             this.spriteFont = spriteFont;
             spriteBatch = (SpriteBatch)Game.Services.GetService(typeof(SpriteBatch));
+            Initialize();
         }
 
         public int Width
@@ -97,6 +99,7 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
         public void SetMenuItems(List<Item> items)
         {
             menuItems.Clear();
+            menuItemsnoDupes.Clear();
             menuItems.AddRange(items);
 
             // create new list here without duplicates
@@ -124,6 +127,7 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
 
         public override void Initialize()
         {
+            world = GameWorld.GetInstance;
             base.Initialize();
         }
 
@@ -188,21 +192,31 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
                     spriteBatch.DrawString(spriteFont, menuItems.FindAll(delegate(Item item) { return item.itemID == menuItemsnoDupes[i].itemID; }).Count.ToString() + "x",
                     new Vector2(menuPosition.X - 40, menuPosition.Y) + Vector2.One, Color.Black);
 
-                    // black back color name
-                    spriteBatch.DrawString(spriteFont, menuItemsnoDupes[i].itemName,
-                    menuPosition + Vector2.One, Color.Black);
-
                     // normal color counter
                     spriteBatch.DrawString(spriteFont, menuItems.FindAll(delegate(Item item) { return item.itemID == menuItemsnoDupes[i].itemID; }).Count.ToString() + "x",
                     new Vector2(menuPosition.X - 40, menuPosition.Y), myColor);
 
+                    // Draw item Sprite
+                    Texture2D sprite = world.Content.Load<Texture2D>(menuItems.Find(delegate(Item item) { return item.itemID == menuItemsnoDupes[i].itemID; }).itemSpritePath);
+                    Rectangle srcframe = new Rectangle(menuItems.Find(delegate(Item item) { return item.itemID == menuItemsnoDupes[i].itemID; }).SpriteFrameX * 48,
+                                                       menuItems.Find(delegate(Item item) { return item.itemID == menuItemsnoDupes[i].itemID; }).SpriteFrameY * 48,
+                                                       48, 48);
+
+                    Rectangle tarframe = new Rectangle((int)menuPosition.X - 15, (int)menuPosition.Y - 8, 35, 35);
+
+                    spriteBatch.Draw(sprite, tarframe, srcframe, Color.White);
+
+                    // black back color name
+                    spriteBatch.DrawString(spriteFont, menuItemsnoDupes[i].itemName,
+                    new Vector2(menuPosition.X + 30, menuPosition.Y) + Vector2.One, Color.Black);
+
                     // normal color name
                     spriteBatch.DrawString(spriteFont, menuItemsnoDupes[i].itemName,
-                    menuPosition, myColor);
+                    new Vector2(menuPosition.X + 30, menuPosition.Y), myColor);
 
-                    menuPosition.Y += spriteFont.LineSpacing;
+                    menuPosition.Y += spriteFont.LineSpacing + 10;
 
-                    if (i == 9 || i == 19) // 0 is also an id
+                    if (i == 8 || i == 18) // 0 is also an id
                     {
                         menuPosition.X = menuPosition.X + 220;
                         menuPosition.Y = Position.Y;

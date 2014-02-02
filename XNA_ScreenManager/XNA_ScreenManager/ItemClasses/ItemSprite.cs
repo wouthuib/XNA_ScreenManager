@@ -18,7 +18,7 @@ namespace XNA_ScreenManager.ItemClasses
         GameWorld world;
         Item item;
 
-        Vector2 spritesize = new Vector2(32, 32);
+        Vector2 spritesize = new Vector2(48, 48);
         Vector2 circleOrigin = Vector2.Zero;
 
         private float transperant = 0;

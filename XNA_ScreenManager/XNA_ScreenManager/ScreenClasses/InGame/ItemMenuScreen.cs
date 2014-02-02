@@ -175,6 +175,9 @@ namespace XNA_ScreenManager.ScreenClasses
 
                     if (selectedCategory == menuCategories.Count)
                         selectedCategory = 0;
+
+                    if (itemlist.SelectedIndex > filterItemList().Count)
+                        itemlist.SelectedIndex = filterItemList().Count;
                 }
 
                 if (CheckKey(Keys.Left))
@@ -183,9 +186,10 @@ namespace XNA_ScreenManager.ScreenClasses
                     updateItemList();
 
                     if (selectedCategory == -1)
-                    {
                         selectedCategory = menuCategories.Count - 1;
-                    }
+
+                    if (itemlist.SelectedIndex > filterItemList().Count)
+                        itemlist.SelectedIndex = filterItemList().Count;
                 }
 
                 if (CheckKey(Keys.Enter))
@@ -316,18 +320,18 @@ namespace XNA_ScreenManager.ScreenClasses
 
         private void itemEquip()
         {
-            if (equipment.getEquip(filterItemList()[itemlist.SelectedIndex].itemSlot) == null)
+            if (equipment.getEquip(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemSlot) == null)
             {
-                equipment.addItem(filterItemList()[itemlist.SelectedIndex]);
-                inventory.removeItem(filterItemList()[itemlist.SelectedIndex].itemID);
+                equipment.addItem(itemlist.menuItemsnoDupes[itemlist.SelectedIndex]);
+                inventory.removeItem(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemID);
 
                 if (itemlist.SelectedIndex > filterItemList().Count - 1)
                     itemlist.SelectedIndex--;
             }
             else
             {
-                Item getequip = equipment.getEquip(filterItemList()[itemlist.SelectedIndex].itemSlot);
-                Item getinvent = filterItemList()[itemlist.SelectedIndex];
+                Item getequip = equipment.getEquip(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemSlot);
+                Item getinvent = itemlist.menuItemsnoDupes[itemlist.SelectedIndex];
 
                 equipment.removeItem(getinvent.itemSlot);
                 equipment.addItem(getinvent);
@@ -348,7 +352,7 @@ namespace XNA_ScreenManager.ScreenClasses
 
         private void itemRemove()
         {
-            inventory.removeItem(filterItemList()[itemlist.SelectedIndex].itemID);
+            inventory.removeItem(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemID);
 
             if (itemlist.SelectedIndex > filterItemList().Count - 1)
                 itemlist.SelectedIndex--;

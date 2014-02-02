@@ -7,6 +7,7 @@ using XNA_ScreenManager.ItemClasses;
 using XNA_ScreenManager.ScriptClasses;
 using XNA_ScreenManager.MapClasses;
 using XNA_ScreenManager.PlayerClasses;
+using Microsoft.Xna.Framework.Content;
 
 namespace XNA_ScreenManager
 {
@@ -22,14 +23,18 @@ namespace XNA_ScreenManager
         // Player inventory
         Inventory inventory = Inventory.Instance;
         ItemStore itemStore = ItemStore.Instance;
+        Equipment equipment = Equipment.Instance;
         ScriptInterpreter scriptManager = ScriptInterpreter.Instance;
         PlayerInfo playerinfo = PlayerInfo.Instance;
 
+        // link to world content manager
+        ContentManager Content;
+
         // Player properties
         public Rectangle spriteScale;
-        public int spriteWidth = 90;
-        public int spriteHeight = 90;
-        public Vector2 spriteOfset = new Vector2(90,0);
+        public int spriteWidth = 80;
+        public int spriteHeight = 80;
+        public Vector2 spriteOfset = new Vector2(80,0);
         private SpriteEffects spriteEffect = SpriteEffects.None;
 
         // Sprite Animation Properties
@@ -48,18 +53,18 @@ namespace XNA_ScreenManager
             previousGameTimeSec;                                                                    // GameTime in Seconds
         int previousEffectTimeSec,                                                                  // GameTime in Miliseconds
             previousEffectTimeMin;                                                                  // GameTime in Seconds
-        bool landed;                                                                                // land switch, arrow switch
+        private bool landed;                                                                        // land switch, arrow switch
 
         //map properties
         private Vector2 TileSize = Vector2.Zero;
         #endregion
 
-        public PlayerSprite(Texture2D _Sprite, int _X, int _Y, Vector2 _tileSize)
+        public PlayerSprite(GameWorld getworld,
+            int _X, int _Y, Vector2 _tileSize)
             : base()
         {
             // Derived properties
             Active = true;
-            Sprite = _Sprite;
             SpriteFrame = new Rectangle((int)spriteOfset.X, (int)spriteOfset.Y, spriteWidth, spriteHeight);
             SpriteSize = new Rectangle(0, 0, spriteWidth, spriteHeight);
             Position = new Vector2(_X, _Y);
@@ -81,6 +86,10 @@ namespace XNA_ScreenManager
                 spriteWidth, spriteHeight);
             Direction = new Vector2();                                                              // Move direction
             state = EntityState.Stand;                                                              // Player state
+
+            // Link world get Content Manager
+            world = getworld;
+            Content = world.Content;
         }
 
         public override void Update(GameTime gameTime)
@@ -102,7 +111,7 @@ namespace XNA_ScreenManager
                         OldPosition = Position;
 
                         // player animation
-                        spriteOfset = new Vector2(spriteFrame.Width * 0, spriteFrame.Height * 3);
+                        spriteOfset = new Vector2(spriteFrame.Width * 0, spriteFrame.Height * 4);
                         spriteFrame.Y = (int)spriteOfset.Y;
 
                         if (previousGameTimeMsec <= (int)gameTime.TotalGameTime.Milliseconds
@@ -175,7 +184,7 @@ namespace XNA_ScreenManager
                         OldPosition = Position;
 
                         // player sprite jump
-                        spriteOfset = new Vector2(spriteFrame.Width * 4, spriteFrame.Height * 2);
+                        spriteOfset = new Vector2(spriteFrame.Width * 0, spriteFrame.Height * 4);
                         spriteFrame = new Rectangle((int)spriteOfset.X, (int)spriteOfset.Y, spriteFrame.Width, spriteFrame.Height);
 
                         // Apply Gravity 
@@ -201,7 +210,7 @@ namespace XNA_ScreenManager
                             this.Speed = PLAYER_SPEED * 0.75f;
 
                             //player animation
-                            spriteOfset = new Vector2(spriteFrame.Width * 0, spriteFrame.Height * 2);
+                            spriteOfset = new Vector2(spriteFrame.Width * 2, spriteFrame.Height * 3);
                             spriteFrame.Y = (int)spriteOfset.Y;
 
                             if (previousGameTimeMsec <= (int)gameTime.TotalGameTime.Milliseconds
@@ -210,7 +219,7 @@ namespace XNA_ScreenManager
                                 previousGameTimeMsec = (int)gameTime.TotalGameTime.Milliseconds + ANIMATION_SPEED;
                                 previousGameTimeSec = (int)gameTime.TotalGameTime.Seconds;
                                 spriteFrame.X += spriteWidth;
-                                if (spriteFrame.X > spriteWidth * 1)
+                                if (spriteFrame.X > spriteWidth * 4)
                                     spriteFrame.X = (int)spriteOfset.X;
                             }
                         }
@@ -221,7 +230,7 @@ namespace XNA_ScreenManager
                             this.Speed = PLAYER_SPEED * 0.75f;
 
                             //player animation
-                            spriteOfset = new Vector2(spriteFrame.Width * 0, spriteFrame.Height * 2);
+                            spriteOfset = new Vector2(spriteFrame.Width * 2, spriteFrame.Height * 3);
                             spriteFrame.Y = (int)spriteOfset.Y;
 
                             if (previousGameTimeMsec <= (int)gameTime.TotalGameTime.Milliseconds
@@ -230,7 +239,7 @@ namespace XNA_ScreenManager
                                 previousGameTimeMsec = (int)gameTime.TotalGameTime.Milliseconds + ANIMATION_SPEED;
                                 previousGameTimeSec = (int)gameTime.TotalGameTime.Seconds;
                                 spriteFrame.X += spriteWidth;
-                                if (spriteFrame.X > spriteWidth * 1)
+                                if (spriteFrame.X > spriteWidth * 4)
                                     spriteFrame.X = (int)spriteOfset.X;
                             }
                         }
@@ -261,7 +270,7 @@ namespace XNA_ScreenManager
                             this.Speed = PLAYER_SPEED * 0.75f;
 
                             //player animation
-                            spriteOfset = new Vector2(spriteFrame.Width * 2, spriteFrame.Height * 2);
+                            spriteOfset = new Vector2(spriteFrame.Width * 0, spriteFrame.Height * 3);
                             spriteFrame.Y = (int)spriteOfset.Y;
 
                             if (previousGameTimeMsec <= (int)gameTime.TotalGameTime.Milliseconds
@@ -270,7 +279,7 @@ namespace XNA_ScreenManager
                                 previousGameTimeMsec = (int)gameTime.TotalGameTime.Milliseconds + ANIMATION_SPEED;
                                 previousGameTimeSec = (int)gameTime.TotalGameTime.Seconds;
                                 spriteFrame.X += spriteWidth;
-                                if (spriteFrame.X > spriteOfset.X + (spriteWidth * 1))
+                                if (spriteFrame.X > spriteWidth * 1)
                                     spriteFrame.X = (int)spriteOfset.X;
                             }
                         }
@@ -281,7 +290,7 @@ namespace XNA_ScreenManager
                             this.Speed = PLAYER_SPEED * 0.75f;
 
                             //player animation
-                            spriteOfset = new Vector2(spriteFrame.Width * 2, spriteFrame.Height * 2);
+                            spriteOfset = new Vector2(spriteFrame.Width * 0, spriteFrame.Height * 3);
                             spriteFrame.Y = (int)spriteOfset.Y;
 
                             if (previousGameTimeMsec <= (int)gameTime.TotalGameTime.Milliseconds
@@ -290,7 +299,7 @@ namespace XNA_ScreenManager
                                 previousGameTimeMsec = (int)gameTime.TotalGameTime.Milliseconds + ANIMATION_SPEED;
                                 previousGameTimeSec = (int)gameTime.TotalGameTime.Seconds;
                                 spriteFrame.X += spriteWidth;
-                                if (spriteFrame.X > spriteOfset.X + (spriteWidth * 1))
+                                if (spriteFrame.X > spriteWidth * 1)
                                     spriteFrame.X = (int)spriteOfset.X;
                             }
                         }
@@ -342,10 +351,14 @@ namespace XNA_ScreenManager
                         else if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.LeftAlt))
                         {
                             // check player jobclass (if archer or wizard)
-                            previousGameTimeMsec = (int)gameTime.TotalGameTime.Milliseconds + (350 - playerinfo.BaseASPD * 12);
-                            previousGameTimeSec = (int)gameTime.TotalGameTime.Seconds;
-                            spriteFrame.X = 0;
-                            state = EntityState.Shoot;
+                            // check if bow is equiped
+                            if (equipment.item_list.FindAll(delegate(Item item) { return item.itemType == ItemType.Weapon; }).Count > 0)
+                            {
+                                previousGameTimeMsec = (int)gameTime.TotalGameTime.Milliseconds + (350 - playerinfo.BaseASPD * 12);
+                                previousGameTimeSec = (int)gameTime.TotalGameTime.Seconds;
+                                spriteFrame.X = 0;
+                                state = EntityState.Shoot;
+                            }
                         }
 
                         // Check if player is steady standing
@@ -396,7 +409,8 @@ namespace XNA_ScreenManager
                         }
 
                         // Player animation
-                        spriteOfset = new Vector2(180, 0);
+                        spriteOfset = new Vector2(spriteFrame.Width * 0, spriteFrame.Height * 1);
+                        spriteFrame.Y = (int)spriteOfset.Y;
 
                         if (previousGameTimeMsec <= (int)gameTime.TotalGameTime.Milliseconds
                             || previousGameTimeSec != (int)gameTime.TotalGameTime.Seconds)
@@ -404,7 +418,7 @@ namespace XNA_ScreenManager
                             previousGameTimeMsec = (int)gameTime.TotalGameTime.Milliseconds + ANIMATION_SPEED;
                             previousGameTimeSec = (int)gameTime.TotalGameTime.Seconds;
                             spriteFrame.X += spriteWidth;
-                            if (spriteFrame.X > spriteOfset.X + (spriteWidth * 3))
+                            if (spriteFrame.X > spriteWidth * 3)
                                 spriteFrame.X = (int)spriteOfset.X;
                         }
 
@@ -471,7 +485,7 @@ namespace XNA_ScreenManager
                             OldPosition = Position;
 
                             // player sprite jump
-                            spriteOfset = new Vector2(spriteFrame.Width * 0, spriteFrame.Height * 1);
+                            spriteOfset = new Vector2(spriteFrame.Width * 0, spriteFrame.Height * 2 + 1);
                             spriteFrame = new Rectangle((int)spriteOfset.X, (int)spriteOfset.Y, spriteFrame.Width, spriteFrame.Height);
 
                             // Apply Gravity + jumping
@@ -498,7 +512,7 @@ namespace XNA_ScreenManager
                     case EntityState.Falling:
                     
                         // player sprite falling
-                        spriteOfset = new Vector2(spriteFrame.Width * 1, spriteFrame.Height * 1);
+                        spriteOfset = new Vector2(spriteFrame.Width * 1, spriteFrame.Height * 2 + 1);
                         spriteFrame = new Rectangle((int)spriteOfset.X, (int)spriteOfset.Y, spriteFrame.Width, spriteFrame.Height);
 
                         if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Left))
@@ -574,16 +588,26 @@ namespace XNA_ScreenManager
                      keyboardStatePrevious.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.F1) == true)
             {
                 inventory.addItem(itemStore.getItem(new Random().Next(1200, 1210)));
+            } 
+            else if (keyboardStateCurrent.IsKeyUp(Microsoft.Xna.Framework.Input.Keys.F2) == true &&
+                      keyboardStatePrevious.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.F2) == true)
+            {
+                inventory.addItem(itemStore.getItem(2300));
             }
             else if (keyboardStateCurrent.IsKeyUp(Microsoft.Xna.Framework.Input.Keys.F3) == true &&
-                     keyboardStatePrevious.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.F3) == true)
+                      keyboardStatePrevious.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.F3) == true)
             {
-                inventory.loadItems("inventory.bin");
+                inventory.addItem(itemStore.getItem(1300));
             }
             else if (keyboardStateCurrent.IsKeyUp(Microsoft.Xna.Framework.Input.Keys.F4) == true &&
                      keyboardStatePrevious.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.F4) == true)
             {
                 inventory.saveItem("inventory.bin");
+            }
+            else if (keyboardStateCurrent.IsKeyUp(Microsoft.Xna.Framework.Input.Keys.F5) == true &&
+                     keyboardStatePrevious.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.F5) == true)
+            {
+                inventory.loadItems("inventory.bin");
             }
             // temporary
 
@@ -599,8 +623,27 @@ namespace XNA_ScreenManager
         public override void Draw(SpriteBatch spriteBatch)
         {
             if (Active)
-                spriteBatch.Draw(sprite, new Rectangle((int)Position.X, (int)Position.Y, spriteFrame.Width, spriteFrame.Height), 
+            {
+                if (playerinfo.body_sprite != null)
+                spriteBatch.Draw(Content.Load<Texture2D>(playerinfo.body_sprite), new Rectangle((int)Position.X, (int)Position.Y, spriteFrame.Width, spriteFrame.Height),
                     spriteFrame, this.color, 0f, Vector2.Zero, spriteEffect, 0f);
+
+                if (playerinfo.faceset_sprite != null)
+                spriteBatch.Draw(Content.Load<Texture2D>(playerinfo.faceset_sprite), new Rectangle((int)Position.X, (int)Position.Y, spriteFrame.Width, spriteFrame.Height),
+                    spriteFrame, this.color, 0f, Vector2.Zero, spriteEffect, 0f);
+
+                if (playerinfo.hair_sprite != null)
+                spriteBatch.Draw(Content.Load<Texture2D>(playerinfo.hair_sprite), new Rectangle((int)Position.X, (int)Position.Y, spriteFrame.Width, spriteFrame.Height),
+                    spriteFrame, this.color, 0f, Vector2.Zero, spriteEffect, 0f);
+
+                if (playerinfo.costume_sprite != null)
+                spriteBatch.Draw(Content.Load<Texture2D>(playerinfo.costume_sprite), new Rectangle((int)Position.X, (int)Position.Y, spriteFrame.Width, spriteFrame.Height),
+                    spriteFrame, this.color, 0f, Vector2.Zero, spriteEffect, 0f);
+
+                if (playerinfo.weapon_sprite != null)
+                spriteBatch.Draw(Content.Load<Texture2D>(playerinfo.weapon_sprite), new Rectangle((int)Position.X, (int)Position.Y, spriteFrame.Width, spriteFrame.Height),
+                    spriteFrame, this.color, 0f, Vector2.Zero, spriteEffect, 0f);
+            }
         }
 
         public bool Effect(GameTime gameTime)

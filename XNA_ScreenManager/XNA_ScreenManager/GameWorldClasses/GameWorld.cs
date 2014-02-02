@@ -59,6 +59,8 @@ namespace XNA_ScreenManager.MapClasses
             Content = (ContentManager)game.Services.GetService(typeof(ContentManager));
             gfxdevice = (GraphicsDevice)game.Services.GetService(typeof(GraphicsDevice));
 
+            this.Active = false; // start disabled
+
             cam = camref;
             LoadObjects();
         }
@@ -97,7 +99,7 @@ namespace XNA_ScreenManager.MapClasses
                     Background = Content.Load<Texture2D>(@"gfx\background\" + property.Value);
             }
 
-            playerSprite = new PlayerSprite(Content.Load<Texture2D>(@"gfx\player\player_basic"),
+            playerSprite = new PlayerSprite( this,
                 (int)map.ObjectGroups["Hero"].Objects["hero"].X,
                 (int)map.ObjectGroups["Hero"].Objects["hero"].Y,
                 new Vector2(map.TileWidth, map.TileHeight));
@@ -107,6 +109,13 @@ namespace XNA_ScreenManager.MapClasses
             itemStore.loadItems(@"..\..\..\..\XNA_ScreenManagerContent\itemDB\", "itemtable.bin");
 
             playerInfo.InitNewGame();
+
+            playerInfo.body_sprite = @"gfx\player\body\player_basic";
+            playerInfo.faceset_sprite = @"gfx\player\faceset\faceset01";
+            playerInfo.hair_sprite = @"gfx\player\hairset\hairset01";
+
+            //playerInfo.weapon_sprite = Content.Load<Texture2D>(@"gfx\player\weapon\bow01");
+            //playerInfo.costume_sprite = Content.Load<Texture2D>(@"gfx\player\costume\hunter_clothes01");
 
             //base.Initialize();
         }

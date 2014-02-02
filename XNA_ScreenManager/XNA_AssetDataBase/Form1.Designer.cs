@@ -78,6 +78,8 @@
             this.LoadScriptButton = new System.Windows.Forms.Button();
             this.SaveScriptButton = new System.Windows.Forms.Button();
             this.SwitchButton = new System.Windows.Forms.Button();
+            this.label17 = new System.Windows.Forms.Label();
+            this.EquipSpitePath = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.ItemsTab.SuspendLayout();
@@ -140,6 +142,8 @@
             // 
             // ItemsTab
             // 
+            this.ItemsTab.Controls.Add(this.EquipSpitePath);
+            this.ItemsTab.Controls.Add(this.label17);
             this.ItemsTab.Controls.Add(this.label16);
             this.ItemsTab.Controls.Add(this.itemSpriteFrameY);
             this.ItemsTab.Controls.Add(this.itemSpriteFrameX);
@@ -182,7 +186,7 @@
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(522, 107);
+            this.label16.Location = new System.Drawing.Point(522, 137);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(88, 13);
             this.label16.TabIndex = 32;
@@ -190,7 +194,7 @@
             // 
             // itemSpriteFrameY
             // 
-            this.itemSpriteFrameY.Location = new System.Drawing.Point(696, 105);
+            this.itemSpriteFrameY.Location = new System.Drawing.Point(696, 135);
             this.itemSpriteFrameY.Maximum = new decimal(new int[] {
             20,
             0,
@@ -202,7 +206,7 @@
             // 
             // itemSpriteFrameX
             // 
-            this.itemSpriteFrameX.Location = new System.Drawing.Point(634, 105);
+            this.itemSpriteFrameX.Location = new System.Drawing.Point(634, 135);
             this.itemSpriteFrameX.Maximum = new decimal(new int[] {
             20,
             0,
@@ -217,9 +221,9 @@
             this.label15.AutoSize = true;
             this.label15.Location = new System.Drawing.Point(522, 81);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(59, 13);
+            this.label15.Size = new System.Drawing.Size(85, 13);
             this.label15.TabIndex = 29;
-            this.label15.Text = "Sprite Path";
+            this.label15.Text = "Drop Sprite Path";
             // 
             // ItemSpritePath
             // 
@@ -340,9 +344,11 @@
             "Shoulders",
             "UpperBody",
             "LowerBody",
+            "Body",
             "Feet",
             "leftHand",
-            "rightHand"});
+            "rightHand",
+            "Hands"});
             this.ItemSlotBox.Location = new System.Drawing.Point(138, 75);
             this.ItemSlotBox.Name = "ItemSlotBox";
             this.ItemSlotBox.Size = new System.Drawing.Size(180, 21);
@@ -661,6 +667,23 @@
             this.SwitchButton.Text = "Switch Grid";
             this.SwitchButton.UseVisualStyleBackColor = true;
             // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(522, 105);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(89, 13);
+            this.label17.TabIndex = 33;
+            this.label17.Text = "Equip Sprite Path";
+            // 
+            // EquipSpitePath
+            // 
+            this.EquipSpitePath.Location = new System.Drawing.Point(634, 102);
+            this.EquipSpitePath.Name = "EquipSpitePath";
+            this.EquipSpitePath.Size = new System.Drawing.Size(180, 20);
+            this.EquipSpitePath.TabIndex = 34;
+            this.EquipSpitePath.Text = "gfx\\player\\costume\\hunter_clothes01";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -742,6 +765,8 @@
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.NumericUpDown itemSpriteFrameY;
         private System.Windows.Forms.NumericUpDown itemSpriteFrameX;
+        private System.Windows.Forms.TextBox EquipSpitePath;
+        private System.Windows.Forms.Label label17;
     }
 }
 
