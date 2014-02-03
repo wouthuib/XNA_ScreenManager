@@ -485,7 +485,7 @@ namespace XNA_ScreenManager
                             OldPosition = Position;
 
                             // player sprite jump
-                            spriteOfset = new Vector2(spriteFrame.Width * 0, spriteFrame.Height * 2 + 1);
+                            spriteOfset = new Vector2(spriteFrame.Width * 4, spriteFrame.Height * 2);
                             spriteFrame = new Rectangle((int)spriteOfset.X, (int)spriteOfset.Y, spriteFrame.Width, spriteFrame.Height);
 
                             // Apply Gravity + jumping
@@ -512,7 +512,7 @@ namespace XNA_ScreenManager
                     case EntityState.Falling:
                     
                         // player sprite falling
-                        spriteOfset = new Vector2(spriteFrame.Width * 1, spriteFrame.Height * 2 + 1);
+                        spriteOfset = new Vector2(spriteFrame.Width * 5, spriteFrame.Height * 2);
                         spriteFrame = new Rectangle((int)spriteOfset.X, (int)spriteOfset.Y, spriteFrame.Width, spriteFrame.Height);
 
                         if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Left))

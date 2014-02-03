@@ -82,6 +82,7 @@ namespace XNA_ScreenManager.ItemClasses
                     }
                     catch (Exception ee)
                     {
+                        string exception = ee.ToString();
                     }
                 }
             }
