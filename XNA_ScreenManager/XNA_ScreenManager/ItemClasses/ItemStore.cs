@@ -65,8 +65,11 @@ namespace XNA_ScreenManager.ItemClasses
 
                             // Fill in the item properties if applicable
                             item.itemDescription = Regex.Replace(values[2], "\"", "");
+                            item.itemDescription = Regex.Replace(item.itemDescription, " ", "");
                             item.itemSpritePath = @"" + Regex.Replace(values[3], "\"", "");
+                            item.itemSpritePath = Regex.Replace(item.itemSpritePath, " ", "");
                             item.equipSpritePath = @"" + Regex.Replace(values[4], "\"", "");
+                            item.equipSpritePath = Regex.Replace(item.equipSpritePath, " ", "");
                             item.SpriteFrameX = Convert.ToInt32(values[5]);
                             item.SpriteFrameY = Convert.ToInt32(values[6]);
 
@@ -78,6 +81,7 @@ namespace XNA_ScreenManager.ItemClasses
                             item.WeaponLevel = Convert.ToInt32(values[12]);
                             item.itemClass = (ItemClass)Enum.Parse(typeof(ItemClass), values[15]);
                             item.itemSlot = (ItemSlot)Enum.Parse(typeof(ItemSlot), values[16]);
+                            item.itemWaponType = (WeaponType)Enum.Parse(typeof(WeaponType), values[17]);
                         }
                     }
                     catch (Exception ee)

@@ -1,12 +1,14 @@
 atkModifier; defModifier; equipSpritePath; itemClass; itemDescription; itemID; itemName; itemSlot; itemSpritePath; itemType; magicModifier; RefinementBonus; speedModifier; SpriteFrameX; SpriteFrameY; Value; WeaponLevel
-1200;  Knife; " A simple knife."; " gfx\effects\itemicons\daggers01"; " "; 21; 0; 0; 17; 0; 0; 50; 0; 0; Weapon; All; Hands;
-1201;  Cutter; " A knife used for cutting enemies."; " gfx\effects\itemicons\daggers01"; " "; 21; 0; 0; 30; 0; 0; 1250; 0; 0; Weapon; All; Hands;
-1202;  Main Gauche; " A French dagger that is usually held in the left hand to parry attacks."; " gfx\effects\itemicons\daggers01"; " "; 15; 0; 0; 43; 0; 0; 2400; 0; 0; Weapon; ArcherFighter; Hands;
-1203;  Dirk; " An ancient knife used by highlanders in Scotland."; " gfx\effects\itemicons\daggers01"; " "; 16; 0; 0; 59; 0; 0; 8500; 0; 0; Weapon; ArcherFighter; Hands;
-1204;  Dagger; " Knife used for stabbing."; " gfx\effects\itemicons\daggers01"; " "; 16; 0; 0; 73; 0; 0; 14000; 0; 0; Weapon; ArcherFighter; Hands;
-1205;  Combat Knife; " Military combat knife made for battles against DemiHuman monster."; " gfx\effects\itemicons\daggers01"; " "; 18; 0; 0; 80; 0; 0; 17000; 0; 0; Weapon; Fighter; Hands;
-1206;  Stiletto; " A long, thin blade that is known to be used as a concealed weapon by Assassins."; " gfx\effects\itemicons\daggers01"; " "; 18; 0; 0; 87; 0; 0; 19500; 0; 0; Weapon; Fighter; Hands;
-1207;  Gladius; " A strong dagger that is usually crafted by traditional artisans."; " gfx\effects\itemicons\daggers01"; " "; 19; 0; 0; 105; 0; 0; 43000; 0; 0; Weapon; Fighter; Hands;
-1208;  Damascus; " A lethal knife made of a special metal that can easily cut straight into the heart of an enemy."; " gfx\effects\itemicons\daggers01"; " "; 19; 0; 0; 118; 0; 0; 49000; 0; 0; Weapon; Fighter; Hands;
-1209;  Cinquedea; " A wide bladed dagger that was crafted by Italian artisans."; " gfx\effects\itemicons\daggers01"; " "; 20; 0; 0; 110; 0; 0; 40000; 0; 0; Weapon; Fighter; Hands;
-1210;  Sucsamad; " A specialty dagger made by a small, mysterious, desert dwelling tribe."; " gfx\effects\itemicons\daggers01"; " "; 20; 0; 0; 140; 0; 0; 64000; 0; 0; Weapon; Fighter; Hands;
+1200; Knife;"A simple knife.";"gfx\effects\itemicons\daggers01";"gfx\player\weapon\dagger01"; 6; 17; 0; 17; 0; 0; 50; 0; 0; Weapon; All; Hands; Dagger;
+1201; Cutter;"A knife used for cutting enemies.";"gfx\effects\itemicons\daggers01";"gfx\player\weapon\dagger01"; 0; 18; 0; 30; 0; 0; 1250; 0; 0; Weapon; All; Hands; Dagger;
+1202; Main Gauche;"A French dagger that is usually held in the left hand to parry attacks.";"gfx\effects\itemicons\daggers01";"gfx\player\weapon\dagger01"; 1; 18; 0; 43; 0; 0; 2400; 0; 0; Weapon; ArcherFighter; Hands; Dagger;
+1203; Dirk;"An ancient knife used by highlanders in Scotland.";"gfx\effects\itemicons\daggers01";"gfx\player\weapon\dagger01"; 2; 18; 0; 59; 0; 0; 8500; 0; 0; Weapon; ArcherFighter; Hands; Dagger;
+1204; Dagger;"Knife used for stabbing.";"gfx\effects\itemicons\daggers01";"gfx\player\weapon\dagger01"; 3; 18; 0; 73; 0; 0; 14000; 0; 0; Weapon; ArcherFighter; Hands; Dagger;
+1205; Combat Knife;"Military combat knife made for battles against DemiHuman monster.";"gfx\effects\itemicons\daggers01";"gfx\player\weapon\dagger01"; 4; 18; 0; 80; 0; 0; 17000; 0; 0; Weapon; Fighter; Hands; Dagger;
+1206; Stiletto;"A long, thin blade that is known to be used as a concealed weapon by Assassins.";"gfx\effects\itemicons\daggers01";"gfx\player\weapon\dagger01"; 5; 18; 0; 87; 0; 0; 19500; 0; 0; Weapon; Fighter; Hands; Dagger;
+1207; Gladius;"A strong dagger that is usually crafted by traditional artisans.";"gfx\effects\itemicons\daggers01";"gfx\player\weapon\dagger01"; 6; 18; 0; 105; 0; 0; 43000; 0; 0; Weapon; Fighter; Hands; Dagger;
+1208; Damascus;"A lethal knife made of a special metal that can easily cut straight into the heart of an enemy.";"gfx\effects\itemicons\daggers01";"gfx\player\weapon\dagger01"; 0; 19; 0; 118; 0; 0; 49000; 0; 0; Weapon; Fighter; Hands; Dagger;
+1209; Cinquedea;"A wide bladed dagger that was crafted by Italian artisans.";"gfx\effects\itemicons\daggers01";"gfx\player\weapon\dagger01"; 1; 19; 0; 110; 0; 0; 40000; 0; 0; Weapon; Fighter; Hands; Dagger;
+1210; Sucsamad;"A specialty dagger made by a small, mysterious, desert dwelling tribe.";"gfx\effects\itemicons\daggers01";"gfx\player\weapon\dagger01"; 2; 19; 0; 140; 0; 0; 64000; 0; 0; Weapon; Fighter; Hands; Dagger;
+1300; Hunter Bow;"A mighty bow that can only be effectively used by Hunters and Snipers.";"gfx\effects\itemicons\bows01";"gfx\player\weapon\bow01"; 1; 0; 0; 125; 0; 0; 64000; 0; 0; Weapon; Archer; Hands; Bow;
+2300; Hunter Clothes;"Skintight, form fitting clothing that allows easy movement.";"gfx\effects\itemicons\armor_hunter";"gfx\player\costume\hunter_clothes01"; 4; 1; 6; 0; 0; 0; 71000; 0; 0; Armor; Archer; Body; ;

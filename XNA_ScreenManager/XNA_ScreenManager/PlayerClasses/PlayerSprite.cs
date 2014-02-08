@@ -100,6 +100,14 @@ namespace XNA_ScreenManager
             {
                 switch (state)
                 {
+                    #region state swinging
+                    case EntityState.Swing:
+                        break;
+                    #endregion
+                    #region state stabbing
+                    case EntityState.Stab:
+                        break;
+                    #endregion
                     #region state shooting
                     case EntityState.Shoot:
 
@@ -354,10 +362,16 @@ namespace XNA_ScreenManager
                             // check if bow is equiped
                             if (equipment.item_list.FindAll(delegate(Item item) { return item.itemType == ItemType.Weapon; }).Count > 0)
                             {
-                                previousGameTimeMsec = (int)gameTime.TotalGameTime.Milliseconds + (350 - playerinfo.BaseASPD * 12);
-                                previousGameTimeSec = (int)gameTime.TotalGameTime.Seconds;
-                                spriteFrame.X = 0;
-                                state = EntityState.Shoot;
+                                if (equipment.item_list.Find(delegate(Item item) { return item.itemType == ItemType.Weapon; }).itemWaponType == WeaponType.Bow)
+                                {
+                                    previousGameTimeMsec = (int)gameTime.TotalGameTime.Milliseconds + (350 - playerinfo.BaseASPD * 12);
+                                    previousGameTimeSec = (int)gameTime.TotalGameTime.Seconds;
+                                    spriteFrame.X = 0;
+                                    state = EntityState.Shoot;
+                                }
+                                else if (equipment.item_list.Find(delegate(Item item) { return item.itemType == ItemType.Weapon; }).itemWaponType == WeaponType.Dagger)
+                                {
+                                }
                             }
                         }
 
@@ -624,25 +638,42 @@ namespace XNA_ScreenManager
         {
             if (Active)
             {
+                // because in some states the hair sprite is out of bound (80x80)
+                Rectangle hairFrame = spriteFrame, 
+                          clothFrame = spriteFrame,
+                          weaponFrame = spriteFrame,
+                          faceFrame = spriteFrame,
+                          bodyFrame = spriteFrame;
+
+                if (state == EntityState.Jump || state == EntityState.Falling)
+                {
+                    hairFrame = new Rectangle(spriteFrame.X, spriteFrame.Y - 10, spriteFrame.Width, SpriteFrame.Height + 10);
+                    clothFrame = new Rectangle(spriteFrame.X, spriteFrame.Y + 10, spriteFrame.Width, SpriteFrame.Height + 10);
+                    bodyFrame = new Rectangle(spriteFrame.X, spriteFrame.Y + 10, spriteFrame.Width, SpriteFrame.Height + 10);
+                    weaponFrame = new Rectangle(spriteFrame.X, spriteFrame.Y + 10, spriteFrame.Width, SpriteFrame.Height + 10);
+                    faceFrame = new Rectangle(spriteFrame.X, spriteFrame.Y, spriteFrame.Width, SpriteFrame.Height);
+                }
+
+
                 if (playerinfo.body_sprite != null)
-                spriteBatch.Draw(Content.Load<Texture2D>(playerinfo.body_sprite), new Rectangle((int)Position.X, (int)Position.Y, spriteFrame.Width, spriteFrame.Height),
-                    spriteFrame, this.color, 0f, Vector2.Zero, spriteEffect, 0f);
+                    spriteBatch.Draw(Content.Load<Texture2D>(playerinfo.body_sprite), new Rectangle((int)Position.X, (int)(Position.Y + (bodyFrame.Height - spriteFrame.Height)), spriteFrame.Width, bodyFrame.Height),
+                    bodyFrame, this.color, 0f, Vector2.Zero, spriteEffect, 0f);
 
                 if (playerinfo.faceset_sprite != null)
                 spriteBatch.Draw(Content.Load<Texture2D>(playerinfo.faceset_sprite), new Rectangle((int)Position.X, (int)Position.Y, spriteFrame.Width, spriteFrame.Height),
-                    spriteFrame, this.color, 0f, Vector2.Zero, spriteEffect, 0f);
+                    faceFrame, this.color, 0f, Vector2.Zero, spriteEffect, 0f);
 
                 if (playerinfo.hair_sprite != null)
-                spriteBatch.Draw(Content.Load<Texture2D>(playerinfo.hair_sprite), new Rectangle((int)Position.X, (int)Position.Y, spriteFrame.Width, spriteFrame.Height),
-                    spriteFrame, this.color, 0f, Vector2.Zero, spriteEffect, 0f);
+                    spriteBatch.Draw(Content.Load<Texture2D>(playerinfo.hair_sprite), new Rectangle((int)Position.X, (int)(Position.Y - (hairFrame.Height - spriteFrame.Height)), spriteFrame.Width, hairFrame.Height),
+                    hairFrame, this.color, 0f, Vector2.Zero, spriteEffect, 0f);
 
                 if (playerinfo.costume_sprite != null)
-                spriteBatch.Draw(Content.Load<Texture2D>(playerinfo.costume_sprite), new Rectangle((int)Position.X, (int)Position.Y, spriteFrame.Width, spriteFrame.Height),
-                    spriteFrame, this.color, 0f, Vector2.Zero, spriteEffect, 0f);
+                    spriteBatch.Draw(Content.Load<Texture2D>(playerinfo.costume_sprite), new Rectangle((int)Position.X, (int)(Position.Y + (clothFrame.Height - spriteFrame.Height)), spriteFrame.Width, clothFrame.Height),
+                    clothFrame, this.color, 0f, Vector2.Zero, spriteEffect, 0f);
 
                 if (playerinfo.weapon_sprite != null)
-                spriteBatch.Draw(Content.Load<Texture2D>(playerinfo.weapon_sprite), new Rectangle((int)Position.X, (int)Position.Y, spriteFrame.Width, spriteFrame.Height),
-                    spriteFrame, this.color, 0f, Vector2.Zero, spriteEffect, 0f);
+                    spriteBatch.Draw(Content.Load<Texture2D>(playerinfo.weapon_sprite), new Rectangle((int)Position.X, (int)(Position.Y + (weaponFrame.Height - spriteFrame.Height)), spriteFrame.Width, weaponFrame.Height),
+                    weaponFrame, this.color, 0f, Vector2.Zero, spriteEffect, 0f);
             }
         }
 

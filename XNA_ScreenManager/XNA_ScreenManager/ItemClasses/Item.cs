@@ -15,6 +15,20 @@ namespace XNA_ScreenManager.ItemClasses
         KeyItem
     };
 
+    public enum WeaponType
+    {
+        Dagger,
+        One_handed_Sword,
+        Two_handed_Sword,
+        One_handed_Spear,
+        Two_handed_Spear,
+        One_handed_Axe,
+        Two_handed_Axe,
+        Mace,
+        Staff,
+        Bow
+    };
+
     public enum ItemClass
     {
         Archer,
@@ -66,6 +80,7 @@ namespace XNA_ScreenManager.ItemClasses
         public ItemType itemType { get; set; }
         public ItemClass itemClass { get; set; }
         public ItemSlot itemSlot { get; set; }
+        public WeaponType itemWaponType { get; set; }
 
         public static Item create(int identifier, string name, ItemType type)
         {

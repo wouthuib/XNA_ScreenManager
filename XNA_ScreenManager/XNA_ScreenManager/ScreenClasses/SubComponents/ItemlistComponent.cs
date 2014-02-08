@@ -197,7 +197,7 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
                     new Vector2(menuPosition.X - 40, menuPosition.Y), myColor);
 
                     // Draw item Sprite
-                    Texture2D sprite = world.Content.Load<Texture2D>(menuItems.Find(delegate(Item item) { return item.itemID == menuItemsnoDupes[i].itemID; }).itemSpritePath);
+                    Texture2D sprite = world.Content.Load<Texture2D>(@"" + menuItems.Find(delegate(Item item) { return item.itemID == menuItemsnoDupes[i].itemID; }).itemSpritePath);
                     Rectangle srcframe = new Rectangle(menuItems.Find(delegate(Item item) { return item.itemID == menuItemsnoDupes[i].itemID; }).SpriteFrameX * 48,
                                                        menuItems.Find(delegate(Item item) { return item.itemID == menuItemsnoDupes[i].itemID; }).SpriteFrameY * 48,
                                                        48, 48);

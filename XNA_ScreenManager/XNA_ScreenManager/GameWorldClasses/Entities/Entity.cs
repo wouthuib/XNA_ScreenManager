@@ -10,6 +10,7 @@ namespace XNA_ScreenManager.CharacterClasses
         Jump,
         Falling,
         Swing,
+        Stab,
         Shoot,
         Sit,
         Rope,
