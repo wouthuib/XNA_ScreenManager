@@ -65,7 +65,6 @@ namespace XNA_ScreenManager.ItemClasses
 
                             // Fill in the item properties if applicable
                             item.itemDescription = Regex.Replace(values[2], "\"", "");
-                            item.itemDescription = Regex.Replace(item.itemDescription, " ", "");
                             item.itemSpritePath = @"" + Regex.Replace(values[3], "\"", "");
                             item.itemSpritePath = Regex.Replace(item.itemSpritePath, " ", "");
                             item.equipSpritePath = @"" + Regex.Replace(values[4], "\"", "");

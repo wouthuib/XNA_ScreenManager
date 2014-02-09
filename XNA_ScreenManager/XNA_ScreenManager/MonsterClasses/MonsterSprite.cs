@@ -42,18 +42,12 @@ namespace XNA_ScreenManager.CharacterClasses
         Border Borders = new Border(0, 0);                                                          // max tiles to walk from center (avoid falling)
 
         // Clocks and Timers
-        int previousAnimateTimeMsec,                                                                // Animation in Miliseconds
-            previousAnimateTimeSec;                                                                 // Animation in Seconds
-        int previousWalkTimeSec,                                                                    // WalkTime in Seconds
-            previousWalkTimeMin;                                                                    // WalkTime in Minutes
-        int previousIdleTimeSec,                                                                    // IdleTime in Seconds
-            previousIdleTimeMin;                                                                    // IdleTime in Minutes
-        int previousHitTimeMSec,                                                                    // IdleTime in Miliseconds
-            previousHitTimeSec;                                                                     // IdleTime in Seconds
-        int previousDiedTimeMin,                                                                    // IdleTime in Minutes
-            previousDiedTimeSec;                                                                    // IdleTime in Seconds
-        int previousSpawnTimeMSec,                                                                  // IdleTime in Miliseconds
-            previousSpawnTimeSec;                                                                   // IdleTime in Seconds
+        float previousAnimateTimeSec,                                                               // Animation in Miliseconds
+              previousWalkTimeSec,                                                                  // WalkTime in Seconds
+              previousIdleTimeSec,                                                                  // IdleTime in Seconds
+              previousHitTimeSec,                                                                   // IdleTime in Seconds
+              previousDiedTimeSec,                                                                  // IdleTime in Seconds
+              previousSpawnTimeSec;                                                                 // IdleTime in Seconds
 
         #endregion
 
@@ -96,11 +90,12 @@ namespace XNA_ScreenManager.CharacterClasses
             {
                 case EntityState.Stand:
 
-                    if (previousIdleTimeSec <= (int)gameTime.TotalGameTime.Seconds
-                        || previousIdleTimeMin != (int)gameTime.TotalGameTime.Minutes)
+                    // reduce timer
+                    previousIdleTimeSec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                    if (previousIdleTimeSec <= 0)
                     {
-                        previousWalkTimeSec = (int)gameTime.TotalGameTime.Seconds + Randomizer.generateRandom(6, 12);
-                        previousWalkTimeMin = (int)gameTime.TotalGameTime.Minutes;
+                        previousWalkTimeSec = (float)gameTime.ElapsedGameTime.TotalSeconds + Randomizer.generateRandom(6, 12);
 
                         // temporary random generator
                         if (Randomizer.generateRandom(0, 2) == 1)
@@ -117,11 +112,12 @@ namespace XNA_ScreenManager.CharacterClasses
 
                 case EntityState.Walk:
 
-                    if (previousWalkTimeSec <= (int)gameTime.TotalGameTime.Seconds
-                        || previousWalkTimeMin != (int)gameTime.TotalGameTime.Minutes)
+                    // reduce timer
+                    previousWalkTimeSec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                    if (previousWalkTimeSec <= 0)
                     {
-                        previousIdleTimeSec = (int)gameTime.TotalGameTime.Seconds + Randomizer.generateRandom(6, 12);
-                        previousIdleTimeMin = (int)gameTime.TotalGameTime.Minutes;
+                        previousIdleTimeSec = (float)gameTime.ElapsedGameTime.TotalSeconds + Randomizer.generateRandom(6, 12);
 
                         // reset sprite frame and change state
                         spriteFrame.X = 0;
@@ -153,11 +149,12 @@ namespace XNA_ScreenManager.CharacterClasses
                     spriteOfset = new Vector2(0, 0);
                     spriteFrame.Y = Convert.ToInt32(spriteOfset.Y);
 
-                    if (previousAnimateTimeMsec <= (int)gameTime.TotalGameTime.Milliseconds
-                        || previousAnimateTimeSec != (int)gameTime.TotalGameTime.Seconds)
+                    // reduce timer
+                    previousAnimateTimeSec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                    if (previousAnimateTimeSec <= 0)
                     {
-                        previousAnimateTimeMsec = (int)gameTime.TotalGameTime.Milliseconds + ANIMATION_SPEED;
-                        previousAnimateTimeSec = (int)gameTime.TotalGameTime.Seconds;
+                        previousAnimateTimeSec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.10f;
 
                         if (ani_forward)
                         {
@@ -208,11 +205,12 @@ namespace XNA_ScreenManager.CharacterClasses
                     spriteOfset = new Vector2(0, 90);
                     spriteFrame.Y = Convert.ToInt32(spriteOfset.Y);
 
-                    if (previousAnimateTimeMsec <= (int)gameTime.TotalGameTime.Milliseconds
-                        || previousAnimateTimeSec != (int)gameTime.TotalGameTime.Seconds)
+                    // reduce timer
+                    previousAnimateTimeSec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                    if (previousAnimateTimeSec <= 0)
                     {
-                        previousAnimateTimeMsec = (int)gameTime.TotalGameTime.Milliseconds + ANIMATION_SPEED;
-                        previousAnimateTimeSec = (int)gameTime.TotalGameTime.Seconds;
+                        previousAnimateTimeSec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.10f;
 
                         if (ani_forward)
                         {
@@ -281,8 +279,7 @@ namespace XNA_ScreenManager.CharacterClasses
                 case EntityState.Hit:
                     
                     // Start freeze timer 
-                    previousHitTimeMSec = (int)gameTime.TotalGameTime.Milliseconds + 700;
-                    previousHitTimeSec = (int)gameTime.TotalGameTime.Seconds;
+                    previousHitTimeSec = (int)gameTime.ElapsedGameTime.TotalSeconds + 0.7f;
 
                     // Check of world instance is created
                     if (world == null)
@@ -294,19 +291,18 @@ namespace XNA_ScreenManager.CharacterClasses
 
                     // create a damage baloon
                     world.createEffects(EffectType.DamageBaloon, new Vector2((this.position.X + this.SpriteFrame.Width * 0.45f) - damage.ToString().Length * 5,
-                                                             this.position.Y + this.SpriteFrame.Height * 0.20f), damage);
+                                                             this.position.Y + this.SpriteFrame.Height * 0.20f), SpriteEffects.None, damage);
 
                     // change state (freeze or kill)
                     if (this.HP <= 0)
                     {
                         // Monster respawn timer
-                        previousDiedTimeSec = (int)gameTime.TotalGameTime.Seconds + RESPAWN_TIME;
-                        previousDiedTimeMin = (int)gameTime.TotalGameTime.Minutes;
+                        previousDiedTimeSec = (int)gameTime.ElapsedGameTime.TotalSeconds + RESPAWN_TIME;
 
                         // Monster Item Drops
                         world.createEffects(EffectType.ItemSprite, 
                         new Vector2(Randomizer.generateRandom((int)this.position.X + 20, (int)this.position.X + this.spriteFrame.Width - 20),
-                                    (int)(this.position.Y + this.spriteFrame.Height * 0.70f)), Randomizer.generateRandom(1200, 1210));
+                                    (int)(this.position.Y + this.spriteFrame.Height * 0.70f)), SpriteEffects.None, Randomizer.generateRandom(1200, 1210));
 
                         // Change state monster
                         state = EntityState.Died;
@@ -327,8 +323,10 @@ namespace XNA_ScreenManager.CharacterClasses
                     spriteFrame.X = Convert.ToInt32(spriteOfset.X);
                     spriteFrame.Y = Convert.ToInt32(spriteOfset.Y);
 
-                    if (previousHitTimeMSec <= (int)gameTime.TotalGameTime.Milliseconds
-                        || previousHitTimeSec != (int)gameTime.TotalGameTime.Seconds)
+                    // reduce timer
+                    previousHitTimeSec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                    if (previousHitTimeSec <= 0)
                     {
                         // reset sprite frame
                         spriteFrame.X = 0;
@@ -349,11 +347,12 @@ namespace XNA_ScreenManager.CharacterClasses
                     // Monster fades away
                     transperancy -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-                    if (previousAnimateTimeMsec <= (int)gameTime.TotalGameTime.Milliseconds
-                        || previousAnimateTimeSec != (int)gameTime.TotalGameTime.Seconds)
+                    // reduce timer
+                    previousAnimateTimeSec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                    if (previousAnimateTimeSec <= 0)
                     {
-                        previousAnimateTimeMsec = (int)gameTime.TotalGameTime.Milliseconds + ANIMATION_SPEED;
-                        previousAnimateTimeSec = (int)gameTime.TotalGameTime.Seconds;
+                        previousAnimateTimeSec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.10f;
 
                         spriteFrame.X += spriteWidth;
 
@@ -363,9 +362,11 @@ namespace XNA_ScreenManager.CharacterClasses
                         }
                     }
 
+                    // reduce timer
+                    previousDiedTimeSec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+
                     // removing counter
-                    if (previousDiedTimeSec <= (int)gameTime.TotalGameTime.Seconds
-                        || previousDiedTimeMin < (int)gameTime.TotalGameTime.Minutes - 1)
+                    if (previousDiedTimeSec <= 0)
                     {
                         // link to world
                         if (world == null)
@@ -389,9 +390,11 @@ namespace XNA_ScreenManager.CharacterClasses
                     if (transperancy < 1)
                         transperancy += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
+                    // reduce timer
+                    previousSpawnTimeSec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+
                     // Monster Spawn Timer
-                    if (previousSpawnTimeMSec <= (int)gameTime.TotalGameTime.Milliseconds
-                        || previousSpawnTimeSec < (int)gameTime.TotalGameTime.Seconds - 1)
+                    if (previousSpawnTimeSec <= 0)
                     {
                         if (spawn)
                         {
@@ -401,8 +404,7 @@ namespace XNA_ScreenManager.CharacterClasses
                         else
                         {
                             spawn = true;
-                            previousSpawnTimeMSec = (int)gameTime.TotalGameTime.Milliseconds + 1100;
-                            previousSpawnTimeSec = (int)gameTime.TotalGameTime.Seconds;
+                            previousSpawnTimeSec = (float)gameTime.ElapsedGameTime.TotalSeconds + 1.1f;
                         }
                     }
 

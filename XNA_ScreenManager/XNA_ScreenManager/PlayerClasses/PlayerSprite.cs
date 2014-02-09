@@ -49,10 +49,8 @@ namespace XNA_ScreenManager
         const int MOVE_DOWN = 1;                                                                    // player moving directions
         const int MOVE_LEFT = -1;                                                                   // player moving directions
         const int MOVE_RIGHT = 1;                                                                   // player moving directions
-        int previousGameTimeMsec,                                                                   // GameTime in Miliseconds
-            previousGameTimeSec;                                                                    // GameTime in Seconds
-        int previousEffectTimeSec,                                                                  // GameTime in Miliseconds
-            previousEffectTimeMin;                                                                  // GameTime in Seconds
+        float previousGameTimeMsec,                                                                 // GameTime in Miliseconds
+              previousEffectTimeSec;                                                                // GameTime in Miliseconds
         private bool landed;                                                                        // land switch, arrow switch
 
         //map properties
@@ -75,7 +73,7 @@ namespace XNA_ScreenManager
             playerinfo.Strength = 15;
             playerinfo.Dexterity = 15;
             playerinfo.Luck = 10;
-            playerinfo.Agility = 20;
+            playerinfo.Agility = 15;
             playerinfo.Level = 10;
             
             // Local properties
@@ -100,12 +98,114 @@ namespace XNA_ScreenManager
             {
                 switch (state)
                 {
+                    #region state cooldown
+                    case EntityState.Cooldown:
+
+                        // reduce timer
+                        previousGameTimeMsec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                        if (previousGameTimeMsec < 0)
+                        {
+                            previousGameTimeMsec = 0;
+
+                            spriteFrame.X = 0;
+                            state = EntityState.Stand;
+                        }
+
+                        // Apply Gravity 
+                        Position += new Vector2(0, 1) * 250 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                        break;
+
+                    #endregion
                     #region state swinging
                     case EntityState.Swing:
+
+                        Speed = 0;
+                        Direction = Vector2.Zero;
+                        Velocity = Vector2.Zero;
+
+                        // Move the Character
+                        OldPosition = Position;
+
+                        // player animation
+                        spriteOfset = new Vector2(spriteFrame.Width * 0, spriteFrame.Height * 7);
+                        spriteFrame.Y = (int)spriteOfset.Y;
+
+                        // reduce timer
+                        previousGameTimeMsec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                        if (previousGameTimeMsec < 0)
+                        {
+                            //previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.20f;
+                            previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerinfo.BaseASPD * 12) * 0.0006f) + 0.05f;
+
+                            spriteFrame.X += spriteWidth * 2;
+
+                            if (spriteFrame.X > spriteOfset.X + (spriteWidth * 2))
+                            {
+                                previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerinfo.BaseASPD * 12) * 0.0006f) + 0.05f;
+
+                                // make sure the world is connected
+                                if (world == null)
+                                    world = GameWorld.GetInstance;
+
+                                // create swing effect
+                                world.createEffects(EffectType.WeaponSwing, new Vector2(this.Position.X + this.spriteFrame.Width * 0.6f, this.Position.Y + this.spriteFrame.Height * 0.7f), spriteEffect, 1);
+
+                                // start cooldown
+                                state = EntityState.Cooldown;
+                            }
+                        }
+
+                        // Apply Gravity 
+                        Position += new Vector2(0, 1) * 250 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
                         break;
                     #endregion
                     #region state stabbing
                     case EntityState.Stab:
+
+                        Speed = 0;
+                        Direction = Vector2.Zero;
+                        Velocity = Vector2.Zero;
+
+                        // Move the Character
+                        OldPosition = Position;
+
+                        // player animation
+                        spriteOfset = new Vector2(spriteFrame.Width * 0, spriteFrame.Height * 6);
+                        spriteFrame.Y = (int)spriteOfset.Y;
+
+                        // reduce timer
+                        previousGameTimeMsec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                        if (previousGameTimeMsec < 0)
+                        {
+                            previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerinfo.BaseASPD * 12) * 0.0006f) + 0.05f;
+
+                            spriteFrame.X += spriteWidth * 2;
+
+                            if (spriteFrame.X > spriteWidth * 1)
+                            {
+                                previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerinfo.BaseASPD * 12) * 0.0006f) + 0.05f;
+
+                                // make sure the world is connected
+                                if (world == null)
+                                    world = GameWorld.GetInstance;
+
+                                // create swing effect
+                                world.createEffects(EffectType.WeaponSwing, new Vector2(this.Position.X, this.Position.Y + this.spriteFrame.Height * 0.7f), spriteEffect, 0);
+
+                                // reset sprite frame and change state
+
+                                state = EntityState.Cooldown;
+                            }
+                        }
+
+                        // Apply Gravity 
+                        Position += new Vector2(0, 1) * 250 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
                         break;
                     #endregion
                     #region state shooting
@@ -122,13 +222,11 @@ namespace XNA_ScreenManager
                         spriteOfset = new Vector2(spriteFrame.Width * 0, spriteFrame.Height * 4);
                         spriteFrame.Y = (int)spriteOfset.Y;
 
-                        if (previousGameTimeMsec <= (int)gameTime.TotalGameTime.Milliseconds
-                            || previousGameTimeSec != (int)gameTime.TotalGameTime.Seconds)
+                        // reduce timer
+                        previousGameTimeMsec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                        if (previousGameTimeMsec < 0)
                         {
-
-                            previousGameTimeMsec = (int)gameTime.TotalGameTime.Milliseconds + 5;
-                            previousGameTimeSec = (int)gameTime.TotalGameTime.Seconds;
-
                             spriteFrame.X += spriteWidth;
 
                             if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.LeftAlt))
@@ -141,9 +239,6 @@ namespace XNA_ScreenManager
                             {
                                 if (spriteFrame.X > spriteOfset.X + (spriteWidth * 2))
                                 {
-                                    previousGameTimeMsec = (int)gameTime.TotalGameTime.Milliseconds;
-                                    previousGameTimeSec = (int)gameTime.TotalGameTime.Seconds;
-
                                     // make sure the world is connected
                                     if (world == null)
                                         world = GameWorld.GetInstance;
@@ -154,9 +249,13 @@ namespace XNA_ScreenManager
                                     else
                                         world.createArrow(new Vector2(this.Position.X, this.Position.Y + this.spriteFrame.Height * 0.6f), 800, new Vector2(-1, 0));
 
+                                    // Set the timer for cooldown
+                                    previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerinfo.BaseASPD * 12) * 0.0006f) + 0.05f;
+
                                     // reset sprite frame and change state
+                                    // start cooldown
                                     spriteFrame.X = 0;
-                                    state = EntityState.Stand;
+                                    state = EntityState.Cooldown;
                                 }
                             }
                         }
@@ -221,11 +320,12 @@ namespace XNA_ScreenManager
                             spriteOfset = new Vector2(spriteFrame.Width * 2, spriteFrame.Height * 3);
                             spriteFrame.Y = (int)spriteOfset.Y;
 
-                            if (previousGameTimeMsec <= (int)gameTime.TotalGameTime.Milliseconds
-                            || previousGameTimeSec != (int)gameTime.TotalGameTime.Seconds)
+                            // reduce timer
+                            previousGameTimeMsec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                            if (previousGameTimeMsec < 0)
                             {
-                                previousGameTimeMsec = (int)gameTime.TotalGameTime.Milliseconds + ANIMATION_SPEED;
-                                previousGameTimeSec = (int)gameTime.TotalGameTime.Seconds;
+                                previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.12f;
                                 spriteFrame.X += spriteWidth;
                                 if (spriteFrame.X > spriteWidth * 4)
                                     spriteFrame.X = (int)spriteOfset.X;
@@ -241,11 +341,12 @@ namespace XNA_ScreenManager
                             spriteOfset = new Vector2(spriteFrame.Width * 2, spriteFrame.Height * 3);
                             spriteFrame.Y = (int)spriteOfset.Y;
 
-                            if (previousGameTimeMsec <= (int)gameTime.TotalGameTime.Milliseconds
-                            || previousGameTimeSec != (int)gameTime.TotalGameTime.Seconds)
+                            // reduce timer
+                            previousGameTimeMsec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                            if (previousGameTimeMsec < 0)
                             {
-                                previousGameTimeMsec = (int)gameTime.TotalGameTime.Milliseconds + ANIMATION_SPEED;
-                                previousGameTimeSec = (int)gameTime.TotalGameTime.Seconds;
+                                previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.12f;
                                 spriteFrame.X += spriteWidth;
                                 if (spriteFrame.X > spriteWidth * 4)
                                     spriteFrame.X = (int)spriteOfset.X;
@@ -281,11 +382,12 @@ namespace XNA_ScreenManager
                             spriteOfset = new Vector2(spriteFrame.Width * 0, spriteFrame.Height * 3);
                             spriteFrame.Y = (int)spriteOfset.Y;
 
-                            if (previousGameTimeMsec <= (int)gameTime.TotalGameTime.Milliseconds
-                            || previousGameTimeSec != (int)gameTime.TotalGameTime.Seconds)
+                            // reduce timer
+                            previousGameTimeMsec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                            if (previousGameTimeMsec < 0)
                             {
-                                previousGameTimeMsec = (int)gameTime.TotalGameTime.Milliseconds + ANIMATION_SPEED;
-                                previousGameTimeSec = (int)gameTime.TotalGameTime.Seconds;
+                                previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.10f;
                                 spriteFrame.X += spriteWidth;
                                 if (spriteFrame.X > spriteWidth * 1)
                                     spriteFrame.X = (int)spriteOfset.X;
@@ -301,11 +403,12 @@ namespace XNA_ScreenManager
                             spriteOfset = new Vector2(spriteFrame.Width * 0, spriteFrame.Height * 3);
                             spriteFrame.Y = (int)spriteOfset.Y;
 
-                            if (previousGameTimeMsec <= (int)gameTime.TotalGameTime.Milliseconds
-                            || previousGameTimeSec != (int)gameTime.TotalGameTime.Seconds)
+                            // reduce timer
+                            previousGameTimeMsec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                            if (previousGameTimeMsec < 0)
                             {
-                                previousGameTimeMsec = (int)gameTime.TotalGameTime.Milliseconds + ANIMATION_SPEED;
-                                previousGameTimeSec = (int)gameTime.TotalGameTime.Seconds;
+                                previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.10f;
                                 spriteFrame.X += spriteWidth;
                                 if (spriteFrame.X > spriteWidth * 1)
                                     spriteFrame.X = (int)spriteOfset.X;
@@ -358,19 +461,29 @@ namespace XNA_ScreenManager
                         }
                         else if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.LeftAlt))
                         {
-                            // check player jobclass (if archer or wizard)
-                            // check if bow is equiped
+                            // check if weapon is equiped
                             if (equipment.item_list.FindAll(delegate(Item item) { return item.itemType == ItemType.Weapon; }).Count > 0)
                             {
-                                if (equipment.item_list.Find(delegate(Item item) { return item.itemType == ItemType.Weapon; }).itemWaponType == WeaponType.Bow)
+                                WeaponType weapontype = equipment.item_list.Find(delegate(Item item) { return item.itemType == ItemType.Weapon; }).itemWaponType;
+
+                                // check the weapon type
+                                if (weapontype == WeaponType.Bow)
                                 {
-                                    previousGameTimeMsec = (int)gameTime.TotalGameTime.Milliseconds + (350 - playerinfo.BaseASPD * 12);
-                                    previousGameTimeSec = (int)gameTime.TotalGameTime.Seconds;
+                                    previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerinfo.BaseASPD * 12) * 0.0006f) + 0.05f;
+
                                     spriteFrame.X = 0;
                                     state = EntityState.Shoot;
                                 }
-                                else if (equipment.item_list.Find(delegate(Item item) { return item.itemType == ItemType.Weapon; }).itemWaponType == WeaponType.Dagger)
+                                else if (weapontype == WeaponType.Dagger || weapontype == WeaponType.One_handed_Sword)
                                 {
+                                    previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerinfo.BaseASPD * 12) * 0.0006f) + 0.05f;
+
+                                    spriteFrame.X = 0;
+
+                                    if(randomizer.Instance.generateRandom(0,2) == 1)
+                                        state = EntityState.Stab;
+                                    else
+                                        state = EntityState.Swing;
                                 }
                             }
                         }
@@ -426,11 +539,12 @@ namespace XNA_ScreenManager
                         spriteOfset = new Vector2(spriteFrame.Width * 0, spriteFrame.Height * 1);
                         spriteFrame.Y = (int)spriteOfset.Y;
 
-                        if (previousGameTimeMsec <= (int)gameTime.TotalGameTime.Milliseconds
-                            || previousGameTimeSec != (int)gameTime.TotalGameTime.Seconds)
+                        // reduce timer
+                        previousGameTimeMsec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                        if (previousGameTimeMsec < 0)
                         {
-                            previousGameTimeMsec = (int)gameTime.TotalGameTime.Milliseconds + ANIMATION_SPEED;
-                            previousGameTimeSec = (int)gameTime.TotalGameTime.Seconds;
+                            previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.10f;
                             spriteFrame.X += spriteWidth;
                             if (spriteFrame.X > spriteWidth * 3)
                                 spriteFrame.X = (int)spriteOfset.X;
@@ -570,11 +684,12 @@ namespace XNA_ScreenManager
                         }
                         else
                         {
-                            if (previousGameTimeMsec <= (int)gameTime.TotalGameTime.Milliseconds
-                            || previousGameTimeSec != (int)gameTime.TotalGameTime.Seconds)
+                            // reduce timer
+                            previousGameTimeMsec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                            if (previousGameTimeMsec < 0)
                             {
-                                previousGameTimeMsec = (int)gameTime.TotalGameTime.Milliseconds + 250;
-                                previousGameTimeSec = (int)gameTime.TotalGameTime.Seconds;
+                                previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.08f;
 
                                 if (landed == true)
                                     state = EntityState.Stand;
@@ -645,13 +760,22 @@ namespace XNA_ScreenManager
                           faceFrame = spriteFrame,
                           bodyFrame = spriteFrame;
 
-                if (state == EntityState.Jump || state == EntityState.Falling)
+                switch(state)
                 {
-                    hairFrame = new Rectangle(spriteFrame.X, spriteFrame.Y - 10, spriteFrame.Width, SpriteFrame.Height + 10);
-                    clothFrame = new Rectangle(spriteFrame.X, spriteFrame.Y + 10, spriteFrame.Width, SpriteFrame.Height + 10);
-                    bodyFrame = new Rectangle(spriteFrame.X, spriteFrame.Y + 10, spriteFrame.Width, SpriteFrame.Height + 10);
-                    weaponFrame = new Rectangle(spriteFrame.X, spriteFrame.Y + 10, spriteFrame.Width, SpriteFrame.Height + 10);
-                    faceFrame = new Rectangle(spriteFrame.X, spriteFrame.Y, spriteFrame.Width, SpriteFrame.Height);
+                    case EntityState.Jump:
+                    case EntityState.Falling:
+                        hairFrame = new Rectangle(spriteFrame.X, spriteFrame.Y - 10, spriteFrame.Width, SpriteFrame.Height + 10);
+                        clothFrame = new Rectangle(spriteFrame.X, spriteFrame.Y + 10, spriteFrame.Width, SpriteFrame.Height + 10);
+                        bodyFrame = new Rectangle(spriteFrame.X, spriteFrame.Y + 10, spriteFrame.Width, SpriteFrame.Height + 10);
+                        weaponFrame = new Rectangle(spriteFrame.X, spriteFrame.Y + 10, spriteFrame.Width, SpriteFrame.Height + 10);
+                        faceFrame = new Rectangle(spriteFrame.X, spriteFrame.Y, spriteFrame.Width, SpriteFrame.Height);
+                        break;
+                    case EntityState.Cooldown:
+                        if (equipment.item_list.Find(delegate(Item item) { return item.itemType == ItemType.Weapon; }).itemWaponType != WeaponType.Bow)
+                            weaponFrame = new Rectangle(spriteFrame.X - 20, spriteFrame.Y, spriteFrame.Width + 20, SpriteFrame.Height);
+                        break;
+                    default:
+                        break;
                 }
 
 
@@ -672,13 +796,20 @@ namespace XNA_ScreenManager
                     clothFrame, this.color, 0f, Vector2.Zero, spriteEffect, 0f);
 
                 if (playerinfo.weapon_sprite != null)
-                    spriteBatch.Draw(Content.Load<Texture2D>(playerinfo.weapon_sprite), new Rectangle((int)Position.X, (int)(Position.Y + (weaponFrame.Height - spriteFrame.Height)), spriteFrame.Width, weaponFrame.Height),
-                    weaponFrame, this.color, 0f, Vector2.Zero, spriteEffect, 0f);
+                {
+                    if (spriteEffect == SpriteEffects.None)
+                        spriteBatch.Draw(Content.Load<Texture2D>(playerinfo.weapon_sprite), new Rectangle((int)(Position.X - (weaponFrame.Width - spriteFrame.Width)), (int)(Position.Y + (weaponFrame.Height - spriteFrame.Height)), weaponFrame.Width, weaponFrame.Height),
+                        weaponFrame, this.color, 0f, Vector2.Zero, spriteEffect, 0f);
+                    else
+                        spriteBatch.Draw(Content.Load<Texture2D>(playerinfo.weapon_sprite), new Rectangle((int)Position.X, (int)(Position.Y + (weaponFrame.Height - spriteFrame.Height)), weaponFrame.Width, weaponFrame.Height),
+                        weaponFrame, this.color, 0f, Vector2.Zero, spriteEffect, 0f);
+                }
             }
         }
 
         public bool Effect(GameTime gameTime)
         {
+            // standing in warp portal effect
             if (this.effectCounter == 3)
             {
                 this.effectCounter = 0;
@@ -687,15 +818,15 @@ namespace XNA_ScreenManager
             }
             else
             {
-                if (previousEffectTimeSec <= (int)gameTime.TotalGameTime.Seconds
-                    || previousEffectTimeMin != (int)gameTime.TotalGameTime.Minutes)
+                previousEffectTimeSec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                if (previousEffectTimeSec <= 0)
                 {
-                    previousEffectTimeSec = (int)gameTime.TotalGameTime.Seconds + 3;
-                    previousEffectTimeMin = (int)gameTime.TotalGameTime.Minutes;
+                    previousEffectTimeSec = (float)gameTime.ElapsedGameTime.TotalSeconds + 3;
                     this.effectCounter++;
                 }
 
-                this.color.R = (byte)((previousEffectTimeSec * 250) - gameTime.TotalGameTime.Milliseconds / 4);
+                this.color.R = (byte)((previousEffectTimeSec * 250) - gameTime.ElapsedGameTime.TotalSeconds / 4);
 
                 return false;
             }

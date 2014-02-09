@@ -125,6 +125,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GameWorldClasses\Entities\Entity.cs" />
+    <Compile Include="GameWorldClasses\Entities\WeaponSwing.cs" />
     <Compile Include="MonsterClasses\Monster.cs" />
     <Compile Include="MonsterClasses\MonsterSprite.cs" />
     <Compile Include="CharacterClasses\NPCharacter.cs" />

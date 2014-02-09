@@ -10,6 +10,7 @@ using XNA_ScreenManager.CharacterClasses;
 using XNA_ScreenManager.ItemClasses;
 using XNA_ScreenManager.PlayerClasses;
 using XNA_ScreenManager.ScreenClasses;
+using XNA_ScreenManager.GameWorldClasses.Entities;
 
 
 namespace XNA_ScreenManager.MapClasses
@@ -37,7 +38,7 @@ namespace XNA_ScreenManager.MapClasses
 
         // Map entities
         Texture2D Background;
-        List<Entity> listEntity = new List<Entity>();
+        public List<Entity> listEntity = new List<Entity>();
         List<Effect> listEffect = new List<Effect>();
 
         // dynamic items
@@ -707,17 +708,27 @@ namespace XNA_ScreenManager.MapClasses
                                     ));
             }
         }
-        public void createEffects(EffectType type, Vector2 getposition, int value = 0)
+        public void createEffects(EffectType type, Vector2 getposition, SpriteEffects effect = SpriteEffects.None, int value1 = 0)
         {
             switch(type)
             {
                 case EffectType.DamageBaloon:
                     listEffect.Add(new DamageBaloon(Content.Load<Texture2D>(@"gfx\effects\damage_counter1"),
                                             Content.Load<SpriteFont>(@"font\gamefont"),
-                                            getposition, value));
+                                            getposition, value1));
                 break;
                 case EffectType.ItemSprite:
-                listEffect.Add(new ItemSprite(getposition, value));
+                    listEffect.Add(new ItemSprite(getposition, value1));
+                    break;
+                case EffectType.WeaponSwing:
+                    if (value1 == 0)
+                        listEffect.Add(new WeaponSwing(getposition, WeaponSwingType.Stab01, effect));
+                    else if (value1 == 1)
+                        listEffect.Add(new WeaponSwing(getposition, WeaponSwingType.Swing01, effect));
+                    else if (value1 == 2)
+                        listEffect.Add(new WeaponSwing(getposition, WeaponSwingType.Swing02, effect));
+                    else if (value1 == 3)
+                        listEffect.Add(new WeaponSwing(getposition, WeaponSwingType.Swing03, effect));
                     break;
                 default:
                     break;

@@ -26,7 +26,8 @@ namespace XNA_ScreenManager.ItemClasses
         Two_handed_Axe,
         Mace,
         Staff,
-        Bow
+        Bow,
+        None
     };
 
     public enum ItemClass
@@ -91,6 +92,7 @@ namespace XNA_ScreenManager.ItemClasses
             results.itemName = name;
             results.WeaponLevel = 1;
             results.RefinementBonus = 0;
+            results.itemWaponType = WeaponType.None;
 
             return results;
         }

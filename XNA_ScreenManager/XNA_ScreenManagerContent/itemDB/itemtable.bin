@@ -11,4 +11,4 @@ atkModifier; defModifier; equipSpritePath; itemClass; itemDescription; itemID; i
 1209; Cinquedea;"A wide bladed dagger that was crafted by Italian artisans.";"gfx\effects\itemicons\daggers01";"gfx\player\weapon\dagger01"; 1; 19; 0; 110; 0; 0; 40000; 0; 0; Weapon; Fighter; Hands; Dagger;
 1210; Sucsamad;"A specialty dagger made by a small, mysterious, desert dwelling tribe.";"gfx\effects\itemicons\daggers01";"gfx\player\weapon\dagger01"; 2; 19; 0; 140; 0; 0; 64000; 0; 0; Weapon; Fighter; Hands; Dagger;
 1300; Hunter Bow;"A mighty bow that can only be effectively used by Hunters and Snipers.";"gfx\effects\itemicons\bows01";"gfx\player\weapon\bow01"; 1; 0; 0; 125; 0; 0; 64000; 0; 0; Weapon; Archer; Hands; Bow;
-2300; Hunter Clothes;"Skintight, form fitting clothing that allows easy movement.";"gfx\effects\itemicons\armor_hunter";"gfx\player\costume\hunter_clothes01"; 4; 1; 6; 0; 0; 0; 71000; 0; 0; Armor; Archer; Body; ;
+2300; Hunter Clothes;"Skintight, form fitting clothing that allows easy movement.";"gfx\effects\itemicons\armor_hunter";"gfx\player\costume\hunter_clothes01"; 4; 1; 6; 0; 0; 0; 71000; 0; 0; Armor; Archer; Body; None;

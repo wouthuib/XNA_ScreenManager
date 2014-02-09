@@ -12,6 +12,7 @@ namespace XNA_ScreenManager.CharacterClasses
         Swing,
         Stab,
         Shoot,
+        Cooldown,
         Sit,
         Rope,
         Ladder,

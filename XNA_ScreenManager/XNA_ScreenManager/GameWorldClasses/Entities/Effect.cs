@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace XNA_ScreenManager.MapClasses
 {
-    public enum EffectType { DamageBaloon, ItemSprite };
+    public enum EffectType { DamageBaloon, ItemSprite, WeaponSwing };
 
     public abstract class Effect
     {
