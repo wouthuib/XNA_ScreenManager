@@ -80,18 +80,23 @@ namespace XNA_ScreenManager.MapClasses
                                           (int)(spriteFrame.Height * 0.75f));
 
                     Rectangle source = new Rectangle(
-                                      (int)(getDamageCount(damage, i) * spriteFrame.Width), 0,
-                                      (int)spriteFrame.Width,
-                                      (int)spriteFrame.Height);
+                                          (int)(getDamageCount(damage, i) * spriteFrame.Width), 0,
+                                          (int)spriteFrame.Width,
+                                          (int)spriteFrame.Height);
 
                     spriteBatch.Draw(sprite, destin, source,
                         Color.White * transperancy, 0f, Vector2.Zero, SpriteEffects.None, 0);
                 }
             }
             else
-                spriteBatch.DrawString(damagefont, "MISS",
-                    new Vector2(position.X + spriteFrame.Width * 0.10f, position.Y + spriteFrame.Height * 0.2f),
-                         Color.White * transperancy);
+                spriteBatch.Draw(sprite, new Rectangle((int)(position.X - spriteFrame.Width * 0.8f),
+                                                       (int)(position.Y + spriteFrame.Height * 0.2f),
+                                                       (int)(spriteFrame.Width * 2f),
+                                                       (int)(spriteFrame.Height * 0.75f)),
+                                         new Rectangle((int) 0, (int) 40, 
+                                                       (int)(spriteFrame.Width * 3), 
+                                                       (int)spriteFrame.Height),
+                        Color.White * transperancy, 0f, Vector2.Zero, SpriteEffects.None, 0);
 
             base.Draw(spriteBatch);
         }

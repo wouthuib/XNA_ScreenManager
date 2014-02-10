@@ -453,17 +453,20 @@ namespace XNA_ScreenManager.CharacterClasses
                             // we now use 800 msec, but this should get a ASPD timer
                             if (currentAttackTimeSec >= 0.8f)
                             {
-                                // Hit the player
-                                player.State = EntityState.Hit;
+                                // reset the attach timer
                                 currentAttackTimeSec = 0;
 
                                 // Start damage controll
                                 int damage = (int)Battle.battle_calc_damage_mob(this, PlayerInfo.Instance);
                                 player.HP -= damage;
 
+                                // Hit the player
+                                if (damage > 0)
+                                    player.State = EntityState.Hit;
+
                                 // create a damage baloon
                                 world.createEffects(EffectType.DamageBaloon, new Vector2((player.Position.X + player.SpriteFrame.Width * 0.45f) - damage.ToString().Length * 5,
-                                                                         player.Position.Y + player.SpriteFrame.Height * 0.20f), SpriteEffects.None, damage);
+                                                                         player.Position.Y + player.SpriteFrame.Height * 0.20f), SpriteEffects.None, damage, 2);
                             }
                         }
                     }

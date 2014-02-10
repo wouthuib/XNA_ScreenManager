@@ -708,12 +708,12 @@ namespace XNA_ScreenManager.MapClasses
                                     ));
             }
         }
-        public void createEffects(EffectType type, Vector2 getposition, SpriteEffects effect = SpriteEffects.None, int value1 = 0)
+        public void createEffects(EffectType type, Vector2 getposition, SpriteEffects effect = SpriteEffects.None, int value1 = 0, int value2 = 1)
         {
             switch(type)
             {
                 case EffectType.DamageBaloon:
-                    listEffect.Add(new DamageBaloon(Content.Load<Texture2D>(@"gfx\effects\damage_counter1"),
+                    listEffect.Add(new DamageBaloon(Content.Load<Texture2D>(@"gfx\effects\damage_counter" + value2.ToString()),
                                             Content.Load<SpriteFont>(@"font\gamefont"),
                                             getposition, value1));
                 break;

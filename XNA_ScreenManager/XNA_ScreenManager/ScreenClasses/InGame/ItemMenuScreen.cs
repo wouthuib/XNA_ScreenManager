@@ -73,15 +73,11 @@ namespace XNA_ScreenManager.ScreenClasses
 
         public void updateItemList()
         {
-            /*string[] displayitems = new string[filterItemList().Count];
-
-            for (int id = 0; id < filterItemList().Count; id++)
-            {
-                displayitems[id] = filterItemList()[id].itemName;
-            }
-
-            menu.SetMenuItems(displayitems);*/
-
+            /* In here we pick the categorized item list
+             * The itemcomponent class will remove the duplicates
+             * The selected index in the itemcomponent class
+             * will only display the unique items and counts
+             */
             itemlist.SetMenuItems(filterItemList());
         }
 
@@ -289,7 +285,7 @@ namespace XNA_ScreenManager.ScreenClasses
             if (filterItemList().Count > 0)
             {
                 // item description
-                spriteBatch.DrawString(spriteFont, filterItemList()[itemlist.SelectedIndex].itemDescription, new Vector2(80, 450), normalColor);
+                spriteBatch.DrawString(spriteFont, itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemDescription, new Vector2(80, 450), normalColor);
 
                 // item options
                 if (itemOptions)
@@ -324,9 +320,6 @@ namespace XNA_ScreenManager.ScreenClasses
             {
                 equipment.addItem(itemlist.menuItemsnoDupes[itemlist.SelectedIndex]);
                 inventory.removeItem(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemID);
-
-                if (itemlist.SelectedIndex > filterItemList().Count - 1)
-                    itemlist.SelectedIndex--;
             }
             else
             {
@@ -342,6 +335,10 @@ namespace XNA_ScreenManager.ScreenClasses
 
             updateItemList();       // update item menu
             itemOptions = false;    // close options
+
+            // Update selected index
+            if (itemlist.SelectedIndex > itemlist.menuItemsnoDupes.Count - 1)
+                itemlist.SelectedIndex = itemlist.menuItemsnoDupes.Count - 1;
         }
 
         private void itemConsume()
@@ -354,8 +351,9 @@ namespace XNA_ScreenManager.ScreenClasses
         {
             inventory.removeItem(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemID);
 
-            if (itemlist.SelectedIndex > filterItemList().Count - 1)
-                itemlist.SelectedIndex--;
+            // Update selected index
+            if (itemlist.SelectedIndex > itemlist.menuItemsnoDupes.Count - 1)
+                itemlist.SelectedIndex = itemlist.menuItemsnoDupes.Count - 1;
 
             updateItemList();       // update item menu
             itemOptions = false;    // close options
