@@ -171,7 +171,7 @@ namespace XNA_ScreenManager.PlayerClasses
         }
         public int Flee
         {
-            get { return (int)(this.Level + this.agi + 100); }
+            get { return (int)((this.Level + this.agi + 100) / 5); }
         }
         public int Health
         {

@@ -47,7 +47,9 @@ namespace XNA_ScreenManager.CharacterClasses
               previousIdleTimeSec,                                                                  // IdleTime in Seconds
               previousHitTimeSec,                                                                   // IdleTime in Seconds
               previousDiedTimeSec,                                                                  // IdleTime in Seconds
-              previousSpawnTimeSec;                                                                 // IdleTime in Seconds
+              previousSpawnTimeSec,                                                                 // IdleTime in Seconds
+              previousAttackTimeSec = 0,                                                            // IdleTime in Seconds
+              currentAttackTimeSec = 0;                                                             // IdleTime in Seconds
 
         #endregion
 
@@ -67,7 +69,7 @@ namespace XNA_ScreenManager.CharacterClasses
             resp_bord = borders;
 
             // temporary parameters these should eventually be imported from the Monster Database
-            HP = 1500; MP = 0; ATK = 60; DEF = 30; LVL = 1; HIT = 10; FLEE = 5;
+            HP = 1500; MP = 0; ATK = 60; DEF = 30; LVL = 1; HIT = 60; FLEE = 5;
 
             // Local properties
             Direction = new Vector2();                                                              // Move direction
@@ -81,6 +83,7 @@ namespace XNA_ScreenManager.CharacterClasses
             {
                 update_movement(gameTime);
                 update_animation(gameTime);
+                update_collision(gameTime);
             }
         }
 
@@ -410,6 +413,69 @@ namespace XNA_ScreenManager.CharacterClasses
 
                     break;
                 #endregion
+            }
+        }
+
+        private void update_collision(GameTime gameTime)
+        {
+            // Check of world instance is created
+            if (world == null)
+                world = GameWorld.GetInstance;
+
+            previousAttackTimeSec = currentAttackTimeSec;
+
+            // check for monster collisions
+            foreach (Entity player in world.listEntity)
+            {
+                if (player.EntityType == EntityType.Player)
+                {
+                    if (new Rectangle(
+                            (int)(player.Position.X + player.SpriteFrame.Width * 0.40f),
+                            (int)player.Position.Y,
+                            (int)(player.SpriteFrame.Width * 0.30f),
+                            (int)player.SpriteFrame.Height).
+                        Intersects(new Rectangle(
+                            (int)(this.Position.X + this.SpriteFrame.Width * 0.40f), 
+                            (int)this.Position.Y,
+                            (int)(this.SpriteFrame.Width * 0.30f), 
+                            (int)this.SpriteFrame.Height)) == true)
+                    {
+                        // player + monster state not equal to hit or frozen
+                        if (this.State != EntityState.Hit &&
+                            this.State != EntityState.Died &&
+                            this.State != EntityState.Spawn &&
+                            player.State != EntityState.Hit &&
+                            player.State != EntityState.Frozen)
+                        {
+                            // activate timer
+                            currentAttackTimeSec += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                            // we now use 800 msec, but this should get a ASPD timer
+                            if (currentAttackTimeSec >= 0.8f)
+                            {
+                                // Hit the player
+                                player.State = EntityState.Hit;
+                                currentAttackTimeSec = 0;
+
+                                // Start damage controll
+                                int damage = (int)Battle.battle_calc_damage_mob(this, PlayerInfo.Instance);
+                                player.HP -= damage;
+
+                                // create a damage baloon
+                                world.createEffects(EffectType.DamageBaloon, new Vector2((player.Position.X + player.SpriteFrame.Width * 0.45f) - damage.ToString().Length * 5,
+                                                                         player.Position.Y + player.SpriteFrame.Height * 0.20f), SpriteEffects.None, damage);
+                            }
+                        }
+                    }
+                }
+            }
+
+            // reset timer when no player collision
+            if (currentAttackTimeSec == previousAttackTimeSec)
+            {
+                // monster gets hit will not reset the timer
+                if(this.state != EntityState.Hit)
+                    currentAttackTimeSec = 0;
             }
         }
 

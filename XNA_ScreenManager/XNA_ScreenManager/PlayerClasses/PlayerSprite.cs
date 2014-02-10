@@ -36,6 +36,7 @@ namespace XNA_ScreenManager
         public int spriteHeight = 80;
         public Vector2 spriteOfset = new Vector2(80,0);
         private SpriteEffects spriteEffect = SpriteEffects.None;
+        private float transperancy = 1;
 
         // Sprite Animation Properties
         public int effectCounter = 0;                                                               // for the warp effect
@@ -93,6 +94,13 @@ namespace XNA_ScreenManager
         public override void Update(GameTime gameTime)
         {
             keyboardStateCurrent = Keyboard.GetState();
+
+            // reset effect state
+            if (!collideWarp)
+            {
+                this.color = Color.White;
+                this.effectCounter = 0;
+            }
 
             if (Active)
             {
@@ -708,9 +716,80 @@ namespace XNA_ScreenManager
                         }
                         break;
                     #endregion
+                    #region state hit
+                    case EntityState.Hit:
+
+                        // Add an upward impulse
+                        Velocity = new Vector2(0, -1.5f);
+
+                        // Add an sideward pulse
+                        if (spriteEffect == SpriteEffects.None)
+                            Direction = new Vector2(1.6f, 0);
+                        else
+                            Direction = new Vector2(-1.6f, 0);
+
+                        // Damage controll and balloon is triggered in monster sprite
+
+                        // Move the Character
+                        OldPosition = Position;
+
+                        // player sprite hit
+                        spriteOfset = new Vector2(spriteFrame.Width * 0, spriteFrame.Height * 0);
+                        spriteFrame = new Rectangle((int)spriteOfset.X, (int)spriteOfset.Y, spriteFrame.Width, spriteFrame.Height);
+
+                        // Set new state
+                        state = EntityState.Frozen;
+
+                        break;
+                    #endregion
+                    #region state recover hit
+                    case EntityState.Frozen:
+
+                        // Upward Position
+                        Velocity.Y += (float)gameTime.ElapsedGameTime.TotalSeconds * 2;
+
+                        // Make player transperant
+                        if (transperancy >= 0 )
+                            this.transperancy -= (float)gameTime.ElapsedGameTime.TotalSeconds * 10;
+
+                        // turn red
+                        this.color = Color.Red;
+
+                        // Move the Character
+                        OldPosition = Position;
+
+                        // player sprite hit
+                        spriteOfset = new Vector2(spriteFrame.Width * 0, spriteFrame.Height * 0);
+                        spriteFrame = new Rectangle((int)spriteOfset.X, (int)spriteOfset.Y, spriteFrame.Width, spriteFrame.Height);
+
+                        // Apply Gravity + jumping
+                        if (Velocity.Y < -1.2f)
+                        {
+                            // Apply jumping
+                            Position += Velocity * 350 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                            // Apply Gravity 
+                            Position += new Vector2(0, 1) * 250 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                            // Walk / Jump speed
+                            Position += Direction * 100 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                        }
+                        else
+                        {
+                            landed = false;
+                            state = EntityState.Falling;
+                            Direction = Vector2.Zero;
+                            Velocity = Vector2.Zero;
+                            //this.color = Color.White;
+                            this.transperancy = 1;
+                        }
+
+                        break;
+                    #endregion
                 }
             }
 
+            #region temporary quickbuttons
             // temporary global function buttons 
             // should be handles by singleton class keyboard manager
             if (keyboardStateCurrent.IsKeyUp(Microsoft.Xna.Framework.Input.Keys.F1) == true &&
@@ -739,12 +818,7 @@ namespace XNA_ScreenManager
                 inventory.loadItems("inventory.bin");
             }
             // temporary
-
-            if (!collideWarp)
-            {
-                this.color = Color.White;
-                this.effectCounter = 0;
-            }
+            #endregion
 
             keyboardStatePrevious = keyboardStateCurrent;
         }
@@ -781,28 +855,28 @@ namespace XNA_ScreenManager
 
                 if (playerinfo.body_sprite != null)
                     spriteBatch.Draw(Content.Load<Texture2D>(playerinfo.body_sprite), new Rectangle((int)Position.X, (int)(Position.Y + (bodyFrame.Height - spriteFrame.Height)), spriteFrame.Width, bodyFrame.Height),
-                    bodyFrame, this.color, 0f, Vector2.Zero, spriteEffect, 0f);
+                    bodyFrame, this.color * this.transperancy, 0f, Vector2.Zero, spriteEffect, 0f);
 
                 if (playerinfo.faceset_sprite != null)
                 spriteBatch.Draw(Content.Load<Texture2D>(playerinfo.faceset_sprite), new Rectangle((int)Position.X, (int)Position.Y, spriteFrame.Width, spriteFrame.Height),
-                    faceFrame, this.color, 0f, Vector2.Zero, spriteEffect, 0f);
+                    faceFrame, this.color * this.transperancy, 0f, Vector2.Zero, spriteEffect, 0f);
 
                 if (playerinfo.hair_sprite != null)
                     spriteBatch.Draw(Content.Load<Texture2D>(playerinfo.hair_sprite), new Rectangle((int)Position.X, (int)(Position.Y - (hairFrame.Height - spriteFrame.Height)), spriteFrame.Width, hairFrame.Height),
-                    hairFrame, this.color, 0f, Vector2.Zero, spriteEffect, 0f);
+                    hairFrame, this.color * this.transperancy, 0f, Vector2.Zero, spriteEffect, 0f);
 
                 if (playerinfo.costume_sprite != null)
                     spriteBatch.Draw(Content.Load<Texture2D>(playerinfo.costume_sprite), new Rectangle((int)Position.X, (int)(Position.Y + (clothFrame.Height - spriteFrame.Height)), spriteFrame.Width, clothFrame.Height),
-                    clothFrame, this.color, 0f, Vector2.Zero, spriteEffect, 0f);
+                    clothFrame, this.color * this.transperancy, 0f, Vector2.Zero, spriteEffect, 0f);
 
                 if (playerinfo.weapon_sprite != null)
                 {
                     if (spriteEffect == SpriteEffects.None)
                         spriteBatch.Draw(Content.Load<Texture2D>(playerinfo.weapon_sprite), new Rectangle((int)(Position.X - (weaponFrame.Width - spriteFrame.Width)), (int)(Position.Y + (weaponFrame.Height - spriteFrame.Height)), weaponFrame.Width, weaponFrame.Height),
-                        weaponFrame, this.color, 0f, Vector2.Zero, spriteEffect, 0f);
+                        weaponFrame, this.color * this.transperancy, 0f, Vector2.Zero, spriteEffect, 0f);
                     else
                         spriteBatch.Draw(Content.Load<Texture2D>(playerinfo.weapon_sprite), new Rectangle((int)Position.X, (int)(Position.Y + (weaponFrame.Height - spriteFrame.Height)), weaponFrame.Width, weaponFrame.Height),
-                        weaponFrame, this.color, 0f, Vector2.Zero, spriteEffect, 0f);
+                        weaponFrame, this.color * this.transperancy, 0f, Vector2.Zero, spriteEffect, 0f);
                 }
             }
         }

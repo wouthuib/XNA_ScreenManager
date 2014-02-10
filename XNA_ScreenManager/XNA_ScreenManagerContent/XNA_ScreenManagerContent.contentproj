@@ -56,23 +56,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="gfx\screens\game_menu.png">
-      <Name>game_menu</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="gfx\screens\system_menu.png">
-      <Name>system_menu</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="gfx\screens\title_menu.png">
-      <Name>title_menu</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="gfx\hud\hud_frame.png">
       <Name>hud_frame</Name>
       <Importer>TextureImporter</Importer>
@@ -82,13 +65,6 @@
   <ItemGroup>
     <Compile Include="gfx\hud\facebox01.png">
       <Name>facebox01</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="gfx\screens\item_menu.png">
-      <Name>item_menu</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
