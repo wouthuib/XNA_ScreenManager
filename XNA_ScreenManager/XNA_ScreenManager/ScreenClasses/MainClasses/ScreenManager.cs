@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using XNA_ScreenManager.ScreenClasses.InGame;
 
 namespace XNA_ScreenManager.ScreenClasses
 {
@@ -17,6 +18,7 @@ namespace XNA_ScreenManager.ScreenClasses
         public CreatePCScreen createPCScreen;
         public InGameMainMenuScreen ingameMenuScreen;
         public ItemMenuScreen itemMenuScreen;
+        public EquipmentMenuScreen equipmentMenuScreen;
         public MessagePopup MessagePopupScreen;
         public LoadingScreen loadingScreen;
 
@@ -63,6 +65,7 @@ namespace XNA_ScreenManager.ScreenClasses
             createPCScreen.Hide();
             ingameMenuScreen.Hide();
             itemMenuScreen.Hide();
+            equipmentMenuScreen.Hide();
             MessagePopupScreen.Hide();
             loadingScreen.Hide();
 
@@ -97,6 +100,10 @@ namespace XNA_ScreenManager.ScreenClasses
             else if (activeScreen == itemMenuScreen)
             {
                 HandleitemMenuScreen();
+            }
+            else if (activeScreen == equipmentMenuScreen)
+            {
+                HandleequipmentMenuScreen();
             }
             else if (activeScreen == loadingScreen)
             {
@@ -201,6 +208,10 @@ namespace XNA_ScreenManager.ScreenClasses
                         break;
                     case 1:
                     case 2:
+                        activeScreen.Hide();
+                        activeScreen = equipmentMenuScreen;
+                        activeScreen.Show();
+                        break;
                     case 3:
                     case 4:
                     case 5:
@@ -235,6 +246,16 @@ namespace XNA_ScreenManager.ScreenClasses
                 }
             }
             else if (CheckKey(Keys.Back) || CheckKey(Keys.Escape))
+            {
+                activeScreen.Hide();
+                activeScreen = ingameMenuScreen;
+                activeScreen.Show();
+            }
+        }
+
+        private void HandleequipmentMenuScreen()
+        {
+            if (CheckKey(Keys.Back) || CheckKey(Keys.Escape))
             {
                 activeScreen.Hide();
                 activeScreen = ingameMenuScreen;

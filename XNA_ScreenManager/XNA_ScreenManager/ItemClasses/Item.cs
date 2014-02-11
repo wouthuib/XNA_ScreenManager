@@ -48,14 +48,13 @@ namespace XNA_ScreenManager.ItemClasses
 
     public enum ItemSlot
     {
-        Head,           // complete head i.e. helmet
+        Weapon,         // both hands i.e. two-handed sword and bows
+        Shield,         // shoulds i.e. cape
+        Headgear,       // complete head i.e. helmet
         Neck,           // necklace and scarf
-        Shoulders,      // shoulds i.e. cape
-        Body,           // complete body i.e. cloak
+        Bodygear,       // complete body i.e. cloak
         Feet,           // Feet i.e. boots
-        Hands,          // both hands i.e. two-handed sword and bows
-        accessory1,
-        accessory2
+        Accessory,      // rings etc..
     };
 
     [Serializable]

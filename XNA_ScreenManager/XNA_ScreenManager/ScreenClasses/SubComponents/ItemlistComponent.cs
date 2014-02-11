@@ -28,6 +28,7 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
         List<Item> menuItems = new List<Item>();
         public List<Item> menuItemsnoDupes = new List<Item>();
         int width, height;
+        private float transperancy = 1;
 
         public ItemlistComponent(Game game, SpriteFont spriteFont)
             : base(game)
@@ -47,6 +48,12 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
             get { return height; }
         }
 
+        public float Transperancy
+        {
+            get { return transperancy; }
+            set { transperancy = value; }
+        }
+
         public int SelectedIndex
         {
             get { return selectedIndex; }
@@ -55,7 +62,6 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
                 selectedIndex = (int)MathHelper.Clamp(
                 value,
                 0,
-                    ///menuItems.Count - 1);
                 menuItemsnoDupes.Count - 1);
             }
         }
@@ -204,7 +210,7 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
 
                     Rectangle tarframe = new Rectangle((int)menuPosition.X - 15, (int)menuPosition.Y - 8, 35, 35);
 
-                    spriteBatch.Draw(sprite, tarframe, srcframe, Color.White);
+                    spriteBatch.Draw(sprite, tarframe, srcframe, Color.White * transperancy);
 
                     // black back color name
                     spriteBatch.DrawString(spriteFont, menuItemsnoDupes[i].itemName,

@@ -24,8 +24,8 @@ namespace XNA_ScreenManager.PlayerClasses
             {
                 string equip = null;
 
-                if (equipment.item_list.FindAll(delegate(Item item) { return item.itemSlot == ItemSlot.Head; }).Count > 0)
-                    equip = equipment.item_list.Find(delegate(Item item) { return item.itemSlot == ItemSlot.Head; }).equipSpritePath;
+                if (equipment.item_list.FindAll(delegate(Item item) { return item.itemSlot == ItemSlot.Headgear; }).Count > 0)
+                    equip = equipment.item_list.Find(delegate(Item item) { return item.itemSlot == ItemSlot.Headgear; }).equipSpritePath;
 
                 if (equip != null)
                     return equip;
@@ -39,8 +39,8 @@ namespace XNA_ScreenManager.PlayerClasses
             {
                 string equip = null;
 
-                if (equipment.item_list.FindAll(delegate(Item item) { return item.itemSlot == ItemSlot.Body; }).Count > 0)
-                    equip = equipment.item_list.Find(delegate(Item item) { return item.itemSlot == ItemSlot.Body; }).equipSpritePath;
+                if (equipment.item_list.FindAll(delegate(Item item) { return item.itemSlot == ItemSlot.Bodygear; }).Count > 0)
+                    equip = equipment.item_list.Find(delegate(Item item) { return item.itemSlot == ItemSlot.Bodygear; }).equipSpritePath;
 
                 if (equip != null)
                     return equip;
@@ -54,8 +54,8 @@ namespace XNA_ScreenManager.PlayerClasses
             {
                 string equip = null;
 
-                if (equipment.item_list.FindAll(delegate(Item item) { return item.itemSlot == ItemSlot.Hands; }).Count > 0)
-                    equip = equipment.item_list.Find(delegate(Item item) { return item.itemSlot == ItemSlot.Hands; }).equipSpritePath;
+                if (equipment.item_list.FindAll(delegate(Item item) { return item.itemSlot == ItemSlot.Weapon; }).Count > 0)
+                    equip = equipment.item_list.Find(delegate(Item item) { return item.itemSlot == ItemSlot.Weapon; }).equipSpritePath;
 
                 if (equip != null)
                     return equip;

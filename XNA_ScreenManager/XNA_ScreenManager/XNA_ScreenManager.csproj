@@ -143,6 +143,7 @@
     <Compile Include="GameWorldClasses\Entities\Arrow.cs" />
     <Compile Include="PlayerClasses\PlayerInfo.cs" />
     <Compile Include="ScreenClasses\InGame\ActionScreen.cs" />
+    <Compile Include="ScreenClasses\InGame\EquipmentMenuScreen.cs" />
     <Compile Include="ScreenClasses\SubComponents\BackgroundComponent.cs" />
     <Compile Include="GameWorldClasses\Camera2d.cs" />
     <Compile Include="ScreenClasses\Menus\CreatePCScreen..cs" />

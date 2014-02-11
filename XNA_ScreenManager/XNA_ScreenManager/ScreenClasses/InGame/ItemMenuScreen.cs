@@ -282,7 +282,7 @@ namespace XNA_ScreenManager.ScreenClasses
                     position.X += 50 + (menuCategories[i].Length * 6);
             }
 
-            if (filterItemList().Count > 0)
+            if (itemlist.menuItemsnoDupes.Count > 0)
             {
                 // item description
                 spriteBatch.DrawString(spriteFont, itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemDescription, new Vector2(80, 450), normalColor);
@@ -298,7 +298,6 @@ namespace XNA_ScreenManager.ScreenClasses
 
                     spriteBatch.Draw(rect, new Vector2(itemlist.selectPos.X + 150, itemlist.selectPos.Y + 0),
                         Color.White * 0.8f);
-
 
                     Vector2 optionPos = new Vector2();
                     optionPos.X = itemlist.selectPos.X + 150;

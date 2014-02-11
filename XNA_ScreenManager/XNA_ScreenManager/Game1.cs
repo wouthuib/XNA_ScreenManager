@@ -1,16 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
 using XNA_ScreenManager.ScreenClasses;
-using XNA_ScreenManager.ItemClasses;
-using XNA_ScreenManager.MapClasses;
+using XNA_ScreenManager.ScreenClasses.InGame;
 
 namespace XNA_ScreenManager
 {
@@ -28,6 +20,7 @@ namespace XNA_ScreenManager
         CreatePCScreen createPCScreen;
         InGameMainMenuScreen ingameMenuScreen;
         ItemMenuScreen itemMenuScreen;
+        EquipmentMenuScreen equipmentMenuScreen;
         MessagePopup MessagePopupScreen;
         LoadingScreen loadingScreen;
 
@@ -83,6 +76,10 @@ namespace XNA_ScreenManager
             itemMenuScreen = new ItemMenuScreen(this, normalFont, Content.Load<Texture2D>(@"gfx\screens\item_menu2"));
             ScreenManager.Instance.itemMenuScreen = itemMenuScreen;
             Components.Add(itemMenuScreen);
+
+            equipmentMenuScreen = new EquipmentMenuScreen(this, normalFont, Content.Load<Texture2D>(@"gfx\screens\equipment_menu2"));
+            ScreenManager.Instance.equipmentMenuScreen = equipmentMenuScreen;
+            Components.Add(equipmentMenuScreen);
 
             loadingScreen = new LoadingScreen(this);
             ScreenManager.Instance.loadingScreen = loadingScreen;
