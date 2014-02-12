@@ -197,14 +197,37 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
                 }
                 else if (CheckKey(Keys.Enter))
                 {
-                    slotOptions = false;
-                    itemOptions = true;
+                    switch (selectedOption)
+                    {
+                        case 0:
+                            slotOptions = false;
+                            itemOptions = true;
+                            break;
+                        case 1:
+                            itemUnEquip();
+                            slotOptions = false;
+                            itemOptions = false;
+                            break;
+                        case 2:
+                            slotOptions = false;
+                            itemOptions = false;
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
             else if (itemOptions)
             {
                 // update item components
                 base.Update(gameTime);
+
+                if (CheckKey(Keys.Enter))
+                {
+                    itemEquip();
+                    slotOptions = false;
+                    itemOptions = false;
+                }
             }
 
             // always update the itemlist
@@ -240,9 +263,9 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
                 itemlist.Transperancy = 1f;
             }
 
-            base.Draw(gameTime);
+            base.Draw(gameTime); // draw items
 
-            // the menu items second
+            // Draw the menu items second
             Vector2 position = new Vector2();
             Color myColor;
 
@@ -265,6 +288,12 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
                 Enum.GetNames(typeof(ItemSlot))[i],
                 position,
                 myColor);
+
+                if (equipment.item_list.FindAll(delegate(Item item) { return item.itemSlot == (ItemSlot)Enum.Parse(typeof(ItemSlot), Enum.GetNames(typeof(ItemSlot))[i]); }).Count > 0)
+                    spriteBatch.DrawString(spriteFont,
+                    equipment.item_list.Find(delegate(Item item) { return item.itemSlot == (ItemSlot)Enum.Parse(typeof(ItemSlot), Enum.GetNames(typeof(ItemSlot))[i]); }).itemName,
+                    new Vector2(position.X + 200, position.Y),
+                    myColor);
 
                 position.Y += spriteFont.LineSpacing;
             }
@@ -297,6 +326,57 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
             if(itemOptions)
                 spriteBatch.DrawString(spriteFont, itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemDescription, new Vector2(80, 70), normalColor);
 
+        }
+        #endregion
+
+        #region equipment functions
+
+        private void itemEquip()
+        {
+            if (equipment.getEquip(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemSlot) == null)
+            {
+                // equip item from inventory
+                equipment.addItem(itemlist.menuItemsnoDupes[itemlist.SelectedIndex]);
+                inventory.removeItem(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemID);
+            }
+            else
+            {
+                // swap inventory and equipment
+                Item getequip = equipment.getEquip(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemSlot);
+                Item getinvent = itemlist.menuItemsnoDupes[itemlist.SelectedIndex];
+
+                equipment.removeItem(getinvent.itemSlot);
+                equipment.addItem(getinvent);
+
+                inventory.removeItem(getinvent.itemID);
+                inventory.addItem(getequip);
+            }
+
+            updateItemList();       // update item menu
+            itemOptions = false;    // close options
+
+            // Update selected index
+            if (itemlist.SelectedIndex > itemlist.menuItemsnoDupes.Count - 1)
+                itemlist.SelectedIndex = itemlist.menuItemsnoDupes.Count - 1;
+        }
+
+        private void itemUnEquip()
+        {
+            if (equipment.getEquip(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemSlot) == null)
+            {
+                // remove equipment
+                Item getequip = equipment.getEquip(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemSlot);
+                Item getinvent = itemlist.menuItemsnoDupes[itemlist.SelectedIndex];
+
+                equipment.removeItem(getinvent.itemSlot);
+                inventory.addItem(getequip);
+            }
+
+            updateItemList();       // update item menu
+
+            // Update selected index
+            if (itemlist.SelectedIndex > itemlist.menuItemsnoDupes.Count - 1)
+                itemlist.SelectedIndex = itemlist.menuItemsnoDupes.Count - 1;
         }
         #endregion
     }
