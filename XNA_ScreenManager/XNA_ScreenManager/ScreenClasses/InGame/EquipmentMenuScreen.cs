@@ -1,12 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System.Collections.Specialized;
 
 using XNA_ScreenManager.ItemClasses;
 using System.Collections.Generic;
 using XNA_ScreenManager.ScreenClasses.SubComponents;
 using System;
+using XNA_ScreenManager.MapClasses;
 
 namespace XNA_ScreenManager.ScreenClasses.InGame
 {
@@ -14,6 +14,7 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
     {
         #region properties
         ItemlistComponent itemlist;
+        GameWorld world;
         Inventory inventory = Inventory.Instance;
         Equipment equipment = Equipment.Instance;
         ScreenManager manager = ScreenManager.Instance;
@@ -200,13 +201,20 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
                     switch (selectedOption)
                     {
                         case 0:
-                            slotOptions = false;
-                            itemOptions = true;
+                            // make sure items are available
+                            if (itemlist.menuItemsnoDupes.Count > 0)
+                            {
+                                slotOptions = false;
+                                itemOptions = true;
+                            }
                             break;
                         case 1:
-                            itemUnEquip();
-                            slotOptions = false;
-                            itemOptions = false;
+                            if (slotEquiped(SelectedSlot))
+                            {
+                                itemUnEquip();
+                                slotOptions = false;
+                                itemOptions = false;
+                            }
                             break;
                         case 2:
                             slotOptions = false;
@@ -265,6 +273,10 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
 
             base.Draw(gameTime); // draw items
 
+            // make sure items are available
+            if (itemlist.menuItemsnoDupes.Count == 0)
+                spriteBatch.DrawString(spriteFont, "None", new Vector2(itemlist.Position.X - 40, itemlist.Position.Y), Color.DarkGray);
+
             // Draw the menu items second
             Vector2 position = new Vector2();
             Color myColor;
@@ -289,11 +301,28 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
                 position,
                 myColor);
 
-                if (equipment.item_list.FindAll(delegate(Item item) { return item.itemSlot == (ItemSlot)Enum.Parse(typeof(ItemSlot), Enum.GetNames(typeof(ItemSlot))[i]); }).Count > 0)
+                if (slotEquiped(i))
+                {
+                    // Draw item Sprite
+                    world = GameWorld.GetInstance;
+
+                    Texture2D sprite = world.Content.Load<Texture2D>(@"" + getslotItem(i).itemSpritePath);
+                    Rectangle srcframe = new Rectangle(getslotItem(i).SpriteFrameX * 48,
+                                                       getslotItem(i).SpriteFrameY * 48 * 48,
+                                                       48, 48);
+
+                    Rectangle tarframe = new Rectangle((int)position.X - 15, (int)position.Y - 8, 35, 35);
+
                     spriteBatch.DrawString(spriteFont,
-                    equipment.item_list.Find(delegate(Item item) { return item.itemSlot == (ItemSlot)Enum.Parse(typeof(ItemSlot), Enum.GetNames(typeof(ItemSlot))[i]); }).itemName,
+                    getslotItem(i).itemName,
                     new Vector2(position.X + 200, position.Y),
                     myColor);
+                }
+                else
+                    spriteBatch.DrawString(spriteFont,
+                    "None",
+                    new Vector2(position.X + 200, position.Y),
+                    Color.DarkGray);
 
                 position.Y += spriteFont.LineSpacing;
             }
@@ -362,7 +391,12 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
 
         private void itemUnEquip()
         {
-            if (equipment.getEquip(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemSlot) == null)
+            if (equipment.getEquip(equipment.item_list.Find(delegate(Item item) 
+                { 
+                    return item.itemSlot == (ItemSlot)Enum.Parse(typeof(ItemSlot),
+                       Enum.GetNames(typeof(ItemSlot))[SelectedSlot]);
+                }
+            ).itemSlot) != null)
             {
                 // remove equipment
                 Item getequip = equipment.getEquip(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemSlot);
@@ -377,6 +411,24 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
             // Update selected index
             if (itemlist.SelectedIndex > itemlist.menuItemsnoDupes.Count - 1)
                 itemlist.SelectedIndex = itemlist.menuItemsnoDupes.Count - 1;
+        }
+
+        private bool slotEquiped(int i)
+        {
+            if (equipment.item_list.FindAll(delegate(Item item)
+                            {
+                                return item.itemSlot == (ItemSlot)Enum.Parse(typeof(ItemSlot),
+                                   Enum.GetNames(typeof(ItemSlot))[i]);
+                            }
+                            ).Count > 0)
+            return true;
+            else
+            return false;
+        }
+
+        private Item getslotItem(int i)
+        {
+            return equipment.item_list.Find(delegate(Item item) { return item.itemSlot == (ItemSlot)Enum.Parse(typeof(ItemSlot), Enum.GetNames(typeof(ItemSlot))[i]); });
         }
         #endregion
     }
