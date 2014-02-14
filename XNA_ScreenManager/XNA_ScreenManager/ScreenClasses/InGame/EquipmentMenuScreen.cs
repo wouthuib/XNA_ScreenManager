@@ -14,7 +14,6 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
     {
         #region properties
         ItemlistComponent itemlist;
-        GameWorld world;
         Inventory inventory = Inventory.Instance;
         Equipment equipment = Equipment.Instance;
         ScreenManager manager = ScreenManager.Instance;
@@ -296,6 +295,7 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
                         myColor = Color.DarkGray;
                 }
 
+                // Draw Slot Name
                 spriteBatch.DrawString(spriteFont,
                 Enum.GetNames(typeof(ItemSlot))[i],
                 position,
@@ -303,16 +303,14 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
 
                 if (slotEquiped(i))
                 {
-                    // Draw item Sprite
-                    world = GameWorld.GetInstance;
-
-                    Texture2D sprite = world.Content.Load<Texture2D>(@"" + getslotItem(i).itemSpritePath);
+                    Texture2D sprite = manager.game.Content.Load<Texture2D>(@"" + getslotItem(i).itemSpritePath);
                     Rectangle srcframe = new Rectangle(getslotItem(i).SpriteFrameX * 48,
-                                                       getslotItem(i).SpriteFrameY * 48 * 48,
+                                                       getslotItem(i).SpriteFrameY * 48,
                                                        48, 48);
+                    Rectangle tarframe = new Rectangle((int)position.X + 170 , (int)position.Y - 8, 30, 30);
+                    spriteBatch.Draw(sprite, tarframe, srcframe, Color.White);
 
-                    Rectangle tarframe = new Rectangle((int)position.X - 15, (int)position.Y - 8, 35, 35);
-
+                    // Draw Item Name
                     spriteBatch.DrawString(spriteFont,
                     getslotItem(i).itemName,
                     new Vector2(position.X + 200, position.Y),
