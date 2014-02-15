@@ -17,11 +17,11 @@ namespace XNA_ScreenManager.MapClasses
 
             int finalDamage = 0, bDamage = 0, wDamage = 0;
 
-            int dodgerate = 100 - (playerinfo.Hit - monsterinfo.FLEE);
+            int dodgerate = 100 - (playerinfo.HIT - monsterinfo.FLEE);
 
             if (Randomizer.generateRandom(0, 100) >= dodgerate)
             {
-                bDamage = (playerinfo.Atk * 2) - monsterinfo.DEF;
+                bDamage = (playerinfo.ATK * 2) - monsterinfo.DEF;
                 wDamage = playerinfo.WeaponATK - monsterinfo.DEF;
                 finalDamage = bDamage + wDamage;
             }
@@ -42,11 +42,11 @@ namespace XNA_ScreenManager.MapClasses
 
             int finalDamage = 0;
 
-            int dodgerate = 100 - (monsterinfo.HIT - playerinfo.Flee);
+            int dodgerate = 100 - (monsterinfo.HIT - playerinfo.FLEE);
 
             if (Randomizer.generateRandom(0, 100) >= dodgerate)
             {
-                finalDamage = (monsterinfo.ATK * 2) - playerinfo.Def;
+                finalDamage = (monsterinfo.ATK * 2) - playerinfo.DEF;
             }
             else
                 finalDamage = 0;

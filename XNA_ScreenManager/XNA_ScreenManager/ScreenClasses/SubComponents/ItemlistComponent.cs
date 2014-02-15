@@ -10,6 +10,7 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
 {
     class ItemlistComponent : DrawableGameComponent
     {
+        #region properties
         Inventory inventory = Inventory.Instance;
         GameWorld world;
 
@@ -22,13 +23,14 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
         KeyboardState oldState;
         Vector2 position = new Vector2();
         public Vector2 selectPos = new Vector2();
-        int selectedIndex = 0;
+        int selectedIndex = 0, maxDisplay = 0;
         bool show = true, active = true;
 
         List<Item> menuItems = new List<Item>();
         public List<Item> menuItemsnoDupes = new List<Item>();
         int width, height;
         private float transperancy = 1;
+        #endregion
 
         public ItemlistComponent(Game game, SpriteFont spriteFont)
             : base(game)
@@ -56,7 +58,21 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
 
         public int SelectedIndex
         {
-            get { return selectedIndex; }
+            get 
+            {
+                if (selectedIndex < menuItemsnoDupes.Count)
+                    return selectedIndex;
+                else
+                {
+                    if (menuItemsnoDupes.Count - 1 >= 0)
+                    {
+                        selectedIndex = menuItemsnoDupes.Count - 1;
+                        return selectedIndex;
+                    }
+                    else
+                        return 0;
+                }
+            }
             set
             {
                 selectedIndex = (int)MathHelper.Clamp(
@@ -171,6 +187,47 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
             return oldState.IsKeyDown(theKey) && newState.IsKeyUp(theKey);
         }
 
+        public int MaxDisplay
+        {
+            get 
+            {
+                if (maxDisplay < menuItemsnoDupes.Count && maxDisplay != 0)
+                {
+                    if (IndexDisplay + maxDisplay < menuItemsnoDupes.Count)
+                        return IndexDisplay + maxDisplay;
+                    else
+                        return menuItemsnoDupes.Count;
+                }
+                else
+                    return menuItemsnoDupes.Count;
+            }
+            set 
+            {
+                maxDisplay = value;
+            }
+        }
+
+        private int IndexDisplay
+        {
+            get
+            {
+                if (maxDisplay < menuItemsnoDupes.Count && maxDisplay != 0)
+                {
+                    if (SelectedIndex >= maxDisplay)
+                    {
+                        if (SelectedIndex + maxDisplay <= menuItemsnoDupes.Count)
+                            return SelectedIndex;
+                        else
+                            return menuItemsnoDupes.Count - maxDisplay;
+                    }
+                    else
+                        return 0;
+                }
+                else
+                    return 0;
+            }
+        }
+
         public override void Draw(GameTime gameTime)
         {
             Vector2 menuPosition = Position;
@@ -178,7 +235,7 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
 
             if (show)
             {
-                for (int i = 0; i < menuItemsnoDupes.Count; i++)
+                for (int i = IndexDisplay; i < MaxDisplay; i++)
                 {
                     if (i == SelectedIndex)
                     {
@@ -187,12 +244,6 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
                     }
                     else
                         myColor = NormalColor;
-                                        
-                    // check if already writen on screen
-                    // for (int a = 0; a < i; a++)
-                    //    if (menuItems[i].itemID == menuItems[a].itemID)
-                    //        draw = false;
-
                     
                     // black back color counter
                     spriteBatch.DrawString(spriteFont, menuItems.FindAll(delegate(Item item) { return item.itemID == menuItemsnoDupes[i].itemID; }).Count.ToString() + "x",
@@ -220,9 +271,19 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
                     spriteBatch.DrawString(spriteFont, menuItemsnoDupes[i].itemName,
                     new Vector2(menuPosition.X + 30, menuPosition.Y), myColor);
 
+                    // Draw scroll down and up
+                    if (MaxDisplay < menuItemsnoDupes.Count)
+                        spriteBatch.DrawString(spriteFont, "v",
+                        new Vector2(Position.X + 200, Position.Y + 90), NormalColor);
+
+                    if (IndexDisplay != 0)
+                        spriteBatch.DrawString(spriteFont, "^",
+                        new Vector2(Position.X + 200, Position.Y), NormalColor);
+
+                    // update line position
                     menuPosition.Y += spriteFont.LineSpacing + 10;
 
-                    if (i == 8 || i == 18) // 0 is also an id
+                    if ((i == 8 || i == 18) && maxDisplay == 0) // 0 is also an id
                     {
                         menuPosition.X = menuPosition.X + 220;
                         menuPosition.Y = Position.Y;

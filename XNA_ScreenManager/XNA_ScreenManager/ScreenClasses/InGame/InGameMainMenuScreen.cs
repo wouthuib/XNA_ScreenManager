@@ -119,7 +119,7 @@ namespace XNA_ScreenManager.ScreenClasses
             spriteBatch.DrawString(infoFont, (playerInfo.NextLevelExp - playerInfo.Exp).ToString(), new Vector2(450, 110), Color.Yellow);
 
             spriteBatch.DrawString(infoFont, "HP", new Vector2(400, 125), Color.White);
-            spriteBatch.DrawString(infoFont, playerInfo.Health.ToString() + "/" + playerInfo.MaxHealth.ToString(), new Vector2(450, 125), Color.Yellow);
+            spriteBatch.DrawString(infoFont, playerInfo.HP.ToString() + "/" + playerInfo.MAXHP.ToString(), new Vector2(450, 125), Color.Yellow);
         }
     }
 }

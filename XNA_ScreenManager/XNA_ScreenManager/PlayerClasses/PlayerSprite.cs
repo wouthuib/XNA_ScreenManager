@@ -70,7 +70,7 @@ namespace XNA_ScreenManager
             OldPosition = new Vector2(_X, _Y);
 
             // temporary parameters these should eventually be imported from the Monster Database
-            playerinfo.Health = 150;
+            playerinfo.HP = 150;
             playerinfo.Strength = 15;
             playerinfo.Dexterity = 15;
             playerinfo.Luck = 10;
@@ -146,13 +146,13 @@ namespace XNA_ScreenManager
                         if (previousGameTimeMsec < 0)
                         {
                             //previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.20f;
-                            previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerinfo.BaseASPD * 12) * 0.0006f) + 0.05f;
+                            previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerinfo.ASPD * 12) * 0.0006f) + 0.05f;
 
                             spriteFrame.X += spriteWidth * 2;
 
                             if (spriteFrame.X > spriteOfset.X + (spriteWidth * 2))
                             {
-                                previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerinfo.BaseASPD * 12) * 0.0006f) + 0.05f;
+                                previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerinfo.ASPD * 12) * 0.0006f) + 0.05f;
 
                                 // make sure the world is connected
                                 if (world == null)
@@ -190,13 +190,13 @@ namespace XNA_ScreenManager
 
                         if (previousGameTimeMsec < 0)
                         {
-                            previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerinfo.BaseASPD * 12) * 0.0006f) + 0.05f;
+                            previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerinfo.ASPD * 12) * 0.0006f) + 0.05f;
 
                             spriteFrame.X += spriteWidth * 2;
 
                             if (spriteFrame.X > spriteWidth * 1)
                             {
-                                previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerinfo.BaseASPD * 12) * 0.0006f) + 0.05f;
+                                previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerinfo.ASPD * 12) * 0.0006f) + 0.05f;
 
                                 // make sure the world is connected
                                 if (world == null)
@@ -258,7 +258,7 @@ namespace XNA_ScreenManager
                                         world.createArrow(new Vector2(this.Position.X, this.Position.Y + this.spriteFrame.Height * 0.6f), 800, new Vector2(-1, 0));
 
                                     // Set the timer for cooldown
-                                    previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerinfo.BaseASPD * 12) * 0.0006f) + 0.05f;
+                                    previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerinfo.ASPD * 12) * 0.0006f) + 0.05f;
 
                                     // reset sprite frame and change state
                                     // start cooldown
@@ -477,14 +477,14 @@ namespace XNA_ScreenManager
                                 // check the weapon type
                                 if (weapontype == WeaponType.Bow)
                                 {
-                                    previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerinfo.BaseASPD * 12) * 0.0006f) + 0.05f;
+                                    previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerinfo.ASPD * 12) * 0.0006f) + 0.05f;
 
                                     spriteFrame.X = 0;
                                     state = EntityState.Shoot;
                                 }
                                 else if (weapontype == WeaponType.Dagger || weapontype == WeaponType.One_handed_Sword)
                                 {
-                                    previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerinfo.BaseASPD * 12) * 0.0006f) + 0.05f;
+                                    previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerinfo.ASPD * 12) * 0.0006f) + 0.05f;
 
                                     spriteFrame.X = 0;
 

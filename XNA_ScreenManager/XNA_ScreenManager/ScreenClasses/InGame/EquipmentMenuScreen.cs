@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using XNA_ScreenManager.ScreenClasses.SubComponents;
 using System;
 using XNA_ScreenManager.MapClasses;
+using XNA_ScreenManager.PlayerClasses;
+using System.Reflection;
 
 namespace XNA_ScreenManager.ScreenClasses.InGame
 {
@@ -50,7 +52,6 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
             updateItemList();
 
             Components.Add(new BackgroundComponent(game, background));
-            Components.Add(itemlist);
         }
 
         #region item list
@@ -227,6 +228,7 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
             else if (itemOptions)
             {
                 // update item components
+                itemlist.Update(gameTime);
                 base.Update(gameTime);
 
                 if (CheckKey(Keys.Enter))
@@ -255,6 +257,7 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
 
         public override void Draw(GameTime gameTime)
         {
+            #region item list
             // Draw the base first
             itemlist.Position = new Vector2(360, 350);
             if (!itemOptions)
@@ -270,12 +273,16 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
                 itemlist.Transperancy = 1f;
             }
 
-            base.Draw(gameTime); // draw items
+            base.Draw(gameTime);
+            itemlist.MaxDisplay = 4;
+            itemlist.Draw(gameTime); // draw items
 
             // make sure items are available
             if (itemlist.menuItemsnoDupes.Count == 0)
                 spriteBatch.DrawString(spriteFont, "None", new Vector2(itemlist.Position.X - 40, itemlist.Position.Y), Color.DarkGray);
+            #endregion
 
+            #region slot types
             // Draw the menu items second
             Vector2 position = new Vector2();
             Color myColor;
@@ -324,7 +331,9 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
 
                 position.Y += spriteFont.LineSpacing;
             }
+            #endregion
 
+            #region menu options
             // Draw Menu Option Types
             position = new Vector2(320, 130);
 
@@ -348,7 +357,45 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
                 if (i < menuOptions.Length - 1)
                     position.X += 50 + (menuOptions[i].Length * 6);
             }
-                
+            #endregion
+            
+            #region player stats
+            // Draw Player Name
+            spriteBatch.DrawString(spriteFont, PlayerInfo.Instance.Name.ToString(),
+                new Vector2(20, 130), NormalColor);
+
+            // Draw Player Stat Values
+            position = new Vector2(20, 170);
+
+            for (int i = 0; i < Enum.GetNames(typeof(PlayerStats)).Length; i++)
+            {
+                // Draw Player Stat Name
+                spriteBatch.DrawString(spriteFont,
+                Enum.GetNames(typeof(PlayerStats))[i],
+                position, Color.DarkGray);
+
+                // Get Stat Value
+                Object player = PlayerInfo.Instance;
+                PropertyInfo info = player.GetType().GetProperty(Enum.GetNames(typeof(PlayerStats))[i]);
+
+                // Draw Player Stat Value
+                spriteBatch.DrawString(spriteFont,
+                info.GetValue(player, null).ToString(),
+                new Vector2(120, position.Y), NormalColor);
+
+                /*
+                if (itemOptions)
+                {
+                    spriteBatch.DrawString(spriteFont,
+                    info.GetValue(player, null).ToString(),
+                    new Vector2(140, position.Y), NormalColor);
+                }
+                */
+
+                position.Y += spriteFont.LineSpacing;
+            }
+            #endregion
+
             // item description
             if(itemOptions)
                 spriteBatch.DrawString(spriteFont, itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemDescription, new Vector2(80, 70), normalColor);

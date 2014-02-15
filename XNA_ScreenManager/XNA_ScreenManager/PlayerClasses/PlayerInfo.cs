@@ -8,6 +8,19 @@ using Microsoft.Xna.Framework.Content;
 
 namespace XNA_ScreenManager.PlayerClasses
 {
+    public enum PlayerStats
+    {
+        ATK,
+        DEF,
+        MATK,
+        MDEF,
+        ASPD,
+        HIT,
+        FLEE,
+        MAXHP,
+        MAXSP,
+    }
+
     public sealed class PlayerInfo
     {
         Equipment equipment = Equipment.Instance;   // Equipment
@@ -114,22 +127,26 @@ namespace XNA_ScreenManager.PlayerClasses
         #region battleinfo
         // Battle Info
         // for more info http://irowiki.org/wiki/ATK#Status_ATK
-        public int Atk
+        public int ATK
         {
             get { return (int)(StatusATK * 2 + WeaponATK + EquipATK + MasteryATK); }
         }
-        public int MAtk
+        public int MATK
         {
             get { return (int)(intel + (intel/2) + (dex/5) + (luk/3) + (lvl/4)); }
         }
-        public int Def
+        public int DEF
+        {
+            get { return (int)(HardDef + SoftDef); }
+        } // for equipment screen
+        public int BattleDEF
         {
             get { return (int)((4000 + HardDef) / (4000 + HardDef * 10)); }
-        }
+        } // for Battle calculation
         public int SoftDef
         {
             get { return (int)((lvl /2) + (vit / 2) + (agi /2)); }
-        }
+        } // for Battle calculation
         public int HardDef
         {
             get
@@ -161,34 +178,34 @@ namespace XNA_ScreenManager.PlayerClasses
                 return refmod;
             }
         }
-        public int MDef
+        public int MDEF
         {
             get { return (int)(intel + vit / 5 + dex / 5 + lvl / 4); }
         }
-        public int Hit
+        public int HIT
         {
             get { return (int)(this.Level + this.dex + 175); }
         }
-        public int Flee
+        public int FLEE
         {
             get { return (int)((this.Level + this.agi + 100) / 5); }
         }
-        public int Health
+        public int HP
         {
             get { return this.hp; }
             set { this.hp = value; }
         }
-        public int MaxHealth
+        public int MAXHP
         {
             get { return this.maxhp; }
             set { this.maxhp = value; }
         }
-        public int Mana
+        public int SP
         {
             get { return this.sp; }
             set { this.sp = value; }
         }
-        public int MaxMana
+        public int MAXSP
         {
             get { return this.maxsp; }
             set { this.maxsp = value; }
@@ -207,11 +224,11 @@ namespace XNA_ScreenManager.PlayerClasses
         }
         public int EquipATK
         {
-            get { return 1; } // to do (buffs + cards etc)
+            get { return 0; } // to do (buffs + cards etc)
         }
         public int MasteryATK
         {
-            get { return 1; } // to do
+            get { return 0; } // to do
         }
         public int Variance
         {
@@ -253,11 +270,10 @@ namespace XNA_ScreenManager.PlayerClasses
         {
             get { return (int)((200 * str) / 200);}
         }
-        public int BaseASPD
+        public int ASPD
         {
             get { return (int)((Math.Sqrt(Math.Pow(agi, 2) / 2) + Math.Sqrt(Math.Pow(dex, 2) / 5)) / 4); }
         }
-
         #endregion
 
         #region player stats
