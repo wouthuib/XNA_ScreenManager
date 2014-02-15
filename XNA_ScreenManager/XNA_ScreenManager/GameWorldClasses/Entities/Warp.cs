@@ -17,10 +17,7 @@ namespace XNA_ScreenManager.MapClasses
         public Vector2 newPosition;
         public Vector2 camPosition;
         public string newMap;
-
-        const int ANIMATION_SPEED = 120;                                                            // Animation speed, 120 = default 
-        int previousGameTimeMsec,                                                                   // GameTime in Miliseconds
-            previousGameTimeSec;                                                                    // GameTime in Seconds
+        float previousAnimateTimeSec;
 
         public Warp (Texture2D Sprite, Vector2 Position, string newmap, Vector2 newposition, Vector2 camposition) :
             base()
@@ -37,11 +34,12 @@ namespace XNA_ScreenManager.MapClasses
 
         public override void Update(GameTime gameTime)
         {
-            if (previousGameTimeMsec <= (int)gameTime.TotalGameTime.Milliseconds
-                || previousGameTimeSec != (int)gameTime.TotalGameTime.Seconds)
+            // reduce timer
+            previousAnimateTimeSec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            if (previousAnimateTimeSec <= 0)
             {
-                previousGameTimeMsec = (int)gameTime.TotalGameTime.Milliseconds + ANIMATION_SPEED;
-                previousGameTimeSec = (int)gameTime.TotalGameTime.Seconds;
+                previousAnimateTimeSec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.10f;
                 spriteFrame.X += (int)spriteSize.X;
                 if (spriteFrame.X > spriteSize.X * 6)
                     spriteFrame.X = 0;
@@ -51,7 +49,7 @@ namespace XNA_ScreenManager.MapClasses
         public override void Draw(SpriteBatch spriteBatch)
         {
             if (active)
-                spriteBatch.Draw(sprite, new Rectangle((int)position.X, (int)position.Y, (int)spriteSize.X, (int)spriteSize.Y),
+                spriteBatch.Draw(sprite, new Rectangle((int)(position.X - spriteFrame.Width * 0.5f), (int)position.Y, (int)spriteSize.X, (int)spriteSize.Y),
                     new Rectangle((int)spriteFrame.X, (int)spriteFrame.Y, (int)spriteSize.X, (int)spriteSize.Y), 
                     Color.White * 0.80f, 0f, new Vector2(0, 0), SpriteEffects.None, 0);
         }

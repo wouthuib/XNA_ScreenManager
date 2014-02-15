@@ -801,7 +801,7 @@ namespace Squared.Tiled {
             foreach (var tileset in result.Tilesets.Values)
             {
                 tileset.Texture = content.Load<Texture2D>(
-                    Path.Combine(Path.GetDirectoryName(tileset.Image), Path.GetFileNameWithoutExtension(tileset.Image))
+                    Path.Combine(@"maps\" + Path.GetDirectoryName(tileset.Image), Path.GetFileNameWithoutExtension(tileset.Image))
                 );
             }
 

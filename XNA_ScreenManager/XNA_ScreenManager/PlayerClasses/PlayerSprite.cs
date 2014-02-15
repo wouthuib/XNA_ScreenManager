@@ -884,7 +884,7 @@ namespace XNA_ScreenManager
         public bool Effect(GameTime gameTime)
         {
             // standing in warp portal effect
-            if (this.effectCounter == 3)
+            if (this.effectCounter == 2)
             {
                 this.effectCounter = 0;
                 this.color = Color.White;       // reset color

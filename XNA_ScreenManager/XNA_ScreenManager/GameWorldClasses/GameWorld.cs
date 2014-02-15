@@ -107,18 +107,13 @@ namespace XNA_ScreenManager.MapClasses
             listEntity.Add(playerSprite);
 
             LoadEntities();
-            itemStore.loadItems(@"..\..\..\..\XNA_ScreenManagerContent\itemDB\", "itemtable.bin");
+            itemStore.loadItems(Content.RootDirectory + @"\itemDB\", "itemtable.bin");
 
             playerInfo.InitNewGame();
 
             playerInfo.body_sprite = @"gfx\player\body\player_basic";
             playerInfo.faceset_sprite = @"gfx\player\faceset\faceset01";
             playerInfo.hair_sprite = @"gfx\player\hairset\hairset01";
-
-            //playerInfo.weapon_sprite = Content.Load<Texture2D>(@"gfx\player\weapon\bow01");
-            //playerInfo.costume_sprite = Content.Load<Texture2D>(@"gfx\player\costume\hunter_clothes01");
-
-            //base.Initialize();
         }
         #endregion
 
@@ -366,14 +361,14 @@ namespace XNA_ScreenManager.MapClasses
                                 {
                                     Warp warp = (Warp)effect;
 
-                                    Rectangle Warp = new Rectangle((int)warp.Position.X, (int)warp.Position.Y,
-                                        (int)warp.SpriteFrame.Width, (int)warp.SpriteFrame.Height);
+                                    Rectangle Warp = new Rectangle((int)warp.Position.X - (int)(warp.SpriteFrame.Width * 0.20f), (int)warp.Position.Y,
+                                        (int)warp.SpriteFrame.Width - (int)(warp.SpriteFrame.Width * 0.40f), (int)warp.SpriteFrame.Height);
 
                                     if (Warp.Intersects(
                                         new Rectangle(
-                                            (int)playerSprite.Position.X + (int)(playerSprite.SpriteSize.Width * 0.25f),
+                                            (int)playerSprite.Position.X + (int)(playerSprite.SpriteSize.Width * 0.40f),
                                             (int)playerSprite.Position.Y,
-                                            (int)playerSprite.SpriteFrame.Width - (int)(playerSprite.SpriteSize.Width * 0.25f),
+                                            (int)playerSprite.SpriteFrame.Width - (int)(playerSprite.SpriteSize.Width * 0.40f),
                                             ((int)playerSprite.SpriteFrame.Height)
                                             )))
                                     {
@@ -433,6 +428,7 @@ namespace XNA_ScreenManager.MapClasses
             // the list index and opening a new maps
             if (newmap != null)
             {
+                // read playersprite warptimer to start new map
                 if (playerSprite.Effect(gameTime))
                 {
                     loadnewmap(newmap, newpos, campos);
@@ -453,6 +449,18 @@ namespace XNA_ScreenManager.MapClasses
                                                     (int)cam._pos.Y - (gfxdevice.Viewport.Height / 2),
                                                     gfxdevice.Viewport.Width,
                                                     gfxdevice.Viewport.Height), Color.White);
+                else
+                {
+                    Texture2D rect = new Texture2D(gfxdevice, gfxdevice.Viewport.Width, gfxdevice.Viewport.Height);
+                    Color[] data = new Color[gfxdevice.Viewport.Width * gfxdevice.Viewport.Height];
+                    for (int i = 0; i < data.Length; ++i) data[i] = Color.Black;
+                    rect.SetData(data);
+
+                    spriteBatch.Draw(rect, new Rectangle((int)cam._pos.X - (gfxdevice.Viewport.Width / 2),
+                                                         (int)cam._pos.Y - (gfxdevice.Viewport.Height / 2),
+                                     gfxdevice.Viewport.Width, gfxdevice.Viewport.Height), Color.Black);
+                }
+
 
                 //Draw map Layer 1
                 map.Draw(spriteBatch, new Rectangle((int)cam._pos.X - (gfxdevice.Viewport.Width / 2),
@@ -669,6 +677,8 @@ namespace XNA_ScreenManager.MapClasses
             if (campos.X != 0 && campos.Y != 0)
                 screenManager.actionScreen.cam.Pos = new Vector2(campos.X * map.TileWidth, campos.Y * map.TileHeight);
 
+            Background = null;
+            
             foreach(var property in map.Properties)
             {
                 if (property.Key == "Background")
