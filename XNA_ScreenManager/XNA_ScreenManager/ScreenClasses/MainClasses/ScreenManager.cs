@@ -19,6 +19,7 @@ namespace XNA_ScreenManager.ScreenClasses
         public InGameMainMenuScreen ingameMenuScreen;
         public ItemMenuScreen itemMenuScreen;
         public EquipmentMenuScreen equipmentMenuScreen;
+        public ShopMenuScreen shopMenuScreen;
         public MessagePopup MessagePopupScreen;
         public LoadingScreen loadingScreen;
 
@@ -66,6 +67,7 @@ namespace XNA_ScreenManager.ScreenClasses
             ingameMenuScreen.Hide();
             itemMenuScreen.Hide();
             equipmentMenuScreen.Hide();
+            shopMenuScreen.Hide();
             MessagePopupScreen.Hide();
             loadingScreen.Hide();
 
@@ -104,6 +106,10 @@ namespace XNA_ScreenManager.ScreenClasses
             else if (activeScreen == equipmentMenuScreen)
             {
                 HandleequipmentMenuScreen();
+            }
+            else if (activeScreen == shopMenuScreen)
+            {
+                HandleshopMenuScreen();
             }
             else if (activeScreen == loadingScreen)
             {
@@ -207,6 +213,10 @@ namespace XNA_ScreenManager.ScreenClasses
                         activeScreen.Show();
                         break;
                     case 1:
+                        activeScreen.Hide();
+                        activeScreen = shopMenuScreen;
+                        activeScreen.Show();
+                        break;
                     case 2:
                         activeScreen.Hide();
                         activeScreen = equipmentMenuScreen;
@@ -254,6 +264,16 @@ namespace XNA_ScreenManager.ScreenClasses
         }
 
         private void HandleequipmentMenuScreen()
+        {
+            if (CheckKey(Keys.Back) || CheckKey(Keys.Escape))
+            {
+                activeScreen.Hide();
+                activeScreen = ingameMenuScreen;
+                activeScreen.Show();
+            }
+        }
+
+        private void HandleshopMenuScreen()
         {
             if (CheckKey(Keys.Back) || CheckKey(Keys.Escape))
             {

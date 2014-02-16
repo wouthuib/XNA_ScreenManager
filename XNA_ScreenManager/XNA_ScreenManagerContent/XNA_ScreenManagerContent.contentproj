@@ -240,6 +240,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="gfx\screens\shop_menu2.png">
+      <Name>shop_menu2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
     <Content Include="itemDB\itemtable.bin">
       <Name>itemtable</Name>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

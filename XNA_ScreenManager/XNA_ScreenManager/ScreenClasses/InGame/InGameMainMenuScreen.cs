@@ -15,7 +15,7 @@ namespace XNA_ScreenManager.ScreenClasses
 
         string[] menuItems = {
             "Items", 
-            "Skills", 
+            "Shop", // <- should be changed back to "Skills"
             "Equipment",
             "Status",
             "Save",

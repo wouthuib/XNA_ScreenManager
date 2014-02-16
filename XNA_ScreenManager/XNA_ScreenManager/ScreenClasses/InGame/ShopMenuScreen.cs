@@ -1,17 +1,18 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using System.Reflection;
+using System.Collections.Generic;
+
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 using XNA_ScreenManager.ItemClasses;
-using System.Collections.Generic;
 using XNA_ScreenManager.ScreenClasses.SubComponents;
-using System;
 using XNA_ScreenManager.PlayerClasses;
-using System.Reflection;
 
 namespace XNA_ScreenManager.ScreenClasses.InGame
 {
-    public class EquipmentMenuScreen : GameScreen
+    public class ShopMenuScreen : GameScreen
     {
         #region properties
         ItemlistComponent itemlist;
@@ -38,8 +39,8 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
         private bool itemOptions = false, slotOptions = false;
 
         #endregion
-                
-        public EquipmentMenuScreen(Game game, SpriteFont spriteFont, Texture2D background)
+
+        public ShopMenuScreen(Game game, SpriteFont spriteFont, Texture2D background)
             : base(game)
         {
             spriteBatch = (SpriteBatch)Game.Services.GetService(typeof(SpriteBatch));

@@ -21,6 +21,7 @@ namespace XNA_ScreenManager
         InGameMainMenuScreen ingameMenuScreen;
         ItemMenuScreen itemMenuScreen;
         EquipmentMenuScreen equipmentMenuScreen;
+        ShopMenuScreen shopMenuScreen;
         MessagePopup MessagePopupScreen;
         LoadingScreen loadingScreen;
 
@@ -80,6 +81,10 @@ namespace XNA_ScreenManager
             equipmentMenuScreen = new EquipmentMenuScreen(this, normalFont, Content.Load<Texture2D>(@"gfx\screens\equipment_menu2"));
             ScreenManager.Instance.equipmentMenuScreen = equipmentMenuScreen;
             Components.Add(equipmentMenuScreen);
+
+            shopMenuScreen = new ShopMenuScreen(this, normalFont, Content.Load<Texture2D>(@"gfx\screens\shop_menu2"));
+            ScreenManager.Instance.shopMenuScreen = shopMenuScreen;
+            Components.Add(shopMenuScreen);
 
             loadingScreen = new LoadingScreen(this);
             ScreenManager.Instance.loadingScreen = loadingScreen;
