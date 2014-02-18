@@ -8,6 +8,13 @@ using XNA_ScreenManager.MapClasses;
 
 namespace XNA_ScreenManager.ScreenClasses.SubComponents
 {
+    public enum ShopPrice
+    {
+        Buy,
+        Sell,
+        None
+    }
+
     class ItemlistComponent : DrawableGameComponent
     {
         #region properties
@@ -25,6 +32,7 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
         public Vector2 selectPos = new Vector2();
         int selectedIndex = 0, maxDisplay = 0;
         bool show = true, active = true;
+        ShopPrice price = ShopPrice.None;
 
         List<Item> menuItems = new List<Item>();
         public List<Item> menuItemsnoDupes = new List<Item>();
@@ -118,6 +126,12 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
             set { active = value; }
         }
 
+        public ShopPrice Price
+        {
+            get { return price; }
+            set { price = value; }
+        }
+
         public void SetMenuItems(List<Item> items)
         {
             menuItems.Clear();
@@ -163,7 +177,12 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
                 {
                     selectedIndex++;
                     if (selectedIndex == menuItemsnoDupes.Count)
-                        selectedIndex = 0;
+                    {
+                        if (MaxDisplay == 0)
+                            selectedIndex = 0;
+                        else
+                            selectedIndex = menuItemsnoDupes.Count - 1;
+                    }
                 }
 
                 if (CheckKey(Keys.Up))
@@ -171,7 +190,10 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
                     selectedIndex--;
                     if (selectedIndex == -1)
                     {
-                        selectedIndex = menuItemsnoDupes.Count - 1;
+                        if (MaxDisplay == 0)
+                            selectedIndex = menuItemsnoDupes.Count - 1;
+                        else
+                            selectedIndex = 0;
                     }
                 }
 
@@ -231,6 +253,7 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
         public override void Draw(GameTime gameTime)
         {
             Vector2 menuPosition = Position;
+            int offsetX = 0;
             Color myColor;
 
             if (show)
@@ -271,14 +294,30 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
                     spriteBatch.DrawString(spriteFont, menuItemsnoDupes[i].itemName,
                     new Vector2(menuPosition.X + 30, menuPosition.Y), myColor);
 
-                    // Draw scroll down and up
+                    // display item price
+                    if (price != ShopPrice.None)
+                    {
+                        int price_value = menuItems.Find(delegate(Item item) { return item.itemID == menuItemsnoDupes[i].itemID; }).Value;
+
+                        // halve the price to avoid shop exploits
+                        if (price == ShopPrice.Sell)
+                            price_value = (int)(price_value / 2);
+
+                        spriteBatch.DrawString(spriteFont, price_value.ToString() + " $",
+                        new Vector2(Position.X + 300 - (price_value.ToString().Length * 5), menuPosition.Y), myColor);
+
+                        // move the scroller to the right
+                        offsetX = 180;
+                    }
+
+                    // Draw scroll down and up (hex 0x2193 = 8595 see spritefont range)
                     if (MaxDisplay < menuItemsnoDupes.Count)
-                        spriteBatch.DrawString(spriteFont, "v",
-                        new Vector2(Position.X + 200, Position.Y + 90), NormalColor);
+                        spriteBatch.DrawString(spriteFont, "↓",
+                        new Vector2(Position.X + 200 + offsetX, Position.Y + (int)(MaxDisplay * 25)), NormalColor);
 
                     if (IndexDisplay != 0)
-                        spriteBatch.DrawString(spriteFont, "^",
-                        new Vector2(Position.X + 200, Position.Y), NormalColor);
+                        spriteBatch.DrawString(spriteFont, "↑",
+                        new Vector2(Position.X + 200 + offsetX, Position.Y), NormalColor);
 
                     // update line position
                     menuPosition.Y += spriteFont.LineSpacing + 10;

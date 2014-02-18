@@ -25,7 +25,7 @@ namespace XNA_ScreenManager
         MessagePopup MessagePopupScreen;
         LoadingScreen loadingScreen;
 
-        SpriteFont normalFont;
+        SpriteFont normalFont, backFont;
 
         public Game1()
         {
@@ -52,6 +52,7 @@ namespace XNA_ScreenManager
             Services.AddService(typeof(GraphicsDevice), GraphicsDevice);
 
             normalFont = Content.Load<SpriteFont>(@"font\normalfont");
+            backFont = Content.Load<SpriteFont>(@"font\backfont");
 
             // create screens
             ingameMenuScreen = new InGameMainMenuScreen(this, normalFont, Content.Load<Texture2D>(@"gfx\screens\game_menu2"));

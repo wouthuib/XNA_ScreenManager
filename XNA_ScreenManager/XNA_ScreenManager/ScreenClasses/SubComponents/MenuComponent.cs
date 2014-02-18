@@ -92,6 +92,11 @@ namespace XNA_ScreenManager
             set { active = value; }
         }
 
+        public StringCollection MenuItems
+        {
+            get { return menuItems; }
+        }
+
         public void SetMenuItems(string[] items)
         {
             menuItems.Clear();

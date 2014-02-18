@@ -397,7 +397,7 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
 
             // item description
             if(itemOptions)
-                spriteBatch.DrawString(spriteFont, itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemDescription, new Vector2(80, 70), normalColor);
+                spriteBatch.DrawString(spriteFont, itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemDescription, new Vector2(80, 60), normalColor);
 
         }
         #endregion

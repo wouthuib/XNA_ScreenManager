@@ -16,11 +16,12 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
     {
         #region properties
         ItemlistComponent itemlist;
+        MenuComponent options;
         Inventory inventory = Inventory.Instance;
         Equipment equipment = Equipment.Instance;
         ScreenManager manager = ScreenManager.Instance;
 
-        List<Item> itemobjects = new List<Item>();
+        List<Item> shopobjects = new List<Item>();
 
         SpriteFont spriteFont;
         SpriteBatch spriteBatch;
@@ -31,12 +32,13 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
 
         KeyboardState oldState;
 
-        //private StringCollection menuItems = new StringCollection();
-        private string[] menuOptions = new string[] { "Change", "UnEquip", "Cancel" };
+        private string[] menuOptions = new string[] { "Buy", "Sell", "Equip", "Cancel" };
+
+        private string[] shopItems = new string[] { "1200", "1201", "1202", "1203" };
 
         int width, height;
-        int selectedSlot = 0, selectedOption = 0;
-        private bool itemOptions = false, slotOptions = false;
+        int selectedMenuOption = 0;
+        private bool itemSelection = false , itemOptions = false;
 
         #endregion
 
@@ -47,8 +49,7 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
             graphics = (GraphicsDevice)Game.Services.GetService(typeof(GraphicsDevice));
             this.spriteFont = spriteFont;
             itemlist = new ItemlistComponent(game, spriteFont);
-
-            //SetmenuCategories(categories);
+            options = new MenuComponent(game, spriteFont);
             updateItemList();
 
             Components.Add(new BackgroundComponent(game, background));
@@ -74,21 +75,20 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
         // Fetch Invetory and place this in Menu Item list
         public List<Item> filterItemList()
         {
-            switch (SelectedSlot)
+            // display all
+            switch (SelectedMenuOption)
             {
-                case 0: // Weapon
-                    return inventory.item_list.FindAll(delegate(Item item) { return item.itemSlot == ItemSlot.Weapon; });
-                case 1: // Shield
-                    return inventory.item_list.FindAll(delegate(Item item) { return item.itemSlot == ItemSlot.Shield; });
-                case 2: // Headgear
-                    return inventory.item_list.FindAll(delegate(Item item) { return item.itemSlot == ItemSlot.Headgear; });
-                case 3: // Neck
-                    return inventory.item_list.FindAll(delegate(Item item) { return item.itemSlot == ItemSlot.Neck; });
-                case 4: // Bodygear
-                    return inventory.item_list.FindAll(delegate(Item item) { return item.itemSlot == ItemSlot.Bodygear; });
-                case 5: // Accessory
-                    return inventory.item_list.FindAll(delegate(Item item) { return item.itemSlot == ItemSlot.Accessory; });
-                default:
+                case 0: // buy
+                    itemlist.Price = ShopPrice.Buy;
+                    return shopobjects;
+                case 1: // sell
+                    itemlist.Price = ShopPrice.Sell;
+                    return inventory.item_list;
+                case 2: // equip
+                    itemlist.Price = ShopPrice.None;
+                    return inventory.item_list;
+                default: // cancel
+                    itemlist.Price = ShopPrice.None;
                     return inventory.item_list;
             }
         }
@@ -96,26 +96,13 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
         #endregion
 
         #region optionmenu update methods
-
-        // Menu category functions
-        public int SelectedSlot
+                
+        public int SelectedMenuOption
         {
-            get { return selectedSlot; }
+            get { return selectedMenuOption; }
             set
             {
-                selectedSlot = (int)MathHelper.Clamp(
-                value,
-                0,
-                Enum.GetNames(typeof(ItemSlot)).Length - 1);
-            }
-        }
-
-        public int SelectedOption
-        {
-            get { return selectedOption; }
-            set
-            {
-                selectedOption = (int)MathHelper.Clamp(
+                selectedMenuOption = (int)MathHelper.Clamp(
                 value,
                 0,
                 menuOptions.Length - 1);
@@ -158,88 +145,71 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
             //record new keyboard state
             KeyboardState newState = Keyboard.GetState();
 
-            if (!slotOptions && !itemOptions)
+            if (!itemSelection)
             {
                 if (CheckKey(Keys.Down))
                 {
-                    selectedSlot++;
+                    selectedMenuOption++;
 
-                    if (selectedSlot == Enum.GetNames(typeof(ItemSlot)).Length)
-                        selectedSlot = 0;
+                    if (selectedMenuOption == menuOptions.Length)
+                        selectedMenuOption = 0;
                 }
                 else if (CheckKey(Keys.Up))
                 {
-                    selectedSlot--;
+                    selectedMenuOption--;
 
-                    if (selectedSlot == -1)
-                        selectedSlot = Enum.GetNames(typeof(ItemSlot)).Length - 1;
+                    if (selectedMenuOption == -1)
+                        selectedMenuOption = menuOptions.Length - 1;
                 }
                 else if (CheckKey(Keys.Enter))
                 {
-                    itemOptions = false;
-                    slotOptions = true;
+                    itemSelection = true;
                 }
             }
-            else if (slotOptions && !itemOptions)
+            else
             {
-                if (CheckKey(Keys.Right))
+                if (!itemOptions)
                 {
-                    selectedOption++;
+                    // update item components
+                    itemlist.Update(gameTime);
+                    base.Update(gameTime);
 
-                    if (selectedOption == menuOptions.Length)
-                        selectedOption = 0;
-                }
-                else if (CheckKey(Keys.Left))
-                {
-                    selectedOption--;
-
-                    if (selectedOption == -1)
-                        selectedOption = menuOptions.Length - 1;
-                }
-                else if (CheckKey(Keys.Enter))
-                {
-                    switch (selectedOption)
+                    if (CheckKey(Keys.Enter))
                     {
-                        case 0:
-                            // make sure items are available
-                            if (itemlist.menuItemsnoDupes.Count > 0)
-                            {
-                                slotOptions = false;
-                                itemOptions = true;
-                            }
-                            break;
-                        case 1:
-                            if (slotEquiped(SelectedSlot))
-                            {
-                                itemUnEquip();
-                                slotOptions = false;
-                                itemOptions = false;
-                            }
-                            break;
-                        case 2:
-                            slotOptions = false;
-                            itemOptions = false;
-                            break;
-                        default:
-                            break;
+                        itemOptions = true;
+                        options.SelectedIndex = 0;
+                        options.SetMenuItems(new string[]{"Confirm", "Cancel"});
                     }
                 }
-            }
-            else if (itemOptions)
-            {
-                // update item components
-                itemlist.Update(gameTime);
-                base.Update(gameTime);
-
-                if (CheckKey(Keys.Enter))
+                else
                 {
-                    itemEquip();
-                    slotOptions = false;
-                    itemOptions = false;
+                    // Check item options
+                    if (CheckKey(Keys.Enter))
+                    {
+                        switch (options.SelectedIndex)
+                        {
+                            case 0:
+                                break;
+                            case 1:
+                                break;
+                            case 2:
+                                break;
+                            case 3:
+                                itemOptions = false;
+                                break;
+                        }
+                    }
+                    else if (CheckKey(Keys.Escape))
+                    {
+                        itemOptions = false;
+                    }
+
+                    // update item components
+                    options.Update(gameTime);
                 }
             }
 
-            // always update the itemlist
+            // update itemlist
             updateItemList();
 
             // save keyboard state
@@ -251,16 +221,20 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
         #region draw methods
         public override void Show()
         {
-            itemlist.Position = new Vector2(150, 130);
+            itemlist.Position = new Vector2(100, 280);
             base.Show();
         }
 
         public override void Draw(GameTime gameTime)
         {
+            // Draw the menu items second
+            Vector2 position = new Vector2();
+            Color myColor;
+
             #region item list
             // Draw the base first
-            itemlist.Position = new Vector2(360, 350);
-            if (!itemOptions)
+            itemlist.Position = new Vector2(100, 280);
+            if (!itemSelection)
             {
                 itemlist.NormalColor = Color.DarkGray;
                 itemlist.HiliteColor = Color.DarkGray;
@@ -274,7 +248,7 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
             }
 
             base.Draw(gameTime);
-            itemlist.MaxDisplay = 4;
+            itemlist.MaxDisplay = 6;
             itemlist.Draw(gameTime); // draw items
 
             // make sure items are available
@@ -282,66 +256,15 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
                 spriteBatch.DrawString(spriteFont, "None", new Vector2(itemlist.Position.X - 40, itemlist.Position.Y), Color.DarkGray);
             #endregion
 
-            #region slot types
-            // Draw the menu items second
-            Vector2 position = new Vector2();
-            Color myColor;
-
-            // Draw Slot Types
-            position = new Vector2(320, 178);
-
-            for (int i = 0; i < Enum.GetNames(typeof(ItemSlot)).Length; i++)
-            {
-                if (i == SelectedSlot)
-                    myColor = HiliteColor;
-                else
-                {
-                    if (!slotOptions && !itemOptions)
-                        myColor = NormalColor;
-                    else
-                        myColor = Color.DarkGray;
-                }
-
-                // Draw Slot Name
-                spriteBatch.DrawString(spriteFont,
-                Enum.GetNames(typeof(ItemSlot))[i],
-                position,
-                myColor);
-
-                if (slotEquiped(i))
-                {
-                    Texture2D sprite = manager.game.Content.Load<Texture2D>(@"" + getslotItem(i).itemSpritePath);
-                    Rectangle srcframe = new Rectangle(getslotItem(i).SpriteFrameX * 48,
-                                                       getslotItem(i).SpriteFrameY * 48,
-                                                       48, 48);
-                    Rectangle tarframe = new Rectangle((int)position.X + 170 , (int)position.Y - 8, 30, 30);
-                    spriteBatch.Draw(sprite, tarframe, srcframe, Color.White);
-
-                    // Draw Item Name
-                    spriteBatch.DrawString(spriteFont,
-                    getslotItem(i).itemName,
-                    new Vector2(position.X + 200, position.Y),
-                    myColor);
-                }
-                else
-                    spriteBatch.DrawString(spriteFont,
-                    "None",
-                    new Vector2(position.X + 200, position.Y),
-                    Color.DarkGray);
-
-                position.Y += spriteFont.LineSpacing;
-            }
-            #endregion
-
             #region menu options
             // Draw Menu Option Types
-            position = new Vector2(320, 130);
+            position = new Vector2(100, 130);
 
             for (int i = 0; i < menuOptions.Length; i++)
             {
-                if (slotOptions)
+                if (!itemSelection)
                 {
-                    if(i == SelectedOption)
+                    if(i == SelectedMenuOption)
                         myColor = HiliteColor;
                     else
                         myColor = NormalColor;
@@ -349,132 +272,65 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
                 else
                     myColor = Color.DarkGray;
 
+                position.X = 100 - menuOptions[i].Length * 3;
+
                 spriteBatch.DrawString(spriteFont,
                 menuOptions[i],
                 position,
                 myColor);
 
                 if (i < menuOptions.Length - 1)
-                    position.X += 50 + (menuOptions[i].Length * 6);
+                    position.Y += spriteFont.LineSpacing + 5;
             }
             #endregion
-            
-            #region player stats
-            // Draw Player Name
-            spriteBatch.DrawString(spriteFont, PlayerInfo.Instance.Name.ToString(),
-                new Vector2(20, 130), NormalColor);
 
-            // Draw Player Stat Values
-            position = new Vector2(20, 170);
-
-            for (int i = 0; i < Enum.GetNames(typeof(PlayerStats)).Length; i++)
+            #region itemoption popup
+            // item options
+            if (itemOptions)
             {
-                // Draw Player Stat Name
-                spriteBatch.DrawString(spriteFont,
-                Enum.GetNames(typeof(PlayerStats))[i],
-                position, Color.DarkGray);
+                Texture2D rect = new Texture2D(graphics, 100, options.MenuItems.Count * 20);
 
-                // Get Stat Value
-                Object player = PlayerInfo.Instance;
-                PropertyInfo info = player.GetType().GetProperty(Enum.GetNames(typeof(PlayerStats))[i]);
+                Color[] data = new Color[100 * options.MenuItems.Count * 20];
+                for (int i = 0; i < data.Length; ++i) data[i] = Color.Black;
+                rect.SetData(data);
 
-                // Draw Player Stat Value
-                spriteBatch.DrawString(spriteFont,
-                info.GetValue(player, null).ToString(),
-                new Vector2(120, position.Y), NormalColor);
+                spriteBatch.Draw(rect, new Vector2(itemlist.selectPos.X + 150, itemlist.selectPos.Y - (options.MenuItems.Count * 20)),
+                    Color.White * 0.8f);
 
-                /*
-                if (itemOptions)
-                {
-                    spriteBatch.DrawString(spriteFont,
-                    info.GetValue(player, null).ToString(),
-                    new Vector2(140, position.Y), NormalColor);
-                }
-                */
+                Vector2 optionPos = new Vector2();
+                optionPos.X = itemlist.selectPos.X + 150;
+                optionPos.Y = itemlist.selectPos.Y - (options.MenuItems.Count * 20);
 
-                position.Y += spriteFont.LineSpacing;
+                options.Position = optionPos;
+                options.Draw(gameTime);
             }
             #endregion
 
+            #region other shop info
             // item description
-            if(itemOptions)
-                spriteBatch.DrawString(spriteFont, itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemDescription, new Vector2(80, 70), normalColor);
+            if (itemSelection)
+            {
+                if (SelectedMenuOption != 0) // not shop items
+                {
+                    if (itemlist.menuItemsnoDupes.Count > 0)
+                        spriteBatch.DrawString(spriteFont, itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemDescription, new Vector2(80, 60), normalColor);
+                }
+                else
+                {
+                    if (shopobjects.Count > 0)
+                        spriteBatch.DrawString(spriteFont, shopobjects[SelectedItem].itemDescription, new Vector2(80, 60), normalColor);
+                }
+            }
+
+            // player gold
+            spriteBatch.DrawString(spriteFont, "Gold: " + PlayerClasses.PlayerInfo.Instance.Gold.ToString() + " $",
+                new Vector2(650 - (PlayerClasses.PlayerInfo.Instance.Gold.ToString().Length * 5), 280), Color.DarkGray);
+            #endregion
 
         }
         #endregion
 
-        #region equipment functions
-
-        private void itemEquip()
-        {
-            if (equipment.getEquip(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemSlot) == null)
-            {
-                // equip item from inventory
-                equipment.addItem(itemlist.menuItemsnoDupes[itemlist.SelectedIndex]);
-                inventory.removeItem(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemID);
-            }
-            else
-            {
-                // swap inventory and equipment
-                Item getequip = equipment.getEquip(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemSlot);
-                Item getinvent = itemlist.menuItemsnoDupes[itemlist.SelectedIndex];
-
-                equipment.removeItem(getinvent.itemSlot);
-                equipment.addItem(getinvent);
-
-                inventory.removeItem(getinvent.itemID);
-                inventory.addItem(getequip);
-            }
-
-            updateItemList();       // update item menu
-            itemOptions = false;    // close options
-
-            // Update selected index
-            if (itemlist.SelectedIndex > itemlist.menuItemsnoDupes.Count - 1)
-                itemlist.SelectedIndex = itemlist.menuItemsnoDupes.Count - 1;
-        }
-
-        private void itemUnEquip()
-        {
-            if (equipment.getEquip(equipment.item_list.Find(delegate(Item item) 
-                { 
-                    return item.itemSlot == (ItemSlot)Enum.Parse(typeof(ItemSlot),
-                       Enum.GetNames(typeof(ItemSlot))[SelectedSlot]);
-                }
-            ).itemSlot) != null)
-            {
-                // remove equipment
-                Item getequip = equipment.getEquip(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemSlot);
-                Item getinvent = itemlist.menuItemsnoDupes[itemlist.SelectedIndex];
-
-                equipment.removeItem(getinvent.itemSlot);
-                inventory.addItem(getequip);
-            }
-
-            updateItemList();       // update item menu
-
-            // Update selected index
-            if (itemlist.SelectedIndex > itemlist.menuItemsnoDupes.Count - 1)
-                itemlist.SelectedIndex = itemlist.menuItemsnoDupes.Count - 1;
-        }
-
-        private bool slotEquiped(int i)
-        {
-            if (equipment.item_list.FindAll(delegate(Item item)
-                            {
-                                return item.itemSlot == (ItemSlot)Enum.Parse(typeof(ItemSlot),
-                                   Enum.GetNames(typeof(ItemSlot))[i]);
-                            }
-                            ).Count > 0)
-            return true;
-            else
-            return false;
-        }
-
-        private Item getslotItem(int i)
-        {
-            return equipment.item_list.Find(delegate(Item item) { return item.itemSlot == (ItemSlot)Enum.Parse(typeof(ItemSlot), Enum.GetNames(typeof(ItemSlot))[i]); });
-        }
+        #region shop functions
         #endregion
     }
 }
