@@ -6,6 +6,11 @@ using System.Collections.Specialized;
 
 namespace XNA_ScreenManager
 {
+    public enum OrderStyle
+    {
+        Right, Central, Left
+    }
+
     /// <summary>
     /// This is a game component that implements IUpdateable.
     /// </summary>
@@ -20,8 +25,9 @@ namespace XNA_ScreenManager
         KeyboardState oldState;
         Vector2 position = new Vector2();
         public Vector2 selectPos = new Vector2();
-        int selectedIndex = 0;
+        int selectedIndex = 0, startIndex = -1;
         bool show = true, active = true;
+        OrderStyle style = OrderStyle.Left;
 
         private StringCollection menuItems = new StringCollection();
         int width, height;
@@ -56,6 +62,12 @@ namespace XNA_ScreenManager
             }
         }
 
+        public int StartIndex
+        {
+            get { return startIndex; }
+            set { startIndex = value; }
+        }
+
         public Color NormalColor
         {
             get { return normalColor; }
@@ -78,6 +90,12 @@ namespace XNA_ScreenManager
         {
             get { return spriteFont; }
             set { spriteFont = value; }
+        }
+
+        public OrderStyle Style
+        {
+            get { return style; }
+            set { style = value; }
         }
 
         public bool Show
@@ -117,6 +135,12 @@ namespace XNA_ScreenManager
             }
         }
 
+        public Vector2 getBounds()
+        {
+            CalculateBounds();
+            return new Vector2(width, height);
+        }
+
         public override void Initialize()
         {
             base.Initialize();
@@ -132,13 +156,13 @@ namespace XNA_ScreenManager
                 {
                     selectedIndex++;
                     if (selectedIndex == menuItems.Count)
-                        selectedIndex = 0;
+                        selectedIndex = startIndex;
                 }
 
                 if (CheckKey(Keys.Up))
                 {
                     selectedIndex--;
-                    if (selectedIndex == -1)
+                    if (selectedIndex == startIndex - 1)
                     {
                         selectedIndex = menuItems.Count - 1;
                     }
@@ -165,13 +189,26 @@ namespace XNA_ScreenManager
             {
                 for (int i = 0; i < menuItems.Count; i++)
                 {
+                    if (selectedIndex < startIndex)
+                        selectedIndex = startIndex;
+                    else
+                    {
+                        if (style == OrderStyle.Central && selectedIndex > startIndex)
+                            menuPosition.X = Position.X + (width * 0.5f) - (menuItems[i].Length * 3f);
+                    }
+
                     if (i == SelectedIndex)
                     {
                         selectPos = menuPosition;
                         myColor = HiliteColor;
                     }
                     else
-                        myColor = NormalColor;
+                    {
+                        if (i >= startIndex)
+                            myColor = NormalColor;
+                        else
+                            myColor = Color.LightBlue;
+                    }
 
                     spriteBatch.DrawString(
                     spriteFont,

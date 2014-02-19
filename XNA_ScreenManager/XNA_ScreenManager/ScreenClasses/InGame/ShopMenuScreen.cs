@@ -176,9 +176,24 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
 
                     if (CheckKey(Keys.Enter))
                     {
+                        string question = null;
+                        Item selectedItem = itemlist.menuItemsnoDupes[itemlist.SelectedIndex];
+
+                        switch (selectedMenuOption)
+                        {
+                            case 0:
+                                question = "Buy " + selectedItem.itemName + " for " + selectedItem.Value.ToString() + " $ ?";
+                                break;
+                            case 1:
+                                question = "Sell " + selectedItem.itemName + " for " + ((int)(selectedItem.Value / 2)).ToString() + " $ ?";
+                                break;
+                        }
+
                         itemOptions = true;
-                        options.SelectedIndex = 0;
-                        options.SetMenuItems(new string[]{"Confirm", "Cancel"});
+                        options.Style = OrderStyle.Central;
+                        options.SetMenuItems(new string[] { question, "", "Confirm", "Cancel" });
+                        options.StartIndex = 2;
+                        options.SelectedIndex = 2;
                     }
                 }
                 else
@@ -189,13 +204,13 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
                         switch (options.SelectedIndex)
                         {
                             case 0:
-                                break;
                             case 1:
-                                break;
                             case 2:
+                                itemOptions = false;
                                 break;
                             case 3:
                                 itemOptions = false;
+                                itemSelection = false;
                                 break;
                         }
                     }
@@ -203,6 +218,7 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
                     {
                         itemOptions = false;
                     }
+
 
                     // update item components
                     options.Update(gameTime);
@@ -234,7 +250,7 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
             #region item list
             // Draw the base first
             itemlist.Position = new Vector2(100, 280);
-            if (!itemSelection)
+            if (!itemSelection || itemOptions)
             {
                 itemlist.NormalColor = Color.DarkGray;
                 itemlist.HiliteColor = Color.DarkGray;
@@ -288,14 +304,36 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
             // item options
             if (itemOptions)
             {
-                Texture2D rect = new Texture2D(graphics, 100, options.MenuItems.Count * 20);
+                Texture2D rect = new Texture2D(graphics, (int)options.getBounds().X, options.MenuItems.Count * 20),
+                          rect2 = new Texture2D(graphics, (int)options.getBounds().X, options.MenuItems.Count * 20);
+  
+                Color[] data = new Color[(int)options.getBounds().X * options.MenuItems.Count * 20];
 
-                Color[] data = new Color[100 * options.MenuItems.Count * 20];
+                // set colors for menu borders and fill
                 for (int i = 0; i < data.Length; ++i) data[i] = Color.Black;
                 rect.SetData(data);
+                for (int i = 0; i < data.Length; ++i) data[i] = Color.White;
+                rect2.SetData(data);
 
-                spriteBatch.Draw(rect, new Vector2(itemlist.selectPos.X + 150, itemlist.selectPos.Y - (options.MenuItems.Count * 20)),
-                    Color.White * 0.8f);
+                // draw menu fill 20% transperancy
+                spriteBatch.Draw(rect, 
+                    new Rectangle((int)(itemlist.selectPos.X + 145), (int)(itemlist.selectPos.Y - (options.MenuItems.Count * 20) - 5), rect.Width + 10, rect.Height + 15),
+                    Color.White * 0.8f);                              
+
+                // draw borders
+                spriteBatch.Draw(rect2, 
+                    new Rectangle((int)itemlist.selectPos.X + 140, (int)itemlist.selectPos.Y - (options.MenuItems.Count * 20) - 10, (int)5, (int)options.MenuItems.Count * 20 + 15),
+                    new Rectangle(0, 0, 5, 5), Color.White);
+                spriteBatch.Draw(rect2,
+                    new Rectangle((int)itemlist.selectPos.X + 140, (int)itemlist.selectPos.Y - (options.MenuItems.Count * 20) - 10, (int)rect.Width + 15, 5),
+                    new Rectangle(0, 0, 5, 5), Color.White);
+                spriteBatch.Draw(rect2,
+                    new Rectangle((int)itemlist.selectPos.X + 140, (int)itemlist.selectPos.Y + 5, (int)rect.Width + 15, 5),
+                    new Rectangle(0, 0, 5, 5), Color.White);
+                spriteBatch.Draw(rect2,
+                    new Rectangle((int)(itemlist.selectPos.X + 155 + rect.Width), (int)itemlist.selectPos.Y - (options.MenuItems.Count * 20) - 10, 5, (int)options.MenuItems.Count * 20 + 20),
+                    new Rectangle(0, 0, 5, 5), Color.White);
+
 
                 Vector2 optionPos = new Vector2();
                 optionPos.X = itemlist.selectPos.X + 150;
