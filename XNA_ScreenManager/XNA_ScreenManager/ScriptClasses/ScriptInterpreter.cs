@@ -262,6 +262,32 @@ namespace XNA_ScreenManager.ScriptClasses
                                 }
                             }
                         }
+                        else if (wrapper.ToString().StartsWith("openshop"))
+                        {
+                            if (this.Property == null)
+                            {
+                                this.Property = "openshop";
+                                this.clearValues();
+                                this.condParan = parenOpen;
+                            }
+
+                            if (parenOpen > condParan || (parenOpen == condParan && getchar == ")"))
+                            {
+                                switch (getchar)
+                                {
+                                    case ",":
+                                    case ")":
+                                        setValue(valueSB.ToString());
+                                        valueSB.Clear();
+                                        break;
+                                    case "(":
+                                        break;
+                                    default:
+                                        valueSB.Append(lines[activeLine][i]);
+                                        break;
+                                }
+                            }
+                        }
                         #endregion
                         #region operators if statement
                         // OPERATORS

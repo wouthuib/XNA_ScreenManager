@@ -275,12 +275,7 @@ namespace XNA_ScreenManager.ScreenClasses
 
         private void HandleshopMenuScreen()
         {
-            if (CheckKey(Keys.Back) || CheckKey(Keys.Escape))
-            {
-                activeScreen.Hide();
-                activeScreen = ingameMenuScreen;
-                activeScreen.Show();
-            }
+            // do nothing all managed in screen
         }
 
         public void ScreenViewport(Vector2 postion, string screenName)
@@ -324,6 +319,9 @@ namespace XNA_ScreenManager.ScreenClasses
                     break;
                 case "loadingScreen":
                     activeScreen = loadingScreen;
+                    break;
+                case "shopMenuScreen":
+                    activeScreen = shopMenuScreen;
                     break;
             }
 

@@ -179,7 +179,7 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
                         case 2: // equip
                             break;
                         case 3: // cancel
-                            ScreenClasses.ScreenManager.Instance.setScreen("InGameMainMenuScreen");
+                            ScreenClasses.ScreenManager.Instance.setScreen("actionScreen");
                             break;
                     }
                 }
@@ -228,6 +228,10 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
                             options.SelectedIndex = 2;
                         }
                     }
+                    else if (CheckKey(Keys.Escape) || CheckKey(Keys.Back))
+                    {
+                        itemSelection = false;
+                    }
                 }
                 else // --> Item Option Popup
                 {
@@ -257,7 +261,7 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
                             itemSelection = false;
                         }
                     }
-                    else if (CheckKey(Keys.Escape))
+                    else if (CheckKey(Keys.Escape) || CheckKey(Keys.Back))
                     {
                         itemOptions = false;
                     }
@@ -533,7 +537,7 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
 
         #region shop functions
 
-        private void SetShopItems(string[] shopItems)
+        public void SetShopItems(string[] shopItems)
         {
             shopobjects.Clear();
 

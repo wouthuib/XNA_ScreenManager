@@ -142,6 +142,10 @@ namespace XNA_ScreenManager.ScreenClasses
                         scriptActive = true;
                         ChooiseList();
                         break;
+                    case "openshop":
+                        scriptActive = true;
+                        OpenShop();
+                        break;
                 }
             }
         }
@@ -318,6 +322,26 @@ namespace XNA_ScreenManager.ScreenClasses
             menu.Show = true;
             menu.Active = true;
             menu.SelectedIndex = 0;
+        }
+
+        public void OpenShop()
+        {
+            string[] displayitems = new string[scriptManager.Values.Count];
+
+            for (int id = 0; id < scriptManager.Values.Count; id++)
+            {
+                displayitems[id] = scriptManager.Values[id].ToString();
+            }
+
+            // stop message popup
+            this.Active = false;
+
+            // clear script, reset to begin
+            scriptManager.clearInstance();
+
+            // open shope menu
+            ScreenManager.Instance.shopMenuScreen.SetShopItems(displayitems);
+            ScreenManager.Instance.setScreen("shopMenuScreen");
         }
         #endregion
     }
