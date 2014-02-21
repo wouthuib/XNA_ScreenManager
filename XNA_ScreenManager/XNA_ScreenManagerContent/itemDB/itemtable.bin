@@ -1,4 +1,5 @@
 atkModifier; defModifier; equipSpritePath; itemClass; itemDescription; itemID; itemName; itemSlot; itemSpritePath; itemType; magicModifier; RefinementBonus; speedModifier; SpriteFrameX; SpriteFrameY; Value; WeaponLevel
+1000; None;"";"";""; 0; 0; 0; 0; 0; 0; 0; 0; 0; Weapon; All; Weapon; Dagger;
 1200; Knife;"A simple knife.";"gfx\effects\itemicons\daggers01";"gfx\player\weapon\dagger01"; 6; 17; 0; 17; 0; 0; 50; 0; 0; Weapon; All; Weapon; Dagger;
 1201; Cutter;"A knife used for cutting enemies.";"gfx\effects\itemicons\daggers01";"gfx\player\weapon\dagger01"; 0; 18; 0; 30; 0; 0; 1250; 0; 0; Weapon; All; Weapon; Dagger;
 1202; Main Gauche;"A French dagger that is usually held in the left hand to parry attacks.";"gfx\effects\itemicons\daggers01";"gfx\player\weapon\dagger01"; 1; 18; 0; 43; 0; 0; 2400; 0; 0; Weapon; ArcherFighter; Weapon; Dagger;

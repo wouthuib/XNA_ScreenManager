@@ -470,9 +470,9 @@ namespace XNA_ScreenManager
                         else if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.LeftAlt))
                         {
                             // check if weapon is equiped
-                            if (equipment.item_list.FindAll(delegate(Item item) { return item.itemType == ItemType.Weapon; }).Count > 0)
+                            if (equipment.item_list.FindAll(delegate(Item item) { return item.Type == ItemType.Weapon; }).Count > 0)
                             {
-                                WeaponType weapontype = equipment.item_list.Find(delegate(Item item) { return item.itemType == ItemType.Weapon; }).itemWaponType;
+                                WeaponType weapontype = equipment.item_list.Find(delegate(Item item) { return item.Type == ItemType.Weapon; }).WeaponType;
 
                                 // check the weapon type
                                 if (weapontype == WeaponType.Bow)
@@ -845,7 +845,7 @@ namespace XNA_ScreenManager
                         faceFrame = new Rectangle(spriteFrame.X, spriteFrame.Y, spriteFrame.Width, SpriteFrame.Height);
                         break;
                     case EntityState.Cooldown:
-                        if (equipment.item_list.Find(delegate(Item item) { return item.itemType == ItemType.Weapon; }).itemWaponType != WeaponType.Bow)
+                        if (equipment.item_list.Find(delegate(Item item) { return item.Type == ItemType.Weapon; }).WeaponType != WeaponType.Bow)
                             weaponFrame = new Rectangle(spriteFrame.X - 20, spriteFrame.Y, spriteFrame.Width + 20, SpriteFrame.Height);
                         break;
                     default:

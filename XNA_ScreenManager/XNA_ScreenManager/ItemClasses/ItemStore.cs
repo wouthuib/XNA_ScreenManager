@@ -72,15 +72,15 @@ namespace XNA_ScreenManager.ItemClasses
                             item.SpriteFrameX = Convert.ToInt32(values[5]);
                             item.SpriteFrameY = Convert.ToInt32(values[6]);
 
-                            item.defModifier = Convert.ToInt32(values[7]);
-                            item.atkModifier = Convert.ToInt32(values[8]);
-                            item.magicModifier = Convert.ToInt32(values[9]);
-                            item.speedModifier = Convert.ToInt32(values[10]);
-                            item.Value = Convert.ToInt32(values[11]);
+                            item.DEF = Convert.ToInt32(values[7]);
+                            item.ATK = Convert.ToInt32(values[8]);
+                            item.Magic = Convert.ToInt32(values[9]);
+                            item.Speed = Convert.ToInt32(values[10]);
+                            item.Price = Convert.ToInt32(values[11]);
                             item.WeaponLevel = Convert.ToInt32(values[12]);
-                            item.itemClass = (ItemClass)Enum.Parse(typeof(ItemClass), values[15]);
-                            item.itemSlot = (ItemSlot)Enum.Parse(typeof(ItemSlot), values[16]);
-                            item.itemWaponType = (WeaponType)Enum.Parse(typeof(WeaponType), values[17]);
+                            item.Class = (ItemClass)Enum.Parse(typeof(ItemClass), values[15]);
+                            item.Slot = (ItemSlot)Enum.Parse(typeof(ItemSlot), values[16]);
+                            item.WeaponType = (WeaponType)Enum.Parse(typeof(WeaponType), values[17]);
                         }
                     }
                     catch (Exception ee)

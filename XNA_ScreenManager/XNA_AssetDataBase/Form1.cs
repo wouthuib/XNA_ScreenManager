@@ -48,13 +48,13 @@ namespace XNA_AssetDataBase
                     item.equipSpritePath = @"" + EquipSpitePath.Text;
                     item.SpriteFrameX = Convert.ToInt32(this.itemSpriteFrameX.Value);
                     item.SpriteFrameY = Convert.ToInt32(this.itemSpriteFrameY.Value);
-                    item.defModifier = Convert.ToInt32(this.ItemDEFNum.Value);
-                    item.atkModifier = Convert.ToInt32(this.ItemATKNum.Value);
-                    item.magicModifier = Convert.ToInt32(this.ItemMATKNum.Value);
-                    item.speedModifier = Convert.ToInt32(this.ItemSPDNum.Value);
-                    item.Value = Convert.ToInt32(this.ItemGoldNum.Value);
-                    item.itemClass = (ItemClass)Enum.Parse(typeof(ItemClass), this.ItemJobBox.Text.ToString());
-                    item.itemSlot = (ItemSlot)Enum.Parse(typeof(ItemSlot), this.ItemSlotBox.Text.ToString());
+                    item.DEF = Convert.ToInt32(this.ItemDEFNum.Value);
+                    item.ATK = Convert.ToInt32(this.ItemATKNum.Value);
+                    item.Magic = Convert.ToInt32(this.ItemMATKNum.Value);
+                    item.Speed = Convert.ToInt32(this.ItemSPDNum.Value);
+                    item.Price = Convert.ToInt32(this.ItemGoldNum.Value);
+                    item.Class = (ItemClass)Enum.Parse(typeof(ItemClass), this.ItemJobBox.Text.ToString());
+                    item.Slot = (ItemSlot)Enum.Parse(typeof(ItemSlot), this.ItemSlotBox.Text.ToString());
                 }
                 catch (Exception ee)
                 {

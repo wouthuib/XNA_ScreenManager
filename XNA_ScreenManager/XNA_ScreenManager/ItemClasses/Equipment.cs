@@ -35,12 +35,12 @@ namespace XNA_ScreenManager.ItemClasses
 
         public void removeItem(ItemSlot slot)
         {
-            item_list.RemoveAll(s => s.itemSlot == slot);
+            item_list.RemoveAll(s => s.Slot == slot);
         }
 
         public Item getEquip(ItemSlot slot)
         {
-            return this.item_list.Find(delegate(Item item) { return item.itemSlot == slot; }); 
+            return this.item_list.Find(delegate(Item item) { return item.Slot == slot; }); 
         }
 
         public void loadItems(string file)

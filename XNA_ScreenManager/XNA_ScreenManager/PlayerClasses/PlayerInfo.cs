@@ -37,8 +37,8 @@ namespace XNA_ScreenManager.PlayerClasses
             {
                 string equip = null;
 
-                if (equipment.item_list.FindAll(delegate(Item item) { return item.itemSlot == ItemSlot.Headgear; }).Count > 0)
-                    equip = equipment.item_list.Find(delegate(Item item) { return item.itemSlot == ItemSlot.Headgear; }).equipSpritePath;
+                if (equipment.item_list.FindAll(delegate(Item item) { return item.Slot == ItemSlot.Headgear; }).Count > 0)
+                    equip = equipment.item_list.Find(delegate(Item item) { return item.Slot == ItemSlot.Headgear; }).equipSpritePath;
 
                 if (equip != null)
                     return equip;
@@ -52,8 +52,8 @@ namespace XNA_ScreenManager.PlayerClasses
             {
                 string equip = null;
 
-                if (equipment.item_list.FindAll(delegate(Item item) { return item.itemSlot == ItemSlot.Bodygear; }).Count > 0)
-                    equip = equipment.item_list.Find(delegate(Item item) { return item.itemSlot == ItemSlot.Bodygear; }).equipSpritePath;
+                if (equipment.item_list.FindAll(delegate(Item item) { return item.Slot == ItemSlot.Bodygear; }).Count > 0)
+                    equip = equipment.item_list.Find(delegate(Item item) { return item.Slot == ItemSlot.Bodygear; }).equipSpritePath;
 
                 if (equip != null)
                     return equip;
@@ -67,8 +67,8 @@ namespace XNA_ScreenManager.PlayerClasses
             {
                 string equip = null;
 
-                if (equipment.item_list.FindAll(delegate(Item item) { return item.itemSlot == ItemSlot.Weapon; }).Count > 0)
-                    equip = equipment.item_list.Find(delegate(Item item) { return item.itemSlot == ItemSlot.Weapon; }).equipSpritePath;
+                if (equipment.item_list.FindAll(delegate(Item item) { return item.Slot == ItemSlot.Weapon; }).Count > 0)
+                    equip = equipment.item_list.Find(delegate(Item item) { return item.Slot == ItemSlot.Weapon; }).equipSpritePath;
 
                 if (equip != null)
                     return equip;
@@ -152,9 +152,9 @@ namespace XNA_ScreenManager.PlayerClasses
             get
             {
                 int defmod = 0;
-                foreach (Item item in equipment.item_list.FindAll(delegate(Item item) { return item.itemType == ItemType.Armor; }))
+                foreach (Item item in equipment.item_list.FindAll(delegate(Item item) { return item.Type == ItemType.Armor; }))
                 {
-                    defmod += item.defModifier;
+                    defmod += item.DEF;
                 }
                 return defmod;
             }
@@ -171,9 +171,9 @@ namespace XNA_ScreenManager.PlayerClasses
             get
             {
                 int refmod = 0;
-                foreach (Item item in equipment.item_list.FindAll(delegate(Item item) { return item.itemType == ItemType.Armor; }))
+                foreach (Item item in equipment.item_list.FindAll(delegate(Item item) { return item.Type == ItemType.Armor; }))
                 {
-                    refmod += item.RefinementBonus;
+                    refmod += item.RefinementLevel;
                 }
                 return refmod;
             }
@@ -235,7 +235,7 @@ namespace XNA_ScreenManager.PlayerClasses
             get 
             { 
                 int WeaponLevel = 0;
-                foreach(Item item in equipment.item_list.FindAll(delegate(Item item) { return item.itemType == ItemType.Weapon; }))
+                foreach(Item item in equipment.item_list.FindAll(delegate(Item item) { return item.Type == ItemType.Weapon; }))
                 {
                     WeaponLevel += item.WeaponLevel;
                 }
@@ -247,9 +247,9 @@ namespace XNA_ScreenManager.PlayerClasses
             get 
             {
                 int atkmod = 0;
-                foreach(Item item in equipment.item_list.FindAll(delegate(Item item) { return item.itemType == ItemType.Weapon; }))
+                foreach (Item item in equipment.item_list.FindAll(delegate(Item item) { return item.Type == ItemType.Weapon; }))
                 {
-                    atkmod += item.atkModifier;
+                    atkmod += item.ATK;
                 }
                 return atkmod; 
             }
@@ -259,9 +259,9 @@ namespace XNA_ScreenManager.PlayerClasses
             get
             {
                 int atkmod = 0;
-                foreach (Item item in equipment.item_list.FindAll(delegate(Item item) { return item.itemType == ItemType.Weapon; }))
+                foreach (Item item in equipment.item_list.FindAll(delegate(Item item) { return item.Type == ItemType.Weapon; }))
                 {
-                    atkmod += item.RefinementBonus;
+                    atkmod += item.RefinementLevel;
                 }
                 return atkmod;
             }

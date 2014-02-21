@@ -89,15 +89,15 @@ namespace XNA_ScreenManager.ScreenClasses
                 case 0: //All
                     return inventory.item_list;
                 case 1: // Collectables
-                    return inventory.item_list.FindAll(delegate(Item item) { return item.itemType == ItemType.Collectable; });
+                    return inventory.item_list.FindAll(delegate(Item item) { return item.Type == ItemType.Collectable; });
                 case 2: // Weapons
-                    return inventory.item_list.FindAll(delegate(Item item) { return item.itemType == ItemType.Weapon; });
+                    return inventory.item_list.FindAll(delegate(Item item) { return item.Type == ItemType.Weapon; });
                 case 3: // Armor
-                    return inventory.item_list.FindAll(delegate(Item item) { return item.itemType == ItemType.Armor; });
+                    return inventory.item_list.FindAll(delegate(Item item) { return item.Type == ItemType.Armor; });
                 case 4: // Accessory
-                    return inventory.item_list.FindAll(delegate(Item item) { return item.itemType == ItemType.Accessory; });
+                    return inventory.item_list.FindAll(delegate(Item item) { return item.Type == ItemType.Accessory; });
                 case 5: // KeyItem
-                    return inventory.item_list.FindAll(delegate(Item item) { return item.itemType == ItemType.KeyItem; });
+                    return inventory.item_list.FindAll(delegate(Item item) { return item.Type == ItemType.KeyItem; });
                 default:
                     return inventory.item_list;
             }
@@ -193,8 +193,11 @@ namespace XNA_ScreenManager.ScreenClasses
                     if (filterItemList().Count > 0)
                     {
                         itemOptions = true;
-                        options.SetMenuItems(new string[]{
+                        options.Style = OrderStyle.Central;
+                        options.SetMenuItems(new string[]{ itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemName + " - Choose an Option.", "",
                             "Equip", "Use", "Remove", "Cancel"});
+                        options.StartIndex = 2;
+                        options.SelectedIndex = 2;
                     }
                 }
 
@@ -214,15 +217,18 @@ namespace XNA_ScreenManager.ScreenClasses
                     switch (options.SelectedIndex)
                     {
                         case 0:
-                            itemEquip();
-                            break;
                         case 1:
-                            itemConsume();
                             break;
                         case 2:
-                            itemRemove();
+                            itemEquip();
                             break;
                         case 3:
+                            itemConsume();
+                            break;
+                        case 4:
+                            itemRemove();
+                            break;
+                        case 5:
                             itemOptions = false;
                             break;
                     }
@@ -286,26 +292,50 @@ namespace XNA_ScreenManager.ScreenClasses
             {
                 // item description
                 spriteBatch.DrawString(spriteFont, itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemDescription, new Vector2(80, 450), normalColor);
-
+                                
+                #region itemoption popup
                 // item options
                 if (itemOptions)
                 {
-                    Texture2D rect = new Texture2D(graphics, 100, 80);
+                    Texture2D rect = new Texture2D(graphics, (int)options.getBounds().X, options.MenuItems.Count * 20),
+                              rect2 = new Texture2D(graphics, (int)options.getBounds().X, options.MenuItems.Count * 20);
 
-                    Color[] data = new Color[100 * 80];
+                    Color[] data = new Color[(int)options.getBounds().X * options.MenuItems.Count * 20];
+
+                    Vector2 PopupPosition = new Vector2((graphics.Viewport.Width * 0.5f) - (options.getBounds().X * 0.5f),
+                                                        (graphics.Viewport.Height * 0.5f) - (options.MenuItems.Count * 10));
+
+                    // set colors for menu borders and fill
                     for (int i = 0; i < data.Length; ++i) data[i] = Color.Black;
                     rect.SetData(data);
+                    for (int i = 0; i < data.Length; ++i) data[i] = Color.White;
+                    rect2.SetData(data);
 
-                    spriteBatch.Draw(rect, new Vector2(itemlist.selectPos.X + 150, itemlist.selectPos.Y + 0),
-                        Color.White * 0.8f);
+                    // draw menu fill 20% transperancy
+                    spriteBatch.Draw(rect,
+                        new Rectangle((int)(PopupPosition.X - 5),(int)(PopupPosition.Y - 5), rect.Width + 10, rect.Height + 10), Color.White * 0.8f);
 
-                    Vector2 optionPos = new Vector2();
-                    optionPos.X = itemlist.selectPos.X + 150;
-                    optionPos.Y = itemlist.selectPos.Y;
+                    // draw borders
+                    spriteBatch.Draw(rect2,
+                        new Rectangle((int)(PopupPosition.X - 5), (int)(PopupPosition.Y - 5), 5, (int)options.MenuItems.Count * 20 + 10),
+                        new Rectangle(0, 0, 5, 5), Color.White);
+                    spriteBatch.Draw(rect2,
+                        new Rectangle((int)(PopupPosition.X - 5), (int)(PopupPosition.Y - 5), (int)rect.Width + 10, 5),
+                        new Rectangle(0, 0, 5, 5), Color.White);
+                    spriteBatch.Draw(rect2,
+                        new Rectangle((int)(PopupPosition.X - 5), (int)(PopupPosition.Y + (options.MenuItems.Count * 20) + 5), (int)rect.Width + 15, 5),
+                        new Rectangle(0, 0, 5, 5), Color.White);
+                    spriteBatch.Draw(rect2,
+                        new Rectangle((int)(PopupPosition.X + rect.Width + 5), (int)(PopupPosition.Y - 5), 5, (int)options.MenuItems.Count * 20 + 15),
+                        new Rectangle(0, 0, 5, 5), Color.White);
+
+
+                    Vector2 optionPos = new Vector2(PopupPosition.X, PopupPosition.Y);
 
                     options.Position = optionPos;
                     options.Draw(gameTime);
                 }
+                #endregion
             }
         }
 
@@ -315,17 +345,17 @@ namespace XNA_ScreenManager.ScreenClasses
 
         private void itemEquip()
         {
-            if (equipment.getEquip(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemSlot) == null)
+            if (equipment.getEquip(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].Slot) == null)
             {
                 equipment.addItem(itemlist.menuItemsnoDupes[itemlist.SelectedIndex]);
                 inventory.removeItem(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemID);
             }
             else
             {
-                Item getequip = equipment.getEquip(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemSlot);
+                Item getequip = equipment.getEquip(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].Slot);
                 Item getinvent = itemlist.menuItemsnoDupes[itemlist.SelectedIndex];
 
-                equipment.removeItem(getinvent.itemSlot);
+                equipment.removeItem(getinvent.Slot);
                 equipment.addItem(getinvent);
 
                 inventory.removeItem(getinvent.itemID);

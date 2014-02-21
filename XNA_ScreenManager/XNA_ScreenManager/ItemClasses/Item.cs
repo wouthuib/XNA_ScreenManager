@@ -69,29 +69,29 @@ namespace XNA_ScreenManager.ItemClasses
         public int SpriteFrameX { get; set; }
         public int SpriteFrameY { get; set; }
 
-        public int defModifier { get; set; }
-        public int atkModifier { get; set; }
-        public int magicModifier { get; set; }
-        public int speedModifier { get; set; }
-        public int Value { get; set; }
+        public int DEF { get; set; }
+        public int ATK { get; set; }
+        public int Magic { get; set; }
+        public int Speed { get; set; }
+        public int Price { get; set; }
         public int WeaponLevel { get; set; }
-        public int RefinementBonus { get; set; }
+        public int RefinementLevel { get; set; }
 
-        public ItemType itemType { get; set; }
-        public ItemClass itemClass { get; set; }
-        public ItemSlot itemSlot { get; set; }
-        public WeaponType itemWaponType { get; set; }
+        public ItemType Type { get; set; }
+        public ItemClass Class { get; set; }
+        public ItemSlot Slot { get; set; }
+        public WeaponType WeaponType { get; set; }
 
         public static Item create(int identifier, string name, ItemType type)
         {
             var results = new Item();
 
             results.itemID = identifier;
-            results.itemType = type;
+            results.Type = type;
             results.itemName = name;
             results.WeaponLevel = 1;
-            results.RefinementBonus = 0;
-            results.itemWaponType = WeaponType.None;
+            results.RefinementLevel = 0;
+            results.WeaponType = WeaponType.None;
 
             return results;
         }

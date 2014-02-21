@@ -189,14 +189,15 @@ namespace XNA_ScreenManager
             {
                 for (int i = 0; i < menuItems.Count; i++)
                 {
+                    // Make sure that Selected index is not smaller than Startindex
                     if (selectedIndex < startIndex)
                         selectedIndex = startIndex;
-                    else
-                    {
-                        if (style == OrderStyle.Central && selectedIndex > startIndex)
-                            menuPosition.X = Position.X + (width * 0.5f) - (menuItems[i].Length * 3f);
-                    }
 
+                    // Change position from left to central
+                    if (i >= startIndex && style == OrderStyle.Central)
+                        menuPosition.X = Position.X + (width * 0.5f) - (menuItems[i].Length * 4f);
+
+                    // Maintain the Menuitems Colors 
                     if (i == SelectedIndex)
                     {
                         selectPos = menuPosition;
@@ -210,6 +211,7 @@ namespace XNA_ScreenManager
                             myColor = Color.LightBlue;
                     }
 
+                    // Start Drawing Menuitems
                     spriteBatch.DrawString(
                     spriteFont,
                     menuItems[i],

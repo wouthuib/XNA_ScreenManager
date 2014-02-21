@@ -297,7 +297,7 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
                     // display item price
                     if (price != ShopPrice.None)
                     {
-                        int price_value = menuItems.Find(delegate(Item item) { return item.itemID == menuItemsnoDupes[i].itemID; }).Value;
+                        int price_value = menuItems.Find(delegate(Item item) { return item.itemID == menuItemsnoDupes[i].itemID; }).Price;
 
                         // halve the price to avoid shop exploits
                         if (price == ShopPrice.Sell)
