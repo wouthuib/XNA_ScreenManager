@@ -795,7 +795,7 @@ namespace XNA_ScreenManager
             if (keyboardStateCurrent.IsKeyUp(Microsoft.Xna.Framework.Input.Keys.F1) == true &&
                      keyboardStatePrevious.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.F1) == true)
             {
-                inventory.addItem(itemStore.getItem(new Random().Next(1200, 1210)));
+                inventory.addItem(itemStore.getItem(new Random().Next(1100, 1114)));
             } 
             else if (keyboardStateCurrent.IsKeyUp(Microsoft.Xna.Framework.Input.Keys.F2) == true &&
                       keyboardStatePrevious.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.F2) == true)

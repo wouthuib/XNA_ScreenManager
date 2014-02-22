@@ -55,6 +55,7 @@ namespace XNA_ScreenManager.ItemClasses
         Bodygear,       // complete body i.e. cloak
         Feet,           // Feet i.e. boots
         Accessory,      // rings etc..
+        None           // not applicable
     };
 
     [Serializable]

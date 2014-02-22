@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace XNA_ScreenManager.MonsterClasses
 {
@@ -43,31 +45,66 @@ namespace XNA_ScreenManager.MonsterClasses
             return this.monster_list.Find(delegate(Monster mob) { return mob.monsterID == ID; });
         }
 
-        public void loadMonster(string file)
+        public void loadMonster(string dir, string file)
         {
-            string dir = @"c:\Temp";
-            string serializationFile = Path.Combine(dir, file);
-
-            //deserialize
-            using (Stream stream = File.Open(serializationFile, FileMode.Open))
+            using (var reader = new StreamReader(Path.Combine(dir, file)))
             {
-                var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                while (!reader.EndOfStream)
+                {
+                    var line = reader.ReadLine();
+                    var values = line.Split(';');
 
-                monster_list = (List<Monster>)bformatter.Deserialize(stream);
+                    try
+                    {
+                        if (values[0] != "atkModifier")
+                        {
+                            // to do
+                        }
+                    }
+                    catch (Exception ee)
+                    {
+                        string exception = ee.ToString();
+                    }
+                }
             }
         }
 
-        public void saveMonster(string file)
+        public void saveItem(string dir, string file)
         {
-            string dir = @"c:\Temp";
-            string serializationFile = Path.Combine(dir, file);
+            Type itemType = typeof(Monster);
+            var props = itemType.GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                                .OrderBy(p => p.Name);
 
-            //serialize
-            using (Stream stream = File.Open(serializationFile, FileMode.Create))
+            using (var writer = new StreamWriter(Path.Combine(dir, file)))
             {
-                var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                writer.WriteLine(string.Join("; ", props.Select(p => p.Name)));
 
-                bformatter.Serialize(stream, monster_list);
+                foreach (var monster in monster_list)
+                {
+                    foreach (PropertyInfo propertyInfo in monster.GetType().GetProperties())
+                    {
+                        if (propertyInfo.Name != "itemID")
+                            writer.Write("; ");
+
+                        string value;
+
+                        if (propertyInfo.Name == "itemSpritePath" || propertyInfo.Name == "equipSpritePath" ||
+                            propertyInfo.Name == "itemDescription")
+                        {
+                            value = "\"" + propertyInfo.GetValue(monster, null) + "\"";
+                            value = Regex.Replace(value, @"\t|\r|\n", "");
+                        }
+                        else
+                        {
+                            var getvalue = propertyInfo.GetValue(monster, null);
+                            value = getvalue.ToString();
+                        }
+
+                        writer.Write(value);
+                    }
+
+                    writer.WriteLine(";");
+                }
             }
         }
     }

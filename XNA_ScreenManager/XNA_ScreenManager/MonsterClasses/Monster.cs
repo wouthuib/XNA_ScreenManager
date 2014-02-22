@@ -11,28 +11,34 @@ namespace XNA_ScreenManager.MonsterClasses
     {
         public int monsterID { get; set; }
         public string monsterName { get; set; }
-        public string monsterDescription { get; set; }
         public string monsterSprite { get; set; }
 
-        public int defModifier { get; set; }
-        public int atkModifier { get; set; }
-        public int magicModifier { get; set; }
-        public int speedModifier { get; set; }
+        public int Level { get; set; }
+        public int HP { get; set; }
+        public int Hit { get; set; }
+        public int Flee { get; set; }
+        public int DEF { get; set; }
+        public int ATK { get; set; }
+        public int Magic { get; set; }
+        public int Speed { get; set; }
 
-        public static Monster create(
-            int identifier,
-            string name, string description,
-            int defMod, int atkMod, int mgcMod, int spdMod)
+        public int drop01Item { get; set; }
+        public int drop01Chance { get; set; }
+        public int drop02Item { get; set; }
+        public int drop02Chance { get; set; }
+        public int drop03Item { get; set; }
+        public int drop03Chance { get; set; }
+        public int drop04Item { get; set; }
+        public int drop04Chance { get; set; }
+        public int drop05Item { get; set; }
+        public int drop05Chance { get; set; }
+
+        public static Monster create(int identifier, string name)
         {
             var results = new Monster();
 
             results.monsterID = identifier;
             results.monsterName = name;
-            results.monsterDescription = description;
-            results.defModifier = defMod;
-            results.atkModifier = atkMod;
-            results.magicModifier = mgcMod;
-            results.speedModifier = spdMod;
 
             return results;
         }
