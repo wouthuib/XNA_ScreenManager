@@ -315,7 +315,8 @@ namespace XNA_ScreenManager
                         Velocity = Vector2.Zero;
                         spriteEffect = SpriteEffects.None;
 
-                        if(this.collideRope == false)
+                        // double check collision
+                        if (this.collideRope == false)
                             this.state = EntityState.Falling;
 
                         if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Down))
@@ -328,6 +329,10 @@ namespace XNA_ScreenManager
                             spriteOfset = new Vector2(spriteFrame.Width * 2, spriteFrame.Height * 3);
                             spriteFrame.Y = (int)spriteOfset.Y;
 
+                            // double check frame if previous state has higher X
+                            if (spriteFrame.X > spriteWidth * 3)
+                                spriteFrame.X = (int)spriteOfset.X;
+
                             // reduce timer
                             previousGameTimeMsec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 
@@ -335,7 +340,7 @@ namespace XNA_ScreenManager
                             {
                                 previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.12f;
                                 spriteFrame.X += spriteWidth;
-                                if (spriteFrame.X > spriteWidth * 4)
+                                if (spriteFrame.X > spriteWidth * 3)
                                     spriteFrame.X = (int)spriteOfset.X;
                             }
                         }
@@ -349,6 +354,10 @@ namespace XNA_ScreenManager
                             spriteOfset = new Vector2(spriteFrame.Width * 2, spriteFrame.Height * 3);
                             spriteFrame.Y = (int)spriteOfset.Y;
 
+                            // double check frame if previous state has higher X
+                            if (spriteFrame.X > spriteWidth * 3)
+                                spriteFrame.X = (int)spriteOfset.X;
+
                             // reduce timer
                             previousGameTimeMsec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 
@@ -356,7 +365,7 @@ namespace XNA_ScreenManager
                             {
                                 previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.12f;
                                 spriteFrame.X += spriteWidth;
-                                if (spriteFrame.X > spriteWidth * 4)
+                                if (spriteFrame.X > spriteWidth * 3)
                                     spriteFrame.X = (int)spriteOfset.X;
                             }
                         }
@@ -377,6 +386,7 @@ namespace XNA_ScreenManager
                         Velocity = Vector2.Zero;
                         spriteEffect = SpriteEffects.None;
 
+                        // double check collision
                         if (this.collideLadder == false)
                             this.state = EntityState.Falling;
 
@@ -389,6 +399,10 @@ namespace XNA_ScreenManager
                             //player animation
                             spriteOfset = new Vector2(spriteFrame.Width * 0, spriteFrame.Height * 3);
                             spriteFrame.Y = (int)spriteOfset.Y;
+
+                            // double check frame if previous state has higher X
+                            if (spriteFrame.X > spriteWidth * 1)
+                                spriteFrame.X = (int)spriteOfset.X;
 
                             // reduce timer
                             previousGameTimeMsec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -410,6 +424,10 @@ namespace XNA_ScreenManager
                             //player animation
                             spriteOfset = new Vector2(spriteFrame.Width * 0, spriteFrame.Height * 3);
                             spriteFrame.Y = (int)spriteOfset.Y;
+
+                            // double check frame if previous state has higher X
+                            if (spriteFrame.X > spriteWidth * 1)
+                                spriteFrame.X = (int)spriteOfset.X;
 
                             // reduce timer
                             previousGameTimeMsec -= (float)gameTime.ElapsedGameTime.TotalSeconds;

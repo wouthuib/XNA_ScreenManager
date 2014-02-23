@@ -3,6 +3,10 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using XNA_ScreenManager.MapClasses;
 using XNA_ScreenManager.PlayerClasses;
+using XNA_ScreenManager.ItemClasses;
+using System.Collections.Generic;
+using System.Reflection;
+using XNA_ScreenManager.MonsterClasses;
 
 namespace XNA_ScreenManager.CharacterClasses
 {
@@ -14,6 +18,10 @@ namespace XNA_ScreenManager.CharacterClasses
         randomizer Randomizer = randomizer.Instance;                                                // generate unique random ID
         PlayerInfo PlayerInfo = PlayerInfo.Instance;                                                // get battle information of player
         GameWorld world;
+
+        // Monster Store ID
+        int MonsterID = 0;
+        List<int[]> ItemDrop = new List<int[]>();
 
         // Drawing properties
         private int spriteWidth = 90;
@@ -53,7 +61,7 @@ namespace XNA_ScreenManager.CharacterClasses
 
         #endregion
 
-        public MonsterSprite(Texture2D texture, Vector2 position, Vector2 borders)
+        public MonsterSprite(int ID, Texture2D texture, Vector2 position, Vector2 borders)
             : base()
         {
             // Derived properties
@@ -68,15 +76,28 @@ namespace XNA_ScreenManager.CharacterClasses
             resp_pos = position;
             resp_bord = borders;
 
-            // temporary parameters these should eventually be imported from the Monster Database
-            HP = 1500; MP = 0; ATK = 60; DEF = 30; LVL = 1; HIT = 60; FLEE = 5;
+            // get battle information from monster database
+            HP = MonsterStore.Instance.getMonster(ID).HP;
+            MP = MonsterStore.Instance.getMonster(ID).Magic;
+            ATK = MonsterStore.Instance.getMonster(ID).ATK;
+            DEF = MonsterStore.Instance.getMonster(ID).DEF;
+            LVL = MonsterStore.Instance.getMonster(ID).Level;
+            HIT = MonsterStore.Instance.getMonster(ID).Hit;
+            FLEE = MonsterStore.Instance.getMonster(ID).Flee;
+            EXP = MonsterStore.Instance.getMonster(ID).EXP;
+            Speed = MonsterStore.Instance.getMonster(ID).Speed;
+
+            // read the items drops (see region functions)
+            ReadDrops(ID);
 
             // Local properties
+            MonsterID = ID;
             Direction = new Vector2();                                                              // Move direction
             state = EntityState.Spawn;                                                              // Player state
             Borders = new Border(borders.X, borders.Y);                                             // Max Tiles from center
         }
 
+        #region update
         public override void Update(GameTime gameTime)
         {
             if (Active)
@@ -303,9 +324,17 @@ namespace XNA_ScreenManager.CharacterClasses
                         previousDiedTimeSec = (int)gameTime.ElapsedGameTime.TotalSeconds + RESPAWN_TIME;
 
                         // Monster Item Drops
-                        world.createEffects(EffectType.ItemSprite, 
-                        new Vector2(Randomizer.generateRandom((int)this.position.X + 20, (int)this.position.X + this.spriteFrame.Width - 20),
-                                    (int)(this.position.Y + this.spriteFrame.Height * 0.70f)), SpriteEffects.None, Randomizer.generateRandom(1200, 1210));
+                        foreach (var drop in ItemDrop)
+                        {
+                            // drop[0] = item, drop[1] = chance in %
+                            if (Randomizer.generateRandom(0, 100) <= drop[1])
+                                world.createEffects(EffectType.ItemSprite, 
+                                new Vector2(Randomizer.generateRandom((int)this.position.X + 20, (int)this.position.X + this.spriteFrame.Width - 20),
+                                        (int)(this.position.Y + this.spriteFrame.Height * 0.70f)), SpriteEffects.None, drop[0]);
+                        }
+
+                        // Give player EXP
+                        PlayerInfo.Instance.Exp += this.EXP;
 
                         // Change state monster
                         state = EntityState.Died;
@@ -355,7 +384,7 @@ namespace XNA_ScreenManager.CharacterClasses
 
                     if (previousAnimateTimeSec <= 0)
                     {
-                        previousAnimateTimeSec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.10f;
+                        previousAnimateTimeSec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.15f;
 
                         spriteFrame.X += spriteWidth;
 
@@ -376,7 +405,7 @@ namespace XNA_ScreenManager.CharacterClasses
                             world = GameWorld.GetInstance;
 
                         // respawn a new monster
-                        world.createMonster(sprite, resp_pos, (int)resp_bord.X, (int)resp_bord.Y);
+                        world.createMonster(sprite, resp_pos, (int)resp_bord.X, (int)resp_bord.Y, MonsterID);
 
                         // remove monster from map
                         this.keepAliveTime = 0;
@@ -481,14 +510,18 @@ namespace XNA_ScreenManager.CharacterClasses
                     currentAttackTimeSec = 0;
             }
         }
+        #endregion
 
+        #region draw
         public override void Draw(SpriteBatch spriteBatch)
         {
             if (Active)
                 spriteBatch.Draw(sprite, new Rectangle((int)Position.X, (int)Position.Y, SpriteFrame.Width, SpriteFrame.Height),
                     SpriteFrame, Color.White * transperancy, 0f, Vector2.Zero, spriteEffect, 0f);
         }
+        #endregion
 
+        #region functions
         private struct Border
         {
             // Structure for monster walking bounds
@@ -500,6 +533,32 @@ namespace XNA_ScreenManager.CharacterClasses
                 Max = max * 32;
             }
         }
+
+        private void ReadDrops(int ID)
+        {
+            PropertyInfo propertyMonster;
+            int[] itemdrop = new int[]{0, 1};
+            int index = 0;
+
+            for (int a = 11; a < MonsterStore.Instance.getMonster(ID).GetType().GetProperties().Length; a++)
+            {
+                propertyMonster = MonsterStore.Instance.getMonster(ID).GetType().GetProperties()[a];
+
+                if (propertyMonster.Name.StartsWith("drop") && propertyMonster.Name.EndsWith("Item"))
+                {
+                    var value = propertyMonster.GetValue(MonsterStore.Instance.getMonster(ID), null);
+                    itemdrop[index] = Convert.ToInt32(value);
+                    index++;
+                }
+                else if (propertyMonster.Name.StartsWith("drop") && propertyMonster.Name.EndsWith("Chance"))
+                {
+                    itemdrop[index] = Convert.ToInt32(propertyMonster.GetValue(MonsterStore.Instance.getMonster(ID), null));
+                    ItemDrop.Add(new int[] { itemdrop[0], itemdrop[1] });
+                    index = 0;
+                }
+            }
+        }
+        #endregion
     }
 
     // Singleton randomizer to provide unique values

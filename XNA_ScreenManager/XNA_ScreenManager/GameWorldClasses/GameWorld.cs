@@ -11,6 +11,7 @@ using XNA_ScreenManager.ItemClasses;
 using XNA_ScreenManager.PlayerClasses;
 using XNA_ScreenManager.ScreenClasses;
 using XNA_ScreenManager.GameWorldClasses.Entities;
+using XNA_ScreenManager.MonsterClasses;
 
 
 namespace XNA_ScreenManager.MapClasses
@@ -33,7 +34,6 @@ namespace XNA_ScreenManager.MapClasses
 
         // Static Classes
         PlayerInfo playerInfo = PlayerInfo.Instance;
-        ItemStore itemStore = ItemStore.Instance;
         ScreenManager screenManager = ScreenManager.Instance;
 
         // Map entities
@@ -43,7 +43,7 @@ namespace XNA_ScreenManager.MapClasses
 
         // dynamic items
         ArrowProperties arrowprop = new ArrowProperties(false, null, Vector2.Zero, 0, new Vector2(0, 0));
-        MonsterProperties mobsprop = new MonsterProperties(false, null, Vector2.Zero, 0, 0);
+        MonsterProperties mobsprop = new MonsterProperties(false, null, Vector2.Zero, 0, 0, 0);
 
         public bool Active { get; set; }
         public bool Paused { get; set; }
@@ -106,8 +106,9 @@ namespace XNA_ScreenManager.MapClasses
                 new Vector2(map.TileWidth, map.TileHeight));
             listEntity.Add(playerSprite);
 
+            ItemStore.Instance.loadItems(Content.RootDirectory + @"\itemDB\", "itemtable.bin");
+            MonsterStore.Instance.loadMonster(Content.RootDirectory + @"\monsterDB\", "monstertable.bin");
             LoadEntities();
-            itemStore.loadItems(Content.RootDirectory + @"\itemDB\", "itemtable.bin");
 
             playerInfo.InitNewGame();
 
@@ -581,8 +582,7 @@ namespace XNA_ScreenManager.MapClasses
                         char[] chars = obj.Value.Name.ToCharArray();
                         string objname = new string(chars).Substring(0, 3); // max 3 chars to skip numbers
 
-                        int borderX = 0, borderY = 0;
-                        string texture = null;
+                        int borderX = 0, borderY = 0, monsterID = 0;
 
                         if (objname == "mob")
                         {
@@ -593,8 +593,8 @@ namespace XNA_ScreenManager.MapClasses
 
                                 switch (objkey)
                                 {
-                                    case "Texture":
-                                        texture = objvalue.ToString();
+                                    case "monsterID":
+                                        monsterID = Convert.ToInt32(objvalue);
                                         break;
                                     case "BorderL":
                                         borderX = Convert.ToInt32(objvalue);
@@ -606,9 +606,13 @@ namespace XNA_ScreenManager.MapClasses
                             }
                             try
                             {
+                                string spritePath = MonsterStore.Instance.getMonster(monsterID).monsterSprite.ToString();
+                                Texture2D monsterSprite = Content.Load<Texture2D>(spritePath);
+
                                 // properties are filled now check the state
                                 listEntity.Add(new MonsterSprite(
-                                            Content.Load<Texture2D>(@"gfx\Mobs\" + texture),
+                                            monsterID,
+                                            monsterSprite,
                                             new Vector2(obj.Value.X, obj.Value.Y),
                                             new Vector2(borderX, borderY)));
                             }
@@ -712,6 +716,7 @@ namespace XNA_ScreenManager.MapClasses
             {
                 mobsprop.active = false;
                 listEntity.Add(new MonsterSprite(
+                                    mobsprop.monsterID,
                                     mobsprop.sprite,
                                     new Vector2(mobsprop.position.X, mobsprop.position.Y),
                                     new Vector2(mobsprop.borderL, mobsprop.borderR)
@@ -754,13 +759,14 @@ namespace XNA_ScreenManager.MapClasses
             arrowprop.speed = arg1;
             arrowprop.direction = arg2;
         }
-        public void createMonster(Texture2D arg0, Vector2 arg1, int arg2, int arg3)
+        public void createMonster(Texture2D arg0, Vector2 arg1, int arg2, int arg3, int arg4)
         {
             mobsprop.active = true;
             mobsprop.sprite = arg0;
             mobsprop.position = arg1;
             mobsprop.borderL = arg2;
             mobsprop.borderR = arg3;
+            mobsprop.monsterID = arg4;
         }
 
         // Structures to store information
@@ -786,15 +792,16 @@ namespace XNA_ScreenManager.MapClasses
             public bool active;
             public Texture2D sprite;
             public Vector2 position;
-            public int borderL, borderR;
+            public int borderL, borderR, monsterID;
 
-            public MonsterProperties(bool arg0, Texture2D arg1, Vector2 arg2, int arg3, int arg4)
+            public MonsterProperties(bool arg0, Texture2D arg1, Vector2 arg2, int arg3, int arg4, int arg5)
             {
                 active = arg0;
                 sprite = arg1;
                 position = arg2;
                 borderL = arg3;
                 borderR = arg4;
+                monsterID = arg5;
             }
         }
         #endregion

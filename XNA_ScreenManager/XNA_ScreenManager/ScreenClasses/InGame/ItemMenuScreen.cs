@@ -201,11 +201,6 @@ namespace XNA_ScreenManager.ScreenClasses
                     }
                 }
 
-                if (CheckKey(Keys.Escape) || CheckKey(Keys.Back))
-                {
-                    manager.setScreen("InGameMainMenuScreen");
-                }
-
                 // update item components
                 base.Update(gameTime);
             }
@@ -242,6 +237,7 @@ namespace XNA_ScreenManager.ScreenClasses
                 options.Update(gameTime);
             }
 
+            // save keyboard state
             oldState = newState;
         }
 
@@ -345,21 +341,26 @@ namespace XNA_ScreenManager.ScreenClasses
 
         private void itemEquip()
         {
-            if (equipment.getEquip(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].Slot) == null)
+            if (ItemStore.Instance.getItem(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemID).Type == ItemType.Weapon ||
+                ItemStore.Instance.getItem(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemID).Type == ItemType.Armor ||
+                ItemStore.Instance.getItem(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemID).Type == ItemType.Accessory)
             {
-                equipment.addItem(itemlist.menuItemsnoDupes[itemlist.SelectedIndex]);
-                inventory.removeItem(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemID);
-            }
-            else
-            {
-                Item getequip = equipment.getEquip(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].Slot);
-                Item getinvent = itemlist.menuItemsnoDupes[itemlist.SelectedIndex];
+                if (equipment.getEquip(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].Slot) == null)
+                {
+                    equipment.addItem(itemlist.menuItemsnoDupes[itemlist.SelectedIndex]);
+                    inventory.removeItem(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemID);
+                }
+                else
+                {
+                    Item getequip = equipment.getEquip(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].Slot);
+                    Item getinvent = itemlist.menuItemsnoDupes[itemlist.SelectedIndex];
 
-                equipment.removeItem(getinvent.Slot);
-                equipment.addItem(getinvent);
+                    equipment.removeItem(getinvent.Slot);
+                    equipment.addItem(getinvent);
 
-                inventory.removeItem(getinvent.itemID);
-                inventory.addItem(getequip);
+                    inventory.removeItem(getinvent.itemID);
+                    inventory.addItem(getequip);
+                }
             }
 
             updateItemList();       // update item menu

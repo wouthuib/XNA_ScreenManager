@@ -158,7 +158,47 @@
    <properties>
     <property name="BorderL" value="40"/>
     <property name="BorderR" value="60"/>
-    <property name="Texture" value="monster001"/>
+    <property name="monsterID" value="1201"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object name="mob02" x="3200" y="736">
+   <properties>
+    <property name="BorderL" value="90"/>
+    <property name="BorderR" value="110"/>
+    <property name="monsterID" value="1202"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object name="mob03" x="4480" y="768">
+   <properties>
+    <property name="BorderL" value="130"/>
+    <property name="BorderR" value="150"/>
+    <property name="monsterID" value="1203"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object name="mob04" x="640" y="672">
+   <properties>
+    <property name="BorderL" value="10"/>
+    <property name="BorderR" value="30"/>
+    <property name="monsterID" value="1204"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object name="mob05" x="5120" y="768">
+   <properties>
+    <property name="BorderL" value="140"/>
+    <property name="BorderR" value="170"/>
+    <property name="monsterID" value="1205"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object name="mob06" x="3360" y="448">
+   <properties>
+    <property name="BorderL" value="95"/>
+    <property name="BorderR" value="115"/>
+    <property name="monsterID" value="1206"/>
    </properties>
    <ellipse/>
   </object>

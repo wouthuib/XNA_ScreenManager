@@ -14,6 +14,7 @@ namespace XNA_ScreenManager.MonsterClasses
         public string monsterSprite { get; set; }
 
         public int Level { get; set; }
+        public int EXP { get; set; }
         public int HP { get; set; }
         public int Hit { get; set; }
         public int Flee { get; set; }
@@ -33,12 +34,13 @@ namespace XNA_ScreenManager.MonsterClasses
         public int drop05Item { get; set; }
         public int drop05Chance { get; set; }
 
-        public static Monster create(int identifier, string name)
+        public static Monster create(int identifier, string name, string sprite)
         {
             var results = new Monster();
 
             results.monsterID = identifier;
             results.monsterName = name;
+            results.monsterSprite = sprite;
 
             return results;
         }

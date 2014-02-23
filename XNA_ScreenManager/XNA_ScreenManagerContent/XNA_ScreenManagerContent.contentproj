@@ -287,6 +287,7 @@
     <Content Include="maps\victoria01.tmx">
       <Name>victoria01</Name>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="maps\victoria02.tmx">
       <Name>victoria02</Name>

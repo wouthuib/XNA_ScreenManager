@@ -163,7 +163,7 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
                 {
                     selectedSlot++;
 
-                    if (selectedSlot == Enum.GetNames(typeof(ItemSlot)).Length)
+                    if (selectedSlot == Enum.GetNames(typeof(ItemSlot)).Length -1) // last slot is "None" we skip this one
                         selectedSlot = 0;
                 }
                 else if (CheckKey(Keys.Up))
@@ -171,7 +171,7 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
                     selectedSlot--;
 
                     if (selectedSlot == -1)
-                        selectedSlot = Enum.GetNames(typeof(ItemSlot)).Length - 1;
+                        selectedSlot = Enum.GetNames(typeof(ItemSlot)).Length - 2; // last slot is "None" we skip this one
                 }
                 else if (CheckKey(Keys.Enter))
                 {
@@ -302,31 +302,34 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
                 }
 
                 // Draw Slot Name
-                spriteBatch.DrawString(spriteFont,
-                Enum.GetNames(typeof(ItemSlot))[i],
-                position,
-                myColor);
-
-                if (slotEquiped(i))
+                if (Enum.GetNames(typeof(ItemSlot))[i] != "None")
                 {
-                    Texture2D sprite = manager.game.Content.Load<Texture2D>(@"" + getslotItem(i).itemSpritePath);
-                    Rectangle srcframe = new Rectangle(getslotItem(i).SpriteFrameX * 48,
-                                                       getslotItem(i).SpriteFrameY * 48,
-                                                       48, 48);
-                    Rectangle tarframe = new Rectangle((int)position.X + 170 , (int)position.Y - 8, 30, 30);
-                    spriteBatch.Draw(sprite, tarframe, srcframe, Color.White);
-
-                    // Draw Item Name
                     spriteBatch.DrawString(spriteFont,
-                    getslotItem(i).itemName,
-                    new Vector2(position.X + 200, position.Y),
+                    Enum.GetNames(typeof(ItemSlot))[i],
+                    position,
                     myColor);
+
+                    if (slotEquiped(i))
+                    {
+                        Texture2D sprite = manager.game.Content.Load<Texture2D>(@"" + getslotItem(i).itemSpritePath);
+                        Rectangle srcframe = new Rectangle(getslotItem(i).SpriteFrameX * 48,
+                                                           getslotItem(i).SpriteFrameY * 48,
+                                                           48, 48);
+                        Rectangle tarframe = new Rectangle((int)position.X + 170, (int)position.Y - 8, 30, 30);
+                        spriteBatch.Draw(sprite, tarframe, srcframe, Color.White);
+
+                        // Draw Item Name
+                        spriteBatch.DrawString(spriteFont,
+                        getslotItem(i).itemName,
+                        new Vector2(position.X + 200, position.Y),
+                        myColor);
+                    }
+                    else
+                        spriteBatch.DrawString(spriteFont,
+                        "None",
+                        new Vector2(position.X + 200, position.Y),
+                        Color.DarkGray);
                 }
-                else
-                    spriteBatch.DrawString(spriteFont,
-                    "None",
-                    new Vector2(position.X + 200, position.Y),
-                    Color.DarkGray);
 
                 position.Y += spriteFont.LineSpacing;
             }
@@ -406,23 +409,28 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
 
         private void itemEquip()
         {
-            if (equipment.getEquip(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].Slot) == null)
+            if (ItemStore.Instance.getItem(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemID).Type == ItemType.Weapon ||
+                ItemStore.Instance.getItem(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemID).Type == ItemType.Armor ||
+                ItemStore.Instance.getItem(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemID).Type == ItemType.Accessory)
             {
-                // equip item from inventory
-                equipment.addItem(itemlist.menuItemsnoDupes[itemlist.SelectedIndex]);
-                inventory.removeItem(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemID);
-            }
-            else
-            {
-                // swap inventory and equipment
-                Item getequip = equipment.getEquip(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].Slot);
-                Item getinvent = itemlist.menuItemsnoDupes[itemlist.SelectedIndex];
+                if (equipment.getEquip(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].Slot) == null)
+                {
+                    // equip item from inventory
+                    equipment.addItem(itemlist.menuItemsnoDupes[itemlist.SelectedIndex]);
+                    inventory.removeItem(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemID);
+                }
+                else
+                {
+                    // swap inventory and equipment
+                    Item getequip = equipment.getEquip(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].Slot);
+                    Item getinvent = itemlist.menuItemsnoDupes[itemlist.SelectedIndex];
 
-                equipment.removeItem(getinvent.Slot);
-                equipment.addItem(getinvent);
+                    equipment.removeItem(getinvent.Slot);
+                    equipment.addItem(getinvent);
 
-                inventory.removeItem(getinvent.itemID);
-                inventory.addItem(getequip);
+                    inventory.removeItem(getinvent.itemID);
+                    inventory.addItem(getequip);
+                }
             }
 
             updateItemList();       // update item menu
@@ -443,10 +451,10 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
             ).Slot) != null)
             {
                 // remove equipment
-                Item getequip = equipment.getEquip(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].Slot);
-                Item getinvent = itemlist.menuItemsnoDupes[itemlist.SelectedIndex];
+                Item getequip = getslotItem(SelectedSlot);
+                //Item getinvent = itemlist.menuItemsnoDupes[itemlist.SelectedIndex];
 
-                equipment.removeItem(getinvent.Slot);
+                equipment.removeItem(getequip.Slot);
                 inventory.addItem(getequip);
             }
 

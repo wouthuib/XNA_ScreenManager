@@ -35,6 +35,7 @@ namespace XNA_ScreenManager.ScreenClasses
             gfxdevice = (GraphicsDevice)Game.Services.GetService(typeof(GraphicsDevice));
 
             menu = new MenuComponent(game, spriteFont);
+            menu.StartIndex = 0;
             menu.SetMenuItems(menuItems);
 
             Components.Add(new BackgroundComponent(game, background));

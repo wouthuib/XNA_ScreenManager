@@ -56,10 +56,38 @@ namespace XNA_ScreenManager.MonsterClasses
 
                     try
                     {
-                        if (values[0] != "atkModifier")
-                        {
-                            // to do
-                        }
+                        this.addMonster(Monster.create(Convert.ToInt32(values[0]), values[1], values[2]));
+
+                        // Link monster to monster database
+                        Monster monster = this.getMonster(Convert.ToInt32(values[0]));
+
+                        // Trim and fix sprite path
+                        monster.monsterSprite = @"" + Regex.Replace(values[2], "\"", "");
+                        monster.monsterSprite = Regex.Replace(monster.monsterSprite, " ", "");
+
+                        // Monster battle inforation
+                        monster.Level = Convert.ToInt32(values[3]);
+                        monster.EXP = Convert.ToInt32(values[4]);
+                        monster.HP = Convert.ToInt32(values[5]);
+                        monster.Hit = Convert.ToInt32(values[6]);
+                        monster.Flee = Convert.ToInt32(values[7]);
+                        monster.DEF = Convert.ToInt32(values[8]);
+                        monster.ATK = Convert.ToInt32(values[9]);
+                        monster.Magic = Convert.ToInt32(values[10]);
+                        monster.Speed = Convert.ToInt32(values[11]);
+
+                        // Monster Drops
+                        monster.drop01Item = Convert.ToInt32(values[12]);
+                        monster.drop01Chance = Convert.ToInt32(values[13]);
+                        monster.drop02Item = Convert.ToInt32(values[14]);
+                        monster.drop02Chance = Convert.ToInt32(values[15]);
+                        monster.drop03Item = Convert.ToInt32(values[16]);
+                        monster.drop03Chance = Convert.ToInt32(values[17]);
+                        monster.drop04Item = Convert.ToInt32(values[18]);
+                        monster.drop04Chance = Convert.ToInt32(values[19]);
+                        monster.drop05Item = Convert.ToInt32(values[20]);
+                        monster.drop05Chance = Convert.ToInt32(values[21]);
+
                     }
                     catch (Exception ee)
                     {
@@ -77,7 +105,7 @@ namespace XNA_ScreenManager.MonsterClasses
 
             using (var writer = new StreamWriter(Path.Combine(dir, file)))
             {
-                writer.WriteLine(string.Join("; ", props.Select(p => p.Name)));
+                // writer.WriteLine(string.Join("; ", props.Select(p => p.Name)));
 
                 foreach (var monster in monster_list)
                 {
@@ -86,21 +114,9 @@ namespace XNA_ScreenManager.MonsterClasses
                         if (propertyInfo.Name != "itemID")
                             writer.Write("; ");
 
-                        string value;
+                        var getvalue = propertyInfo.GetValue(monster, null);
 
-                        if (propertyInfo.Name == "itemSpritePath" || propertyInfo.Name == "equipSpritePath" ||
-                            propertyInfo.Name == "itemDescription")
-                        {
-                            value = "\"" + propertyInfo.GetValue(monster, null) + "\"";
-                            value = Regex.Replace(value, @"\t|\r|\n", "");
-                        }
-                        else
-                        {
-                            var getvalue = propertyInfo.GetValue(monster, null);
-                            value = getvalue.ToString();
-                        }
-
-                        writer.Write(value);
+                        writer.Write(getvalue.ToString());
                     }
 
                     writer.WriteLine(";");

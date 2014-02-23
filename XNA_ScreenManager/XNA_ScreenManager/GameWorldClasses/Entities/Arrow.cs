@@ -11,6 +11,7 @@ namespace XNA_ScreenManager.PlayerClasses
         private SpriteEffects spriteEffect;
         private float Speed;
         private Vector2 Direction;
+        private bool Activate = false;
 
         public Arrow(Texture2D texture, Vector2 position, float speed, Vector2 direction)
             : base()
@@ -33,12 +34,17 @@ namespace XNA_ScreenManager.PlayerClasses
 
         public override void Update(GameTime gameTime)
         {
-            // Start timer (default is -1)
-            if (KeepAliveTime < 0)
-                KeepAliveTime = (float)gameTime.TotalGameTime.Seconds + 2;
+            if (!Activate)
+            {
+                KeepAliveTime = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.48f;
+                Activate = true;
+            }
 
             // Remove Arrow Timer
-            KeepAliveTime -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (KeepAliveTime > 0)
+                KeepAliveTime -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+            else
+                KeepAliveTime = 0;
 
             // Move the Arrow
             OldPosition = Position;
