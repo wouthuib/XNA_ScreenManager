@@ -77,12 +77,13 @@
  <objectgroup name="NPCS" width="186" height="34">
   <object name="npc1" x="2685" y="666">
    <properties>
-    <property name="Face" value="npc01"/>
+    <property name="Face" value="rang"/>
     <property name="OffsetX" value="58"/>
     <property name="OffsetY" value="5"/>
     <property name="Texture" value="npc01"/>
     <property name="spriteSizeX" value="60"/>
     <property name="spriteSizeY" value="90"/>
+    <property name="Script" value="npc02"/>
    </properties>
    <ellipse/>
   </object>
@@ -94,17 +95,19 @@
     <property name="Texture" value="npc01"/>
     <property name="spriteSizeX" value="60"/>
     <property name="spriteSizeY" value="100"/>
+     <property name="Script" value="npc01"/>
    </properties>
    <ellipse/>
   </object>
   <object name="npc3" x="1376" y="627">
    <properties>
-    <property name="Face" value="npc01"/>
+    <property name="Face" value="rang"/>
     <property name="OffsetX" value="510"/>
     <property name="OffsetY" value="450"/>
     <property name="Texture" value="npc01"/>
     <property name="spriteSizeX" value="170"/>
     <property name="spriteSizeY" value="130"/>
+     <property name="Script" value="npc02"/>
    </properties>
    <ellipse/>
   </object>
@@ -116,17 +119,19 @@
     <property name="Texture" value="npc01"/>
     <property name="spriteSizeX" value="65"/>
     <property name="spriteSizeY" value="71"/>
+     <property name="Script" value="npc01"/>
    </properties>
    <ellipse/>
   </object>
   <object name="npc5" x="4416" y="301">
    <properties>
-    <property name="Face" value="npc01"/>
+    <property name="Face" value="rang"/>
     <property name="OffsetX" value="504"/>
     <property name="OffsetY" value="619"/>
     <property name="Texture" value="npc01"/>
     <property name="spriteSizeX" value="59"/>
     <property name="spriteSizeY" value="66"/>
+     <property name="Script" value="npc02"/>
    </properties>
    <ellipse/>
   </object>
@@ -138,17 +143,19 @@
     <property name="Texture" value="npc01"/>
     <property name="spriteSizeX" value="80"/>
     <property name="spriteSizeY" value="125"/>
+     <property name="Script" value="npc01"/>
    </properties>
    <ellipse/>
   </object>
   <object name="npc7" x="5504" y="768">
    <properties>
-    <property name="Face" value="npc01"/>
+    <property name="Face" value="rang"/>
     <property name="OffsetX" value="540"/>
     <property name="OffsetY" value="110"/>
     <property name="Texture" value="npc01"/>
     <property name="spriteSizeX" value="80"/>
     <property name="spriteSizeY" value="125"/>
+     <property name="Script" value="npc02"/>
    </properties>
    <ellipse/>
   </object>

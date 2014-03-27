@@ -23,7 +23,6 @@ npc "Young Man"
 	case 1:
 
 		mes"I hope the weather forecast will remain the same.";
-		openshop(1200, 1201, 1202, 1203, 1300, 2300);
 		close;
 
 	case 2:

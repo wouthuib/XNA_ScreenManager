@@ -168,7 +168,10 @@ namespace XNA_ScreenManager.ScreenClasses
                 switch (createPCScreen.SelectedIndex)
                 {
                     case 0:
-                        createPCScreen.ChangeName();
+                        if (!createPCScreen.keyboardiput.Active)
+                            createPCScreen.keyboardiput.Activate(PlayerClasses.PlayerInfo.Instance.Name);
+                        else if (CheckKey(Keys.Enter))
+                            createPCScreen.keyboardiput.Complete();
                         break;
                     case 1:
                         createPCScreen.ChangeGender();
@@ -177,11 +180,6 @@ namespace XNA_ScreenManager.ScreenClasses
                         createPCScreen.ChangeClass();
                         break;
                     case 3:
-                        activeScreen.Hide();
-                        activeScreen = startScreen;
-                        activeScreen.Show();
-                        break;
-                    case 4:
                         activeScreen.Hide();
                         activeScreen = actionScreen;
                         activeScreen.Show();

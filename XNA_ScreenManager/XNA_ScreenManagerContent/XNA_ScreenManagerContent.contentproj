@@ -276,33 +276,38 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Content Include="itemDB\itemtable.bin">
+    <Compile Include="gfx\background\nametag.png">
+      <Name>nametag</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <None Include="itemDB\itemtable.bin">
       <Name>itemtable</Name>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="maps\maple_map002.tmx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\maple_map002.tmx">
       <Name>maple_map002</Name>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="maps\victoria01.tmx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\victoria01.tmx">
       <Name>victoria01</Name>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
-    </Content>
-    <Content Include="maps\victoria02.tmx">
+    </None>
+    <None Include="maps\victoria02.tmx">
       <Name>victoria02</Name>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="scriptDB\npc01.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="scriptDB\npc01.txt">
       <Name>npc01</Name>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="itemDB\inventory.bin">
+    <None Include="itemDB\inventory.bin">
       <Name>inventory</Name>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="gfx\player\player_complete.png">
@@ -597,10 +602,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="maps\victoria02_inn01.tmx">
+    <None Include="maps\victoria02_inn01.tmx">
       <Name>victoria02_inn01</Name>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="font\backfont.spritefont">
@@ -610,10 +615,16 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="monsterDB\monstertable.bin">
+    <None Include="monsterDB\monstertable.bin">
       <Name>monstertable</Name>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="scriptDB\npc02.txt">
+      <Name>npc02</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
   <!--  To modify your build process, add your task inside one of the targets below and uncomment it. 

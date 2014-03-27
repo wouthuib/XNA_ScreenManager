@@ -21,6 +21,8 @@ namespace XNA_ScreenManager
         Texture2D background;
         SpriteBatch spriteBatch = null;
         Rectangle bgRect;
+        Color myColor = Color.White;
+        bool hue = false;
 
         public BackgroundComponent(Game game, Texture2D texture)
             : base(game)
@@ -44,9 +46,22 @@ namespace XNA_ScreenManager
             base.Update(gameTime);
         }
 
+        public bool Hue
+        {
+            get { return hue; }
+            set 
+            { 
+                hue = value;
+                if (hue)
+                    myColor = new Color(100, 100, 100);
+                else
+                    myColor = Color.White;
+            }
+        }
+
         public override void Draw(GameTime gameTime)
         {
-            spriteBatch.Draw(background, bgRect, Color.White);
+            spriteBatch.Draw(background, bgRect, myColor);
             base.Draw(gameTime);
         }
     }

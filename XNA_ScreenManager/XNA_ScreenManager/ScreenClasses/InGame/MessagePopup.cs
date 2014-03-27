@@ -71,7 +71,11 @@ namespace XNA_ScreenManager.ScreenClasses
             t_complete.Capacity = 0;
             t_index = 0;
 
-            scriptfile = Game.Content.RootDirectory + @"\scriptDB\npc01.txt";
+            if (scriptfile == null)
+                scriptfile = Game.Content.RootDirectory + @"\scriptDB\npc01.txt";
+            else
+                scriptfile = Game.Content.RootDirectory + @"\scriptDB\" + scriptfile + ".txt";
+
             scriptManager.loadFile(scriptfile);
             this.scriptActive = false;
 
@@ -259,12 +263,6 @@ namespace XNA_ScreenManager.ScreenClasses
                                 new Vector2(bounds.X + textoffsetX, bounds.Bottom - 20), Color.Yellow);
                                 break;
                             case "chooise":
-                                /*foreach (var option in scriptManager.Values)
-                                {
-                                    spriteBatch.DrawString(spriteFont, option.ToString(),
-                                    new Vector2(bounds.X + textoffsetX, bounds.Bottom - 20), Color.Yellow);
-                                    textoffsetX = textoffsetX + 100;
-                                }*/
                                 menu.Position = new Vector2(bounds.X + textoffsetX, bounds.Bottom - (20 * scriptManager.Values.Count));
                                 break;
                         }

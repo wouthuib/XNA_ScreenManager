@@ -558,13 +558,25 @@ namespace XNA_ScreenManager.MapClasses
                             }
                             try
                             {
+                                Texture2D facetext = null;
+
+                                try
+                                {
+                                    facetext = Content.Load<Texture2D>(@"gfx\faces\" + face);
+                                }
+                                catch (Exception ee)
+                                {
+                                    // bug handler for NPC import properties
+                                    string aa = ee.ToString();
+                                }
+
                                 // properties are filled now check the state
                                 listEntity.Add(new NPCharacter(
                                             Content.Load<Texture2D>(@"gfx\NPCs\" + texture),
                                             new Vector2(offsetX, offsetY),
                                             new Vector2(spritesizeX, spritesizeY),
                                             new Vector2(obj.Value.X, obj.Value.Y),
-                                            Content.Load<Texture2D>(@"gfx\faces\" + face), 
+                                            facetext, 
                                             script));
                             }
                             catch (Exception ee)

@@ -155,6 +155,7 @@
     <Compile Include="ScreenClasses\InGame\ItemMenuScreen.cs" />
     <Compile Include="ScreenClasses\InGame\LoadingScreen.cs" />
     <Compile Include="ScreenClasses\SubComponents\ItemlistComponent.cs" />
+    <Compile Include="ScreenClasses\SubComponents\KeyboardInput.cs" />
     <Compile Include="ScreenClasses\SubComponents\MenuComponent.cs" />
     <Compile Include="PlayerClasses\PlayerSprite.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
