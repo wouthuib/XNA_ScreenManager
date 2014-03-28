@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Input;
 using XNA_ScreenManager.PlayerClasses;
 using XNA_ScreenManager.ScriptClasses;
 using System.Text;
+using XNA_ScreenManager.ScreenClasses.SubComponents;
 
 namespace XNA_ScreenManager.ScreenClasses
 {
@@ -23,6 +24,7 @@ namespace XNA_ScreenManager.ScreenClasses
         KeyboardState keyboardStateCurrent, keyboardStatePrevious;
 
         MenuComponent menu;
+        TextBalloon balloon;
         PlayerInfo playerInfo = PlayerInfo.Instance;
         ScriptInterpreter scriptManager = ScriptInterpreter.Instance;
         Texture2D NPCPicture;
@@ -51,6 +53,7 @@ namespace XNA_ScreenManager.ScreenClasses
 
             menu = new MenuComponent(game, spriteFont);
             Components.Add(menu);
+            balloon = new TextBalloon(game);
 
             LoadContent();
         }
@@ -183,10 +186,7 @@ namespace XNA_ScreenManager.ScreenClasses
                     if (scriptManager.Property == "close")
                     {
                         scriptManager.clearInstance();
-                        //this.scriptActive = false;
-                        menu.SetMenuItems(new string[0]);
-                        menu.Show = false;
-                        menu.Active = false;
+                        clearStringBuilders();
                         this.Active = false;
                     }
                     else if (scriptManager.Property == "next")
@@ -196,8 +196,6 @@ namespace XNA_ScreenManager.ScreenClasses
                     }
                     else if (scriptManager.Property == "chooise")
                     {
-                        //Random rand = new Random();
-                        //scriptManager.setChooise((int)rand.Next(1, 5)); // temporary
                         scriptManager.setChooise(menu.SelectedIndex + 1);
                         clearStringBuilders();
                         this.scriptActive = false;
@@ -221,7 +219,6 @@ namespace XNA_ScreenManager.ScreenClasses
         #region draw
         public override void Draw(GameTime gameTime)
         {
-            //base.Draw(gameTime);
 
             if (Active)
             {
@@ -229,49 +226,63 @@ namespace XNA_ScreenManager.ScreenClasses
                                                  (int)(position.Y + gfxdevice.Viewport.Height - size.Y),
                                                  (int)size.X, (int)size.Y);
 
-                // Draw transperant background window
-                Texture2D rect = new Texture2D(gfxdevice, bounds.Width, bounds.Height);
-
-                Color[] data = new Color[bounds.Width * bounds.Height];
-                for (int i = 0; i < data.Length; ++i) data[i] = Color.Black;
-                rect.SetData(data);
-
-                spriteBatch.Draw(rect, new Vector2(bounds.X, bounds.Y), Color.White * 0.8f);
-
+                /*
                 // Draw NPC picture if applicable
                 if (NPCPicture != null)
                     spriteBatch.Draw(NPCPicture,
                         new Rectangle((int)position.X, (int)position.Y + 100, (int)200, (int)gfxdevice.Viewport.Height - 100),
                         Color.White);
+                 */
 
                 // Here we draw the text items
                 if (t_display != null)
                 {
-                    spriteBatch.DrawString(spriteFont, t_display,
-                        new Vector2(bounds.X + textoffsetX, bounds.Y + 20), Color.White);
+                    // draw the text balloon
+                    balloon.Active = true;
+                    balloon.Position = new Vector2(bounds.X + (textoffsetX - 20), bounds.Y);
+                    balloon.Width = 200;
+                    balloon.Height = (t_display.ToString().Split('\n').Length * spriteFont.LineSpacing);
 
                     if (t_index == t_complete.Length)
+                        balloon.Height = (int)(t_complete.ToString().Split('\n').Length * spriteFont.LineSpacing) + 
+                            (scriptManager.Values.Count * 9);
+
+                    balloon.Draw(gameTime);
+
+                    // Draw text based on message
+                    spriteBatch.DrawString(spriteFont, t_display,
+                        new Vector2(bounds.X + textoffsetX, bounds.Y + 10), Color.Black);
+
+                    // Draw special options if applicable
+                    if (t_index == t_complete.Length)
                     {
+                        // property
+                        int propertyposy = bounds.Y + (int)(t_complete.ToString().Split('\n').Length * spriteFont.LineSpacing);
+
                         switch(scriptManager.Property)
                         {
                             case "close":
                                 spriteBatch.DrawString(spriteFont, "Close",
-                                new Vector2(bounds.X + textoffsetX, bounds.Bottom - 20), Color.Yellow);
+                                new Vector2(bounds.X + textoffsetX, propertyposy), Color.Red);
                                 break;
                             case "next":
                                 spriteBatch.DrawString(spriteFont, "Next >>",
-                                new Vector2(bounds.X + textoffsetX, bounds.Bottom - 20), Color.Yellow);
+                                new Vector2(bounds.X + textoffsetX, propertyposy), Color.Red);
                                 break;
                             case "chooise":
-                                menu.Position = new Vector2(bounds.X + textoffsetX, bounds.Bottom - (20 * scriptManager.Values.Count));
+                                menu.Position = new Vector2(bounds.X + textoffsetX, propertyposy);
+                                menu.Show = true;
                                 break;
                         }
 
                     }
                     else if (t_display.ToString().Split('\n').Length > 4)
                     {
+                        // property
+                        int propertyposy = bounds.Y + (int)(t_complete.ToString().Split('\n').Length * spriteFont.LineSpacing);
+
                         spriteBatch.DrawString(spriteFont, "Next >>",
-                        new Vector2(bounds.X + 50, bounds.Bottom - 20), Color.Yellow);
+                        new Vector2(bounds.X + 50, propertyposy), Color.Red);
                     }
                 }
             }
@@ -300,6 +311,9 @@ namespace XNA_ScreenManager.ScreenClasses
             t_complete.Capacity = 0;
             t_complete.Clear();
             t_index = 0;
+            menu.Show = false;
+            menu.SetMenuItems(new string[0]);
+            menu.Active = false;
         }
 
         public int SelectedItem
@@ -317,7 +331,6 @@ namespace XNA_ScreenManager.ScreenClasses
             }
             menu.SetMenuItems(displayitems);
             menu.SpriteFont = spriteFont;
-            menu.Show = true;
             menu.Active = true;
             menu.SelectedIndex = 0;
         }
@@ -341,6 +354,7 @@ namespace XNA_ScreenManager.ScreenClasses
             ScreenManager.Instance.shopMenuScreen.SetShopItems(displayitems);
             ScreenManager.Instance.setScreen("shopMenuScreen");
         }
+
         #endregion
     }
 }

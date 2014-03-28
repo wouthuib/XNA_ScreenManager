@@ -8,7 +8,7 @@ npc "Ranger"
 
 	mes"Please let me know what you would like to do:";
 
-	chooise(Open shop, Leave)
+	chooise(Open shop, Leave);
 
 	case 1:
 
