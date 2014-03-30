@@ -1,0 +1,37 @@
+npc "Joey"
+{
+	if (switch sw_herman == stage1)
+	{
+		mes"Hi I am Joey, nice to meet you.";
+		mes"What did you say! Herman is dehydrating and wants some water.";
+		mes"Here, please bring this bottle of mineral water to him.";
+		
+		setswitch sw_herman stage2;
+
+		close;
+	}
+
+	if (switch sw_herman == stage2)
+	{
+		mes"Hi, have you brought the bottle to Herman?";
+		mes"Please hurry up, Herman is an old man.";
+
+		close;
+	}
+
+	if (switch sw_herman == complete)
+	{
+		mes"Hi, you say you have brought the bottle to Herman.";
+		mes"Good job! that will cool him down.";
+
+		close;
+	}
+
+	if (switch sw_herman == null)
+	{
+		mes"Hi I am Joey, nice to meet you.";
+
+		close;
+	}
+
+}

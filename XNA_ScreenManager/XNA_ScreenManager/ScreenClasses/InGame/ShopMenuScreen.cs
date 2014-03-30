@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Input;
 using XNA_ScreenManager.ItemClasses;
 using XNA_ScreenManager.ScreenClasses.SubComponents;
 using XNA_ScreenManager.PlayerClasses;
+using Microsoft.Xna.Framework.Content;
 
 namespace XNA_ScreenManager.ScreenClasses.InGame
 {
@@ -26,6 +27,7 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
         SpriteFont spriteFont;
         SpriteBatch spriteBatch;
         GraphicsDevice graphics;
+        ContentManager Content;
 
         Color normalColor = Color.Yellow;
         Color hiliteColor = Color.Red;
@@ -47,9 +49,12 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
         {
             spriteBatch = (SpriteBatch)Game.Services.GetService(typeof(SpriteBatch));
             graphics = (GraphicsDevice)Game.Services.GetService(typeof(GraphicsDevice));
-            this.spriteFont = spriteFont;
-            itemlist = new ItemlistComponent(game, spriteFont);
-            options = new MenuComponent(game, spriteFont);
+            Content = (ContentManager)Game.Services.GetService(typeof(ContentManager));
+
+            this.spriteFont = Content.Load<SpriteFont>(@"font\Comic_Sans_15px");
+
+            itemlist = new ItemlistComponent(game);
+            options = new MenuComponent(game, Content.Load<SpriteFont>(@"font\Comic_Sans_18px"));
 
             updateItemList();
             SetShopItems(this.shopItems);
@@ -336,7 +341,7 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
 
                 position.X = 100 - menuOptions[i].Length * 3;
 
-                spriteBatch.DrawString(spriteFont,
+                spriteBatch.DrawString(Content.Load<SpriteFont>(@"font\Comic_Sans_18px"),
                 menuOptions[i],
                 position,
                 myColor);
@@ -464,7 +469,7 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
                 position,
                 Color.DarkGray);
 
-                // Draw the euiped values
+                // Draw the equiped values
                 spriteBatch.DrawString(spriteFont,
                 propertyEquipment.GetValue(equipItem, null).ToString(),
                 new Vector2(position.X + 80 + space, position.Y),

@@ -276,25 +276,7 @@ namespace XNA_ScreenManager.MapClasses
                                 }
                             }
                         }
-                        #endregion
-                        #region NPC collision
-                        // Check NPC collision (player only!)
-                        if (entity.EntityType == EntityType.NPC)
-                        {
-                            Rectangle NPC = new Rectangle((int)entity.Position.X, (int)entity.Position.Y, 
-                                                            entity.SpriteFrame.Width, entity.SpriteFrame.Height);
-
-                            if (NPC.Intersects(new Rectangle(
-                                    (int)playerSprite.Position.X + (int)(playerSprite.SpriteFrame.Width * 0.25f),
-                                    (int)playerSprite.Position.Y,
-                                    (int)playerSprite.SpriteFrame.Width - (int)(playerSprite.SpriteFrame.Width * 0.25f),
-                                    (int)playerSprite.SpriteFrame.Height)
-                                    ))
-                            {
-                                playerSprite.CollideNPC = true;
-                            }
-                        }
-                        #endregion
+                        #endregion                        
                         #region slope collision
                         // Check Slope collision (player and NPC!)
                         foreach (var obj in map.ObjectGroups["Slopes"].Objects)
@@ -741,7 +723,6 @@ namespace XNA_ScreenManager.MapClasses
             {
                 case EffectType.DamageBaloon:
                     listEffect.Add(new DamageBaloon(Content.Load<Texture2D>(@"gfx\effects\damage_counter" + value2.ToString()),
-                                            Content.Load<SpriteFont>(@"font\gamefont"),
                                             getposition, value1));
                 break;
                 case EffectType.ItemSprite:

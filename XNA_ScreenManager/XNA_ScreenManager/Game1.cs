@@ -24,8 +24,9 @@ namespace XNA_ScreenManager
         ShopMenuScreen shopMenuScreen;
         MessagePopup MessagePopupScreen;
         LoadingScreen loadingScreen;
+        TopMessageScreen topmessageScreen;
 
-        SpriteFont normalFont, backFont;
+        SpriteFont normalFont;
 
         public Game1()
         {
@@ -50,9 +51,9 @@ namespace XNA_ScreenManager
             Services.AddService(typeof(ContentManager), Content);
             Services.AddService(typeof(GraphicsDeviceManager), graphics);
             Services.AddService(typeof(GraphicsDevice), GraphicsDevice);
+            Services.AddService(typeof(GameTime), new GameTime());
 
-            normalFont = Content.Load<SpriteFont>(@"font\normalfont");
-            backFont = Content.Load<SpriteFont>(@"font\backfont");
+            normalFont = Content.Load<SpriteFont>(@"font\Comic_Sans_18px");
 
             // create screens
             ingameMenuScreen = new InGameMainMenuScreen(this, normalFont, Content.Load<Texture2D>(@"gfx\screens\game_menu2"));
@@ -90,6 +91,10 @@ namespace XNA_ScreenManager
             loadingScreen = new LoadingScreen(this);
             ScreenManager.Instance.loadingScreen = loadingScreen;
             Components.Add(loadingScreen);
+
+            topmessageScreen = new TopMessageScreen(this);
+            ScreenManager.Instance.topmessageScreen = topmessageScreen;
+            Components.Add(topmessageScreen);
 
             MessagePopupScreen = new MessagePopup(this, normalFont);
             ScreenManager.Instance.MessagePopupScreen = MessagePopupScreen;

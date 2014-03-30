@@ -27,7 +27,6 @@ namespace XNA_ScreenManager.ScreenClasses
         TextBalloon balloon;
         PlayerInfo playerInfo = PlayerInfo.Instance;
         ScriptInterpreter scriptManager = ScriptInterpreter.Instance;
-        Texture2D NPCPicture;
 
         StringBuilder t_complete = new StringBuilder();
         StringBuilder t_display = new StringBuilder();
@@ -40,6 +39,8 @@ namespace XNA_ScreenManager.ScreenClasses
 
         Vector2 position,
                 size;
+
+        Rectangle NPCPostion;
         #endregion
 
         #region constructor
@@ -61,11 +62,11 @@ namespace XNA_ScreenManager.ScreenClasses
         protected override void LoadContent()
         {
             base.LoadContent();
-            size = new Vector2((gfxdevice.Viewport.Width / 8) * 7, gfxdevice.Viewport.Height / 4);
+            size = new Vector2(gfxdevice.Viewport.Width * 0.85f, gfxdevice.Viewport.Height * 0.30f);
             position = new Vector2(gfxdevice.Viewport.Width - size.X, gfxdevice.Viewport.Height - size.Y);
         }
 
-        public void LoadAssets(Texture2D picture, string scriptfile)
+        public void LoadAssets(Rectangle NPCPos, string scriptfile)
         {
             // this will become the contructor
             t_display.Length = 0;
@@ -82,8 +83,8 @@ namespace XNA_ScreenManager.ScreenClasses
             scriptManager.loadFile(scriptfile);
             this.scriptActive = false;
 
-            spriteFont = Content.Load<SpriteFont>(@"font\gamefont");
-            NPCPicture = picture;
+            spriteFont = Content.Load<SpriteFont>(@"font\Comic_Sans_13px");
+            this.NPCPostion = NPCPos;
         }
 
         public bool Active { get; set; }
@@ -223,16 +224,8 @@ namespace XNA_ScreenManager.ScreenClasses
             if (Active)
             {
                 Rectangle bounds = new Rectangle((int)(position.X + gfxdevice.Viewport.Width - size.X),
-                                                 (int)(position.Y + gfxdevice.Viewport.Height - size.Y),
+                                                 (int)(NPCPostion.Y + NPCPostion.Height * 0.95f),
                                                  (int)size.X, (int)size.Y);
-
-                /*
-                // Draw NPC picture if applicable
-                if (NPCPicture != null)
-                    spriteBatch.Draw(NPCPicture,
-                        new Rectangle((int)position.X, (int)position.Y + 100, (int)200, (int)gfxdevice.Viewport.Height - 100),
-                        Color.White);
-                 */
 
                 // Here we draw the text items
                 if (t_display != null)
@@ -242,10 +235,22 @@ namespace XNA_ScreenManager.ScreenClasses
                     balloon.Position = new Vector2(bounds.X + (textoffsetX - 20), bounds.Y);
                     balloon.Width = 200;
                     balloon.Height = (t_display.ToString().Split('\n').Length * spriteFont.LineSpacing);
+                    balloon.ArrowPosition = new Vector2(NPCPostion.X + NPCPostion.Width * 0.5f, 0);
 
                     if (t_index == t_complete.Length)
-                        balloon.Height = (int)(t_complete.ToString().Split('\n').Length * spriteFont.LineSpacing) + 
-                            (scriptManager.Values.Count * 9);
+                    {
+                        switch (scriptManager.Property)
+                        {
+                            case "close":
+                            case "next":
+                                balloon.Height = (int)(t_complete.ToString().Split('\n').Length * spriteFont.LineSpacing);
+                                break;
+                            case "chooise":
+                                balloon.Height = (int)(t_complete.ToString().Split('\n').Length * spriteFont.LineSpacing) +
+                                (scriptManager.Values.Count * 12);
+                                break;
+                        }
+                    }
 
                     balloon.Draw(gameTime);
 
@@ -263,9 +268,13 @@ namespace XNA_ScreenManager.ScreenClasses
                         {
                             case "close":
                                 spriteBatch.DrawString(spriteFont, "Close",
+                                new Vector2(bounds.X + textoffsetX, propertyposy) + Vector2.One, Color.Black);
+                                spriteBatch.DrawString(spriteFont, "Close",
                                 new Vector2(bounds.X + textoffsetX, propertyposy), Color.Red);
                                 break;
                             case "next":
+                                spriteBatch.DrawString(spriteFont, "Next >>",
+                                new Vector2(bounds.X + textoffsetX, propertyposy) + Vector2.One, Color.Black);
                                 spriteBatch.DrawString(spriteFont, "Next >>",
                                 new Vector2(bounds.X + textoffsetX, propertyposy), Color.Red);
                                 break;
@@ -282,6 +291,8 @@ namespace XNA_ScreenManager.ScreenClasses
                         int propertyposy = bounds.Y + (int)(t_complete.ToString().Split('\n').Length * spriteFont.LineSpacing);
 
                         spriteBatch.DrawString(spriteFont, "Next >>",
+                        new Vector2(bounds.X + 50, propertyposy) + Vector2.One, Color.Black);
+                        spriteBatch.DrawString(spriteFont, "Next >>",
                         new Vector2(bounds.X + 50, propertyposy), Color.Red);
                     }
                 }
@@ -292,6 +303,7 @@ namespace XNA_ScreenManager.ScreenClasses
         #endregion
 
         #region functions
+        // Message Functions
         private bool CheckKeySpace()
         {
             if (keyboardStateCurrent.IsKeyUp(Microsoft.Xna.Framework.Input.Keys.Space) == true &&
@@ -321,6 +333,7 @@ namespace XNA_ScreenManager.ScreenClasses
             get { return menu.SelectedIndex; }
         }
 
+        // Script Functions
         public void ChooiseList()
         {
             string[] displayitems = new string[scriptManager.Values.Count];

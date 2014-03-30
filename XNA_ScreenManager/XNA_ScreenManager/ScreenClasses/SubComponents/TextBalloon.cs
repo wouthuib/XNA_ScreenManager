@@ -72,17 +72,20 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
                 Vector2 pos = Position;
 
                 // center rectangle (balloon fill)
+                pos.X += LTcorner.Width * 0.5f;
+                pos.Y += LTcorner.Height * 0.5f;
+
                 Rectangle rect = Rectangle.Empty;
 
                 for (int i = 0; i < width; i++)
                     rect.Width += top.Width;
 
-                rect.Width += LTcorner.Width * 2;
+                rect.Width += 17;
 
                 for (int i = 0; i < height; i++)
                     rect.Height += side.Height;
 
-                rect.Height += LTcorner.Height * 2;
+                rect.Height += 17;
 
                 Texture2D balloonfill = new Texture2D(gfxdevice, rect.Width, rect.Height);
 
@@ -93,6 +96,8 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
                 spriteBatch.Draw(balloonfill, pos, new Color(238, 238, 238));
 
                 // top border
+                pos = Position;
+
                 spriteBatch.Draw(LTcorner, pos, Color.White);
                 pos.X += LTcorner.Width;
 
@@ -149,7 +154,7 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
                 {
                     pos = Position;
                     pos.X = arrowPosition.X;
-                    pos.Y -= 17; // arrow.height is 27 pxt, and top 10 pxt
+                    pos.Y -= 13; // arrow.height is 27 pxt, and top 10 pxt
 
                     spriteBatch.Draw(arrow, pos, Color.White);
                 }

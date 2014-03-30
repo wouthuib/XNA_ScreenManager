@@ -27,10 +27,9 @@ namespace XNA_ScreenManager.ScreenClasses
         Texture2D HudPicture;
         Vector2 position = new Vector2();
 
-        public HUDScreen(Game game, SpriteFont spriteFont)
+        public HUDScreen(Game game)
             : base(game)
         {
-            this.spriteFont = spriteFont;
             spriteBatch = (SpriteBatch)Game.Services.GetService(typeof(SpriteBatch));
             Content = (ContentManager)Game.Services.GetService(typeof(ContentManager));
             gfxdevice = (GraphicsDevice)Game.Services.GetService(typeof(GraphicsDevice));
@@ -42,7 +41,7 @@ namespace XNA_ScreenManager.ScreenClasses
         {
             base.LoadContent();
 
-            spriteFont = Content.Load<SpriteFont>(@"font\gamefont");
+            spriteFont = Content.Load<SpriteFont>(@"font\Arial_12px");
             HudPicture = Content.Load<Texture2D>(@"gfx\hud\facebox01");
         }
 

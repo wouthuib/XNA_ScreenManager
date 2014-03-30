@@ -9,19 +9,16 @@ namespace XNA_ScreenManager.MapClasses
 {
     public class DamageBaloon : Effect
     {
-        SpriteFont damagefont;
         int damage = 0;
         float transperancy = 1;
         public Vector2 Velocity = new Vector2(0, 1);
         int previousDmgTimeMSec = 0, previousDmgTimeSec = 0;
         bool settimer = false;
 
-        public DamageBaloon(Texture2D getsprite, SpriteFont getspriteFont, Vector2 getposition, int getdamage)
+        public DamageBaloon(Texture2D getsprite, Vector2 getposition, int getdamage)
             : base()
         {
-            damagefont = getspriteFont;
             sprite = getsprite;
-            damagefont = getspriteFont;
             position = getposition;
             damage = getdamage;
             spriteSize = new Vector2(40, 40);

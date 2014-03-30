@@ -47,7 +47,7 @@ namespace XNA_ScreenManager.ScreenClasses
         protected void LoadAssets()
         {
             base.LoadContent();
-            infoFont = Content.Load<SpriteFont>(@"font\gamefont");
+            infoFont = Content.Load<SpriteFont>(@"font\Arial_12px");
             HudPicture = Content.Load<Texture2D>(@"gfx\player\player_basic");
         }
 

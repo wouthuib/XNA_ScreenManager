@@ -8,6 +8,7 @@ using XNA_ScreenManager.ScreenClasses.SubComponents;
 using System;
 using XNA_ScreenManager.PlayerClasses;
 using System.Reflection;
+using Microsoft.Xna.Framework.Content;
 
 namespace XNA_ScreenManager.ScreenClasses.InGame
 {
@@ -24,6 +25,7 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
         SpriteFont spriteFont;
         SpriteBatch spriteBatch;
         GraphicsDevice graphics;
+        ContentManager Content;
 
         Color normalColor = Color.Yellow;
         Color hiliteColor = Color.Red;
@@ -38,14 +40,16 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
         private bool itemOptions = false, slotOptions = false;
 
         #endregion
-                
+
         public EquipmentMenuScreen(Game game, SpriteFont spriteFont, Texture2D background)
             : base(game)
         {
             spriteBatch = (SpriteBatch)Game.Services.GetService(typeof(SpriteBatch));
             graphics = (GraphicsDevice)Game.Services.GetService(typeof(GraphicsDevice));
+            Content = (ContentManager)Game.Services.GetService(typeof(ContentManager));
+
             this.spriteFont = spriteFont;
-            itemlist = new ItemlistComponent(game, spriteFont);
+            itemlist = new ItemlistComponent(game);
 
             //SetmenuCategories(categories);
             updateItemList();

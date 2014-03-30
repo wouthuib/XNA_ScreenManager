@@ -145,6 +145,7 @@
     <Compile Include="ScreenClasses\InGame\ActionScreen.cs" />
     <Compile Include="ScreenClasses\InGame\EquipmentMenuScreen.cs" />
     <Compile Include="ScreenClasses\InGame\ShopMenuScreen.cs" />
+    <Compile Include="ScreenClasses\InGame\TopMessageScreen.cs" />
     <Compile Include="ScreenClasses\SubComponents\BackgroundComponent.cs" />
     <Compile Include="GameWorldClasses\Camera2d.cs" />
     <Compile Include="ScreenClasses\Menus\CreatePCScreen..cs" />
@@ -166,8 +167,9 @@
     <Compile Include="ScreenClasses\Menus\StartScreen.cs" />
     <Compile Include="GameWorldClasses\Tiled.cs" />
     <Compile Include="ScreenClasses\SubComponents\TextBalloon.cs" />
+    <Compile Include="ScriptClasses\QuestStore.cs" />
     <Compile Include="ScriptClasses\ScriptInterpreter.cs" />
-    <Compile Include="ScriptClasses\Switch.cs" />
+    <Compile Include="ScriptClasses\SwitchStore.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />

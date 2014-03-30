@@ -1,0 +1,52 @@
+npc "Herman"
+{
+	if (switch sw_herman == null)
+	{
+		mes"Hi I am Herman, nice to meet you.";
+		mes"Can you please do me a favor?";
+
+		chooise(Yes, Not now)
+
+		case 1:
+
+			mes"Alright thanks!";
+			mes"I want you to bring me some water.";
+			mes"Please ask Joey for a bottle of mineral water.";
+
+			setswitch sw_herman stage1;
+
+			close;
+
+		case 2:
+
+			mes"Ok no problem. Please come back when you have time.";
+
+			close;
+	}
+
+	if (switch sw_herman == stage1)
+	{
+		mes"Hi have you spoken with Joey?";
+		mes"Please come back when you have a bottle of mineral water.";
+
+		close;
+	}
+
+	if (switch sw_herman == stage2)
+	{
+		mes"Oh I see you have the mineral water!";
+		mes"Thanks man, that feels really refreshing.";
+
+		setswitch sw_herman complete;
+
+		close;
+	}
+
+	if (switch sw_herman == complete)
+	{
+		mes"Hey man thanks for bringing me the bottle.";
+		mes"If you ever need my help, please come back to me.";
+		
+		close;
+	}
+}

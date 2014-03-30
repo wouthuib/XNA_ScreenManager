@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.Collections.Generic;
 using XNA_ScreenManager.ItemClasses;
 using XNA_ScreenManager.MapClasses;
+using Microsoft.Xna.Framework.Content;
 
 namespace XNA_ScreenManager.ScreenClasses.SubComponents
 {
@@ -21,6 +22,7 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
         Inventory inventory = Inventory.Instance;
         GameWorld world;
 
+        ContentManager Content;
         SpriteBatch spriteBatch = null;
         SpriteFont spriteFont;
 
@@ -40,11 +42,13 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
         private float transperancy = 1;
         #endregion
 
-        public ItemlistComponent(Game game, SpriteFont spriteFont)
+        public ItemlistComponent(Game game)
             : base(game)
         {
-            this.spriteFont = spriteFont;
             spriteBatch = (SpriteBatch)Game.Services.GetService(typeof(SpriteBatch));
+            Content = (ContentManager)Game.Services.GetService(typeof(ContentManager));
+
+            spriteFont = Content.Load<SpriteFont>(@"font\Comic_Sans_15px");
             Initialize();
         }
 
@@ -312,11 +316,11 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
 
                     // Draw scroll down and up (hex 0x2193 = 8595 see spritefont range)
                     if (MaxDisplay < menuItemsnoDupes.Count)
-                        spriteBatch.DrawString(spriteFont, "↓",
+                        spriteBatch.DrawString(spriteFont, ">>",
                         new Vector2(Position.X + 200 + offsetX, Position.Y + (int)(MaxDisplay * 25)), NormalColor);
 
                     if (IndexDisplay != 0)
-                        spriteBatch.DrawString(spriteFont, "↑",
+                        spriteBatch.DrawString(spriteFont, "<<",
                         new Vector2(Position.X + 200 + offsetX, Position.Y), NormalColor);
 
                     // update line position

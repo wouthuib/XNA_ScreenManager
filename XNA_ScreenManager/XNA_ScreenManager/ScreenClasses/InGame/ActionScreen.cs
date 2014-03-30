@@ -14,7 +14,6 @@ namespace XNA_ScreenManager
         ContentManager Content;
         GraphicsDevice gfxdevice;
         SpriteBatch spriteBatch;
-        SpriteFont spriteFont;
 
         ScreenManager screenManager = ScreenManager.Instance;
         HUDScreen hud;
@@ -36,11 +35,9 @@ namespace XNA_ScreenManager
             world = createworld;
             world.Active = true;
 
-            hud = new HUDScreen(game, spriteFont);
+            hud = new HUDScreen(game);
             Components.Add(hud);
             hud.Active = true;
-
-            spriteFont = Content.Load<SpriteFont>(@"font\normalfont");
         }
 
         public override void Update(GameTime gameTime)

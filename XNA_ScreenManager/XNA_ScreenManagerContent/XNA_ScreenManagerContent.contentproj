@@ -57,21 +57,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="font\normalfont.spritefont">
-      <Name>normalfont</Name>
-      <Importer>FontDescriptionImporter</Importer>
-      <Processor>FontDescriptionProcessor</Processor>
-      <SubType>Designer</SubType>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="font\gamefont.spritefont">
-      <Name>gamefont</Name>
-      <Importer>FontDescriptionImporter</Importer>
-      <Processor>FontDescriptionProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="gfx\hud\hud_frame.png">
       <Name>hud_frame</Name>
       <Importer>TextureImporter</Importer>
@@ -608,13 +593,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="font\backfont.spritefont">
-      <Name>backfont</Name>
-      <Importer>FontDescriptionImporter</Importer>
-      <Processor>FontDescriptionProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="monsterDB\monstertable.bin">
       <Name>monstertable</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -669,12 +647,62 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="font\font01.bmp">
-      <Name>font01</Name>
+    <Compile Include="font\Comic_Sans_18px.png">
+      <Name>Comic_Sans_18px</Name>
       <Importer>TextureImporter</Importer>
       <Processor>FontTextureProcessor</Processor>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="font\Arial_12px.png">
+      <Name>Arial_12px</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>FontTextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="font\Comic_Sans_15px.png">
+      <Name>Comic_Sans_15px</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>FontTextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="font\Comic_Sans_13px.png">
+      <Name>Comic_Sans_13px</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>FontTextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="scriptDB\npc03.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>npc03</Name>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="scriptDB\npc04.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>npc04</Name>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="scriptDB\npc05.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>npc05</Name>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="scriptDB\npc06.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>npc06</Name>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="scriptDB\npc07.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>npc07</Name>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
   <!--  To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -60,8 +60,21 @@ namespace XNA_ScreenManager.CharacterClasses
             // Apply Gravity 
             Position += new Vector2(0, 1) * 250 * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            if (world.playerSprite.CollideNPC)
+            // create NPC rectangle
+            Rectangle NPC = new Rectangle((int)this.Position.X, (int)this.Position.Y,
+                                               this.SpriteFrame.Width, this.SpriteFrame.Height);
+
+            // check intersection with player
+            if (NPC.Intersects
+                (new Rectangle((int)world.playerSprite.Position.X + (int)(world.playerSprite.SpriteFrame.Width * 0.25f),
+                    (int)world.playerSprite.Position.Y,
+                    (int)world.playerSprite.SpriteFrame.Width - (int)(world.playerSprite.SpriteFrame.Width * 0.25f),
+                    (int)world.playerSprite.SpriteFrame.Height)
+                ))
             {
+                // set player state
+                world.playerSprite.CollideNPC = true;
+
                 // Update keyboard states
                 keyboardStateCurrent = Keyboard.GetState();
 
@@ -70,7 +83,7 @@ namespace XNA_ScreenManager.CharacterClasses
                     keyboardStatePrevious.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Space) == true &&
                     world.playerSprite.State == EntityState.Stand)
                 {
-                    screenmanager.messageScreen(true, this.entityFace, this.entityScript);
+                    screenmanager.messageScreen(true, new Rectangle((int)Position.X, (int)Position.Y, SpriteFrame.Width, SpriteFrame.Height), this.entityScript);
                 }
 
                 // Save keyboard states

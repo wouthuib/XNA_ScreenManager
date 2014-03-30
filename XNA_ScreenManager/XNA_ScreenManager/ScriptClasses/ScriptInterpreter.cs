@@ -8,6 +8,7 @@ namespace XNA_ScreenManager.ScriptClasses
 {
     public class ScriptInterpreter
     {
+        #region properties
         public List<string> Values = new List<string>();
         public string Property;
 
@@ -16,7 +17,9 @@ namespace XNA_ScreenManager.ScriptClasses
         private bool quoteActive = false, noConditions = true;
         private StringBuilder valueSB = new StringBuilder(), wrapper = new StringBuilder();
         private string condstring = null;
+        #endregion
 
+        #region constructor
         private static ScriptInterpreter instance;
         private ScriptInterpreter() { }
 
@@ -31,7 +34,9 @@ namespace XNA_ScreenManager.ScriptClasses
                 return instance;
             }
         }
+        #endregion
 
+        #region main script functions
         public void loadFile(string filename)
         {
             using (StreamReader reader = new StreamReader(filename))
@@ -88,6 +93,7 @@ namespace XNA_ScreenManager.ScriptClasses
             noConditions = false;
             clearValues();
         }
+        #endregion
 
         public void readScript()
         {
@@ -182,6 +188,11 @@ namespace XNA_ScreenManager.ScriptClasses
                             }
                             switch (getchar)
                             {
+                                case " ":
+                                    if (valueSB.Length > 1)
+                                        setValue(valueSB.ToString());
+                                    valueSB.Clear();
+                                    break;
                                 case ";": 
                                     setValue(valueSB.ToString());
                                     valueSB.Clear();
@@ -212,6 +223,11 @@ namespace XNA_ScreenManager.ScriptClasses
                             }
                             switch (getchar)
                             {
+                                case " ":
+                                    if (valueSB.Length > 1)
+                                        setValue(valueSB.ToString());
+                                    valueSB.Clear();
+                                    break;
                                 case ";":
                                     setValue(valueSB.ToString());
                                     valueSB.Clear();
@@ -225,6 +241,39 @@ namespace XNA_ScreenManager.ScriptClasses
                                                     Convert.ToInt32(Values[0])
                                                 );
                                         }
+                                    }
+                                    Values.Clear();
+                                    break;
+                                default:
+                                    valueSB.Append(lines[activeLine][i]);
+                                    break;
+                            }
+                        }
+                        else if (wrapper.ToString().StartsWith("setswitch"))
+                        {
+                            if (this.Property == null)
+                            {
+                                this.Property = "setswitch";
+                                this.clearValues();
+                            }
+                            switch (getchar)
+                            {
+                                case " ":
+                                    if (valueSB.Length > 1)
+                                        setValue(valueSB.ToString());
+                                    valueSB.Clear();
+                                    break;
+                                case ";":
+                                    setValue(valueSB.ToString());
+                                    valueSB.Clear();
+
+                                    // value 0 = switchName (string), value 1= switchValue (string)
+                                    if (Values.Count > 0)
+                                    {
+                                        SwitchStore.Instance.setSwitch(
+                                                SwitchStore.Instance.switch_list.Count,
+                                                Values[0].ToString(),
+                                                Values[1].ToString());
                                     }
                                     Values.Clear();
                                     break;
@@ -348,6 +397,9 @@ namespace XNA_ScreenManager.ScriptClasses
                                     case "=":
                                         switch(previouschar)
                                         {
+                                            case " ":
+                                                valueSB.Append(lines[activeLine][i]);
+                                                break;
                                             case "=":
                                                 valueSB.Length -= 1;                // remove previous '='
                                                 if (valueSB.Length > 1) 
@@ -452,7 +504,25 @@ namespace XNA_ScreenManager.ScriptClasses
                                     return item.itemID == Convert.ToInt32(Values[index + 1]); 
                                 }).Count);
                                 index++;
-                            continue;
+                                continue;
+                        case "switch":
+                                // does the switch exist
+                                if (SwitchStore.Instance.switch_list.FindAll(delegate(Switch switchobj)
+                                        { return switchobj.switchName == Values[index + 1]; }
+                                    ).Count >= 1)
+                                {
+                                    strValues.Add(SwitchStore.Instance.switch_list.Find(delegate(Switch switchobj)
+                                    {
+                                        return switchobj.switchName == Values[index + 1];
+                                    }).switchValue);
+                                    index++;
+                                }
+                                else
+                                {
+                                    strValues.Add("null");
+                                    index++;
+                                }
+                                continue;
                         case "profession":
                                 strValues.Add(PlayerClasses.PlayerInfo.Instance.Jobclass);
                             continue;

@@ -6,6 +6,7 @@ using System.Collections.Specialized;
 using XNA_ScreenManager.ItemClasses;
 using System.Collections.Generic;
 using XNA_ScreenManager.ScreenClasses.SubComponents;
+using Microsoft.Xna.Framework.Content;
 
 namespace XNA_ScreenManager.ScreenClasses
 {
@@ -23,6 +24,7 @@ namespace XNA_ScreenManager.ScreenClasses
         SpriteFont spriteFont;
         SpriteBatch spriteBatch;
         GraphicsDevice graphics;
+        ContentManager Content;
 
         Color normalColor = Color.Yellow;
         Color hiliteColor = Color.Red;
@@ -52,8 +54,10 @@ namespace XNA_ScreenManager.ScreenClasses
         {
             spriteBatch = (SpriteBatch)Game.Services.GetService(typeof(SpriteBatch));
             graphics = (GraphicsDevice)Game.Services.GetService(typeof(GraphicsDevice));
+            Content = (ContentManager)Game.Services.GetService(typeof(ContentManager));
+
             this.spriteFont = spriteFont;
-            itemlist = new ItemlistComponent(game, spriteFont);
+            itemlist = new ItemlistComponent(game);
             options = new MenuComponent(game, spriteFont);
 
             SetmenuCategories(categories);

@@ -901,6 +901,14 @@ namespace XNA_ScreenManager
 
         public bool Effect(GameTime gameTime)
         {
+            // press up will instant warp
+            if (Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Up))
+            {
+                this.effectCounter = 0;
+                this.color = Color.White;
+                return true;
+            } 
+
             // standing in warp portal effect
             if (this.effectCounter == 2)
             {
