@@ -84,7 +84,7 @@
     <property name="spriteSizeX" value="60"/>
     <property name="spriteSizeY" value="90"/>
     <property name="Name" value="Young Man"/>
-    <property name="Script" value="npc01"/>
+    <property name="Script" value="victoria01"/>
    </properties>
    <ellipse/>
   </object>
@@ -97,7 +97,7 @@
     <property name="spriteSizeX" value="60"/>
     <property name="spriteSizeY" value="100"/>
     <property name="Name" value="Ranger"/>
-    <property name="Script" value="npc02"/>
+    <property name="Script" value="victoria01"/>
    </properties>
    <ellipse/>
   </object>
@@ -110,7 +110,7 @@
     <property name="spriteSizeX" value="170"/>
     <property name="spriteSizeY" value="130"/>
     <property name="Name" value="Herman"/>
-    <property name="Script" value="npc03"/>
+    <property name="Script" value="victoria01"/>
    </properties>
    <ellipse/>
   </object>
@@ -123,7 +123,7 @@
     <property name="spriteSizeX" value="65"/>
     <property name="spriteSizeY" value="71"/>
     <property name="Name" value="Herman"/>
-    <property name="Script" value="npc03"/>
+    <property name="Script" value="victoria01"/>
    </properties>
    <ellipse/>
   </object>
@@ -136,7 +136,7 @@
     <property name="spriteSizeX" value="59"/>
     <property name="spriteSizeY" value="66"/>
     <property name="Name" value="Joey"/>
-    <property name="Script" value="npc03"/>
+    <property name="Script" value="victoria01"/>
    </properties>
    <ellipse/>
   </object>
@@ -149,7 +149,7 @@
     <property name="spriteSizeX" value="80"/>
     <property name="spriteSizeY" value="125"/>
     <property name="Name" value="Joey"/>
-     <property name="Script" value="npc03"/>
+     <property name="Script" value="victoria01"/>
    </properties>
    <ellipse/>
   </object>
@@ -162,7 +162,7 @@
     <property name="spriteSizeX" value="80"/>
     <property name="spriteSizeY" value="125"/>
     <property name="Name" value="Joey"/>
-    <property name="Script" value="npc03"/>
+    <property name="Script" value="victoria01"/>
    </properties>
    <ellipse/>
   </object>

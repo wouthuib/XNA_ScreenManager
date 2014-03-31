@@ -14,7 +14,7 @@ namespace XNA_ScreenManager.ScriptClasses
 
         private List<string> lines = new List<string>();
         private int activeLine = 0, skipBrace = 0, condBrace = 0, parenOpen = 0, condParan = 0;
-        private bool quoteActive = false, noConditions = true;
+        private bool quoteActive = false, noConditions = true, startReading = false;
         private StringBuilder valueSB = new StringBuilder(), wrapper = new StringBuilder();
         private string condstring = null;
         #endregion
@@ -55,6 +55,12 @@ namespace XNA_ScreenManager.ScriptClasses
             Values.Add(value.Trim()); // trim is remove spaces
         }
 
+        public bool StartReading 
+        { 
+            get { return startReading; }
+            set { startReading = value; }
+        }
+
         private void clearStringBuilders()
         {
             valueSB.Length = 0;
@@ -79,6 +85,7 @@ namespace XNA_ScreenManager.ScriptClasses
             this.condstring = null;
             this.clearValues();
             this.Property = null;
+            this.startReading = false;
 
             activeLine = 0;
             skipBrace = 0;
@@ -145,321 +152,333 @@ namespace XNA_ScreenManager.ScriptClasses
                                 break;
                         }
                         #endregion
-                        #region default commands
-                        // COMMANDS
-                        if (wrapper.ToString().StartsWith("next"))
+                        #region NPC finder
+                        // Find the right NPC
+                        if (!startReading)
                         {
-                            if (this.Property == null)
+                            if (wrapper.ToString().StartsWith("npc"))
                             {
-                                this.Property = "next";
-                                clearValues();
-                            }
-                        }
-                        else if (wrapper.ToString().StartsWith("close"))
-                        {
-                            if (this.Property == null)
-                                this.Property = "close";
-                        }
-                        else if (wrapper.ToString().StartsWith("npc"))
-                        {
-                            if (this.Property == null)
-                            {
-                                this.Property = "npc";
-                                this.clearValues();
-                            }
-
-                            switch (getchar)
-                            {
-                                case " ":
-                                    if (valueSB.Length > 1)
-                                        setValue(valueSB.ToString());
-                                    valueSB.Clear();
-                                    break;
-                                case "\"":
-                                    if (!quoteActive)
-                                    {
-                                        setValue(valueSB.ToString());
-                                        valueSB.Clear();
-                                    }
-                                    break;
-                                default:
-                                    valueSB.Append(lines[activeLine][i]);
-                                    break;
-                            }
-
-                        }
-                        else if (wrapper.ToString().StartsWith("mes"))
-                        {
-                            if (this.Property == null)
-                                this.Property = "mes";
-
-                            if (quoteActive && getchar != "\"")
-                                valueSB.Append(lines[activeLine][i]);
-                        }
-                        #endregion
-                        #region special commands
-                        // SPECIAL COMMANDS
-                        else if (wrapper.ToString().StartsWith("getitem"))
-                        {
-                            if (this.Property == null)
-                            {
-                                this.Property = "getitem";
-                                this.clearValues();
-                            }
-                            switch (getchar)
-                            {
-                                case " ":
-                                    if (valueSB.Length > 1)
-                                        setValue(valueSB.ToString());
-                                    valueSB.Clear();
-                                    break;
-                                case ";": 
-                                    setValue(valueSB.ToString());
-                                    valueSB.Clear();
-
-                                    // value 0 = itemID, value 1= itemCount
-                                    if (Values.Count > 0)
-                                    {
-                                        for (int getItem = 0; getItem < Convert.ToInt32(Values[1]); getItem++)
-                                        {
-                                            ItemClasses.Inventory.Instance.addItem(
-                                                    ItemClasses.ItemStore.Instance.getItem(Convert.ToInt32(Values[0]))
-                                                );
-                                        }
-                                    }
-                                    Values.Clear();
-                                    break;
-                                default:
-                                    valueSB.Append(lines[activeLine][i]);
-                                    break;
-                            }
-                        }
-                        else if (wrapper.ToString().StartsWith("delitem"))
-                        {
-                            if (this.Property == null)
-                            {
-                                this.Property = "delitem";
-                                this.clearValues();
-                            }
-                            switch (getchar)
-                            {
-                                case " ":
-                                    if (valueSB.Length > 1)
-                                        setValue(valueSB.ToString());
-                                    valueSB.Clear();
-                                    break;
-                                case ";":
-                                    setValue(valueSB.ToString());
-                                    valueSB.Clear();
-
-                                    // value 0 = itemID, value 1 = itemCount
-                                    if (Values.Count > 0)
-                                    {
-                                        for (int getItem = 0; getItem < Convert.ToInt32(Values[1]); getItem++)
-                                        {
-                                            ItemClasses.Inventory.Instance.removeItem(
-                                                    Convert.ToInt32(Values[0])
-                                                );
-                                        }
-                                    }
-                                    Values.Clear();
-                                    break;
-                                default:
-                                    valueSB.Append(lines[activeLine][i]);
-                                    break;
-                            }
-                        }
-                        else if (wrapper.ToString().StartsWith("setswitch"))
-                        {
-                            if (this.Property == null)
-                            {
-                                this.Property = "setswitch";
-                                this.clearValues();
-                            }
-                            switch (getchar)
-                            {
-                                case " ":
-                                    if (valueSB.Length > 1)
-                                        setValue(valueSB.ToString());
-                                    valueSB.Clear();
-                                    break;
-                                case ";":
-                                    setValue(valueSB.ToString());
-                                    valueSB.Clear();
-
-                                    // value 0 = switchName (string), value 1= switchValue (string)
-                                    if (Values.Count > 0)
-                                    {
-                                        SwitchStore.Instance.setSwitch(
-                                                SwitchStore.Instance.switch_list.Count,
-                                                Values[0].ToString(),
-                                                Values[1].ToString());
-                                    }
-                                    Values.Clear();
-                                    break;
-                                default:
-                                    valueSB.Append(lines[activeLine][i]);
-                                    break;
-                            }
-                        }
-                        #endregion
-                        #region chooise / case statement
-                        // PLAYER MENU CHOOISE
-                        else if (wrapper.ToString().StartsWith("chooise"))
-                        {
-                            if (this.Property == null)
-                            {
-                                this.Property = "chooise";
-                                this.clearValues();
-                                this.condParan = parenOpen;
-                            }
-
-                            if (parenOpen > condParan || (parenOpen == condParan && getchar == ")"))
-                            {
-                                switch (getchar)
+                                if (this.Property == null)
                                 {
-                                    case ",":
-                                    case ")":
-                                        setValue(valueSB.ToString());
-                                        valueSB.Clear();
-                                        break;
-                                    case "(":
-                                        break;
-                                    default:
-                                        valueSB.Append(lines[activeLine][i]);
-                                        break;
+                                    this.Property = "npc";
+                                    this.clearValues();
+                                }
+                                else
+                                {
+                                    switch (getchar)
+                                    {
+                                        case " ":
+                                            if (!quoteActive)
+                                                valueSB.Clear();
+                                            else
+                                                valueSB.Append(lines[activeLine][i]);
+                                            break;
+                                        case "\"":
+                                            if (!quoteActive)
+                                            {
+                                                setValue(valueSB.ToString());
+                                                valueSB.Clear();
+                                            }
+                                            break;
+                                        default:
+                                            valueSB.Append(lines[activeLine][i]);
+                                            break;
+                                    }
+                                }
+
+                            }
+                        }
+                        else
+                        {
+                        #endregion
+                            #region default commands
+                            // COMMANDS
+                            if (wrapper.ToString().StartsWith("next"))
+                            {
+                                if (this.Property == null)
+                                {
+                                    this.Property = "next";
+                                    clearValues();
                                 }
                             }
-                        }
-                        else if (wrapper.ToString().StartsWith("openshop"))
-                        {
-                            if (this.Property == null)
+                            else if (wrapper.ToString().StartsWith("close"))
                             {
-                                this.Property = "openshop";
-                                this.clearValues();
-                                this.condParan = parenOpen;
+                                if (this.Property == null)
+                                    this.Property = "close";
                             }
-
-                            if (parenOpen > condParan || (parenOpen == condParan && getchar == ")"))
+                            else if (wrapper.ToString().StartsWith("mes"))
                             {
-                                switch (getchar)
+                                if (this.Property == null)
+                                    this.Property = "mes";
+
+                                if (quoteActive && getchar != "\"")
+                                    valueSB.Append(lines[activeLine][i]);
+                            }
+                            #endregion
+                            #region special commands
+                            // SPECIAL COMMANDS
+                            else if (wrapper.ToString().StartsWith("getitem"))
+                            {
+                                if (this.Property == null)
                                 {
-                                    case ",":
-                                    case ")":
-                                        setValue(valueSB.ToString());
-                                        valueSB.Clear();
-                                        break;
-                                    case "(":
-                                        break;
-                                    default:
-                                        valueSB.Append(lines[activeLine][i]);
-                                        break;
+                                    this.Property = "getitem";
+                                    this.clearValues();
                                 }
-                            }
-                        }
-                        #endregion
-                        #region operators if statement
-                        // OPERATORS
-                        else if (wrapper.ToString().StartsWith("if"))
-                        {
-                            if (this.Property == null)
-                            {
-                                this.Property = "if";
-                                this.clearValues();
-                                this.condParan = parenOpen;
-                            }
-
-                            if (parenOpen > condParan || (parenOpen == condParan && getchar == ")"))
-                            {
                                 switch (getchar)
                                 {
                                     case " ":
                                         if (valueSB.Length > 1)
                                             setValue(valueSB.ToString());
-                                            valueSB.Clear();
+                                        valueSB.Clear();
                                         break;
-                                    case ")":
+                                    case ";":
                                         setValue(valueSB.ToString());
                                         valueSB.Clear();
-                                        if (!readCondition())
-                                        {
-                                            noConditions = false;
-                                            skipBrace = 0;
-                                            condBrace = 0;
-                                        }
 
+                                        // value 0 = itemID, value 1= itemCount
+                                        if (Values.Count > 0)
+                                        {
+                                            for (int getItem = 0; getItem < Convert.ToInt32(Values[1]); getItem++)
+                                            {
+                                                ItemClasses.Inventory.Instance.addItem(
+                                                        ItemClasses.ItemStore.Instance.getItem(Convert.ToInt32(Values[0]))
+                                                    );
+                                            }
+                                        }
                                         Values.Clear();
-                                        break;
-                                    case "&":
-                                        if (previouschar == "&")
-                                        {
-                                            setValue("AND");
-                                            valueSB.Clear();
-                                        }
-                                        else
-                                        {
-                                            setValue(valueSB.ToString());
-                                            valueSB.Clear();
-                                        }
-                                        break;
-                                    case "|":
-                                        if (previouschar == "|")
-                                        {
-                                            setValue("OR");
-                                            valueSB.Clear();
-                                        }
-                                        else
-                                        {
-                                            setValue(valueSB.ToString());
-                                            valueSB.Clear();
-                                        }
-                                        break;
-                                    case "=":
-                                        switch(previouschar)
-                                        {
-                                            case " ":
-                                                valueSB.Append(lines[activeLine][i]);
-                                                break;
-                                            case "=":
-                                                valueSB.Length -= 1;                // remove previous '='
-                                                if (valueSB.Length > 1) 
-                                                    setValue(valueSB.ToString());
-
-                                                setValue("EQ");
-                                                valueSB.Clear();
-                                                break;
-                                            case "<":
-                                                valueSB.Length -= 1;                // remove previous '='
-                                                if (valueSB.Length > 1) 
-                                                    setValue(valueSB.ToString());
-
-                                                setValue("SEQ");
-                                                valueSB.Clear();
-                                                break;
-                                            case ">":
-                                                valueSB.Length -= 1;                // remove previous '='
-                                                if (valueSB.Length > 1) 
-                                                    setValue(valueSB.ToString());
-
-                                                setValue("BEQ");
-                                                valueSB.Clear();
-                                                break;
-                                            default:
-                                                if (valueSB.Length > 1)
-                                                    setValue(valueSB.ToString());
-                                                valueSB.Clear();
-                                                break;
-                                        }
-                                        break;
-                                    case "(":
                                         break;
                                     default:
                                         valueSB.Append(lines[activeLine][i]);
                                         break;
                                 }
                             }
+                            else if (wrapper.ToString().StartsWith("delitem"))
+                            {
+                                if (this.Property == null)
+                                {
+                                    this.Property = "delitem";
+                                    this.clearValues();
+                                }
+                                switch (getchar)
+                                {
+                                    case " ":
+                                        if (valueSB.Length > 1)
+                                            setValue(valueSB.ToString());
+                                        valueSB.Clear();
+                                        break;
+                                    case ";":
+                                        setValue(valueSB.ToString());
+                                        valueSB.Clear();
+
+                                        // value 0 = itemID, value 1 = itemCount
+                                        if (Values.Count > 0)
+                                        {
+                                            for (int getItem = 0; getItem < Convert.ToInt32(Values[1]); getItem++)
+                                            {
+                                                ItemClasses.Inventory.Instance.removeItem(
+                                                        Convert.ToInt32(Values[0])
+                                                    );
+                                            }
+                                        }
+                                        Values.Clear();
+                                        break;
+                                    default:
+                                        valueSB.Append(lines[activeLine][i]);
+                                        break;
+                                }
+                            }
+                            else if (wrapper.ToString().StartsWith("setswitch"))
+                            {
+                                if (this.Property == null)
+                                {
+                                    this.Property = "setswitch";
+                                    this.clearValues();
+                                }
+                                switch (getchar)
+                                {
+                                    case " ":
+                                        if (valueSB.Length > 1)
+                                            setValue(valueSB.ToString());
+                                        valueSB.Clear();
+                                        break;
+                                    case ";":
+                                        setValue(valueSB.ToString());
+                                        valueSB.Clear();
+
+                                        // value 0 = switchName (string), value 1= switchValue (string)
+                                        if (Values.Count > 0)
+                                        {
+                                            SwitchStore.Instance.setSwitch(
+                                                    SwitchStore.Instance.switch_list.Count,
+                                                    Values[0].ToString(),
+                                                    Values[1].ToString());
+                                        }
+                                        Values.Clear();
+                                        break;
+                                    default:
+                                        valueSB.Append(lines[activeLine][i]);
+                                        break;
+                                }
+                            }
+                            #endregion
+                            #region chooise / case statement
+                            // PLAYER MENU CHOOISE
+                            else if (wrapper.ToString().StartsWith("chooise"))
+                            {
+                                if (this.Property == null)
+                                {
+                                    this.Property = "chooise";
+                                    this.clearValues();
+                                    this.condParan = parenOpen;
+                                }
+
+                                if (parenOpen > condParan || (parenOpen == condParan && getchar == ")"))
+                                {
+                                    switch (getchar)
+                                    {
+                                        case ",":
+                                        case ")":
+                                            setValue(valueSB.ToString());
+                                            valueSB.Clear();
+                                            break;
+                                        case "(":
+                                            break;
+                                        default:
+                                            valueSB.Append(lines[activeLine][i]);
+                                            break;
+                                    }
+                                }
+                            }
+                            else if (wrapper.ToString().StartsWith("openshop"))
+                            {
+                                if (this.Property == null)
+                                {
+                                    this.Property = "openshop";
+                                    this.clearValues();
+                                    this.condParan = parenOpen;
+                                }
+
+                                if (parenOpen > condParan || (parenOpen == condParan && getchar == ")"))
+                                {
+                                    switch (getchar)
+                                    {
+                                        case ",":
+                                        case ")":
+                                            setValue(valueSB.ToString());
+                                            valueSB.Clear();
+                                            break;
+                                        case "(":
+                                            break;
+                                        default:
+                                            valueSB.Append(lines[activeLine][i]);
+                                            break;
+                                    }
+                                }
+                            }
+                            #endregion
+                            #region operators if statement
+                            // OPERATORS
+                            else if (wrapper.ToString().StartsWith("if"))
+                            {
+                                if (this.Property == null)
+                                {
+                                    this.Property = "if";
+                                    this.clearValues();
+                                    this.condParan = parenOpen;
+                                }
+
+                                if (parenOpen > condParan || (parenOpen == condParan && getchar == ")"))
+                                {
+                                    switch (getchar)
+                                    {
+                                        case " ":
+                                            if (valueSB.Length > 1)
+                                                setValue(valueSB.ToString());
+                                            valueSB.Clear();
+                                            break;
+                                        case ")":
+                                            setValue(valueSB.ToString());
+                                            valueSB.Clear();
+                                            if (!readCondition())
+                                            {
+                                                noConditions = false;
+                                                skipBrace = 0;
+                                                condBrace = 0;
+                                            }
+
+                                            Values.Clear();
+                                            break;
+                                        case "&":
+                                            if (previouschar == "&")
+                                            {
+                                                setValue("AND");
+                                                valueSB.Clear();
+                                            }
+                                            else
+                                            {
+                                                setValue(valueSB.ToString());
+                                                valueSB.Clear();
+                                            }
+                                            break;
+                                        case "|":
+                                            if (previouschar == "|")
+                                            {
+                                                setValue("OR");
+                                                valueSB.Clear();
+                                            }
+                                            else
+                                            {
+                                                setValue(valueSB.ToString());
+                                                valueSB.Clear();
+                                            }
+                                            break;
+                                        case "=":
+                                            switch (previouschar)
+                                            {
+                                                case " ":
+                                                    valueSB.Append(lines[activeLine][i]);
+                                                    break;
+                                                case "=":
+                                                    valueSB.Length -= 1;                // remove previous '='
+                                                    if (valueSB.Length > 1)
+                                                        setValue(valueSB.ToString());
+
+                                                    setValue("EQ");
+                                                    valueSB.Clear();
+                                                    break;
+                                                case "<":
+                                                    valueSB.Length -= 1;                // remove previous '='
+                                                    if (valueSB.Length > 1)
+                                                        setValue(valueSB.ToString());
+
+                                                    setValue("SEQ");
+                                                    valueSB.Clear();
+                                                    break;
+                                                case ">":
+                                                    valueSB.Length -= 1;                // remove previous '='
+                                                    if (valueSB.Length > 1)
+                                                        setValue(valueSB.ToString());
+
+                                                    setValue("BEQ");
+                                                    valueSB.Clear();
+                                                    break;
+                                                default:
+                                                    if (valueSB.Length > 1)
+                                                        setValue(valueSB.ToString());
+                                                    valueSB.Clear();
+                                                    break;
+                                            }
+                                            break;
+                                        case "(":
+                                            break;
+                                        default:
+                                            valueSB.Append(lines[activeLine][i]);
+                                            break;
+                                    }
+                                }
+                            }
+                            #endregion
                         }
-                        #endregion
                     }
                 }
                 else

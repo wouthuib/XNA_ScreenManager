@@ -32,7 +32,6 @@ namespace XNA_ScreenManager.ItemClasses
 
         public void addItem(Item addItem)
         {
-            //ScreenClasses.ScreenManager.Instance.showItem(addItem);
             item_list.Add(addItem);
         }
 

@@ -37,7 +37,6 @@ namespace XNA_ScreenManager.ScreenClasses
 
         // variables to finding right script
         string NPCName;
-        bool startReading = false;
 
         const int textoffsetX = 100; // draw offset
 
@@ -79,7 +78,6 @@ namespace XNA_ScreenManager.ScreenClasses
             t_complete.Capacity = 0;
             t_index = 0;
 
-            this.startReading = false;
             this.NPCName = name;
 
             if (scriptfile == null)
@@ -137,12 +135,27 @@ namespace XNA_ScreenManager.ScreenClasses
             {
                 scriptManager.readScript(); // initial read
 
-                // find the right NPC script in the file
-                if (scriptManager.Property == "npc" && scriptManager.Values[0] == NPCName)
-                    startReading = true;
+                // find the right NPC script in the file.
+                // skip all line until the right "npc" with "name" is found.
 
-                if (startReading)
+                if (scriptManager.Property == "npc" && scriptManager.Values[0] == NPCName)
                 {
+                    // the NPC with the right name has been found
+                    // now we enable script reading in the interpretter
+                    // also the property and values are reset to continue
+                    // with the next commands.
+
+                    scriptManager.StartReading = true;
+                    scriptManager.Property = null;
+                    scriptManager.Values.Clear();
+                }
+
+                if (scriptManager.StartReading)
+                {
+                    // the NPC has been found and the script reading begins
+                    // the following switch contains several properties
+                    // these properties are the commands in your script
+
                     switch (scriptManager.Property)
                     {
                         case "mes":

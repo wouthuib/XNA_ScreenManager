@@ -1,3 +1,54 @@
+npc "Young Man"
+{
+	mes"Hi, I am a test NPC which will talk based on the code";
+	mes"There are a couple of lines which will be displayed";
+	mes"and eventually there will be a next button";
+
+	next;
+
+	if(item 1200 >= 1)
+	{
+
+		mes"Ahh I see you have a knife.";
+		mes"Let me borrow it from you to peel my apple.";
+
+		next;
+	}
+
+	mes"Lovely weather, isnt't it?";
+
+	chooise(Yes , No, Might be, I dont know)
+
+
+	case 1:
+
+		mes"I hope the weather forecast will remain the same.";
+		close;
+
+	case 2:
+
+		mes"No I dont like the rain either.";
+		mes"Perhaps I should get myself a new coat";
+		close;
+
+	case 3:
+
+		mes"It is so sunny today I might have to bring my sunglasses";
+		mes"You can buy one at the town store if you want";
+		mes"Let me know if you need help";
+		close;
+
+	case 4:
+
+		mes"I heard it will be stormy this evening.";
+		mes"Please be careful when you decide to go out of town.";
+		mes"Ok nice speaking with you.";
+		close;
+	}
+	
+	close;
+}
+
 npc "Herman"
 {
 	if (switch sw_herman == null)
@@ -97,4 +148,28 @@ npc "Joey"
 
 		close;
 	}
+}
+
+npc "Ranger"
+{
+	mes"Hi, I am ranger Bob.";
+	mes"If you need to buy resources please contact me.";
+	mes"You can also sell drops to me.";
+
+	next;
+
+	mes"Please let me know what you would like to do:";
+
+	chooise(Open shop, Leave);
+
+	case 1:
+
+		openshop(1200, 1201, 1202, 1203, 1300, 2300);
+		close;
+
+	case 2:
+		mes"Alright no problem, have a nice day.";
+		close;
+
+	close;
 }

@@ -24,7 +24,7 @@ namespace XNA_ScreenManager.ScreenClasses
         GraphicsDevice gfxdevice;
 
         PlayerInfo playerInfo = PlayerInfo.Instance;
-        Texture2D HudPicture;
+        Texture2D Border, HP, MP, EXP;
         Vector2 position = new Vector2();
 
         public HUDScreen(Game game)
@@ -42,7 +42,11 @@ namespace XNA_ScreenManager.ScreenClasses
             base.LoadContent();
 
             spriteFont = Content.Load<SpriteFont>(@"font\Arial_12px");
-            HudPicture = Content.Load<Texture2D>(@"gfx\hud\facebox01");
+
+            Border = Content.Load<Texture2D>(@"gfx\hud\border");
+            HP = Content.Load<Texture2D>(@"gfx\hud\HP");
+            MP = Content.Load<Texture2D>(@"gfx\hud\MP");
+            EXP = Content.Load<Texture2D>(@"gfx\hud\EXP");
         }
 
         public bool Active { get; set; }
@@ -77,11 +81,38 @@ namespace XNA_ScreenManager.ScreenClasses
 
                 spriteBatch.Draw(rect, new Vector2(position.X, position.Y + 0), Color.White * 0.5f);
 
-                spriteBatch.Draw(HudPicture, new Vector2(position.X + 5, position.Y + 5), new Rectangle(0, 58, 96, 40), Color.White * 0.75f);
-                spriteBatch.DrawString(spriteFont, "Name: " + playerInfo.Name, new Vector2(Position.X + 5, Position.Y + 50), Color.White);
-                spriteBatch.DrawString(spriteFont, "Level: " + playerInfo.Level, new Vector2(Position.X + 5, Position.Y + 65), Color.White);
-                spriteBatch.DrawString(spriteFont, "Gold: " + playerInfo.Gold, new Vector2(Position.X + 5, Position.Y + 80), Color.White);
-                spriteBatch.DrawString(spriteFont, "Exp: " + playerInfo.Exp, new Vector2(Position.X + 5, Position.Y + 95), Color.White);
+                // Name
+                spriteBatch.DrawString(spriteFont, "Name: " + playerInfo.Name, new Vector2(Position.X + 5, Position.Y + 5), Color.White);
+
+                // HP
+                spriteBatch.DrawString(spriteFont, "HP: " + playerInfo.HP + " of " + playerInfo.MAXHP, new Vector2(Position.X + 5, Position.Y + 20), Color.White);
+                spriteBatch.Draw(HP, new Vector2(position.X + 5, position.Y + 35), 
+                    new Rectangle(0, 0,
+                        (int)((Border.Width * 0.01f) * (playerInfo.HP * 100 / playerInfo.MAXHP)), 
+                        Border.Height), 
+                    Color.White * 0.75f);
+                spriteBatch.Draw(Border, new Vector2(position.X + 5, position.Y + 35), Color.White * 0.75f);
+
+                // MP
+                spriteBatch.DrawString(spriteFont, "SP: " + playerInfo.SP + " of " + playerInfo.MAXSP, new Vector2(Position.X + 5, Position.Y + 50), Color.White);
+                spriteBatch.Draw(MP, new Vector2(position.X + 5, position.Y + 65),
+                    new Rectangle(0, 0,
+                        (int)((Border.Width * 0.01f) * (playerInfo.SP * 100 / playerInfo.MAXSP)),
+                        Border.Height),
+                    Color.White * 0.75f);
+                spriteBatch.Draw(Border, new Vector2(position.X + 5, position.Y + 65), Color.White * 0.75f);
+
+                // EXP
+                spriteBatch.DrawString(spriteFont, "EXP: " + playerInfo.Exp + " of " + playerInfo.NextLevelExp, new Vector2(Position.X + 5, Position.Y + 80), Color.White);
+                spriteBatch.Draw(EXP, new Vector2(position.X + 5, position.Y + 95),
+                    new Rectangle(0, 0,
+                        (int)((Border.Width * 0.01f) * (playerInfo.Exp * 100 / playerInfo.NextLevelExp)),
+                        Border.Height),
+                    Color.White * 0.75f);
+                spriteBatch.Draw(Border, new Vector2(position.X + 5, position.Y + 95), Color.White * 0.75f);
+                
+                //spriteBatch.DrawString(spriteFont, "Level: " + playerInfo.Level, new Vector2(Position.X + 5, Position.Y + 65), Color.White);
+                //spriteBatch.DrawString(spriteFont, "Gold: " + playerInfo.Gold, new Vector2(Position.X + 5, Position.Y + 80), Color.White);
             }
         }
     }

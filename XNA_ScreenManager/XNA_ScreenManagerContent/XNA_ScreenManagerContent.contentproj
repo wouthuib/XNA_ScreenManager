@@ -283,8 +283,8 @@
       <Name>victoria02</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="scriptDB\npc01.txt">
-      <Name>npc01</Name>
+    <None Include="scriptDB\victoria01.txt">
+      <Name>victoria01</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -599,12 +599,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="scriptDB\npc02.txt">
-      <Name>npc02</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="gfx\NPCs\textballoon\arrow.png">
       <Name>arrow</Name>
       <Importer>TextureImporter</Importer>
@@ -675,10 +669,26 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="scriptDB\npc03.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>npc03</Name>
-    </None>
+    <Compile Include="gfx\hud\border.png">
+      <Name>border</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\hud\EXP.png">
+      <Name>EXP</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\hud\HP.png">
+      <Name>HP</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\hud\MP.png">
+      <Name>MP</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
   <!--  To modify your build process, add your task inside one of the targets below and uncomment it. 
