@@ -30,6 +30,7 @@ namespace XNA_ScreenManager.CharacterClasses
 
         protected EntityType entityType;
         protected Texture2D entityFace;
+        protected string entityName;
         protected string entityScript;
         protected EntityState state;
 
@@ -43,6 +44,12 @@ namespace XNA_ScreenManager.CharacterClasses
         {
             get { return entityScript; }
             set { entityScript = value; }
+        }
+
+        public string EntityName
+        {
+            get { return entityName; }
+            set { entityName = value; }
         }
 
         public EntityState State

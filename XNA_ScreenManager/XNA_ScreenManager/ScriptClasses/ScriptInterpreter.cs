@@ -163,10 +163,30 @@ namespace XNA_ScreenManager.ScriptClasses
                         else if (wrapper.ToString().StartsWith("npc"))
                         {
                             if (this.Property == null)
+                            {
                                 this.Property = "npc";
+                                this.clearValues();
+                            }
 
-                            if (quoteActive && getchar != "\"")
-                                valueSB.Append(lines[activeLine][i]);
+                            switch (getchar)
+                            {
+                                case " ":
+                                    if (valueSB.Length > 1)
+                                        setValue(valueSB.ToString());
+                                    valueSB.Clear();
+                                    break;
+                                case "\"":
+                                    if (!quoteActive)
+                                    {
+                                        setValue(valueSB.ToString());
+                                        valueSB.Clear();
+                                    }
+                                    break;
+                                default:
+                                    valueSB.Append(lines[activeLine][i]);
+                                    break;
+                            }
+
                         }
                         else if (wrapper.ToString().StartsWith("mes"))
                         {

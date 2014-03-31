@@ -35,6 +35,10 @@ namespace XNA_ScreenManager.ScreenClasses
         int previousGameTimeMsec,
             previousGameTimeSec;
 
+        // variables to finding right script
+        string NPCName;
+        bool startReading = false;
+
         const int textoffsetX = 100; // draw offset
 
         Vector2 position,
@@ -66,7 +70,7 @@ namespace XNA_ScreenManager.ScreenClasses
             position = new Vector2(gfxdevice.Viewport.Width - size.X, gfxdevice.Viewport.Height - size.Y);
         }
 
-        public void LoadAssets(Rectangle NPCPos, string scriptfile)
+        public void LoadAssets(Rectangle NPCPos, string name, string scriptfile)
         {
             // this will become the contructor
             t_display.Length = 0;
@@ -74,6 +78,9 @@ namespace XNA_ScreenManager.ScreenClasses
             t_complete.Length = 0;
             t_complete.Capacity = 0;
             t_index = 0;
+
+            this.startReading = false;
+            this.NPCName = name;
 
             if (scriptfile == null)
                 scriptfile = Game.Content.RootDirectory + @"\scriptDB\npc01.txt";
@@ -130,30 +137,37 @@ namespace XNA_ScreenManager.ScreenClasses
             {
                 scriptManager.readScript(); // initial read
 
-                switch (scriptManager.Property)
+                // find the right NPC script in the file
+                if (scriptManager.Property == "npc" && scriptManager.Values[0] == NPCName)
+                    startReading = true;
+
+                if (startReading)
                 {
-                    case "mes":
-                        t_complete.Clear();
-                        foreach (var value in scriptManager.Values)
-                        {
-                            t_complete.Append(value.ToString());
-                            t_complete.Append(Environment.NewLine);
-                        }
-                        break;
-                    case "next":
-                        scriptActive = true;
-                        break;
-                    case "close":
-                        scriptActive = true;
-                        break;
-                    case "chooise":
-                        scriptActive = true;
-                        ChooiseList();
-                        break;
-                    case "openshop":
-                        scriptActive = true;
-                        OpenShop();
-                        break;
+                    switch (scriptManager.Property)
+                    {
+                        case "mes":
+                            t_complete.Clear();
+                            foreach (var value in scriptManager.Values)
+                            {
+                                t_complete.Append(value.ToString());
+                                t_complete.Append(Environment.NewLine);
+                            }
+                            break;
+                        case "next":
+                            scriptActive = true;
+                            break;
+                        case "close":
+                            scriptActive = true;
+                            break;
+                        case "chooise":
+                            scriptActive = true;
+                            ChooiseList();
+                            break;
+                        case "openshop":
+                            scriptActive = true;
+                            OpenShop();
+                            break;
+                    }
                 }
             }
         }

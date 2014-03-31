@@ -24,7 +24,6 @@ namespace XNA_ScreenManager
         ShopMenuScreen shopMenuScreen;
         MessagePopup MessagePopupScreen;
         LoadingScreen loadingScreen;
-        TopMessageScreen topmessageScreen;
 
         SpriteFont normalFont;
 
@@ -91,10 +90,6 @@ namespace XNA_ScreenManager
             loadingScreen = new LoadingScreen(this);
             ScreenManager.Instance.loadingScreen = loadingScreen;
             Components.Add(loadingScreen);
-
-            topmessageScreen = new TopMessageScreen(this);
-            ScreenManager.Instance.topmessageScreen = topmessageScreen;
-            Components.Add(topmessageScreen);
 
             MessagePopupScreen = new MessagePopup(this, normalFont);
             ScreenManager.Instance.MessagePopupScreen = MessagePopupScreen;

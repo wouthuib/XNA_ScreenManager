@@ -15,6 +15,7 @@ atkModifier; defModifier; equipSpritePath; itemClass; itemDescription; itemID; i
 1112; Dragon Scale;"A scale of a dragon.";"gfx\effects\itemicons\items01";""; 5; 1; 0; 0; 0; 0; 60; 0; 0; Collectable; All; None; None;
 1113; Horseshoe;"An iron fitted on a horse's hoof for its protection.";"gfx\effects\itemicons\items01";""; 6; 1; 0; 0; 0; 0; 40; 0; 0; Collectable; All; None; None;
 1114; Jellopy;"A small crystallization created by some monsters.";"gfx\effects\itemicons\items01";""; 0; 0; 0; 0; 0; 0; 10; 0; 0; Collectable; All; None; None;
+1115; Mineral Water;"A small bottle of mineral water for refreshment.";"gfx\effects\itemicons\items01";""; 4; 0; 0; 0; 0; 0; 10; 0; 0; KeyItem; All; None; None;
 1200; Knife;"A simple knife.";"gfx\effects\itemicons\daggers01";"gfx\player\weapon\dagger01"; 6; 17; 0; 17; 0; 0; 50; 0; 0; Weapon; All; Weapon; Dagger;
 1201; Cutter;"A knife used for cutting enemies.";"gfx\effects\itemicons\daggers01";"gfx\player\weapon\dagger01"; 0; 18; 0; 30; 0; 0; 1250; 0; 0; Weapon; All; Weapon; Dagger;
 1202; Main Gauche;"A French dagger that is usually held in the left hand to parry attacks.";"gfx\effects\itemicons\daggers01";"gfx\player\weapon\dagger01"; 1; 18; 0; 43; 0; 0; 2400; 0; 0; Weapon; ArcherFighter; Weapon; Dagger;

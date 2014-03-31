@@ -22,9 +22,8 @@ namespace XNA_ScreenManager.ScreenClasses
         public ShopMenuScreen shopMenuScreen;
         public MessagePopup MessagePopupScreen;
         public LoadingScreen loadingScreen;
-        public TopMessageScreen topmessageScreen;
 
-        GameScreen activeScreen;
+        public GameScreen activeScreen;
         KeyboardState newState;
         KeyboardState oldState;
 
@@ -71,7 +70,6 @@ namespace XNA_ScreenManager.ScreenClasses
             shopMenuScreen.Hide();
             MessagePopupScreen.Hide();
             loadingScreen.Hide();
-            topmessageScreen.Hide();
 
             startScreen.Show();
             activeScreen = startScreen;
@@ -328,25 +326,19 @@ namespace XNA_ScreenManager.ScreenClasses
             activeScreen.Show();
         }
 
-        public void messageScreen(bool activated, Rectangle getpos, string script)
+        public void messageScreen(bool activated, Rectangle getpos, string name, string script)
         {
             if (activated)
             {
                 MessagePopupScreen.Active = true;
                 MessagePopupScreen.Show();
-                MessagePopupScreen.LoadAssets(getpos, script);
+                MessagePopupScreen.LoadAssets(getpos, name, script);
             }
             else
             {
                 MessagePopupScreen.Active = false;
                 MessagePopupScreen.Hide();
             }
-        }
-
-        public void showItem(ItemClasses.Item item)
-        {
-            topmessageScreen.Display(item);
-            topmessageScreen.Show();
         }
 
         private bool CheckKey(Keys theKey)

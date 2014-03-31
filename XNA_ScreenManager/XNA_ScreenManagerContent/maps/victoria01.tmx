@@ -83,6 +83,7 @@
     <property name="Texture" value="npc01"/>
     <property name="spriteSizeX" value="60"/>
     <property name="spriteSizeY" value="90"/>
+    <property name="Name" value="Young Man"/>
     <property name="Script" value="npc01"/>
    </properties>
    <ellipse/>
@@ -95,7 +96,8 @@
     <property name="Texture" value="npc01"/>
     <property name="spriteSizeX" value="60"/>
     <property name="spriteSizeY" value="100"/>
-     <property name="Script" value="npc02"/>
+    <property name="Name" value="Ranger"/>
+    <property name="Script" value="npc02"/>
    </properties>
    <ellipse/>
   </object>
@@ -107,7 +109,8 @@
     <property name="Texture" value="npc01"/>
     <property name="spriteSizeX" value="170"/>
     <property name="spriteSizeY" value="130"/>
-     <property name="Script" value="npc03"/>
+    <property name="Name" value="Herman"/>
+    <property name="Script" value="npc03"/>
    </properties>
    <ellipse/>
   </object>
@@ -119,7 +122,8 @@
     <property name="Texture" value="npc01"/>
     <property name="spriteSizeX" value="65"/>
     <property name="spriteSizeY" value="71"/>
-     <property name="Script" value="npc04"/>
+    <property name="Name" value="Herman"/>
+    <property name="Script" value="npc03"/>
    </properties>
    <ellipse/>
   </object>
@@ -131,7 +135,8 @@
     <property name="Texture" value="npc01"/>
     <property name="spriteSizeX" value="59"/>
     <property name="spriteSizeY" value="66"/>
-     <property name="Script" value="npc05"/>
+    <property name="Name" value="Joey"/>
+    <property name="Script" value="npc03"/>
    </properties>
    <ellipse/>
   </object>
@@ -143,7 +148,8 @@
     <property name="Texture" value="npc01"/>
     <property name="spriteSizeX" value="80"/>
     <property name="spriteSizeY" value="125"/>
-     <property name="Script" value="npc06"/>
+    <property name="Name" value="Joey"/>
+     <property name="Script" value="npc03"/>
    </properties>
    <ellipse/>
   </object>
@@ -155,7 +161,8 @@
     <property name="Texture" value="npc01"/>
     <property name="spriteSizeX" value="80"/>
     <property name="spriteSizeY" value="125"/>
-     <property name="Script" value="npc07"/>
+    <property name="Name" value="Joey"/>
+    <property name="Script" value="npc03"/>
    </properties>
    <ellipse/>
   </object>

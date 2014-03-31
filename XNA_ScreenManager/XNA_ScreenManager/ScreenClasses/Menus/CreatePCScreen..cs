@@ -45,6 +45,7 @@ namespace XNA_ScreenManager
             keyboardiput = new KeyboardInput(game, spriteFont);
             bgcomp = new BackgroundComponent(game, background);
             menu.SetMenuItems(menuItems);
+            menu.StartIndex = 0;
             Components.Add(bgcomp);
             Components.Add(menu);
             Components.Add(keyboardiput);

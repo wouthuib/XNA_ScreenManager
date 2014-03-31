@@ -504,7 +504,7 @@ namespace XNA_ScreenManager.MapClasses
                         string objname = new string(chars).Substring(0, 3); // max 3 chars to skip numbers
 
                         int offsetX = 0, offsetY = 0, spritesizeX = 0, spritesizeY = 0;
-                        string texture = null, face = null, script = null;
+                        string texture = null, face = null, name = null, script = null;
 
                         if (objname == "npc")
                         {
@@ -533,6 +533,9 @@ namespace XNA_ScreenManager.MapClasses
                                     case "Face":
                                         face = objvalue;
                                         break;
+                                    case "Name":
+                                        name = objvalue;
+                                        break;
                                     case "Script":
                                         script = objvalue;
                                         break;
@@ -558,7 +561,8 @@ namespace XNA_ScreenManager.MapClasses
                                             new Vector2(offsetX, offsetY),
                                             new Vector2(spritesizeX, spritesizeY),
                                             new Vector2(obj.Value.X, obj.Value.Y),
-                                            facetext, 
+                                            facetext,
+                                            name,
                                             script));
                             }
                             catch (Exception ee)

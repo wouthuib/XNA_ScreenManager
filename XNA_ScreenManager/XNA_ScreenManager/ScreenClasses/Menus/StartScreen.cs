@@ -19,6 +19,7 @@ namespace XNA_ScreenManager
                         "Help", "Quit" };
             menu = new MenuComponent(game, spriteFont);
             menu.SetMenuItems(items);
+            menu.StartIndex = 0;
             Components.Add(menu);
         }
 

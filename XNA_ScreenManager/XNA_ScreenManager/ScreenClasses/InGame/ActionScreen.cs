@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Content;
 using XNA_ScreenManager.MapClasses;
 using XNA_ScreenManager.ScreenClasses;
 using XNA_ScreenManager.CharacterClasses;
+using XNA_ScreenManager.ScreenClasses.InGame;
 
 namespace XNA_ScreenManager
 {
@@ -17,6 +18,7 @@ namespace XNA_ScreenManager
 
         ScreenManager screenManager = ScreenManager.Instance;
         HUDScreen hud;
+        public TopMessageScreen topmessage;
         GameWorld world;
         public Camera2d cam;
 
@@ -38,6 +40,10 @@ namespace XNA_ScreenManager
             hud = new HUDScreen(game);
             Components.Add(hud);
             hud.Active = true;
+
+            topmessage = new TopMessageScreen(game);
+            Components.Add(topmessage);
+            topmessage.Active = false;
         }
 
         public override void Update(GameTime gameTime)
@@ -56,6 +62,9 @@ namespace XNA_ScreenManager
         {
             if (hud.Active)
                 hud.Position = ViewPort();
+
+            if (topmessage.Active)
+                topmessage.Position = ViewPort();
 
             if (screenManager.MessagePopupScreen.Active)
             {

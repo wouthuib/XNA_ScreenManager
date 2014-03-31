@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Content;
 
 namespace XNA_ScreenManager.ScreenClasses.InGame
 {
-    public class TopMessageScreen : GameScreen
+    public class TopMessageScreen : DrawableGameComponent
     {
         ContentManager Content;
         GraphicsDevice gfxdevice;
@@ -19,8 +19,9 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
         ItemClasses.Item iteminfo;
         SpriteFont spriteFont;
 
-        Boolean Active = false;
-        float previousAnimateTimeSec;
+        float previousTimeSec, transperancy;
+        Vector2 position = new Vector2();
+        string midstring = null;
 
         public TopMessageScreen(Game game)
             : base(game)
@@ -33,25 +34,38 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
             spriteFont = Content.Load<SpriteFont>(@"font\Arial_12px");
         }
 
+        public bool Active { get; set; }
+
+        public Vector2 Position
+        {
+            get { return position; }
+            set { position = value; }
+        }
+
         public override void Update(GameTime gameTime)
         {
             if (Active)
             {
                 // reduce timer
-                previousAnimateTimeSec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                previousTimeSec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                transperancy = 0.2f + previousTimeSec;
 
-                if (previousAnimateTimeSec <= 0)
+                if (transperancy > 1)
+                    transperancy = 1;
+
+                if (previousTimeSec <= 0)
                 {
                     this.iteminfo = null;
                     this.Active = false;
-                    this.Hide();
                 }
             }
         }
 
-        public void Display(ItemClasses.Item item)
+        public void Display(ItemClasses.Item item, string mtext)
         {
-            previousAnimateTimeSec = (float)gameTime.ElapsedGameTime.TotalSeconds + 1.5f;
+            this.iteminfo = item;
+            this.midstring = mtext;
+            previousTimeSec = (float)gameTime.ElapsedGameTime.TotalSeconds + 2.0f;
             this.Active = true;
         }
 
@@ -59,7 +73,7 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
         {
             if (Active)
             {
-                string message = this.iteminfo.itemName + " has been added to your inventory.";
+                string message = this.iteminfo.itemName + " has been " + midstring + " to your inventory.";
 
                 Vector2 size = spriteFont.MeasureString(message);
 
@@ -69,9 +83,9 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
                 for (int i = 0; i < data.Length; ++i) data[i] = Color.Black;
                 rect.SetData(data);
 
-                spriteBatch.Draw(rect, new Vector2((gfxdevice.Viewport.Width * 0.5f) - (int)(size.X * 0.5f), 10), Color.White * 0.5f);
+                spriteBatch.Draw(rect, new Vector2((position.X + gfxdevice.Viewport.Width * 0.5f) - size.X * 0.5f, position.Y), (Color.White * 0.5f) * transperancy);
 
-                spriteBatch.DrawString(spriteFont, message, new Vector2((gfxdevice.Viewport.Width * 0.5f) - (int)(size.X * 0.5f), 10), Color.White);
+                spriteBatch.DrawString(spriteFont, message, new Vector2((position.X + gfxdevice.Viewport.Width * 0.5f) - size.X * 0.5f, position.Y), Color.White * transperancy);
 
             }
         }

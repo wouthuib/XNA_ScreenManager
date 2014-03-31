@@ -29,7 +29,7 @@ namespace XNA_ScreenManager.CharacterClasses
         #endregion
 
         public NPCharacter(Texture2D _Sprite, Vector2 _spriteoffset, Vector2 _spriteSize, 
-            Vector2 _position, Texture2D face, string script)
+            Vector2 _position, Texture2D face, string name, string script)
             : base()
         {
             // Derived properties
@@ -39,6 +39,7 @@ namespace XNA_ScreenManager.CharacterClasses
             Position = _position;
             entityType = EntityType.NPC;
             entityFace = face;
+            entityName = name;
             entityScript = script;
 
             // Local properties
@@ -83,7 +84,7 @@ namespace XNA_ScreenManager.CharacterClasses
                     keyboardStatePrevious.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Space) == true &&
                     world.playerSprite.State == EntityState.Stand)
                 {
-                    screenmanager.messageScreen(true, new Rectangle((int)Position.X, (int)Position.Y, SpriteFrame.Width, SpriteFrame.Height), this.entityScript);
+                    screenmanager.messageScreen(true, new Rectangle((int)Position.X, (int)Position.Y, SpriteFrame.Width, SpriteFrame.Height), this.entityName, this.entityScript);
                 }
 
                 // Save keyboard states

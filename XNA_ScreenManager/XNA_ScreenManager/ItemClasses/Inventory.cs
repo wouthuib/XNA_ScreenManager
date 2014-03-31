@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
 using System.IO;
+using XNA_ScreenManager.ScreenClasses;
 
 namespace XNA_ScreenManager.ItemClasses
 {
@@ -13,6 +14,7 @@ namespace XNA_ScreenManager.ItemClasses
 
     public sealed class Inventory
     {
+        ScreenManager screenmanager = ScreenManager.Instance;
         public List<Item> item_list { get; set; }
 
         private static Inventory instance;
@@ -35,12 +37,17 @@ namespace XNA_ScreenManager.ItemClasses
 
         public void addItem(Item addItem)
         {
+            screenmanager.actionScreen.topmessage.Display(addItem, "added");
             item_list.Add(addItem);
         }
 
         public void removeItem(int ID)
         {
             var onlyMatch = item_list.First(i => i.itemID == ID);
+
+            if (screenmanager.activeScreen == screenmanager.actionScreen)
+                ScreenClasses.ScreenManager.Instance.actionScreen.topmessage.Display(onlyMatch, "removed");
+
             item_list.Remove(onlyMatch);
         }
 
