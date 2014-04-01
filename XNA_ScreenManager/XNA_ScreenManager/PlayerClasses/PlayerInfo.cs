@@ -332,11 +332,20 @@ namespace XNA_ScreenManager.PlayerClasses
         {
             this.name = "Wouter";
             this.jobclass = "Fighter";
-            this.gold = 100;
-            this.exp = 0;
-            this.nlexp = 1200;
-            this.hp = 100;
-            this.maxhp = 100;
+
+            // temporary parameters these should eventually be imported from the Monster Database
+            this.HP = 2000;
+            this.MAXHP = 2000;
+            this.SP = 500;
+            this.MAXSP = 500;
+            this.Exp = 1;
+            this.NextLevelExp = 1000;
+            this.Strength = 10;
+            this.Dexterity = 10;
+            this.Luck = 1;
+            this.Agility = 10;
+            this.Level = 1;
+
         }
     }
 }

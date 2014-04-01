@@ -447,6 +447,8 @@ namespace XNA_ScreenManager.CharacterClasses
 
         private void update_collision(GameTime gameTime)
         {
+            // Monster attacks the player method
+
             // Check of world instance is created
             if (world == null)
                 world = GameWorld.GetInstance;
@@ -487,7 +489,7 @@ namespace XNA_ScreenManager.CharacterClasses
 
                                 // Start damage controll
                                 int damage = (int)Battle.battle_calc_damage_mob(this, PlayerInfo.Instance);
-                                player.HP -= damage;
+                                PlayerInfo.Instance.HP -= damage;
 
                                 // Hit the player
                                 if (damage > 0)

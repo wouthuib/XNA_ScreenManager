@@ -684,8 +684,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\hud\MP.png">
-      <Name>MP</Name>
+    <Compile Include="gfx\hud\SP.png">
+      <Name>SP</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

@@ -68,19 +68,6 @@ namespace XNA_ScreenManager
             SpriteSize = new Rectangle(0, 0, spriteWidth, spriteHeight);
             Position = new Vector2(_X, _Y);
             OldPosition = new Vector2(_X, _Y);
-
-            // temporary parameters these should eventually be imported from the Monster Database
-            playerinfo.HP = 2000;
-            playerinfo.MAXHP = 2000;
-            playerinfo.SP = 500;
-            playerinfo.MAXSP = 500;
-            playerinfo.Exp = 1;
-            playerinfo.NextLevelExp = 1000;
-            playerinfo.Strength = 10;
-            playerinfo.Dexterity = 10;
-            playerinfo.Luck = 1;
-            playerinfo.Agility = 10;
-            playerinfo.Level = 1;
             
             // Local properties
             TileSize = _tileSize;

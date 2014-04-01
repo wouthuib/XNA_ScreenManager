@@ -18,15 +18,18 @@ namespace XNA_ScreenManager.ScreenClasses
     /// </summary>
     public class HUDScreen : DrawableGameComponent
     {
+        #region properties
         SpriteBatch spriteBatch = null;
         SpriteFont spriteFont;
         ContentManager Content;
         GraphicsDevice gfxdevice;
 
         PlayerInfo playerInfo = PlayerInfo.Instance;
-        Texture2D Border, HP, MP, EXP;
+        Texture2D Border, HP, SP, EXP;
         Vector2 position = new Vector2();
+        #endregion
 
+        #region contructor
         public HUDScreen(Game game)
             : base(game)
         {
@@ -45,9 +48,10 @@ namespace XNA_ScreenManager.ScreenClasses
 
             Border = Content.Load<Texture2D>(@"gfx\hud\border");
             HP = Content.Load<Texture2D>(@"gfx\hud\HP");
-            MP = Content.Load<Texture2D>(@"gfx\hud\MP");
+            SP = Content.Load<Texture2D>(@"gfx\hud\SP");
             EXP = Content.Load<Texture2D>(@"gfx\hud\EXP");
         }
+        #endregion
 
         public bool Active { get; set; }
 
@@ -73,46 +77,64 @@ namespace XNA_ScreenManager.ScreenClasses
 
             if (Active)
             {
-                Texture2D rect = new Texture2D(gfxdevice, 120, 110);
 
-                Color[] data = new Color[120 * 110];
+                string message = playerInfo.Name + " - " + playerInfo.Jobclass + " - Level: " + playerInfo.Level;
+
+                Texture2D rect = new Texture2D(gfxdevice, (int)(spriteFont.MeasureString(message).X + 20), 75);
+
+                Color[] data = new Color[(int)(spriteFont.MeasureString(message).X + 20) * 75];
                 for (int i = 0; i < data.Length; ++i) data[i] = Color.Black;
                 rect.SetData(data);
 
                 spriteBatch.Draw(rect, new Vector2(position.X, position.Y + 0), Color.White * 0.5f);
 
                 // Name
-                spriteBatch.DrawString(spriteFont, "Name: " + playerInfo.Name, new Vector2(Position.X + 5, Position.Y + 5), Color.White);
+                spriteBatch.DrawString(spriteFont, message, new Vector2(Position.X + 5, Position.Y + 5), Color.White);
 
                 // HP
-                spriteBatch.DrawString(spriteFont, "HP: " + playerInfo.HP + " of " + playerInfo.MAXHP, new Vector2(Position.X + 5, Position.Y + 20), Color.White);
-                spriteBatch.Draw(HP, new Vector2(position.X + 5, position.Y + 35), 
+                message = playerInfo.HP + " / " + playerInfo.MAXHP;
+                spriteBatch.DrawString(spriteFont, "HP: ", new Vector2(Position.X + 5, Position.Y + 25), Color.White);
+                spriteBatch.Draw(HP, new Vector2(position.X + 40, position.Y + 25), 
                     new Rectangle(0, 0,
                         (int)((Border.Width * 0.01f) * (playerInfo.HP * 100 / playerInfo.MAXHP)), 
                         Border.Height), 
                     Color.White * 0.75f);
-                spriteBatch.Draw(Border, new Vector2(position.X + 5, position.Y + 35), Color.White * 0.75f);
+                spriteBatch.Draw(Border, new Vector2(position.X + 40, position.Y + 25), Color.White * 0.75f);
+                spriteBatch.DrawString(spriteFont, message.ToString(),
+                    new Vector2((Position.X + 40 + Border.Width * 0.5f) - (spriteFont.MeasureString(message).X * 0.5f), Position.Y + 25),
+                    Color.White);
 
-                // MP
-                spriteBatch.DrawString(spriteFont, "SP: " + playerInfo.SP + " of " + playerInfo.MAXSP, new Vector2(Position.X + 5, Position.Y + 50), Color.White);
-                spriteBatch.Draw(MP, new Vector2(position.X + 5, position.Y + 65),
+                // SP
+                message = playerInfo.SP + " / " + playerInfo.MAXSP;
+                spriteBatch.DrawString(spriteFont, "SP: ", new Vector2(Position.X + 5, Position.Y + 40), Color.White);
+                spriteBatch.Draw(SP, new Vector2(position.X + 40, position.Y + 40),
                     new Rectangle(0, 0,
                         (int)((Border.Width * 0.01f) * (playerInfo.SP * 100 / playerInfo.MAXSP)),
                         Border.Height),
                     Color.White * 0.75f);
-                spriteBatch.Draw(Border, new Vector2(position.X + 5, position.Y + 65), Color.White * 0.75f);
+                spriteBatch.Draw(Border, new Vector2(position.X + 40, position.Y + 40), Color.White * 0.75f);
+                spriteBatch.DrawString(spriteFont, message.ToString(),
+                    new Vector2((Position.X + 40 + Border.Width * 0.5f) - (spriteFont.MeasureString(message).X * 0.5f), Position.Y + 40),
+                    Color.White);
+
 
                 // EXP
-                spriteBatch.DrawString(spriteFont, "EXP: " + playerInfo.Exp + " of " + playerInfo.NextLevelExp, new Vector2(Position.X + 5, Position.Y + 80), Color.White);
-                spriteBatch.Draw(EXP, new Vector2(position.X + 5, position.Y + 95),
+                spriteBatch.DrawString(spriteFont, "EXP: ", new Vector2(Position.X + 5, Position.Y + 55), Color.White);
+                spriteBatch.Draw(EXP, new Vector2(position.X + 40, position.Y + 55),
                     new Rectangle(0, 0,
                         (int)((Border.Width * 0.01f) * (playerInfo.Exp * 100 / playerInfo.NextLevelExp)),
                         Border.Height),
                     Color.White * 0.75f);
-                spriteBatch.Draw(Border, new Vector2(position.X + 5, position.Y + 95), Color.White * 0.75f);
-                
-                //spriteBatch.DrawString(spriteFont, "Level: " + playerInfo.Level, new Vector2(Position.X + 5, Position.Y + 65), Color.White);
-                //spriteBatch.DrawString(spriteFont, "Gold: " + playerInfo.Gold, new Vector2(Position.X + 5, Position.Y + 80), Color.White);
+                spriteBatch.Draw(Border, new Vector2(position.X + 40, position.Y + 55), Color.White * 0.75f);
+
+                string percentExp = string.Format("{0:0.00}", playerInfo.Exp * 100 / playerInfo.NextLevelExp) + "%";
+                spriteBatch.DrawString(spriteFont, percentExp.ToString(), 
+                    new Vector2((Position.X + 40 + Border.Width * 0.5f) - (spriteFont.MeasureString(percentExp).X * 0.5f), Position.Y + 55),
+                    Color.White);
+
+                // Level and Gold
+                // message = "Gold: " + playerInfo.Gold;
+                // spriteBatch.DrawString(spriteFont, message, new Vector2(Position.X + 5, Position.Y + 70), Color.White);
             }
         }
     }
