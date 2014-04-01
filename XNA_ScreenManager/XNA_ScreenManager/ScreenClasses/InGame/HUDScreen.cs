@@ -20,7 +20,7 @@ namespace XNA_ScreenManager.ScreenClasses
     {
         #region properties
         SpriteBatch spriteBatch = null;
-        SpriteFont spriteFont;
+        SpriteFont spriteFont, smallFont;
         ContentManager Content;
         GraphicsDevice gfxdevice;
 
@@ -44,6 +44,7 @@ namespace XNA_ScreenManager.ScreenClasses
         {
             base.LoadContent();
 
+            smallFont = Content.Load<SpriteFont>(@"font\Arial_10px");
             spriteFont = Content.Load<SpriteFont>(@"font\Arial_12px");
 
             Border = Content.Load<Texture2D>(@"gfx\hud\border");
@@ -100,8 +101,8 @@ namespace XNA_ScreenManager.ScreenClasses
                         Border.Height), 
                     Color.White * 0.75f);
                 spriteBatch.Draw(Border, new Vector2(position.X + 40, position.Y + 25), Color.White * 0.75f);
-                spriteBatch.DrawString(spriteFont, message.ToString(),
-                    new Vector2((Position.X + 40 + Border.Width * 0.5f) - (spriteFont.MeasureString(message).X * 0.5f), Position.Y + 25),
+                spriteBatch.DrawString(smallFont, message.ToString(),
+                    new Vector2((Position.X + 40 + Border.Width * 0.5f) - (smallFont.MeasureString(message).X * 0.5f), Position.Y + 25),
                     Color.White);
 
                 // SP
@@ -113,8 +114,8 @@ namespace XNA_ScreenManager.ScreenClasses
                         Border.Height),
                     Color.White * 0.75f);
                 spriteBatch.Draw(Border, new Vector2(position.X + 40, position.Y + 40), Color.White * 0.75f);
-                spriteBatch.DrawString(spriteFont, message.ToString(),
-                    new Vector2((Position.X + 40 + Border.Width * 0.5f) - (spriteFont.MeasureString(message).X * 0.5f), Position.Y + 40),
+                spriteBatch.DrawString(smallFont, message.ToString(),
+                    new Vector2((Position.X + 40 + Border.Width * 0.5f) - (smallFont.MeasureString(message).X * 0.5f), Position.Y + 40),
                     Color.White);
 
 
@@ -128,8 +129,8 @@ namespace XNA_ScreenManager.ScreenClasses
                 spriteBatch.Draw(Border, new Vector2(position.X + 40, position.Y + 55), Color.White * 0.75f);
 
                 string percentExp = string.Format("{0:0.00}", playerInfo.Exp * 100 / playerInfo.NextLevelExp) + "%";
-                spriteBatch.DrawString(spriteFont, percentExp.ToString(), 
-                    new Vector2((Position.X + 40 + Border.Width * 0.5f) - (spriteFont.MeasureString(percentExp).X * 0.5f), Position.Y + 55),
+                spriteBatch.DrawString(smallFont, percentExp.ToString(),
+                    new Vector2((Position.X + 40 + Border.Width * 0.5f) - (smallFont.MeasureString(percentExp).X * 0.5f), Position.Y + 55),
                     Color.White);
 
                 // Level and Gold

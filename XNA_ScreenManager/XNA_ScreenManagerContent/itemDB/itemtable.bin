@@ -29,3 +29,4 @@ atkModifier; defModifier; equipSpritePath; itemClass; itemDescription; itemID; i
 1210; Sucsamad;"A specialty dagger made by a small, mysterious, desert dwelling tribe.";"gfx\effects\itemicons\daggers01";"gfx\player\weapon\dagger01"; 2; 19; 0; 140; 0; 0; 64000; 0; 0; Weapon; Fighter; Weapon; Dagger;
 1300; Hunter Bow;"A mighty bow that can only be effectively used by Hunters and Snipers.";"gfx\effects\itemicons\bows01";"gfx\player\weapon\bow01"; 1; 0; 0; 125; 0; 0; 64000; 0; 0; Weapon; Archer; Weapon; Bow;
 2300; Hunter Clothes;"Skintight, form fitting clothing that allows easy movement.";"gfx\effects\itemicons\armor_hunter";"gfx\player\costume\hunter_clothes01"; 4; 1; 6; 0; 0; 0; 71000; 0; 0; Armor; Archer; Bodygear; None;
+2301; Beginner Clothes;"An exclusive clothset for new adventurers.";"gfx\effects\itemicons\armor_hunter";"gfx\player\costume\beginner_clothes01"; 4; 10; 0; 0; 0; 0; 10; 0; 0; Armor; All; Bodygear; None;

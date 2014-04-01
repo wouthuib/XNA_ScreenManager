@@ -23,9 +23,9 @@ namespace XNA_ScreenManager.MapClasses
     {
         #region properties
         // Game Services
-        SpriteBatch spriteBatch = null;
+        public SpriteBatch spriteBatch = null;
         public ContentManager Content;
-        GraphicsDevice gfxdevice;
+        public GraphicsDevice gfxdevice;
 
         // Class Instances
         public Map map;

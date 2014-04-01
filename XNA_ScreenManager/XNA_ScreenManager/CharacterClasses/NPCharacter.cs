@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using XNA_ScreenManager.MapClasses;
 using XNA_ScreenManager.ScreenClasses;
+using Microsoft.Xna.Framework.Content;
 
 namespace XNA_ScreenManager.CharacterClasses
 {
@@ -12,6 +13,7 @@ namespace XNA_ScreenManager.CharacterClasses
         // Global staic classes
         GameWorld world;
         ScreenManager screenmanager;
+        SpriteFont spriteFont;
 
         // Keyboard State
         KeyboardState keyboardStateCurrent, keyboardStatePrevious;
@@ -20,6 +22,7 @@ namespace XNA_ScreenManager.CharacterClasses
         public int spriteWidth = 32;
         public int spriteHeight = 48;
         public Vector2 spriteOffset = Vector2.Zero;
+        bool playerCollide = false;
 
         // Sprite Animation Properties
         public Vector2 Direction = Vector2.Zero;                                                    // Sprite Move direction
@@ -75,6 +78,7 @@ namespace XNA_ScreenManager.CharacterClasses
             {
                 // set player state
                 world.playerSprite.CollideNPC = true;
+                this.playerCollide = true;
 
                 // Update keyboard states
                 keyboardStateCurrent = Keyboard.GetState();
@@ -90,13 +94,39 @@ namespace XNA_ScreenManager.CharacterClasses
                 // Save keyboard states
                 keyboardStatePrevious = keyboardStateCurrent;
             }
+            else
+                this.playerCollide = false;
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
             if (Active)
+            {
+                // draw NPC
                 spriteBatch.Draw(sprite, new Rectangle((int)Position.X, (int)Position.Y, SpriteFrame.Width, SpriteFrame.Height),
                     SpriteFrame, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0f);
+
+                // draw NPC ame tag
+                if (this.playerCollide)
+                {
+                    // dirty >> fix this later...
+                    if (spriteFont == null)
+                        spriteFont = world.Content.Load<SpriteFont>(@"font\Arial_12px");
+
+                    Texture2D rect = new Texture2D(world.gfxdevice, (int)(spriteFont.MeasureString(this.entityName).X), (int)(spriteFont.MeasureString(this.entityName).Y));
+
+                    Color[] data = new Color[(int)(spriteFont.MeasureString(this.entityName).X) * (int)(spriteFont.MeasureString(this.entityName).Y)];
+                    for (int i = 0; i < data.Length; ++i) data[i] = Color.Black;
+                    rect.SetData(data);
+
+                    spriteBatch.Draw(rect, new Vector2((this.position.X + SpriteFrame.Width * 0.5f) - (spriteFont.MeasureString(this.entityName).X * 0.5f), position.Y),
+                        Color.White * 0.8f);
+
+                    spriteBatch.DrawString(spriteFont, this.entityName.ToString(),
+                        new Vector2((this.position.X + SpriteFrame.Width * 0.5f) - (spriteFont.MeasureString(this.entityName).X * 0.5f), this.position.Y),
+                        Color.White * 0.8f);
+                }
+            }
         }
     }
 }
