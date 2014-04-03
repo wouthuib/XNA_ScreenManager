@@ -317,6 +317,7 @@ namespace XNA_ScreenManager.ScreenClasses
                         selectCharScreen.menu.EndIndex = 5;
                         break;
                     case 1:
+                        selectCharScreen.menu.SelectedIndex = 0;
                         selectCharScreen.menu.StartIndex = 0;
                         selectCharScreen.menu.EndIndex = 3;                  
                         activeScreen.Hide();
@@ -325,6 +326,7 @@ namespace XNA_ScreenManager.ScreenClasses
                         break;
                     case 2:
                     case 3:
+                        selectCharScreen.menu.SelectedIndex = 0;
                         selectCharScreen.menu.StartIndex = 0;
                         selectCharScreen.menu.EndIndex = 3;
                         activeScreen.Hide();
@@ -332,6 +334,7 @@ namespace XNA_ScreenManager.ScreenClasses
                         activeScreen.Show();
                         break;
                     case 4:
+                        selectCharScreen.menu.SelectedIndex = 0;
                         selectCharScreen.menu.StartIndex = 0;
                         selectCharScreen.menu.EndIndex = 3;
                         activeScreen.Hide();

@@ -864,6 +864,7 @@ namespace XNA_ScreenManager
                         break;
                 }
 
+                Color newcolor = new Color(80,180,222);
 
                 if (playerinfo.body_sprite != null)
                     spriteBatch.Draw(Content.Load<Texture2D>(playerinfo.body_sprite), new Rectangle((int)Position.X, (int)(Position.Y + (bodyFrame.Height - spriteFrame.Height)), spriteFrame.Width, bodyFrame.Height),
@@ -879,7 +880,7 @@ namespace XNA_ScreenManager
 
                 if (playerinfo.costume_sprite != null)
                     spriteBatch.Draw(Content.Load<Texture2D>(playerinfo.costume_sprite), new Rectangle((int)Position.X, (int)(Position.Y + (clothFrame.Height - spriteFrame.Height)), spriteFrame.Width, clothFrame.Height),
-                    clothFrame, this.color * this.transperancy, 0f, Vector2.Zero, spriteEffect, 0f);
+                    clothFrame, newcolor * this.transperancy, 0f, Vector2.Zero, spriteEffect, 0f);
 
                 if (playerinfo.weapon_sprite != null)
                 {
