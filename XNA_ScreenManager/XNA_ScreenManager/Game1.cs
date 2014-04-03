@@ -3,6 +3,9 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using XNA_ScreenManager.ScreenClasses;
 using XNA_ScreenManager.ScreenClasses.InGame;
+using XNA_ScreenManager.ScreenClasses.Menus;
+using XNA_ScreenManager.MapClasses;
+using XNA_ScreenManager.ScreenClasses.MainClasses;
 
 namespace XNA_ScreenManager
 {
@@ -13,11 +16,14 @@ namespace XNA_ScreenManager
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        ResourceManager resourcemanager;
 
         // screens are drawble game objects
         StartScreen startScreen;
         HelpScreen helpScreen;         ActionScreen actionScreen;
-        CreatePCScreen createPCScreen;
+        CreatePCScreen createPCScreen; // old
+        CharacterCreationScreen createCharScreen; // new
+        CharacterSelectionScreen selectCharScreen; // new
         InGameMainMenuScreen ingameMenuScreen;
         ItemMenuScreen itemMenuScreen;
         EquipmentMenuScreen equipmentMenuScreen;
@@ -54,15 +60,29 @@ namespace XNA_ScreenManager
 
             normalFont = Content.Load<SpriteFont>(@"font\Comic_Sans_18px");
 
+            // create resource manager
+            resourcemanager = ResourceManager.CreateInstance(this);
+
             // create screens
             ingameMenuScreen = new InGameMainMenuScreen(this, normalFont, Content.Load<Texture2D>(@"gfx\screens\game_menu2"));
             ScreenManager.Instance.ingameMenuScreen = ingameMenuScreen;
             Components.Add(ingameMenuScreen);
 
+            // old 2013
             createPCScreen = new CreatePCScreen(this, normalFont, Content.Load<Texture2D>(@"gfx\screens\system_menu2"));
             ScreenManager.Instance.createPCScreen = createPCScreen;
             Components.Add(createPCScreen);
 
+            // new 2014
+            createCharScreen = new CharacterCreationScreen(this);
+            ScreenManager.Instance.createCharScreen = createCharScreen;
+            Components.Add(createCharScreen);
+
+            selectCharScreen = new CharacterSelectionScreen(this);
+            ScreenManager.Instance.selectCharScreen = selectCharScreen;
+            Components.Add(selectCharScreen);
+
+            // main screens
             startScreen = new StartScreen(this, normalFont, Content.Load<Texture2D>(@"gfx\screens\title_menu2"));
             ScreenManager.Instance.startScreen = startScreen;
             Components.Add(startScreen);

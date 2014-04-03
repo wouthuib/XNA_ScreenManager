@@ -8,6 +8,7 @@ using XNA_ScreenManager.ScriptClasses;
 using XNA_ScreenManager.MapClasses;
 using XNA_ScreenManager.PlayerClasses;
 using Microsoft.Xna.Framework.Content;
+using XNA_ScreenManager.ScreenClasses.MainClasses;
 
 namespace XNA_ScreenManager
 {
@@ -16,6 +17,7 @@ namespace XNA_ScreenManager
         #region properties
         // The Gameworld
         GameWorld world;
+        ResourceManager resourcemanager = ResourceManager.GetInstance;
 
         // Keyboard- and Mousestate
         KeyboardState keyboardStateCurrent, keyboardStatePrevious;
@@ -58,7 +60,7 @@ namespace XNA_ScreenManager
         private Vector2 TileSize = Vector2.Zero;
         #endregion
 
-        public PlayerSprite(GameWorld getworld,
+        public PlayerSprite(//GameWorld getworld,
             int _X, int _Y, Vector2 _tileSize)
             : base()
         {
@@ -79,8 +81,8 @@ namespace XNA_ScreenManager
             state = EntityState.Stand;                                                              // Player state
 
             // Link world get Content Manager
-            world = getworld;
-            Content = world.Content;
+            // world = getworld;
+            Content = resourcemanager.Content;
         }
 
         public override void Update(GameTime gameTime)

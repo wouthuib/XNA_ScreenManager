@@ -146,6 +146,9 @@
     <Compile Include="ScreenClasses\InGame\EquipmentMenuScreen.cs" />
     <Compile Include="ScreenClasses\InGame\ShopMenuScreen.cs" />
     <Compile Include="ScreenClasses\InGame\TopMessageScreen.cs" />
+    <Compile Include="ScreenClasses\MainClasses\ResourceManager.cs" />
+    <Compile Include="ScreenClasses\Menus\CharacterCreationScreen.cs" />
+    <Compile Include="ScreenClasses\Menus\CharacterSelectionScreen.cs" />
     <Compile Include="ScreenClasses\SubComponents\BackgroundComponent.cs" />
     <Compile Include="GameWorldClasses\Camera2d.cs" />
     <Compile Include="ScreenClasses\Menus\CreatePCScreen..cs" />

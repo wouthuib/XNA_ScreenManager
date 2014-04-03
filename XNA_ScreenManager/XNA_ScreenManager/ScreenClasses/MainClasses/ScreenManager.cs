@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using XNA_ScreenManager.ScreenClasses.InGame;
+using XNA_ScreenManager.ScreenClasses.Menus;
 
 namespace XNA_ScreenManager.ScreenClasses
 {
@@ -16,6 +17,8 @@ namespace XNA_ScreenManager.ScreenClasses
         public HelpScreen helpScreen;
         public ActionScreen actionScreen;
         public CreatePCScreen createPCScreen;
+        public CharacterCreationScreen createCharScreen;
+        public CharacterSelectionScreen selectCharScreen;
         public InGameMainMenuScreen ingameMenuScreen;
         public ItemMenuScreen itemMenuScreen;
         public EquipmentMenuScreen equipmentMenuScreen;
@@ -70,6 +73,8 @@ namespace XNA_ScreenManager.ScreenClasses
             shopMenuScreen.Hide();
             MessagePopupScreen.Hide();
             loadingScreen.Hide();
+            createCharScreen.Hide();
+            selectCharScreen.Hide();
 
             startScreen.Show();
             activeScreen = startScreen;
@@ -115,6 +120,14 @@ namespace XNA_ScreenManager.ScreenClasses
             {
                 //HandleloadingScreen();
             }
+            else if (activeScreen == createCharScreen)
+            {
+                HandleCreateCharScreen();
+            }
+            else if (activeScreen == selectCharScreen)
+            {
+                HandleSelectCharScreen();
+            }
 
             oldState = newState;
         }
@@ -141,7 +154,8 @@ namespace XNA_ScreenManager.ScreenClasses
                 {
                     case 0:
                         activeScreen.Hide();
-                        activeScreen = createPCScreen;
+                        //activeScreen = createPCScreen;
+                        activeScreen = selectCharScreen;
                         activeScreen.Show();
                         break;
                     case 1:
@@ -274,6 +288,58 @@ namespace XNA_ScreenManager.ScreenClasses
         private void HandleshopMenuScreen()
         {
             // do nothing all managed in screen
+        }
+
+        private void HandleCreateCharScreen()
+        {
+            if (CheckKey(Keys.Back) || CheckKey(Keys.Escape))
+            {
+                activeScreen.Hide();
+                activeScreen = selectCharScreen;
+                activeScreen.Show();
+            }
+        }
+
+        private void HandleSelectCharScreen()
+        {
+            if (CheckKey(Keys.Back) || CheckKey(Keys.Escape))
+            {
+                activeScreen.Hide();
+                activeScreen = startScreen;
+                activeScreen.Show();
+            }
+            else if (CheckKey(Keys.Space) || CheckKey(Keys.Enter))
+            {
+                switch (selectCharScreen.SelectedIndex)
+                {
+                    case 0:
+                        selectCharScreen.menu.StartIndex = 3;
+                        selectCharScreen.menu.EndIndex = 5;
+                        break;
+                    case 1:
+                        selectCharScreen.menu.StartIndex = 0;
+                        selectCharScreen.menu.EndIndex = 3;                  
+                        activeScreen.Hide();
+                        activeScreen = createCharScreen;
+                        activeScreen.Show();
+                        break;
+                    case 2:
+                    case 3:
+                        selectCharScreen.menu.StartIndex = 0;
+                        selectCharScreen.menu.EndIndex = 3;
+                        activeScreen.Hide();
+                        activeScreen = actionScreen;
+                        activeScreen.Show();
+                        break;
+                    case 4:
+                        selectCharScreen.menu.StartIndex = 0;
+                        selectCharScreen.menu.EndIndex = 3;
+                        activeScreen.Hide();
+                        activeScreen = startScreen;
+                        activeScreen.Show();
+                        break;
+                }
+            }
         }
 
         public void ScreenViewport(Vector2 postion, string screenName)

@@ -25,8 +25,10 @@ namespace XNA_ScreenManager
         KeyboardState oldState;
         Vector2 position = new Vector2();
         public Vector2 selectPos = new Vector2();
-        int selectedIndex = 0, startIndex = -1;
+        int selectedIndex = 0, startIndex = -1, endIndex = 4, menuItemSpace = 0;
         bool show = true, active = true;
+        float[] rotation = new float[20];
+        Vector2[] offset = new Vector2[20];
         OrderStyle style = OrderStyle.Left;
 
         private StringCollection menuItems = new StringCollection();
@@ -36,8 +38,14 @@ namespace XNA_ScreenManager
             : base(game)
         {
             this.spriteFont = spriteFont;
-            spriteBatch =
-            (SpriteBatch)Game.Services.GetService(typeof(SpriteBatch));
+            spriteBatch = (SpriteBatch)Game.Services.GetService(typeof(SpriteBatch));
+
+            // rotation
+            for (int i = 0; i < 20; i++)
+            {
+                rotation[i] = 0;
+                offset[i] = Vector2.Zero;
+            }
         }
 
         public int Width
@@ -66,6 +74,12 @@ namespace XNA_ScreenManager
         {
             get { return startIndex; }
             set { startIndex = value; }
+        }
+
+        public int EndIndex
+        {
+            get { return endIndex; }
+            set { endIndex = value; }
         }
 
         public Color NormalColor
@@ -98,6 +112,24 @@ namespace XNA_ScreenManager
             set { style = value; }
         }
 
+        public int MenuItemSpace
+        {
+            get { return menuItemSpace; }
+            set { menuItemSpace = value; }
+        }
+
+        public float[] Rotation
+        {
+            get { return rotation; }
+            set { rotation = value; }
+        }
+
+        public Vector2[] Offset
+        {
+            get { return offset; }
+            set { offset = value; }
+        }
+
         public bool Show
         {
             get { return show; }
@@ -120,6 +152,7 @@ namespace XNA_ScreenManager
             menuItems.Clear();
             menuItems.AddRange(items);
             CalculateBounds();
+            endIndex = menuItems.Count;
         }
 
         private void CalculateBounds()
@@ -155,7 +188,7 @@ namespace XNA_ScreenManager
                 if (CheckKey(Keys.Down))
                 {
                     selectedIndex++;
-                    if (selectedIndex == menuItems.Count)
+                    if (selectedIndex == endIndex) //menuItems.Count)
                         selectedIndex = startIndex;
                 }
 
@@ -164,7 +197,7 @@ namespace XNA_ScreenManager
                     selectedIndex--;
                     if (selectedIndex == startIndex - 1)
                     {
-                        selectedIndex = menuItems.Count - 1;
+                        selectedIndex = endIndex - 1; //menuItems.Count - 1;
                     }
                 }
 
@@ -215,15 +248,27 @@ namespace XNA_ScreenManager
                     spriteBatch.DrawString(
                     spriteFont,
                     menuItems[i],
-                    menuPosition + Vector2.One,
-                    Color.Black);
+                    menuPosition + Vector2.One + offset[i],
+                    Color.Black,
+                    rotation[i],
+                    Vector2.Zero, 
+                    1, 
+                    SpriteEffects.None, 
+                    0);
 
-                    spriteBatch.DrawString(spriteFont,
+                    spriteBatch.DrawString(
+                    spriteFont,
                     menuItems[i],
-                    menuPosition,
-                    myColor);
+                    menuPosition + offset[i],
+                    myColor, 
+                    rotation[i],
+                    Vector2.Zero, 
+                    1, 
+                    SpriteEffects.None, 
+                    0);
 
                     menuPosition.Y += spriteFont.LineSpacing;
+                    menuPosition.Y += menuItemSpace;
 
                     if (i == 12 || i == 25) // 0 is also an id
                     {

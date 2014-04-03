@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using XNA_ScreenManager.MapClasses;
 using XNA_ScreenManager.ScreenClasses;
 using Microsoft.Xna.Framework.Content;
+using XNA_ScreenManager.ScreenClasses.MainClasses;
 
 namespace XNA_ScreenManager.CharacterClasses
 {
@@ -22,7 +23,7 @@ namespace XNA_ScreenManager.CharacterClasses
         public int spriteWidth = 32;
         public int spriteHeight = 48;
         public Vector2 spriteOffset = Vector2.Zero;
-        bool playerCollide = false;
+        float previousTime = 0, transperancy = 0;
 
         // Sprite Animation Properties
         public Vector2 Direction = Vector2.Zero;                                                    // Sprite Move direction
@@ -34,7 +35,9 @@ namespace XNA_ScreenManager.CharacterClasses
         public NPCharacter(Texture2D _Sprite, Vector2 _spriteoffset, Vector2 _spriteSize, 
             Vector2 _position, Texture2D face, string name, string script)
             : base()
-        {
+        {            
+            spriteFont = ResourceManager.GetInstance.Content.Load<SpriteFont>(@"font\Arial_12px");
+
             // Derived properties
             Active = true;
             Sprite = _Sprite;
@@ -78,7 +81,9 @@ namespace XNA_ScreenManager.CharacterClasses
             {
                 // set player state
                 world.playerSprite.CollideNPC = true;
-                this.playerCollide = true;
+
+                previousTime = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.8f;
+                transperancy = 0.8f;
 
                 // Update keyboard states
                 keyboardStateCurrent = Keyboard.GetState();
@@ -95,7 +100,14 @@ namespace XNA_ScreenManager.CharacterClasses
                 keyboardStatePrevious = keyboardStateCurrent;
             }
             else
-                this.playerCollide = false;
+            {
+                // no collision, remove NPC nametag
+                if (previousTime > 0)
+                {
+                    previousTime -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    transperancy = previousTime;
+                }
+            }
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -106,26 +118,18 @@ namespace XNA_ScreenManager.CharacterClasses
                 spriteBatch.Draw(sprite, new Rectangle((int)Position.X, (int)Position.Y, SpriteFrame.Width, SpriteFrame.Height),
                     SpriteFrame, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0f);
 
-                // draw NPC ame tag
-                if (this.playerCollide)
-                {
-                    // dirty >> fix this later...
-                    if (spriteFont == null)
-                        spriteFont = world.Content.Load<SpriteFont>(@"font\Arial_12px");
+                Texture2D rect = new Texture2D(world.gfxdevice, (int)(spriteFont.MeasureString(this.entityName).X), (int)(spriteFont.MeasureString(this.entityName).Y));
 
-                    Texture2D rect = new Texture2D(world.gfxdevice, (int)(spriteFont.MeasureString(this.entityName).X), (int)(spriteFont.MeasureString(this.entityName).Y));
+                Color[] data = new Color[(int)(spriteFont.MeasureString(this.entityName).X) * (int)(spriteFont.MeasureString(this.entityName).Y)];
+                for (int i = 0; i < data.Length; ++i) data[i] = Color.Black;
+                rect.SetData(data);
 
-                    Color[] data = new Color[(int)(spriteFont.MeasureString(this.entityName).X) * (int)(spriteFont.MeasureString(this.entityName).Y)];
-                    for (int i = 0; i < data.Length; ++i) data[i] = Color.Black;
-                    rect.SetData(data);
+                spriteBatch.Draw(rect, new Vector2((this.position.X + SpriteFrame.Width * 0.5f) - (spriteFont.MeasureString(this.entityName).X * 0.5f), position.Y),
+                    Color.White * transperancy);
 
-                    spriteBatch.Draw(rect, new Vector2((this.position.X + SpriteFrame.Width * 0.5f) - (spriteFont.MeasureString(this.entityName).X * 0.5f), position.Y),
-                        Color.White * 0.8f);
-
-                    spriteBatch.DrawString(spriteFont, this.entityName.ToString(),
-                        new Vector2((this.position.X + SpriteFrame.Width * 0.5f) - (spriteFont.MeasureString(this.entityName).X * 0.5f), this.position.Y),
-                        Color.White * 0.8f);
-                }
+                spriteBatch.DrawString(spriteFont, this.entityName.ToString(),
+                    new Vector2((this.position.X + SpriteFrame.Width * 0.5f) - (spriteFont.MeasureString(this.entityName).X * 0.5f), this.position.Y),
+                    Color.White * transperancy);
             }
         }
     }
