@@ -83,6 +83,7 @@
     <property name="Texture" value="npc01"/>
     <property name="spriteSizeX" value="60"/>
     <property name="spriteSizeY" value="90"/>
+    <property name="Frames" value="1"/>
     <property name="Name" value="Young Man"/>
     <property name="Script" value="victoria01"/>
    </properties>
@@ -96,6 +97,7 @@
     <property name="Texture" value="npc01"/>
     <property name="spriteSizeX" value="60"/>
     <property name="spriteSizeY" value="100"/>
+    <property name="Frames" value="1"/>
     <property name="Name" value="Ranger"/>
     <property name="Script" value="victoria01"/>
    </properties>
@@ -104,12 +106,13 @@
   <object name="npc3" x="1376" y="627">
    <properties>
     <property name="Face" value="rang"/>
-    <property name="OffsetX" value="510"/>
-    <property name="OffsetY" value="450"/>
-    <property name="Texture" value="npc01"/>
-    <property name="spriteSizeX" value="170"/>
-    <property name="spriteSizeY" value="130"/>
-    <property name="Name" value="Herman"/>
+    <property name="OffsetX" value="0"/>
+    <property name="OffsetY" value="0"/>
+    <property name="Texture" value="lucas"/>
+    <property name="spriteSizeX" value="66"/>
+    <property name="spriteSizeY" value="70"/>
+    <property name="Frames" value="7"/>
+    <property name="Name" value="Lucas"/>
     <property name="Script" value="victoria01"/>
    </properties>
    <ellipse/>
@@ -122,6 +125,7 @@
     <property name="Texture" value="npc01"/>
     <property name="spriteSizeX" value="65"/>
     <property name="spriteSizeY" value="71"/>
+    <property name="Frames" value="1"/>
     <property name="Name" value="Herman"/>
     <property name="Script" value="victoria01"/>
    </properties>
@@ -135,7 +139,8 @@
     <property name="Texture" value="npc01"/>
     <property name="spriteSizeX" value="59"/>
     <property name="spriteSizeY" value="66"/>
-    <property name="Name" value="Joey"/>
+    <property name="Frames" value="1"/>
+    <property name="Name" value="Joey1"/>
     <property name="Script" value="victoria01"/>
    </properties>
    <ellipse/>
@@ -143,12 +148,13 @@
   <object name="npc6" x="4640" y="800">
    <properties>
     <property name="Face" value="npc01"/>
-    <property name="OffsetX" value="540"/>
-    <property name="OffsetY" value="110"/>
-    <property name="Texture" value="npc01"/>
-    <property name="spriteSizeX" value="80"/>
-    <property name="spriteSizeY" value="125"/>
-    <property name="Name" value="Joey"/>
+    <property name="OffsetX" value="0"/>
+    <property name="OffsetY" value="0"/>
+    <property name="Texture" value="pan"/>
+    <property name="spriteSizeX" value="75"/>
+    <property name="spriteSizeY" value="69"/>
+    <property name="Frames" value="7"/>
+    <property name="Name" value="Pan"/>
      <property name="Script" value="victoria01"/>
    </properties>
    <ellipse/>
@@ -161,7 +167,8 @@
     <property name="Texture" value="npc01"/>
     <property name="spriteSizeX" value="80"/>
     <property name="spriteSizeY" value="125"/>
-    <property name="Name" value="Joey"/>
+    <property name="Frames" value="1"/>
+    <property name="Name" value="Joey3"/>
     <property name="Script" value="victoria01"/>
    </properties>
    <ellipse/>

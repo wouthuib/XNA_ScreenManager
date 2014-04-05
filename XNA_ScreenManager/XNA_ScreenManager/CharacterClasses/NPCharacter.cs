@@ -22,8 +22,9 @@ namespace XNA_ScreenManager.CharacterClasses
         // Sprite properties
         public int spriteWidth = 32;
         public int spriteHeight = 48;
+        public int frames = 48;
         public Vector2 spriteOffset = Vector2.Zero;
-        float previousTime = 0, transperancy = 0;
+        float previousTime = 0, transperancy = 0, previousAnimateTimeSec = 0;
 
         // Sprite Animation Properties
         public Vector2 Direction = Vector2.Zero;                                                    // Sprite Move direction
@@ -33,7 +34,7 @@ namespace XNA_ScreenManager.CharacterClasses
         #endregion
 
         public NPCharacter(Texture2D _Sprite, Vector2 _spriteoffset, Vector2 _spriteSize, 
-            Vector2 _position, Texture2D face, string name, string script)
+            Vector2 _position, int _frames, Texture2D face, string name, string script)
             : base()
         {            
             spriteFont = ResourceManager.GetInstance.Content.Load<SpriteFont>(@"font\Arial_12px");
@@ -43,6 +44,7 @@ namespace XNA_ScreenManager.CharacterClasses
             Sprite = _Sprite;
             SpriteSize = new Rectangle(0, 0, (int)_spriteSize.X, (int)_spriteSize.Y);
             Position = _position;
+            frames = _frames;
             entityType = EntityType.NPC;
             entityFace = face;
             entityName = name;
@@ -53,6 +55,24 @@ namespace XNA_ScreenManager.CharacterClasses
             SpriteFrame = new Rectangle((int)_spriteoffset.X, (int)_spriteoffset.Y, (int)_spriteSize.X, (int)_spriteSize.Y);
             spriteWidth = (int)_spriteSize.X;
             spriteHeight = (int)_spriteSize.Y;
+        }
+
+        private void Animate(GameTime gameTime)
+        {
+            // reduce timer
+            previousAnimateTimeSec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            if (previousAnimateTimeSec <= 0 && frames > 1)
+            {
+                previousAnimateTimeSec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.10f;
+
+                spriteFrame.X += spriteWidth;
+                if (spriteFrame.X >= (spriteWidth * frames))
+                {
+                    spriteFrame.X = 0; 
+                    previousAnimateTimeSec = (float)gameTime.ElapsedGameTime.TotalSeconds + 3f;
+                }  
+            }
         }
 
         public override void Update(GameTime gameTime)
@@ -70,6 +90,9 @@ namespace XNA_ScreenManager.CharacterClasses
             // create NPC rectangle
             Rectangle NPC = new Rectangle((int)this.Position.X, (int)this.Position.Y,
                                                this.SpriteFrame.Width, this.SpriteFrame.Height);
+
+            // Animate NPC
+            Animate(gameTime);
 
             // check intersection with player
             if (NPC.Intersects

@@ -503,7 +503,7 @@ namespace XNA_ScreenManager.MapClasses
                         char[] chars = obj.Value.Name.ToCharArray();
                         string objname = new string(chars).Substring(0, 3); // max 3 chars to skip numbers
 
-                        int offsetX = 0, offsetY = 0, spritesizeX = 0, spritesizeY = 0;
+                        int offsetX = 0, offsetY = 0, spritesizeX = 0, spritesizeY = 0, frames = 1;
                         string texture = null, face = null, name = null, script = null;
 
                         if (objname == "npc")
@@ -529,6 +529,9 @@ namespace XNA_ScreenManager.MapClasses
                                         break;
                                     case "spriteSizeY":
                                         spritesizeY = Convert.ToInt32(objvalue);
+                                        break;
+                                    case "Frames":
+                                        frames = Convert.ToInt32(objvalue);
                                         break;
                                     case "Face":
                                         face = objvalue;
@@ -561,6 +564,7 @@ namespace XNA_ScreenManager.MapClasses
                                             new Vector2(offsetX, offsetY),
                                             new Vector2(spritesizeX, spritesizeY),
                                             new Vector2(obj.Value.X, obj.Value.Y),
+                                            frames,
                                             facetext,
                                             name,
                                             script));

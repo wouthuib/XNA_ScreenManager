@@ -49,11 +49,11 @@ npc "Young Man"
 	close;
 }
 
-npc "Herman"
+npc "Lucas"
 {
-	if (switch sw_herman == null)
+	if (switch sw_lucas == null)
 	{
-		mes"Hi I am Herman, nice to meet you.";
+		mes"Hi I am Lucas, nice to meet you.";
 		mes"Can you please do me a favor?";
 
 		chooise(Yes, Not now)
@@ -62,9 +62,9 @@ npc "Herman"
 
 			mes"Alright thanks!";
 			mes"I want you to bring me some water.";
-			mes"Please ask Joey for a bottle of mineral water.";
+			mes"Please ask Pan for a bottle of mineral water.";
 
-			setswitch sw_herman stage1;
+			setswitch sw_lucas stage1;
 
 			close;
 
@@ -75,15 +75,15 @@ npc "Herman"
 			close;
 	}
 
-	if (switch sw_herman == stage1)
+	if (switch sw_lucas == stage1)
 	{
-		mes"Hi have you spoken with Joey?";
+		mes"Hi have you spoken with Pan?";
 		mes"Please come back when you have a bottle of mineral water.";
 
 		close;
 	}
 
-	if (switch sw_herman == stage2)
+	if (switch sw_lucas == stage2)
 	{
 		mes"Oh I see you have the mineral water!";
 
@@ -98,7 +98,7 @@ npc "Herman"
 		close;
 	}
 
-	if (switch sw_herman == complete)
+	if (switch sw_lucas == complete)
 	{
 		mes"Hey man thanks for bringing me the bottle.";
 		mes"If you ever need my help, please come back to me.";
@@ -107,15 +107,15 @@ npc "Herman"
 	}
 }
 
-npc "Joey"
+npc "Pan"
 {
-	if (switch sw_herman == stage1)
+	if (switch sw_lucas == stage1)
 	{
-		mes"Hi I am Joey, nice to meet you.";
-		mes"What did you say! Herman is dehydrating and wants some water.";
+		mes"Hi I am Pan, nice to meet you.";
+		mes"What did you say! Lucas is dehydrating and wants some water.";
 		mes"Here, please bring this bottle of mineral water to him.";
 		
-		setswitch sw_herman stage2;
+		setswitch sw_lucas stage2;
 		
 		next;
 		
@@ -126,25 +126,25 @@ npc "Joey"
 		close;
 	}
 
-	if (switch sw_herman == stage2)
+	if (switch sw_lucas == stage2)
 	{
-		mes"Hi, have you brought the bottle to Herman?";
-		mes"Please hurry up, Herman is an old man.";
+		mes"Hi, have you brought the bottle to Lucas?";
+		mes"Please hurry up, Lucas is an old man.";
 
 		close;
 	}
 
-	if (switch sw_herman == complete)
+	if (switch sw_lucas == complete)
 	{
-		mes"Hi, you say you have brought the bottle to Herman.";
+		mes"Hi, you say you have brought the bottle to Lucas.";
 		mes"Good job! that will cool him down.";
 
 		close;
 	}
 
-	if (switch sw_herman == null)
+	if (switch sw_lucas == null)
 	{
-		mes"Hi I am Joey, nice to meet you.";
+		mes"Hi I am Pan, nice to meet you.";
 
 		close;
 	}
