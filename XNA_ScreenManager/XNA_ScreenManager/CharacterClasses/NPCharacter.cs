@@ -112,9 +112,9 @@ namespace XNA_ScreenManager.CharacterClasses
                 keyboardStateCurrent = Keyboard.GetState();
 
                 // Check for Keyboard input
-                if (keyboardStateCurrent.IsKeyUp(Microsoft.Xna.Framework.Input.Keys.Space) == true &&
-                    keyboardStatePrevious.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Space) == true &&
-                    world.playerSprite.State == EntityState.Stand)
+                if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Space) == true &&
+                    keyboardStatePrevious.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Space) == true 
+                    )//&& world.playerSprite.State == EntityState.Stand)
                 {
                     screenmanager.messageScreen(true, new Rectangle((int)Position.X, (int)Position.Y, SpriteFrame.Width, SpriteFrame.Height), this.entityName, this.entityScript);
                 }
@@ -141,17 +141,19 @@ namespace XNA_ScreenManager.CharacterClasses
                 spriteBatch.Draw(sprite, new Rectangle((int)Position.X, (int)Position.Y, SpriteFrame.Width, SpriteFrame.Height),
                     SpriteFrame, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0f);
 
+                // draw NPC rectangle
                 Texture2D rect = new Texture2D(world.gfxdevice, (int)(spriteFont.MeasureString(this.entityName).X), (int)(spriteFont.MeasureString(this.entityName).Y));
 
                 Color[] data = new Color[(int)(spriteFont.MeasureString(this.entityName).X) * (int)(spriteFont.MeasureString(this.entityName).Y)];
                 for (int i = 0; i < data.Length; ++i) data[i] = Color.Black;
                 rect.SetData(data);
 
-                spriteBatch.Draw(rect, new Vector2((this.position.X + SpriteFrame.Width * 0.5f) - (spriteFont.MeasureString(this.entityName).X * 0.5f), position.Y),
+                spriteBatch.Draw(rect, new Vector2((this.position.X + SpriteFrame.Width * 0.5f) - (spriteFont.MeasureString(this.entityName).X * 0.5f), position.Y - 10),
                     Color.White * transperancy);
 
+                // NPC name
                 spriteBatch.DrawString(spriteFont, this.entityName.ToString(),
-                    new Vector2((this.position.X + SpriteFrame.Width * 0.5f) - (spriteFont.MeasureString(this.entityName).X * 0.5f), this.position.Y),
+                    new Vector2((this.position.X + SpriteFrame.Width * 0.5f) - (spriteFont.MeasureString(this.entityName).X * 0.5f), this.position.Y - 10),
                     Color.White * transperancy);
             }
         }

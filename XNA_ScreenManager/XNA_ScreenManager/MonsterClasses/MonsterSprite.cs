@@ -481,8 +481,8 @@ namespace XNA_ScreenManager.CharacterClasses
                             // activate timer
                             currentAttackTimeSec += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-                            // we now use 800 msec, but this should get a ASPD timer
-                            if (currentAttackTimeSec >= 0.8f)
+                            // we now use 500 msec, but this should get a ASPD timer
+                            if (currentAttackTimeSec >= 0.5f)
                             {
                                 // reset the attach timer
                                 currentAttackTimeSec = 0;

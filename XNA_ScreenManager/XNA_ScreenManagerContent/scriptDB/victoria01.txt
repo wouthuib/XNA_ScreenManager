@@ -173,3 +173,19 @@ npc "Ranger"
 
 	close;
 }
+
+npc "Mai"
+{
+	mes"Hello stranger.";
+	mes"Sorry I am quite busy please come back another time.";
+
+	close;
+}
+
+npc "Chief Stan"
+{
+	mes"Hello stranger.";
+	mes"Sorry I am quite busy please come back another time.";
+
+	close;
+}

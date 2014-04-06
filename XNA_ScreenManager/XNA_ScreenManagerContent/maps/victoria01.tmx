@@ -79,10 +79,10 @@
    <properties>
     <property name="Face" value="rang"/>
     <property name="OffsetX" value="58"/>
-    <property name="OffsetY" value="5"/>
+    <property name="OffsetY" value="18"/>
     <property name="Texture" value="npc01"/>
     <property name="spriteSizeX" value="60"/>
-    <property name="spriteSizeY" value="90"/>
+    <property name="spriteSizeY" value="78"/>
     <property name="Frames" value="1"/>
     <property name="Name" value="Young Man"/>
     <property name="Script" value="victoria01"/>
@@ -93,10 +93,10 @@
    <properties>
     <property name="Face" value="npc01"/>
     <property name="OffsetX" value="600"/>
-    <property name="OffsetY" value="0"/>
+    <property name="OffsetY" value="25"/>
     <property name="Texture" value="npc01"/>
     <property name="spriteSizeX" value="60"/>
-    <property name="spriteSizeY" value="100"/>
+    <property name="spriteSizeY" value="70"/>
     <property name="Frames" value="1"/>
     <property name="Name" value="Ranger"/>
     <property name="Script" value="victoria01"/>
@@ -131,16 +131,16 @@
    </properties>
    <ellipse/>
   </object>
-  <object name="npc5" x="4416" y="301">
+  <object name="npc5" x="4416" y="768">
    <properties>
     <property name="Face" value="rang"/>
-    <property name="OffsetX" value="504"/>
-    <property name="OffsetY" value="619"/>
-    <property name="Texture" value="npc01"/>
-    <property name="spriteSizeX" value="59"/>
-    <property name="spriteSizeY" value="66"/>
-    <property name="Frames" value="1"/>
-    <property name="Name" value="Joey1"/>
+    <property name="OffsetX" value="0"/>
+    <property name="OffsetY" value="0"/>
+    <property name="Texture" value="mai"/>
+    <property name="spriteSizeX" value="60"/>
+    <property name="spriteSizeY" value="80"/>
+    <property name="Frames" value="10"/>
+    <property name="Name" value="Mai"/>
     <property name="Script" value="victoria01"/>
    </properties>
    <ellipse/>
@@ -162,17 +162,31 @@
   <object name="npc7" x="5504" y="768">
    <properties>
     <property name="Face" value="rang"/>
-    <property name="OffsetX" value="540"/>
-    <property name="OffsetY" value="110"/>
-    <property name="Texture" value="npc01"/>
-    <property name="spriteSizeX" value="80"/>
-    <property name="spriteSizeY" value="125"/>
-    <property name="Frames" value="1"/>
-    <property name="Name" value="Joey3"/>
+    <property name="OffsetX" value="0"/>
+    <property name="OffsetY" value="0"/>
+    <property name="Texture" value="mina"/>
+    <property name="spriteSizeX" value="59"/>
+    <property name="spriteSizeY" value="69"/>
+    <property name="Frames" value="3"/>
+    <property name="Name" value="Mina"/>
     <property name="Script" value="victoria01"/>
    </properties>
    <ellipse/>
   </object>
+   <object name="npc8" x="5000" y="768">
+     <properties>
+       <property name="Face" value="rang"/>
+       <property name="OffsetX" value="0"/>
+       <property name="OffsetY" value="0"/>
+       <property name="Texture" value="chief stan"/>
+       <property name="spriteSizeX" value="51"/>
+       <property name="spriteSizeY" value="73"/>
+       <property name="Frames" value="2"/>
+       <property name="Name" value="Chief Stan"/>
+       <property name="Script" value="victoria01"/>
+     </properties>
+     <ellipse/>
+   </object>
  </objectgroup>
  <objectgroup name="Monsters" width="65" height="69">
   <object name="mob01" x="1592" y="672">

@@ -125,7 +125,13 @@ namespace XNA_ScreenManager.MapClasses
             {
                 // Update Player and other Entities
                 foreach (Entity obj in listEntity)
-                    obj.Update(gameTime);
+                    if(obj.EntityType != EntityType.Player)
+                        obj.Update(gameTime);
+
+                // Update player
+                foreach (Entity obj in listEntity)
+                    if (obj.EntityType == EntityType.Player)
+                        obj.Update(gameTime);
                 
                 // Update Warp objects
                 foreach (Effect obj in listEffect)
@@ -455,14 +461,14 @@ namespace XNA_ScreenManager.MapClasses
                                                                 "Tile Layer 1");
 
 
-                // Sort all entities based on their Y position
+                // Sort all entities tallest in height first (avoids hiding behind)
                 listEntity.Sort(delegate(Entity a, Entity b)
                 {
-                    int xdiff = a.Position.Y.CompareTo(b.Position.Y);
+                    int xdiff = a.SpriteFrame.Height.CompareTo(b.SpriteFrame.Height);
                     return xdiff;
                 });
 
-                // Draw all Entities (incl Player)
+                // Draw all Entities (except for the Player)
                 foreach (Entity obj in listEntity)
                 {
                     if(obj != playerSprite)
@@ -573,6 +579,7 @@ namespace XNA_ScreenManager.MapClasses
                             {
                                 // bug handler for NPC import properties
                                 string aa = ee.ToString();
+                                throw new Exception("NPC property in the map.tmx not found!!!");
                             }
                         }
                     }

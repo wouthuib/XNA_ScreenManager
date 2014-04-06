@@ -125,7 +125,9 @@ namespace XNA_ScreenManager.ScreenClasses
         #region update
         public override void Update(GameTime gameTime)
         {
-            base.Update(gameTime);
+            //base.Update(gameTime);
+            if (t_index == t_complete.Length)
+                menu.Update(gameTime);
             
             if (scriptActive)
             {
@@ -189,7 +191,7 @@ namespace XNA_ScreenManager.ScreenClasses
         {
             keyboardStateCurrent = Keyboard.GetState();
 
-            // animated text
+            // Animated text
             if (previousGameTimeMsec <= (int)gameTime.TotalGameTime.Milliseconds
                 || previousGameTimeSec != (int)gameTime.TotalGameTime.Seconds)
             {
@@ -235,7 +237,7 @@ namespace XNA_ScreenManager.ScreenClasses
                     t_display.Capacity = 0;
                 }
             }
-            if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Space) == true)
+            if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Right) == true)
             {
                 previousGameTimeMsec = 20; // speed up the text
             }
@@ -371,6 +373,7 @@ namespace XNA_ScreenManager.ScreenClasses
             }
             menu.SetMenuItems(displayitems);
             menu.SpriteFont = spriteFont;
+            menu.StartIndex = 0;
             menu.Active = true;
             menu.SelectedIndex = 0;
         }
