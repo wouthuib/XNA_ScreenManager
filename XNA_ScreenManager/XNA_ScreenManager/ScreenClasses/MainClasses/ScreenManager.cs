@@ -27,8 +27,7 @@ namespace XNA_ScreenManager.ScreenClasses
         public LoadingScreen loadingScreen;
 
         public GameScreen activeScreen;
-        KeyboardState newState;
-        KeyboardState oldState;
+        KeyboardState newState, oldState;
 
         private static ScreenManager instance;
         
@@ -292,11 +291,24 @@ namespace XNA_ScreenManager.ScreenClasses
 
         private void HandleCreateCharScreen()
         {
-            if (CheckKey(Keys.Back) || CheckKey(Keys.Escape))
+            if (CheckKey(Keys.Escape))
             {
-                activeScreen.Hide();
-                activeScreen = selectCharScreen;
-                activeScreen.Show();
+                if (createCharScreen.phase == Phase.Name)
+                {
+                    activeScreen.Hide();
+                    activeScreen = selectCharScreen;
+                    activeScreen.Show();
+                }
+            }
+
+            if (CheckKey(Keys.Enter))
+            {
+                if (createCharScreen.phase == Phase.Properties)
+                {
+                    activeScreen.Hide();
+                    activeScreen = selectCharScreen;
+                    activeScreen.Show();
+                }
             }
         }
 

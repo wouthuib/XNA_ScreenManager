@@ -26,7 +26,7 @@ namespace XNA_ScreenManager
         Vector2 position = new Vector2();
         public Vector2 selectPos = new Vector2();
         int selectedIndex = 0, startIndex = -1, endIndex = 4, menuItemSpace = 0;
-        bool show = true, active = true;
+        bool show = true, active = true, displaySingle = false, listDown = true, shade = true;
         float[] rotation = new float[20];
         Vector2[] offset = new Vector2[20];
         OrderStyle style = OrderStyle.Left;
@@ -130,6 +130,24 @@ namespace XNA_ScreenManager
             set { offset = value; }
         }
 
+        public bool DisplaySingle
+        {
+            get { return displaySingle; }
+            set { displaySingle = value; }
+        }
+
+        public bool ListDown
+        {
+            get { return listDown; }
+            set { listDown = value; }
+        }
+
+        public bool Shade
+        {
+            get { return shade; }
+            set { shade = value; }
+        }
+
         public bool Show
         {
             get { return show; }
@@ -185,19 +203,36 @@ namespace XNA_ScreenManager
             {
                 KeyboardState newState = Keyboard.GetState();
 
-                if (CheckKey(Keys.Down))
+                if (listDown)
                 {
-                    selectedIndex++;
-                    if (selectedIndex == endIndex) //menuItems.Count)
-                        selectedIndex = startIndex;
-                }
-
-                if (CheckKey(Keys.Up))
-                {
-                    selectedIndex--;
-                    if (selectedIndex == startIndex - 1)
+                    if (CheckKey(Keys.Down))
                     {
-                        selectedIndex = endIndex - 1; //menuItems.Count - 1;
+                        selectedIndex++;
+                        if (selectedIndex == endIndex) //menuItems.Count)
+                            selectedIndex = startIndex;
+                    }
+
+                    if (CheckKey(Keys.Up))
+                    {
+                        selectedIndex--;
+                        if (selectedIndex == startIndex - 1)
+                            selectedIndex = endIndex - 1; //menuItems.Count - 1;
+                    }
+                }
+                else
+                {
+                    if (CheckKey(Keys.Right))
+                    {
+                        selectedIndex++;
+                        if (selectedIndex == endIndex) //menuItems.Count)
+                            selectedIndex = startIndex;
+                    }
+
+                    if (CheckKey(Keys.Left))
+                    {
+                        selectedIndex--;
+                        if (selectedIndex == startIndex - 1)
+                            selectedIndex = endIndex - 1; //menuItems.Count - 1;
                     }
                 }
 
@@ -244,36 +279,43 @@ namespace XNA_ScreenManager
                             myColor = Color.LightBlue;
                     }
 
-                    // Start Drawing Menuitems
-                    spriteBatch.DrawString(
-                    spriteFont,
-                    menuItems[i],
-                    menuPosition + Vector2.One + offset[i],
-                    Color.Black,
-                    rotation[i],
-                    Vector2.Zero, 
-                    1, 
-                    SpriteEffects.None, 
-                    0);
-
-                    spriteBatch.DrawString(
-                    spriteFont,
-                    menuItems[i],
-                    menuPosition + offset[i],
-                    myColor, 
-                    rotation[i],
-                    Vector2.Zero, 
-                    1, 
-                    SpriteEffects.None, 
-                    0);
-
-                    menuPosition.Y += spriteFont.LineSpacing;
-                    menuPosition.Y += menuItemSpace;
-
-                    if (i == 12 || i == 25) // 0 is also an id
+                    if (!displaySingle || selectedIndex == i)
                     {
-                        menuPosition.X = menuPosition.X + 220;
-                        menuPosition.Y = Position.Y;
+                        // Start Drawing Menuitems
+                        if(shade)
+                            spriteBatch.DrawString(
+                            spriteFont,
+                            menuItems[i],
+                            menuPosition + Vector2.One + offset[i],
+                            Color.Black,
+                            rotation[i],
+                            Vector2.Zero,
+                            1,
+                            SpriteEffects.None,
+                            0);
+
+                        spriteBatch.DrawString(
+                        spriteFont,
+                        menuItems[i],
+                        menuPosition + offset[i],
+                        myColor,
+                        rotation[i],
+                        Vector2.Zero,
+                        1,
+                        SpriteEffects.None,
+                        0);
+
+                        if (!displaySingle)
+                        {
+                            menuPosition.Y += spriteFont.LineSpacing;
+                            menuPosition.Y += menuItemSpace;
+
+                            if (i == 12 || i == 25) // 0 is also an id
+                            {
+                                menuPosition.X = menuPosition.X + 220;
+                                menuPosition.Y = Position.Y;
+                            }
+                        }
                     }
                 } 
             }            base.Draw(gameTime);

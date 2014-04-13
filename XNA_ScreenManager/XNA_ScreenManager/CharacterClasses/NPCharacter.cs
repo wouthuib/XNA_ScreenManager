@@ -114,7 +114,7 @@ namespace XNA_ScreenManager.CharacterClasses
                 // Check for Keyboard input
                 if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Space) == true &&
                     keyboardStatePrevious.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Space) == true 
-                    )//&& world.playerSprite.State == EntityState.Stand)
+                    )
                 {
                     screenmanager.messageScreen(true, new Rectangle((int)Position.X, (int)Position.Y, SpriteFrame.Width, SpriteFrame.Height), this.entityName, this.entityScript);
                 }

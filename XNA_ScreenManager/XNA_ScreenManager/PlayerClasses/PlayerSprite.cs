@@ -80,9 +80,8 @@ namespace XNA_ScreenManager
             Direction = new Vector2();                                                              // Move direction
             state = EntityState.Stand;                                                              // Player state
 
-            // Link world get Content Manager
-            // world = getworld;
             Content = resourcemanager.Content;
+            spriteEffect = SpriteEffects.FlipHorizontally;
         }
 
         public override void Update(GameTime gameTime)
@@ -871,7 +870,7 @@ namespace XNA_ScreenManager
 
                 if (playerinfo.body_sprite != null)
                     spriteBatch.Draw(Content.Load<Texture2D>(playerinfo.body_sprite), new Rectangle((int)Position.X, (int)(Position.Y + (bodyFrame.Height - spriteFrame.Height)), spriteFrame.Width, bodyFrame.Height),
-                    bodyFrame, this.color * this.transperancy, 0f, Vector2.Zero, spriteEffect, 0f);
+                    bodyFrame, playerinfo.skin_color * this.transperancy, 0f, Vector2.Zero, spriteEffect, 0f);
 
                 if (playerinfo.faceset_sprite != null)
                 spriteBatch.Draw(Content.Load<Texture2D>(playerinfo.faceset_sprite), new Rectangle((int)Position.X, (int)Position.Y, spriteFrame.Width, spriteFrame.Height),
@@ -879,7 +878,7 @@ namespace XNA_ScreenManager
 
                 if (playerinfo.hair_sprite != null)
                     spriteBatch.Draw(Content.Load<Texture2D>(playerinfo.hair_sprite), new Rectangle((int)Position.X, (int)(Position.Y - (hairFrame.Height - spriteFrame.Height)), spriteFrame.Width, hairFrame.Height),
-                    hairFrame, this.color * this.transperancy, 0f, Vector2.Zero, spriteEffect, 0f);
+                    hairFrame, playerinfo.hair_color * this.transperancy, 0f, Vector2.Zero, spriteEffect, 0f);
 
                 if (playerinfo.costume_sprite != null)
                     spriteBatch.Draw(Content.Load<Texture2D>(playerinfo.costume_sprite), new Rectangle((int)Position.X, (int)(Position.Y + (clothFrame.Height - spriteFrame.Height)), spriteFrame.Width, clothFrame.Height),

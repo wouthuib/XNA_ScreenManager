@@ -16,8 +16,6 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
         ContentManager Content;
         GraphicsDevice graphics;
 
-        Texture2D nametag;
-
         Keys[] keys;
         bool[] IskeyUp;
         string[] SC = { ")", "!", "@", "#", "$", "%", "^", "&", "*", "(" };//special characters
@@ -25,17 +23,18 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
         public bool Active = false;
         float transperancy = 1,
               previousTimeSec = 0;
+        Vector2 position;
 
-        public KeyboardInput(Game game, SpriteFont spriteFont)
+        public KeyboardInput(Game game, SpriteFont spriteFont, Vector2 Position)
             : base(game)
         {
             // base variables for gfx
             this.spriteFont = spriteFont;
             spriteBatch = (SpriteBatch)Game.Services.GetService(typeof(SpriteBatch));
             Content = (ContentManager)Game.Services.GetService(typeof(ContentManager));
-            graphics = (GraphicsDevice)Game.Services.GetService(typeof(GraphicsDevice)); 
+            graphics = (GraphicsDevice)Game.Services.GetService(typeof(GraphicsDevice));
 
-            nametag = Content.Load<Texture2D>(@"gfx\background\nametag");
+            this.position = Position;
 
             // new keyboard variables
             keys = new Keys[38];
@@ -53,6 +52,12 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
             IskeyUp = new bool[keys.Length]; //boolean for each key to make the user have to release the key before adding to the string
             for (int i = 0; i < keys.Length; i++)
                 IskeyUp[i] = true;
+        }
+
+        public Vector2 Position
+        {
+            get { return position; }
+            set { position = value; }
         }
 
         public override void Update(GameTime gameTime)
@@ -100,9 +105,9 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
             float width = 0;
 
             foreach(char i in result)
-                width += spriteFont.MeasureString(i.ToString()).X + 1f;
+                width += spriteFont.MeasureString(i.ToString()).X;
 
-            width -= 1.5f; // small correction
+            width -= 0.5f; // small correction
 
             return width;
         }
@@ -139,23 +144,28 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
             if (Active)
             {                 
                 // Draw the NameTag
-                Vector2 position = new Vector2(280, 30);
-                spriteBatch.Draw(nametag, position, Color.White);
+                //Vector2 position = new Vector2(480, 75);
+                //spriteBatch.Draw(nametag, position, Color.White);
 
                 // Draw result
-                position = new Vector2(320, 135);
                 spriteBatch.DrawString(spriteFont,
                     result,
-                    position,
-                    Color.DarkRed);
-
-                // Draw Pointer
-                position = new Vector2(320 + GetLengthPxt(), 135);
+                    new Vector2(position.X - (int)(GetLengthPxt() / 2), 
+                        position.Y) + Vector2.One,
+                    Color.Black);
 
                 spriteBatch.DrawString(spriteFont,
+                    result,
+                    new Vector2(position.X - (int)(GetLengthPxt() / 2), 
+                        position.Y),
+                    Color.White);
+
+                // Draw Pointer
+                spriteBatch.DrawString(spriteFont,
                     "|",
-                    position,
-                    Color.DarkRed * transperancy);
+                    new Vector2(position.X + (int)(GetLengthPxt() / 2), 
+                        position.Y),
+                    Color.White * transperancy);
             }
         }
 

@@ -42,7 +42,7 @@ namespace XNA_ScreenManager
                 (SpriteBatch)Game.Services.GetService(typeof(SpriteBatch));
             this.spriteFont = spriteFont;
             menu = new MenuComponent(game, spriteFont);
-            keyboardiput = new KeyboardInput(game, spriteFont);
+            keyboardiput = new KeyboardInput(game, spriteFont, new Vector2(480, 75));
             bgcomp = new BackgroundComponent(game, background);
             menu.SetMenuItems(menuItems);
             menu.StartIndex = 0;

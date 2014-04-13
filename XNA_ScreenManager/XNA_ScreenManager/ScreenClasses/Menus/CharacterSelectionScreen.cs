@@ -18,7 +18,6 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
 
         PlayerClasses.PlayerInfo playerinfo = PlayerClasses.PlayerInfo.Instance;
 
-        KeyboardInput keyboardiput;
         BackgroundComponent bgcomp1, bgcomp2, bgcomp3;
         public MenuComponent menu;
         SpriteFont playerNameFont;
@@ -45,8 +44,7 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
             playerNameFont = Content.Load<SpriteFont>(@"font\Arial_12px");
 
             // define components
-            keyboardiput = new KeyboardInput(game, Content.Load<SpriteFont>(@"font\Arial_12px"));
-            bgcomp1 = new BackgroundComponent(game, Content.Load<Texture2D>(@"gfx\background\background03"));
+            bgcomp1 = new BackgroundComponent(game, Content.Load<Texture2D>(@"gfx\background\background1"));
             bgcomp2 = new BackgroundComponent(game, Content.Load<Texture2D>(@"gfx\background\character_selection"));
             bgcomp3 = new BackgroundComponent(game, Content.Load<Texture2D>(@"gfx\background\frame2"));
             menu = new MenuComponent(game, Content.Load<SpriteFont>(@"font\Comic_Sans_18px"));
@@ -55,7 +53,6 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
             Components.Add(bgcomp1);
             Components.Add(bgcomp2);
             Components.Add(bgcomp3);
-            Components.Add(keyboardiput);
 
             // menu options
             menu.SetMenuItems(menuItems);
