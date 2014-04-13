@@ -47,8 +47,8 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
 
         int selectedIndex = 0;
 
-        string[] item0 = { "Face 01", "Face 02", "Face 03"};
-        string[] item1 = { "Style 01", "Style 02", "Style 03", "Style 04", "Style 05" };
+        string[] item0 = { "Face 01", "Face 02", "Face 03", "Face 04", "Face 05", "Face 06" };
+        string[] item1 = { "Style 01", "Style 02", "Style 03", "Style 04", "Style 05", "Style 06" };
         string[] item2 = { "Red", "Green", "Blue", "Yellow", 
                            "Orange", "Purple", "Pink", "Brown", "Black", "Gray", "White" };
         string[] item3 = { "Pale", "Light", "Tanned", "Dark", "Blue", "Green" };
