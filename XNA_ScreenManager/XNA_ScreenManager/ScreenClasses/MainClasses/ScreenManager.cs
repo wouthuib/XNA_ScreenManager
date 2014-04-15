@@ -16,7 +16,6 @@ namespace XNA_ScreenManager.ScreenClasses
         public StartScreen startScreen;
         public HelpScreen helpScreen;
         public ActionScreen actionScreen;
-        public CreatePCScreen createPCScreen;
         public CharacterCreationScreen createCharScreen;
         public CharacterSelectionScreen selectCharScreen;
         public InGameMainMenuScreen ingameMenuScreen;
@@ -65,7 +64,6 @@ namespace XNA_ScreenManager.ScreenClasses
         {
             actionScreen.Hide();
             actionScreen.Hide();
-            createPCScreen.Hide();
             ingameMenuScreen.Hide();
             itemMenuScreen.Hide();
             equipmentMenuScreen.Hide();
@@ -90,10 +88,6 @@ namespace XNA_ScreenManager.ScreenClasses
             else if (activeScreen == helpScreen)
             {
                 HandleHelpScreenInput();
-            }
-            else if (activeScreen == createPCScreen)
-            {
-                HandleCreatePCScreenInput();
             }
             else if (activeScreen == actionScreen)
             {
@@ -153,7 +147,6 @@ namespace XNA_ScreenManager.ScreenClasses
                 {
                     case 0:
                         activeScreen.Hide();
-                        //activeScreen = createPCScreen;
                         activeScreen = selectCharScreen;
                         activeScreen.Show();
                         break;
@@ -169,33 +162,6 @@ namespace XNA_ScreenManager.ScreenClasses
                         break;
                     case 3:
                         game.Exit();
-                        break;
-                }
-            }
-        }
-
-        private void HandleCreatePCScreenInput()
-        {
-            if (CheckKey(Keys.Enter) || CheckKey(Keys.Space))
-            {
-                switch (createPCScreen.SelectedIndex)
-                {
-                    case 0:
-                        if (!createPCScreen.keyboardiput.Active)
-                            createPCScreen.keyboardiput.Activate(PlayerClasses.PlayerInfo.Instance.Name);
-                        else if (CheckKey(Keys.Enter))
-                            createPCScreen.keyboardiput.Complete();
-                        break;
-                    case 1:
-                        createPCScreen.ChangeGender();
-                        break;
-                    case 2:
-                        createPCScreen.ChangeClass();
-                        break;
-                    case 3:
-                        activeScreen.Hide();
-                        activeScreen = actionScreen;
-                        activeScreen.Show();
                         break;
                 }
             }
@@ -291,6 +257,7 @@ namespace XNA_ScreenManager.ScreenClasses
 
         private void HandleCreateCharScreen()
         {
+
             if (CheckKey(Keys.Escape))
             {
                 if (createCharScreen.phase == Phase.Name)
@@ -299,15 +266,23 @@ namespace XNA_ScreenManager.ScreenClasses
                     activeScreen = selectCharScreen;
                     activeScreen.Show();
                 }
+                else
+                    createCharScreen.phase = Phase.Name;
             }
 
             if (CheckKey(Keys.Enter))
             {
                 if (createCharScreen.phase == Phase.Properties)
                 {
+                    createCharScreen.phase = Phase.Name;
                     activeScreen.Hide();
                     activeScreen = selectCharScreen;
                     activeScreen.Show();
+                }
+                else
+                {
+                    createCharScreen.phase = Phase.Properties;
+                    PlayerClasses.PlayerInfo.Instance.Name = createCharScreen.keyboardiput.Result;
                 }
             }
         }
@@ -316,9 +291,18 @@ namespace XNA_ScreenManager.ScreenClasses
         {
             if (CheckKey(Keys.Back) || CheckKey(Keys.Escape))
             {
-                activeScreen.Hide();
-                activeScreen = startScreen;
-                activeScreen.Show();
+                if (selectCharScreen.menu.EndIndex == 3)
+                {
+                    activeScreen.Hide();
+                    activeScreen = startScreen;
+                    activeScreen.Show();
+                }
+                else
+                {
+                    selectCharScreen.menu.SelectedIndex = 0;
+                    selectCharScreen.menu.StartIndex = 0;
+                    selectCharScreen.menu.EndIndex = 3;
+                }
             }
             else if (CheckKey(Keys.Space) || CheckKey(Keys.Enter))
             {
@@ -331,7 +315,8 @@ namespace XNA_ScreenManager.ScreenClasses
                     case 1:
                         selectCharScreen.menu.SelectedIndex = 0;
                         selectCharScreen.menu.StartIndex = 0;
-                        selectCharScreen.menu.EndIndex = 3;                  
+                        selectCharScreen.menu.EndIndex = 3;
+                        createCharScreen.phase = Phase.Name;
                         activeScreen.Hide();
                         activeScreen = createCharScreen;
                         activeScreen.Show();
@@ -389,9 +374,6 @@ namespace XNA_ScreenManager.ScreenClasses
                     break;
                 case "helpScreen":
                     activeScreen = helpScreen;
-                    break;
-                case "createPCScreen":
-                    activeScreen = createPCScreen;
                     break;
                 case "startScreen":
                     activeScreen = startScreen;

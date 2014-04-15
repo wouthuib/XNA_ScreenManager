@@ -152,7 +152,10 @@ namespace XNA_ScreenManager
                                     world = GameWorld.GetInstance;
 
                                 // create swing effect
-                                world.createEffects(EffectType.WeaponSwing, new Vector2(this.Position.X + this.spriteFrame.Width * 0.6f, this.Position.Y + this.spriteFrame.Height * 0.7f), spriteEffect, 1);
+                                if (spriteEffect == SpriteEffects.FlipHorizontally)
+                                    world.createEffects(EffectType.WeaponSwing, new Vector2(this.Position.X + this.spriteFrame.Height * 1.2f, this.Position.Y + this.spriteFrame.Height * 0.7f), spriteEffect, 1);
+                                else
+                                    world.createEffects(EffectType.WeaponSwing, new Vector2(this.Position.X - this.spriteFrame.Height * 0.2f, this.Position.Y + this.spriteFrame.Height * 0.7f), spriteEffect, 1);
 
                                 // start cooldown
                                 state = EntityState.Cooldown;

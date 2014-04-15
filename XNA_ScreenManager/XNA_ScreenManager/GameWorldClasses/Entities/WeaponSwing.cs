@@ -46,10 +46,8 @@ namespace XNA_ScreenManager.GameWorldClasses.Entities
                 case WeaponSwingType.Swing01:
                     this.sprite = world.Content.Load<Texture2D>(@"gfx\effects\weapon\0.swingT2.2_0");
                     if (sprite_effect == SpriteEffects.FlipHorizontally)
-                    {
-                        this.position.X -= 20;
-                        this.angle = 3;
-                    }
+                        this.transperant = 0.5f;
+                    this.angle = -12;
                     break;
                 case WeaponSwingType.Swing02:
                     this.sprite = world.Content.Load<Texture2D>(@"gfx\effects\weapon\0.swingT3.2_0");
@@ -86,15 +84,21 @@ namespace XNA_ScreenManager.GameWorldClasses.Entities
 
             // Make the item slowly disapear
             if (transperant > 0)
-                transperant -= (float)gameTime.ElapsedGameTime.TotalSeconds * 2;
+                transperant -= (float)gameTime.ElapsedGameTime.TotalSeconds * 3;
 
             // Make it slowly rotate
-            if (swingtype != WeaponSwingType.Stab01)
+            if (swingtype == WeaponSwingType.Swing01)
             {
                 if (sprite_effect == SpriteEffects.None)
-                    angle -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                {
+                    angle -= (float)gameTime.ElapsedGameTime.TotalSeconds * 15f;
+                    position.X += (float)gameTime.ElapsedGameTime.TotalMilliseconds * 0.35f;
+                }
                 else
-                    angle += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                {
+                    angle += (float)gameTime.ElapsedGameTime.TotalSeconds * 15f;
+                    position.X -= (float)gameTime.ElapsedGameTime.TotalMilliseconds * 0.35f;
+                }
             }
 
             // stabbing will not rotate

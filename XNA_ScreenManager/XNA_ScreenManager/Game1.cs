@@ -21,7 +21,6 @@ namespace XNA_ScreenManager
         // screens are drawble game objects
         StartScreen startScreen;
         HelpScreen helpScreen;         ActionScreen actionScreen;
-        CreatePCScreen createPCScreen; // old
         CharacterCreationScreen createCharScreen; // new
         CharacterSelectionScreen selectCharScreen; // new
         InGameMainMenuScreen ingameMenuScreen;
@@ -67,11 +66,6 @@ namespace XNA_ScreenManager
             ingameMenuScreen = new InGameMainMenuScreen(this, normalFont, Content.Load<Texture2D>(@"gfx\screens\game_menu2"));
             ScreenManager.Instance.ingameMenuScreen = ingameMenuScreen;
             Components.Add(ingameMenuScreen);
-
-            // old 2013
-            createPCScreen = new CreatePCScreen(this, normalFont, Content.Load<Texture2D>(@"gfx\screens\system_menu2"));
-            ScreenManager.Instance.createPCScreen = createPCScreen;
-            Components.Add(createPCScreen);
 
             // new 2014
             createCharScreen = new CharacterCreationScreen(this);

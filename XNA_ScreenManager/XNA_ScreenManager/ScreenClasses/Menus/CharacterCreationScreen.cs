@@ -10,6 +10,7 @@ using XNA_ScreenManager.PlayerClasses;
 using Microsoft.Xna.Framework.Input;
 using System.Reflection;
 using System.Collections.Specialized;
+using XNA_ScreenManager.ItemClasses;
 
 namespace XNA_ScreenManager.ScreenClasses.Menus
 {
@@ -25,7 +26,7 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
         SpriteBatch spriteBatch;
         ContentManager Content;
 
-        KeyboardInput keyboardiput;
+        public KeyboardInput keyboardiput;
         BackgroundComponent[] bgcomp = new BackgroundComponent[8];
         SpriteFont spriteFont, smallFont;
         PlayerSprite playersprite;
@@ -95,8 +96,9 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
             propertyboard = Content.Load<Texture2D>(@"gfx\screens\screenobjects\character_properties");
 
             // Create player info instance
-            // Display Player Sprite
             playerInfo.InitNewGame();
+
+            // Activate Text Input Class (for PlayerName)
             keyboardiput.Activate(playerInfo.Name.ToString());
 
             // Set Phase to Name
@@ -114,9 +116,17 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
             switch (phase)
             {
                 case Phase.Name:
+
                     keyboardiput.Update(gameTime);
-                    if (CheckKey(Keys.Enter))
-                        phase = Phase.Properties;
+
+                    // Equip Beginner Clothes + Knife
+                    if (Equipment.Instance.item_list.FindAll(delegate(Item item)
+                    { return item.Slot == ItemSlot.Bodygear; }).Count == 0)
+                        Equipment.Instance.addItem(ItemStore.Instance.getItem(2301));
+                    if (Equipment.Instance.item_list.FindAll(delegate(Item item)
+                    { return item.Slot == ItemSlot.Weapon; }).Count == 0)
+                        Equipment.Instance.addItem(ItemStore.Instance.getItem(1200));
+
                     break;
                 case Phase.Properties:
                     for (int i = 0; i <= properties.Length - 1; i++)
@@ -147,9 +157,6 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
                         if (selectedIndex == - 1)
                             selectedIndex = properties.Length - 1; //menuItems.Count - 1;
                     }
-
-                    if (CheckKey(Keys.Escape) || CheckKey(Keys.Back))
-                        phase = Phase.Properties;
 
                     properties[selectedIndex].Update(gameTime);
                     properties[selectedIndex].HiliteColor = Color.Yellow;

@@ -127,10 +127,9 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
             }
         }
 
-        public void Complete()
+        public string Result
         {
-            this.Active = false;
-            PlayerClasses.PlayerInfo.Instance.Name = result;
+            get { return result; }
         }
 
         public void Activate(string import)
