@@ -27,7 +27,7 @@ namespace XNA_ScreenManager
         ItemStore itemStore = ItemStore.Instance;
         Equipment equipment = Equipment.Instance;
         ScriptInterpreter scriptManager = ScriptInterpreter.Instance;
-        PlayerInfo playerinfo = PlayerInfo.Instance;
+        PlayerStore playerinfo = PlayerStore.Instance;
 
         // link to world content manager
         ContentManager Content;
@@ -139,13 +139,13 @@ namespace XNA_ScreenManager
                         if (previousGameTimeMsec < 0)
                         {
                             //previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.20f;
-                            previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerinfo.ASPD * 12) * 0.0006f) + 0.05f;
+                            previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - this.playerinfo.activePlayer.ASPD * 12) * 0.0006f) + 0.05f;
 
                             spriteFrame.X += spriteWidth * 2;
 
                             if (spriteFrame.X > spriteOfset.X + (spriteWidth * 2))
                             {
-                                previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerinfo.ASPD * 12) * 0.0006f) + 0.05f;
+                                previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - this.playerinfo.activePlayer.ASPD * 12) * 0.0006f) + 0.05f;
 
                                 // make sure the world is connected
                                 if (world == null)
@@ -186,13 +186,13 @@ namespace XNA_ScreenManager
 
                         if (previousGameTimeMsec < 0)
                         {
-                            previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerinfo.ASPD * 12) * 0.0006f) + 0.05f;
+                            previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerinfo.activePlayer.ASPD * 12) * 0.0006f) + 0.05f;
 
                             spriteFrame.X += spriteWidth * 2;
 
                             if (spriteFrame.X > spriteWidth * 1)
                             {
-                                previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerinfo.ASPD * 12) * 0.0006f) + 0.05f;
+                                previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerinfo.activePlayer.ASPD * 12) * 0.0006f) + 0.05f;
 
                                 // make sure the world is connected
                                 if (world == null)
@@ -254,7 +254,7 @@ namespace XNA_ScreenManager
                                         world.createArrow(new Vector2(this.Position.X, this.Position.Y + this.spriteFrame.Height * 0.6f), 800, new Vector2(-1, 0));
 
                                     // Set the timer for cooldown
-                                    previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerinfo.ASPD * 12) * 0.0006f) + 0.05f;
+                                    previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerinfo.activePlayer.ASPD * 12) * 0.0006f) + 0.05f;
 
                                     // reset sprite frame and change state
                                     // start cooldown
@@ -491,14 +491,14 @@ namespace XNA_ScreenManager
                                 // check the weapon type
                                 if (weapontype == WeaponType.Bow)
                                 {
-                                    previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerinfo.ASPD * 12) * 0.0006f) + 0.05f;
+                                    previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerinfo.activePlayer.ASPD * 12) * 0.0006f) + 0.05f;
 
                                     spriteFrame.X = 0;
                                     state = EntityState.Shoot;
                                 }
                                 else if (weapontype == WeaponType.Dagger || weapontype == WeaponType.One_handed_Sword)
                                 {
-                                    previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerinfo.ASPD * 12) * 0.0006f) + 0.05f;
+                                    previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerinfo.activePlayer.ASPD * 12) * 0.0006f) + 0.05f;
 
                                     spriteFrame.X = 0;
 
@@ -840,10 +840,14 @@ namespace XNA_ScreenManager
             keyboardStatePrevious = keyboardStateCurrent;
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch, PlayerInfo player = null)
         {
+
             if (Active)
             {
+                if (player == null)
+                    player = this.playerinfo.activePlayer;
+
                 // because in some states the hair sprite is out of bound (80x80)
                 Rectangle hairFrame = spriteFrame, 
                           clothFrame = spriteFrame,
@@ -871,29 +875,29 @@ namespace XNA_ScreenManager
 
                 //Color newcolor = new Color(80,180,222);
 
-                if (playerinfo.body_sprite != null)
-                    spriteBatch.Draw(Content.Load<Texture2D>(playerinfo.body_sprite), new Rectangle((int)Position.X, (int)(Position.Y + (bodyFrame.Height - spriteFrame.Height)), spriteFrame.Width, bodyFrame.Height),
-                    bodyFrame, playerinfo.skin_color * this.transperancy, 0f, Vector2.Zero, spriteEffect, 0f);
+                if (player.body_sprite != null)
+                    spriteBatch.Draw(Content.Load<Texture2D>(player.body_sprite), new Rectangle((int)Position.X, (int)(Position.Y + (bodyFrame.Height - spriteFrame.Height)), spriteFrame.Width, bodyFrame.Height),
+                    bodyFrame, player.skin_color * this.transperancy, 0f, Vector2.Zero, spriteEffect, 0f);
 
-                if (playerinfo.faceset_sprite != null)
-                spriteBatch.Draw(Content.Load<Texture2D>(playerinfo.faceset_sprite), new Rectangle((int)Position.X, (int)Position.Y, spriteFrame.Width, spriteFrame.Height),
+                if (player.faceset_sprite != null)
+                    spriteBatch.Draw(Content.Load<Texture2D>(player.faceset_sprite), new Rectangle((int)Position.X, (int)Position.Y, spriteFrame.Width, spriteFrame.Height),
                     faceFrame, this.color * this.transperancy, 0f, Vector2.Zero, spriteEffect, 0f);
 
-                if (playerinfo.hair_sprite != null)
-                    spriteBatch.Draw(Content.Load<Texture2D>(playerinfo.hair_sprite), new Rectangle((int)Position.X, (int)(Position.Y - (hairFrame.Height - spriteFrame.Height)), spriteFrame.Width, hairFrame.Height),
-                    hairFrame, playerinfo.hair_color * this.transperancy, 0f, Vector2.Zero, spriteEffect, 0f);
+                if (player.hair_sprite != null)
+                    spriteBatch.Draw(Content.Load<Texture2D>(player.hair_sprite), new Rectangle((int)Position.X, (int)(Position.Y - (hairFrame.Height - spriteFrame.Height)), spriteFrame.Width, hairFrame.Height),
+                    hairFrame, player.hair_color * this.transperancy, 0f, Vector2.Zero, spriteEffect, 0f);
 
-                if (playerinfo.costume_sprite != null)
-                    spriteBatch.Draw(Content.Load<Texture2D>(playerinfo.costume_sprite), new Rectangle((int)Position.X, (int)(Position.Y + (clothFrame.Height - spriteFrame.Height)), spriteFrame.Width, clothFrame.Height),
+                if (player.costume_sprite != null)
+                    spriteBatch.Draw(Content.Load<Texture2D>(player.costume_sprite), new Rectangle((int)Position.X, (int)(Position.Y + (clothFrame.Height - spriteFrame.Height)), spriteFrame.Width, clothFrame.Height),
                     clothFrame, this.color * this.transperancy, 0f, Vector2.Zero, spriteEffect, 0f);
 
-                if (playerinfo.weapon_sprite != null)
+                if (player.weapon_sprite != null)
                 {
                     if (spriteEffect == SpriteEffects.None)
-                        spriteBatch.Draw(Content.Load<Texture2D>(playerinfo.weapon_sprite), new Rectangle((int)(Position.X - (weaponFrame.Width - spriteFrame.Width)), (int)(Position.Y + (weaponFrame.Height - spriteFrame.Height)), weaponFrame.Width, weaponFrame.Height),
+                        spriteBatch.Draw(Content.Load<Texture2D>(player.weapon_sprite), new Rectangle((int)(Position.X - (weaponFrame.Width - spriteFrame.Width)), (int)(Position.Y + (weaponFrame.Height - spriteFrame.Height)), weaponFrame.Width, weaponFrame.Height),
                         weaponFrame, this.color * this.transperancy, 0f, Vector2.Zero, spriteEffect, 0f);
                     else
-                        spriteBatch.Draw(Content.Load<Texture2D>(playerinfo.weapon_sprite), new Rectangle((int)Position.X, (int)(Position.Y + (weaponFrame.Height - spriteFrame.Height)), weaponFrame.Width, weaponFrame.Height),
+                        spriteBatch.Draw(Content.Load<Texture2D>(player.weapon_sprite), new Rectangle((int)Position.X, (int)(Position.Y + (weaponFrame.Height - spriteFrame.Height)), weaponFrame.Width, weaponFrame.Height),
                         weaponFrame, this.color * this.transperancy, 0f, Vector2.Zero, spriteEffect, 0f);
                 }
             }

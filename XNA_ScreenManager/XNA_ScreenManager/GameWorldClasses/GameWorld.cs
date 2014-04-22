@@ -33,7 +33,7 @@ namespace XNA_ScreenManager.MapClasses
         Camera2d cam;
 
         // Static Classes
-        PlayerInfo playerInfo = PlayerInfo.Instance;
+        PlayerStore playerInfo = PlayerStore.Instance;
         ScreenManager screenManager = ScreenManager.Instance;
 
         // Map entities
@@ -110,11 +110,11 @@ namespace XNA_ScreenManager.MapClasses
             MonsterStore.Instance.loadMonster(Content.RootDirectory + @"\monsterDB\", "monstertable.bin");
             LoadEntities();
 
-            playerInfo.InitNewGame();
+            /*PlayerStore.Instance.addPlayer();
 
-            playerInfo.body_sprite = @"gfx\player\body\player_basic";
-            playerInfo.faceset_sprite = @"gfx\player\faceset\faceset01";
-            playerInfo.hair_sprite = @"gfx\player\hairset\hairset01";
+            PlayerStore.Instance.activePlayer.body_sprite = @"gfx\player\body\player_basic";
+            PlayerStore.Instance.activePlayer.faceset_sprite = @"gfx\player\faceset\faceset01";
+            PlayerStore.Instance.activePlayer.hair_sprite = @"gfx\player\hairset\hairset01";*/
         }
         #endregion
 

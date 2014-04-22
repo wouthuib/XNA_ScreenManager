@@ -10,7 +10,7 @@ namespace XNA_ScreenManager.ScreenClasses
         ContentManager Content;
         GraphicsDevice gfxdevice;
 
-        PlayerInfo playerInfo = PlayerInfo.Instance;
+        PlayerStore playerInfo = PlayerStore.Instance;
         MenuComponent menu;
 
         string[] menuItems = {
@@ -110,17 +110,17 @@ namespace XNA_ScreenManager.ScreenClasses
                 new Rectangle(20, 0, 60, 60), Color.White, 
                 0f, new Vector2(0,0), SpriteEffects.FlipHorizontally, 1);
 
-            spriteBatch.DrawString(infoFont, playerInfo.Name, new Vector2(400, 80), Color.White);
-            spriteBatch.DrawString(infoFont, playerInfo.Jobclass, new Vector2(450, 80), Color.Yellow);
+            spriteBatch.DrawString(infoFont, PlayerStore.Instance.activePlayer.Name, new Vector2(400, 80), Color.White);
+            spriteBatch.DrawString(infoFont, PlayerStore.Instance.activePlayer.Jobclass, new Vector2(450, 80), Color.Yellow);
 
             spriteBatch.DrawString(infoFont, "Level", new Vector2(400, 95), Color.White);
-            spriteBatch.DrawString(infoFont, playerInfo.Level.ToString(), new Vector2(450, 95), Color.Yellow);
+            spriteBatch.DrawString(infoFont, PlayerStore.Instance.activePlayer.Level.ToString(), new Vector2(450, 95), Color.Yellow);
 
             spriteBatch.DrawString(infoFont, "Next", new Vector2(400, 110), Color.White);
-            spriteBatch.DrawString(infoFont, (playerInfo.NextLevelExp - playerInfo.Exp).ToString(), new Vector2(450, 110), Color.Yellow);
+            spriteBatch.DrawString(infoFont, (PlayerStore.Instance.activePlayer.NextLevelExp - PlayerStore.Instance.activePlayer.Exp).ToString(), new Vector2(450, 110), Color.Yellow);
 
             spriteBatch.DrawString(infoFont, "HP", new Vector2(400, 125), Color.White);
-            spriteBatch.DrawString(infoFont, playerInfo.HP.ToString() + "/" + playerInfo.MAXHP.ToString(), new Vector2(450, 125), Color.Yellow);
+            spriteBatch.DrawString(infoFont, PlayerStore.Instance.activePlayer.HP.ToString() + "/" + PlayerStore.Instance.activePlayer.MAXHP.ToString(), new Vector2(450, 125), Color.Yellow);
         }
     }
 }

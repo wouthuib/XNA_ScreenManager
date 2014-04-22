@@ -8,6 +8,7 @@ using XNA_ScreenManager.ScreenClasses.SubComponents;
 using Microsoft.Xna.Framework.Content;
 using XNA_ScreenManager.MapClasses;
 using XNA_ScreenManager.ScreenClasses.MainClasses;
+using XNA_ScreenManager.PlayerClasses;
 
 namespace XNA_ScreenManager.ScreenClasses.Menus
 {
@@ -16,13 +17,13 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
         SpriteBatch spriteBatch;
         ContentManager Content;
 
-        PlayerClasses.PlayerInfo playerinfo = PlayerClasses.PlayerInfo.Instance;
+        PlayerStore playerStore = PlayerStore.Instance;
 
         BackgroundComponent bgcomp1, bgcomp2, bgcomp3;
         public MenuComponent menu;
         SpriteFont playerNameFont;
 
-        Texture2D[] slot = new Texture2D[6];
+        Texture2D slot;
         Texture2D option_board, screen_board;
         PlayerSprite playersprite;
 
@@ -75,8 +76,7 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
             screen_board = Content.Load<Texture2D>(@"gfx\screens\screenobjects\next_board");
 
             // slots
-            for (int i = 0; i < 6; i++)
-                slot[i] = Content.Load<Texture2D>(@"gfx\screens\screenobjects\empty_character_slot");
+            slot = Content.Load<Texture2D>(@"gfx\screens\screenobjects\empty_character_slot");
         }
         
         public int SelectedIndex
@@ -92,39 +92,44 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
 
         public override void Draw(GameTime gameTime)
         {
-            Vector2 Position = Vector2.Zero;
+            Vector2 Position = new Vector2(100, 123);
 
             // Draw Backgrounds
             base.Draw(gameTime);
 
             // Draw Player
-            playersprite.Draw(spriteBatch);
-
-            Texture2D rect = new Texture2D(ResourceManager.GetInstance.gfxdevice,
-                (int)(playerNameFont.MeasureString(playerinfo.Name).X),
-                (int)(playerNameFont.MeasureString(playerinfo.Name).Y));
-
-            Color[] data = new Color[(int)(playerNameFont.MeasureString(playerinfo.Name).X) * (int)(playerNameFont.MeasureString(playerinfo.Name).Y)];
-            for (int i = 0; i < data.Length; ++i) data[i] = Color.Black;
-            rect.SetData(data);
-
-            // Draw Player Name
-            spriteBatch.Draw(rect, new Vector2(
-                playersprite.Position.X + (playersprite.SpriteFrame.Width * 0.5f) - (playerNameFont.MeasureString(playerinfo.Name).X * 0.5f),
-                            playersprite.Position.Y + (playersprite.SpriteFrame.Height) + 5), 
-                Color.White * 0.5f);
-
-            spriteBatch.DrawString(playerNameFont, playerinfo.Name,
-                new Vector2(playersprite.Position.X + (playersprite.SpriteFrame.Width * 0.5f) - (playerNameFont.MeasureString(playerinfo.Name).X * 0.5f),
-                            playersprite.Position.Y + (playersprite.SpriteFrame.Height) + 5), 
-                Color.White);
-
-            // Draw Slots
-            Position = new Vector2(250, 132); // <<-- change this to 100 when more players into game
-            
-            for (int i = 0; i < 6; i++)
+            for (int ID = 0; ID < 6; ID++)
             {
-                spriteBatch.Draw(slot[i], Position, Color.White);
+                if (playerStore.getPlayer(null, ID) != null)
+                {
+                    playersprite.Position = Position;
+                    playersprite.Draw(spriteBatch, playerStore.getPlayer(null, ID));
+
+                    Texture2D rect = new Texture2D(ResourceManager.GetInstance.gfxdevice,
+                        (int)(playerNameFont.MeasureString(playerStore.getPlayer(null, ID).Name).X),
+                        (int)(playerNameFont.MeasureString(playerStore.getPlayer(null, ID).Name).Y));
+
+                    Color[] data = new Color[(int)(playerNameFont.MeasureString(playerStore.getPlayer(null, ID).Name).X) * (int)(playerNameFont.MeasureString(playerStore.getPlayer(null, ID).Name).Y)];
+                    for (int i = 0; i < data.Length; ++i) data[i] = Color.Black;
+                    rect.SetData(data);
+
+                    // Draw Player Name
+                    spriteBatch.Draw(rect, new Vector2(
+                        Position.X + (playersprite.SpriteFrame.Width * 0.5f) - (playerNameFont.MeasureString(playerStore.getPlayer(null, ID).Name).X * 0.5f),
+                                    Position.Y + (playersprite.SpriteFrame.Height) + 5),
+                        Color.White * 0.5f);
+
+                    spriteBatch.DrawString(playerNameFont, playerStore.getPlayer(null, ID).Name,
+                        new Vector2(Position.X + (playersprite.SpriteFrame.Width * 0.5f) - (playerNameFont.MeasureString(playerStore.getPlayer(null, ID).Name).X * 0.5f),
+                                    Position.Y + (playersprite.SpriteFrame.Height) + 5),
+                        Color.White);
+                }
+                else
+                {
+                    // Draw Slots
+                    spriteBatch.Draw(slot, Position, Color.White);
+                }
+
                 Position.X += 150;
 
                 if (Position.X > 400)

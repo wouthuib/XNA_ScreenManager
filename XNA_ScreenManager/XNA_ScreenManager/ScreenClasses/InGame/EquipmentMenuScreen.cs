@@ -367,7 +367,7 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
             
             #region player stats
             // Draw Player Name
-            spriteBatch.DrawString(spriteFont, PlayerInfo.Instance.Name.ToString(),
+            spriteBatch.DrawString(spriteFont, PlayerStore.Instance.activePlayer.Name.ToString(),
                 new Vector2(20, 130), NormalColor);
 
             // Draw Player Stat Values
@@ -381,7 +381,7 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
                 position, Color.DarkGray);
 
                 // Get Stat Value
-                Object player = PlayerInfo.Instance;
+                Object player = PlayerStore.Instance.activePlayer;
                 PropertyInfo info = player.GetType().GetProperty(Enum.GetNames(typeof(PlayerStats))[i]);
 
                 // Draw Player Stat Value

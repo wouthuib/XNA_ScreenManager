@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.Text.RegularExpressions;
+using XNA_ScreenManager.PlayerClasses;
 
 namespace XNA_ScreenManager.ScriptClasses
 {
@@ -529,13 +530,13 @@ namespace XNA_ScreenManager.ScriptClasses
                     switch (Values[index].ToString())
                     {
                         case "baselevel":
-                                intValues.Add(PlayerClasses.PlayerInfo.Instance.Level);
+                            intValues.Add(PlayerStore.Instance.activePlayer.Level);
                             continue;
                         case "gold":
-                                intValues.Add(PlayerClasses.PlayerInfo.Instance.Gold);
+                            intValues.Add(PlayerStore.Instance.activePlayer.Gold);
                             continue;
                         case "experience":
-                                intValues.Add(PlayerClasses.PlayerInfo.Instance.Exp);
+                            intValues.Add(PlayerStore.Instance.activePlayer.Exp);
                             continue;
                         case "item":
                                 intValues.Add(ItemClasses.Inventory.Instance.item_list.FindAll(delegate(ItemClasses.Item item) 
@@ -563,7 +564,7 @@ namespace XNA_ScreenManager.ScriptClasses
                                 }
                                 continue;
                         case "profession":
-                                strValues.Add(PlayerClasses.PlayerInfo.Instance.Jobclass);
+                                strValues.Add(PlayerClasses.PlayerStore.Instance.activePlayer.Jobclass);
                             continue;
                         #region operators
                         case "EQ":

@@ -4,7 +4,8 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using XNA_ScreenManager.ScreenClasses.SubComponents;
+using XNA_ScreenManager.ScreenClasses.SubComponents;
+using XNA_ScreenManager.PlayerClasses;
 
 namespace XNA_ScreenManager
 {
@@ -134,7 +135,7 @@ namespace XNA_ScreenManager
                 position = new Vector2(220, 120);
 
                 spriteBatch.DrawString(spriteFont,
-                    PlayerClasses.PlayerInfo.Instance.Name,
+                    PlayerStore.Instance.activePlayer.Name,
                     position,
                     Color.White);
 

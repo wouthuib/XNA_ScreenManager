@@ -30,7 +30,8 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
         BackgroundComponent[] bgcomp = new BackgroundComponent[8];
         SpriteFont spriteFont, smallFont;
         PlayerSprite playersprite;
-        PlayerInfo playerInfo = PlayerInfo.Instance;
+        //PlayerStore playerInfo = PlayerStore.Instance;
+        public PlayerInfo newPlayer = null;
         public Phase phase = new Phase();
 
         Texture2D nameboard, propertyboard;
@@ -96,10 +97,10 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
             propertyboard = Content.Load<Texture2D>(@"gfx\screens\screenobjects\character_properties");
 
             // Create player info instance
-            playerInfo.InitNewGame();
+            // newPlayer = new PlayerInfo();
 
             // Activate Text Input Class (for PlayerName)
-            keyboardiput.Activate(playerInfo.Name.ToString());
+            // keyboardiput.Activate(newPlayer.Name.ToString());
 
             // Set Phase to Name
             phase = Phase.Name;
@@ -172,8 +173,8 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
 
         private void updatePlayerInfo()
         {
-            playerInfo.faceset_sprite = @"gfx\player\faceset\faceset0" + properties[0].SelectedIndex.ToString();
-            playerInfo.hair_sprite = @"gfx\player\hairset\hairset0" + properties[1].SelectedIndex.ToString();
+            this.newPlayer.faceset_sprite = @"gfx\player\faceset\faceset0" + properties[0].SelectedIndex.ToString();
+            this.newPlayer.hair_sprite = @"gfx\player\hairset\hairset0" + properties[1].SelectedIndex.ToString();
 
             PropertyInfo propinfo = properties[2].GetType().GetProperty("MenuItems");
             StringCollection value = new StringCollection();
@@ -186,7 +187,7 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
             string colorname = value[properties[2].SelectedIndex].ToString();
 
             var colorprops = typeof(Color).GetProperty(colorname);
-            playerInfo.hair_color = (Color)colorprops.GetValue(null, null);
+            this.newPlayer.hair_color = (Color)colorprops.GetValue(null, null);
             #endregion
 
             // get skin color
@@ -199,22 +200,22 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
             switch (colorname.ToString())
             {
                 case "Pale":
-                    playerInfo.skin_color = new Color(255, 229, 200);
+                    newPlayer.skin_color = new Color(255, 229, 200);
                     break;
                 case "Light":
-                    playerInfo.skin_color = new Color(255, 206, 180);
+                    newPlayer.skin_color = new Color(255, 206, 180);
                     break;
                 case "Tanned":
-                    playerInfo.skin_color = new Color(240, 184, 160);
+                    newPlayer.skin_color = new Color(240, 184, 160);
                     break;
                 case "Dark":
-                    playerInfo.skin_color = new Color(180, 138, 120);
+                    newPlayer.skin_color = new Color(180, 138, 120);
                     break;
                 case "Blue":
-                    playerInfo.skin_color = Color.LightSkyBlue;
+                    newPlayer.skin_color = Color.LightSkyBlue;
                     break;
                 case "Green":
-                    playerInfo.skin_color = Color.LightGreen;
+                    newPlayer.skin_color = Color.LightGreen;
                     break;
                 default:
                     // all other colors are OK
@@ -249,7 +250,7 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
             }
 
             // Draw Player
-            playersprite.Draw(spriteBatch);
+            playersprite.Draw(spriteBatch, this.newPlayer);
         }
 
         private bool CheckKey(Keys theKey)

@@ -418,8 +418,8 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
             }
 
             // player gold
-            spriteBatch.DrawString(spriteFont, "Gold: " + PlayerClasses.PlayerInfo.Instance.Gold.ToString() + " $",
-                new Vector2(650 - (PlayerClasses.PlayerInfo.Instance.Gold.ToString().Length * 5), 280), Color.LightBlue);
+            spriteBatch.DrawString(spriteFont, "Gold: " + PlayerClasses.PlayerStore.Instance.activePlayer.Gold.ToString() + " $",
+                new Vector2(650 - (PlayerClasses.PlayerStore.Instance.activePlayer.Gold.ToString().Length * 5), 280), Color.LightBlue);
             #endregion
 
         }
@@ -572,7 +572,7 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
             if (itemlist.SelectedIndex > itemlist.menuItemsnoDupes.Count - 1)
                 itemlist.SelectedIndex = itemlist.menuItemsnoDupes.Count - 1;
 
-            PlayerClasses.PlayerInfo.Instance.Gold += SellValue;
+            PlayerStore.Instance.activePlayer.Gold += SellValue;
 
             updateItemList();       // update item menu
             itemOptions = false;    // close options
@@ -587,12 +587,12 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
             int BuyValue = (int)(shopobjects[SelectedItem].Price);
 
             // Check if PLayer posses enough Gold
-            if (PlayerInfo.Instance.Gold >= BuyValue)
+            if (PlayerStore.Instance.activePlayer.Gold >= BuyValue)
             {
 
                 inventory.addItem(shopobjects[SelectedItem]);
 
-                PlayerClasses.PlayerInfo.Instance.Gold -= BuyValue;
+                PlayerStore.Instance.activePlayer.Gold -= BuyValue;
 
                 updateItemList();       // update item menu
                 itemOptions = false;    // close options

@@ -315,26 +315,10 @@ namespace XNA_ScreenManager.PlayerClasses
         #endregion
 
         #region constructor
-        private static PlayerInfo instance;
-        private PlayerInfo(){}
 
-        public static PlayerInfo Instance
+        public PlayerInfo()
         {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new PlayerInfo();
-                }
-                return instance;
-            }
-        }
-        #endregion
-
-        // init player values
-        public void InitNewGame()
-        {
-            this.name = "Wouter";
+            this.name = "New Player";
             this.jobclass = "Fighter";
 
             // temporary parameters these should eventually be imported from the Monster Database
@@ -350,6 +334,10 @@ namespace XNA_ScreenManager.PlayerClasses
             this.Agility = 10;
             this.Level = 1;
 
+            this.body_sprite = @"gfx\player\body\player_basic";
+            this.faceset_sprite = @"gfx\player\faceset\faceset01";
+            this.hair_sprite = @"gfx\player\hairset\hairset01";
         }
+        #endregion
     }
 }

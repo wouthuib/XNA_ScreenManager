@@ -24,7 +24,7 @@ namespace XNA_ScreenManager.ScreenClasses
         ContentManager Content;
         GraphicsDevice gfxdevice;
 
-        PlayerInfo playerInfo = PlayerInfo.Instance;
+        PlayerStore playerInfo = PlayerStore.Instance;
         Texture2D Border, HP, SP, EXP;
         Vector2 position = new Vector2();
         #endregion
@@ -79,7 +79,7 @@ namespace XNA_ScreenManager.ScreenClasses
             if (Active)
             {
 
-                string message = playerInfo.Name + " - " + playerInfo.Jobclass + " - Level: " + playerInfo.Level;
+                string message = PlayerStore.Instance.activePlayer.Name + " - " + PlayerStore.Instance.activePlayer.Jobclass + " - Level: " + PlayerStore.Instance.activePlayer.Level;
 
                 Texture2D rect = new Texture2D(gfxdevice, (int)(spriteFont.MeasureString(message).X + 20), 75);
 
@@ -93,11 +93,11 @@ namespace XNA_ScreenManager.ScreenClasses
                 spriteBatch.DrawString(spriteFont, message, new Vector2(Position.X + 5, Position.Y + 5), Color.White);
 
                 // HP
-                message = playerInfo.HP + " / " + playerInfo.MAXHP;
+                message = PlayerStore.Instance.activePlayer.HP + " / " + PlayerStore.Instance.activePlayer.MAXHP;
                 spriteBatch.DrawString(spriteFont, "HP: ", new Vector2(Position.X + 5, Position.Y + 25), Color.White);
                 spriteBatch.Draw(HP, new Vector2(position.X + 40, position.Y + 25), 
                     new Rectangle(0, 0,
-                        (int)((Border.Width * 0.01f) * (playerInfo.HP * 100 / playerInfo.MAXHP)), 
+                        (int)((Border.Width * 0.01f) * (PlayerStore.Instance.activePlayer.HP * 100 / PlayerStore.Instance.activePlayer.MAXHP)), 
                         Border.Height), 
                     Color.White * 0.75f);
                 spriteBatch.Draw(Border, new Vector2(position.X + 40, position.Y + 25), Color.White * 0.75f);
@@ -106,11 +106,11 @@ namespace XNA_ScreenManager.ScreenClasses
                     Color.White);
 
                 // SP
-                message = playerInfo.SP + " / " + playerInfo.MAXSP;
+                message = PlayerStore.Instance.activePlayer.SP + " / " + PlayerStore.Instance.activePlayer.MAXSP;
                 spriteBatch.DrawString(spriteFont, "SP: ", new Vector2(Position.X + 5, Position.Y + 40), Color.White);
                 spriteBatch.Draw(SP, new Vector2(position.X + 40, position.Y + 40),
                     new Rectangle(0, 0,
-                        (int)((Border.Width * 0.01f) * (playerInfo.SP * 100 / playerInfo.MAXSP)),
+                        (int)((Border.Width * 0.01f) * (PlayerStore.Instance.activePlayer.SP * 100 / PlayerStore.Instance.activePlayer.MAXSP)),
                         Border.Height),
                     Color.White * 0.75f);
                 spriteBatch.Draw(Border, new Vector2(position.X + 40, position.Y + 40), Color.White * 0.75f);
@@ -123,12 +123,12 @@ namespace XNA_ScreenManager.ScreenClasses
                 spriteBatch.DrawString(spriteFont, "EXP: ", new Vector2(Position.X + 5, Position.Y + 55), Color.White);
                 spriteBatch.Draw(EXP, new Vector2(position.X + 40, position.Y + 55),
                     new Rectangle(0, 0,
-                        (int)((Border.Width * 0.01f) * (playerInfo.Exp * 100 / playerInfo.NextLevelExp)),
+                        (int)((Border.Width * 0.01f) * (PlayerStore.Instance.activePlayer.Exp * 100 / PlayerStore.Instance.activePlayer.NextLevelExp)),
                         Border.Height),
                     Color.White * 0.75f);
                 spriteBatch.Draw(Border, new Vector2(position.X + 40, position.Y + 55), Color.White * 0.75f);
 
-                string percentExp = string.Format("{0:0.00}", playerInfo.Exp * 100 / playerInfo.NextLevelExp) + "%";
+                string percentExp = string.Format("{0:0.00}", PlayerStore.Instance.activePlayer.Exp * 100 / PlayerStore.Instance.activePlayer.NextLevelExp) + "%";
                 spriteBatch.DrawString(smallFont, percentExp.ToString(),
                     new Vector2((Position.X + 40 + Border.Width * 0.5f) - (smallFont.MeasureString(percentExp).X * 0.5f), Position.Y + 55),
                     Color.White);

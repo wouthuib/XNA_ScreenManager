@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using XNA_ScreenManager.ScreenClasses.InGame;
 using XNA_ScreenManager.ScreenClasses.Menus;
+using XNA_ScreenManager.PlayerClasses;
 
 namespace XNA_ScreenManager.ScreenClasses
 {
@@ -275,6 +276,7 @@ namespace XNA_ScreenManager.ScreenClasses
                 if (createCharScreen.phase == Phase.Properties)
                 {
                     createCharScreen.phase = Phase.Name;
+                    PlayerStore.Instance.addPlayer(createCharScreen.newPlayer);
                     activeScreen.Hide();
                     activeScreen = selectCharScreen;
                     activeScreen.Show();
@@ -282,7 +284,7 @@ namespace XNA_ScreenManager.ScreenClasses
                 else
                 {
                     createCharScreen.phase = Phase.Properties;
-                    PlayerClasses.PlayerInfo.Instance.Name = createCharScreen.keyboardiput.Result;
+                    createCharScreen.newPlayer.Name = createCharScreen.keyboardiput.Result;
                 }
             }
         }
@@ -317,6 +319,8 @@ namespace XNA_ScreenManager.ScreenClasses
                         selectCharScreen.menu.StartIndex = 0;
                         selectCharScreen.menu.EndIndex = 3;
                         createCharScreen.phase = Phase.Name;
+                        createCharScreen.newPlayer = new PlayerInfo();
+                        createCharScreen.keyboardiput.Activate(createCharScreen.newPlayer.Name.ToString());
                         activeScreen.Hide();
                         activeScreen = createCharScreen;
                         activeScreen.Show();

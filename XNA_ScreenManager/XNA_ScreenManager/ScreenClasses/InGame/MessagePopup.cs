@@ -25,7 +25,7 @@ namespace XNA_ScreenManager.ScreenClasses
 
         MenuComponent menu;
         TextBalloon balloon;
-        PlayerInfo playerInfo = PlayerInfo.Instance;
+        PlayerStore playerInfo = PlayerStore.Instance;
         ScriptInterpreter scriptManager = ScriptInterpreter.Instance;
 
         StringBuilder t_complete = new StringBuilder();

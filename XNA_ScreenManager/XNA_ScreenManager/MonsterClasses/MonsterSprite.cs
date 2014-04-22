@@ -16,7 +16,7 @@ namespace XNA_ScreenManager.CharacterClasses
 
         // static randomizer
         randomizer Randomizer = randomizer.Instance;                                                // generate unique random ID
-        PlayerInfo PlayerInfo = PlayerInfo.Instance;                                                // get battle information of player
+        PlayerStore PlayerInfo = PlayerStore.Instance;                                                // get battle information of player
         GameWorld world;
 
         // Monster Store ID
@@ -310,7 +310,7 @@ namespace XNA_ScreenManager.CharacterClasses
                         world = GameWorld.GetInstance;
 
                     // Start damage controll
-                    damage = Battle.battle_calc_damage(PlayerInfo, this);
+                    damage = Battle.battle_calc_damage(PlayerStore.Instance.activePlayer, this);
                     this.HP -= damage;
 
                     // create a damage baloon
@@ -334,7 +334,7 @@ namespace XNA_ScreenManager.CharacterClasses
                         }
 
                         // Give player EXP
-                        PlayerInfo.Instance.Exp += this.EXP;
+                        PlayerStore.Instance.activePlayer.Exp += this.EXP;
 
                         // Change state monster
                         state = EntityState.Died;
@@ -488,8 +488,8 @@ namespace XNA_ScreenManager.CharacterClasses
                                 currentAttackTimeSec = 0;
 
                                 // Start damage controll
-                                int damage = (int)Battle.battle_calc_damage_mob(this, PlayerInfo.Instance);
-                                PlayerInfo.Instance.HP -= damage;
+                                int damage = (int)Battle.battle_calc_damage_mob(this, PlayerStore.Instance.activePlayer);
+                                PlayerStore.Instance.activePlayer.HP -= damage;
 
                                 // Hit the player
                                 if (damage > 0)
