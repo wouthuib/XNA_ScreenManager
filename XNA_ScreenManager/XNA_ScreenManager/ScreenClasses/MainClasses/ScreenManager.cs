@@ -126,7 +126,6 @@ namespace XNA_ScreenManager.ScreenClasses
             oldState = newState;
         }
 
-
         private void HandleHelpScreenInput()
         {
             if (CheckKey(Keys.Space) ||
@@ -283,8 +282,18 @@ namespace XNA_ScreenManager.ScreenClasses
                 }
                 else
                 {
-                    createCharScreen.phase = Phase.Properties;
-                    createCharScreen.newPlayer.Name = createCharScreen.keyboardiput.Result;
+                    // check if name already exists
+                    bool namematch = false;
+
+                    for(int i = 0; i < PlayerStore.Instance.Count; i++)
+                        if (createCharScreen.keyboardiput.Result == PlayerStore.Instance.playerlist[i].Name)
+                            namematch = true;
+
+                    if (!namematch) // no matches found
+                    {
+                        createCharScreen.phase = Phase.Properties;
+                        createCharScreen.newPlayer.Name = createCharScreen.keyboardiput.Result;
+                    }
                 }
             }
         }
@@ -315,15 +324,15 @@ namespace XNA_ScreenManager.ScreenClasses
                         selectCharScreen.menu.EndIndex = 5;
                         break;
                     case 1:
-                        selectCharScreen.menu.SelectedIndex = 0;
-                        selectCharScreen.menu.StartIndex = 0;
-                        selectCharScreen.menu.EndIndex = 3;
-                        createCharScreen.phase = Phase.Name;
-                        createCharScreen.newPlayer = new PlayerInfo();
-                        createCharScreen.keyboardiput.Activate(createCharScreen.newPlayer.Name.ToString());
-                        activeScreen.Hide();
-                        activeScreen = createCharScreen;
-                        activeScreen.Show();
+                        if (createCharScreen.initize())
+                        {
+                            selectCharScreen.menu.SelectedIndex = 0;
+                            selectCharScreen.menu.StartIndex = 0;
+                            selectCharScreen.menu.EndIndex = 3;
+                            activeScreen.Hide();
+                            activeScreen = createCharScreen;
+                            activeScreen.Show();
+                        }
                         break;
                     case 2:
                     case 3:

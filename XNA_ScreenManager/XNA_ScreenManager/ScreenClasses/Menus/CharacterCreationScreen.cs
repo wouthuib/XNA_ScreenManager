@@ -23,6 +23,7 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
 
     public class CharacterCreationScreen : GameScreen
     {
+        #region properties
         SpriteBatch spriteBatch;
         ContentManager Content;
 
@@ -56,6 +57,7 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
         string[] item3 = { "Pale", "Light", "Tanned", "Dark", "Blue", "Green" };
         string[] item4 = { "Warrior", "Magician", "Bowman", "Thief", "Pirate" };
         string[] item5 = { "Male", "Female"};
+        #endregion
 
         public CharacterCreationScreen(Game game)
             : base(game)
@@ -169,6 +171,22 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
             }
 
             oldState = newState;
+        }
+
+        public bool initize()
+        {
+            if (PlayerStore.Instance.Count < 6)
+            {
+                phase = Phase.Name;
+                newPlayer = new PlayerInfo();
+                keyboardiput.Activate(newPlayer.Name.ToString());
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         private void updatePlayerInfo()

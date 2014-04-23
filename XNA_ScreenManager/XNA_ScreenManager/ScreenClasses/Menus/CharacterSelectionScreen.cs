@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Content;
 using XNA_ScreenManager.MapClasses;
 using XNA_ScreenManager.ScreenClasses.MainClasses;
 using XNA_ScreenManager.PlayerClasses;
+using Microsoft.Xna.Framework.Input;
 
 namespace XNA_ScreenManager.ScreenClasses.Menus
 {
@@ -19,6 +20,7 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
 
         PlayerStore playerStore = PlayerStore.Instance;
 
+        KeyboardState oldState;
         BackgroundComponent bgcomp1, bgcomp2, bgcomp3;
         public MenuComponent menu;
         SpriteFont playerNameFont;
@@ -84,15 +86,48 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
             get { return menu.SelectedIndex; }
         }
 
+        public int SelectedPlayer
+        {
+            get { return PlayerStore.Instance.ActiveSlot; }
+            set
+            {
+                PlayerStore.Instance.ActiveSlot = (int)MathHelper.Clamp(
+                value,
+                -1,
+                PlayerStore.Instance.Count);
+            }
+        }
+
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
             menu.Update(gameTime);
+
+            KeyboardState newState = Keyboard.GetState();
+
+            if (SelectedIndex == 0)
+            {
+                if (CheckKey(Keys.Right))
+                {
+                    SelectedPlayer++;
+                    if (SelectedPlayer == PlayerStore.Instance.Count)
+                        SelectedPlayer = 0;
+                }
+
+                if (CheckKey(Keys.Left))
+                {
+                    SelectedPlayer--;
+                    if (SelectedPlayer == - 1)
+                        SelectedPlayer = PlayerStore.Instance.Count - 1;
+                }
+            }
+
+            oldState = newState;
         }
 
         public override void Draw(GameTime gameTime)
         {
-            Vector2 Position = new Vector2(100, 123);
+            Vector2 Position = new Vector2(100, 130);
 
             // Draw Backgrounds
             base.Draw(gameTime);
@@ -102,9 +137,22 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
             {
                 if (playerStore.getPlayer(null, ID) != null)
                 {
-                    playersprite.Position = Position;
+                    // Draw player slots
+                    float transperancy = 1f;
+                    playersprite.Position = new Vector2(Position.X, Position.Y - 10);
+
+                    if (ID == playerStore.ActiveSlot)
+                        playersprite.SetState = CharacterClasses.EntityState.Stand;
+                    else
+                    {
+                        transperancy = 0.5f;
+                        playersprite.SetState = CharacterClasses.EntityState.Sit;
+                        playersprite.Position = new Vector2(Position.X, Position.Y);
+                    }
+
                     playersprite.Draw(spriteBatch, playerStore.getPlayer(null, ID));
 
+                    // Draw player Name Rect
                     Texture2D rect = new Texture2D(ResourceManager.GetInstance.gfxdevice,
                         (int)(playerNameFont.MeasureString(playerStore.getPlayer(null, ID).Name).X),
                         (int)(playerNameFont.MeasureString(playerStore.getPlayer(null, ID).Name).Y));
@@ -122,7 +170,7 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
                     spriteBatch.DrawString(playerNameFont, playerStore.getPlayer(null, ID).Name,
                         new Vector2(Position.X + (playersprite.SpriteFrame.Width * 0.5f) - (playerNameFont.MeasureString(playerStore.getPlayer(null, ID).Name).X * 0.5f),
                                     Position.Y + (playersprite.SpriteFrame.Height) + 5),
-                        Color.White);
+                        Color.White * transperancy);
                 }
                 else
                 {
@@ -150,6 +198,12 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
             // Draw menu items
             menu.Draw(gameTime);
 
+        }
+
+        public bool CheckKey(Microsoft.Xna.Framework.Input.Keys theKey)
+        {
+            KeyboardState newState = Keyboard.GetState();
+            return oldState.IsKeyDown(theKey) && newState.IsKeyUp(theKey);
         }
     }
 }

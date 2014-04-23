@@ -84,6 +84,27 @@ namespace XNA_ScreenManager
             spriteEffect = SpriteEffects.FlipHorizontally;
         }
 
+        public EntityState SetState
+        {
+            get { return state; }
+            set
+            {
+                state = value;
+                switch (state)
+                {
+                    case EntityState.Sit:
+                        spriteOfset = new Vector2(spriteFrame.Width * 0, spriteFrame.Height * 5);
+                        spriteFrame = new Rectangle((int)spriteOfset.X, (int)spriteOfset.Y, spriteFrame.Width, spriteFrame.Height);
+                        break;
+                    case EntityState.Stand:
+                    default:
+                        spriteOfset = new Vector2(spriteFrame.Width * 0, spriteFrame.Height * 0);
+                        spriteFrame = new Rectangle((int)spriteOfset.X, (int)spriteOfset.Y, spriteFrame.Width, spriteFrame.Height);
+                        break;
+                }
+            }
+        }
+
         public override void Update(GameTime gameTime)
         {
             keyboardStateCurrent = Keyboard.GetState();
@@ -294,8 +315,8 @@ namespace XNA_ScreenManager
                         // Move the Character
                         OldPosition = Position;
 
-                        // player sprite jump
-                        spriteOfset = new Vector2(spriteFrame.Width * 0, spriteFrame.Height * 4);
+                        // player sprite sit
+                        spriteOfset = new Vector2(spriteFrame.Width * 0, spriteFrame.Height * 5);
                         spriteFrame = new Rectangle((int)spriteOfset.X, (int)spriteOfset.Y, spriteFrame.Width, spriteFrame.Height);
 
                         // Apply Gravity 
@@ -872,8 +893,6 @@ namespace XNA_ScreenManager
                     default:
                         break;
                 }
-
-                //Color newcolor = new Color(80,180,222);
 
                 if (player.body_sprite != null)
                     spriteBatch.Draw(Content.Load<Texture2D>(player.body_sprite), new Rectangle((int)Position.X, (int)(Position.Y + (bodyFrame.Height - spriteFrame.Height)), spriteFrame.Width, bodyFrame.Height),
