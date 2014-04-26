@@ -9,6 +9,8 @@ using XNA_ScreenManager.MapClasses;
 using XNA_ScreenManager.PlayerClasses;
 using Microsoft.Xna.Framework.Content;
 using XNA_ScreenManager.ScreenClasses.MainClasses;
+using System.Collections.Generic;
+using XNA_ScreenManager.GameWorldClasses.Entities;
 
 namespace XNA_ScreenManager
 {
@@ -159,7 +161,6 @@ namespace XNA_ScreenManager
 
                         if (previousGameTimeMsec < 0)
                         {
-                            //previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.20f;
                             previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - this.playerinfo.activePlayer.ASPD * 12) * 0.0006f) + 0.05f;
 
                             spriteFrame.X += spriteWidth * 2;
@@ -174,9 +175,15 @@ namespace XNA_ScreenManager
 
                                 // create swing effect
                                 if (spriteEffect == SpriteEffects.FlipHorizontally)
-                                    world.createEffects(EffectType.WeaponSwing, new Vector2(this.Position.X + this.spriteFrame.Height * 1.2f, this.Position.Y + this.spriteFrame.Height * 0.7f), spriteEffect, 1);
+                                    world.newEffect.Add(new WeaponSwing(
+                                        new Vector2(this.Position.X + this.spriteFrame.Height * 1.2f, this.Position.Y + this.spriteFrame.Height * 0.7f), 
+                                        WeaponSwingType.Swing01,
+                                        spriteEffect));
                                 else
-                                    world.createEffects(EffectType.WeaponSwing, new Vector2(this.Position.X - this.spriteFrame.Height * 0.2f, this.Position.Y + this.spriteFrame.Height * 0.7f), spriteEffect, 1);
+                                    world.newEffect.Add(new WeaponSwing(
+                                        new Vector2(this.Position.X - this.spriteFrame.Height * 0.2f, this.Position.Y + this.spriteFrame.Height * 0.7f),
+                                        WeaponSwingType.Swing01,
+                                        spriteEffect));
 
                                 // start cooldown
                                 state = EntityState.Cooldown;
@@ -220,10 +227,12 @@ namespace XNA_ScreenManager
                                     world = GameWorld.GetInstance;
 
                                 // create swing effect
-                                world.createEffects(EffectType.WeaponSwing, new Vector2(this.Position.X, this.Position.Y + this.spriteFrame.Height * 0.7f), spriteEffect, 0);
+                                world.newEffect.Add(new WeaponSwing(
+                                        new Vector2(this.Position.X, this.Position.Y + this.spriteFrame.Height * 0.7f),
+                                        WeaponSwingType.Stab01,
+                                        spriteEffect));
 
                                 // reset sprite frame and change state
-
                                 state = EntityState.Cooldown;
                             }
                         }
@@ -270,9 +279,13 @@ namespace XNA_ScreenManager
 
                                     // create and release an arrow
                                     if(spriteEffect == SpriteEffects.FlipHorizontally)
-                                        world.createArrow(new Vector2(this.Position.X, this.Position.Y + this.spriteFrame.Height * 0.6f), 800, new Vector2(1, 0));
+                                        world.newEntity.Add(new Arrow(Content.Load<Texture2D>(@"gfx\gameobjects\arrow"),
+                                            new Vector2(this.Position.X, this.Position.Y + this.spriteFrame.Height * 0.6f),
+                                            800, new Vector2(1, 0)));
                                     else
-                                        world.createArrow(new Vector2(this.Position.X, this.Position.Y + this.spriteFrame.Height * 0.6f), 800, new Vector2(-1, 0));
+                                        world.newEntity.Add(new Arrow(Content.Load<Texture2D>(@"gfx\gameobjects\arrow"),
+                                            new Vector2(this.Position.X, this.Position.Y + this.spriteFrame.Height * 0.6f),
+                                            800, new Vector2(-1, 0)));
 
                                     // Set the timer for cooldown
                                     previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerinfo.activePlayer.ASPD * 12) * 0.0006f) + 0.05f;

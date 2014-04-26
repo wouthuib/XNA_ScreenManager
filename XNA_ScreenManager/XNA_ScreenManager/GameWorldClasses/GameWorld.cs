@@ -39,12 +39,26 @@ namespace XNA_ScreenManager.MapClasses
         // Map entities
         Texture2D Background;
         public List<Entity> listEntity = new List<Entity>();
-        List<Effect> listEffect = new List<Effect>();
+        public List<Effect> listEffect = new List<Effect>();
 
-        // dynamic items
-        ArrowProperties arrowprop = new ArrowProperties(false, null, Vector2.Zero, 0, new Vector2(0, 0));
-        MonsterProperties mobsprop = new MonsterProperties(false, null, Vector2.Zero, 0, 0, 0);
+        public List<Entity> newEntity = new List<Entity>();
+        public List<Effect> newEffect = new List<Effect>();
 
+        public Entity Player 
+        { 
+            get 
+            {
+                Entity return_player = null;
+                foreach (Entity player in listEntity)
+                {
+                    if(player.EntityType == EntityType.Player)
+                        return_player = player;
+                }
+
+                return return_player;
+            } 
+        }
+        
         public bool Active { get; set; }
         public bool Paused { get; set; }
         #endregion
@@ -123,6 +137,22 @@ namespace XNA_ScreenManager.MapClasses
         {
             if (Active && !Paused)
             {
+                // Create new Entity instances
+                if (newEntity.Count > 0)
+                {
+                    foreach (var entity in newEntity)
+                        listEntity.Add(entity);
+                    newEntity.Clear();
+                }
+
+                // Create new Effect instances
+                if (newEffect.Count > 0)
+                {
+                    foreach (var effect in newEffect)
+                        listEffect.Add(effect);
+                    newEffect.Clear();
+                }
+
                 // Update Player and other Entities
                 foreach (Entity obj in listEntity)
                     if(obj.EntityType != EntityType.Player)
@@ -157,9 +187,6 @@ namespace XNA_ScreenManager.MapClasses
                     if (obj.KeepAliveTime == 0)
                         listEffect.Remove(obj);
                 }
-                
-                // create new entities
-                createEntities();
             }
         }
 
@@ -712,106 +739,7 @@ namespace XNA_ScreenManager.MapClasses
 
             LoadEntities();
         }
-
-        // actual creation and add to list voids
-        private void createEntities()
-        {
-            if (arrowprop.active)
-            {
-                arrowprop.active = false;
-                listEntity.Add(new Arrow(Content.Load<Texture2D>(arrowprop.sprite), arrowprop.position, arrowprop.speed, arrowprop.direction));
-            }
-            else if (mobsprop.active)
-            {
-                mobsprop.active = false;
-                listEntity.Add(new MonsterSprite(
-                                    mobsprop.monsterID,
-                                    mobsprop.sprite,
-                                    new Vector2(mobsprop.position.X, mobsprop.position.Y),
-                                    new Vector2(mobsprop.borderL, mobsprop.borderR)
-                                    ));
-            }
-        }
-        public void createEffects(EffectType type, Vector2 getposition, SpriteEffects effect = SpriteEffects.None, int value1 = 0, int value2 = 1)
-        {
-            switch(type)
-            {
-                case EffectType.DamageBaloon:
-                    listEffect.Add(new DamageBaloon(Content.Load<Texture2D>(@"gfx\effects\damage_counter" + value2.ToString()),
-                                            getposition, value1));
-                break;
-                case EffectType.ItemSprite:
-                    listEffect.Add(new ItemSprite(getposition, value1));
-                    break;
-                case EffectType.WeaponSwing:
-                    if (value1 == 0)
-                        listEffect.Add(new WeaponSwing(getposition, WeaponSwingType.Stab01, effect));
-                    else if (value1 == 1)
-                        listEffect.Add(new WeaponSwing(getposition, WeaponSwingType.Swing01, effect));
-                    else if (value1 == 2)
-                        listEffect.Add(new WeaponSwing(getposition, WeaponSwingType.Swing02, effect));
-                    else if (value1 == 3)
-                        listEffect.Add(new WeaponSwing(getposition, WeaponSwingType.Swing03, effect));
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        // public creation request voids
-        public void createArrow(Vector2 arg0, float arg1, Vector2 arg2)
-        {
-            arrowprop.active = true;
-            arrowprop.sprite = @"gfx\gameobjects\arrow";
-            arrowprop.position = arg0;
-            arrowprop.speed = arg1;
-            arrowprop.direction = arg2;
-        }
-        public void createMonster(Texture2D arg0, Vector2 arg1, int arg2, int arg3, int arg4)
-        {
-            mobsprop.active = true;
-            mobsprop.sprite = arg0;
-            mobsprop.position = arg1;
-            mobsprop.borderL = arg2;
-            mobsprop.borderR = arg3;
-            mobsprop.monsterID = arg4;
-        }
-
-        // Structures to store information
-        private struct ArrowProperties
-        {
-            public bool active;
-            public string sprite;
-            public Vector2 position;
-            public float speed;
-            public Vector2 direction;
-
-            public ArrowProperties(bool arg0, string arg1, Vector2 arg2, float arg3, Vector2 arg4)
-            {
-                active = arg0;
-                sprite = arg1;
-                position = arg2;
-                speed = arg3;
-                direction = arg4;
-            }
-        }
-        private struct MonsterProperties
-        {
-            public bool active;
-            public Texture2D sprite;
-            public Vector2 position;
-            public int borderL, borderR, monsterID;
-
-            public MonsterProperties(bool arg0, Texture2D arg1, Vector2 arg2, int arg3, int arg4, int arg5)
-            {
-                active = arg0;
-                sprite = arg1;
-                position = arg2;
-                borderL = arg3;
-                borderR = arg4;
-                monsterID = arg5;
-            }
-        }
+        
         #endregion
     }
 }

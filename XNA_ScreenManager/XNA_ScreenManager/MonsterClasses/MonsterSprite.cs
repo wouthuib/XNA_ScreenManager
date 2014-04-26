@@ -7,6 +7,8 @@ using XNA_ScreenManager.ItemClasses;
 using System.Collections.Generic;
 using System.Reflection;
 using XNA_ScreenManager.MonsterClasses;
+using XNA_ScreenManager.GameWorldClasses.Entities;
+using XNA_ScreenManager.ScreenClasses.MainClasses;
 
 namespace XNA_ScreenManager.CharacterClasses
 {
@@ -314,8 +316,10 @@ namespace XNA_ScreenManager.CharacterClasses
                     this.HP -= damage;
 
                     // create a damage baloon
-                    world.createEffects(EffectType.DamageBaloon, new Vector2((this.position.X + this.SpriteFrame.Width * 0.45f) - damage.ToString().Length * 5,
-                                                             this.position.Y + this.SpriteFrame.Height * 0.20f), SpriteEffects.None, damage);
+                    world.newEffect.Add(new DamageBaloon(
+                        ResourceManager.GetInstance.Content.Load<Texture2D>(@"gfx\effects\damage_counter1"),
+                        new Vector2((this.position.X + this.SpriteFrame.Width * 0.45f) - damage.ToString().Length * 5, 
+                                     this.position.Y + this.SpriteFrame.Height * 0.20f), damage));
 
                     // change state (freeze or kill)
                     if (this.HP <= 0)
@@ -328,9 +332,9 @@ namespace XNA_ScreenManager.CharacterClasses
                         {
                             // drop[0] = item, drop[1] = chance in %
                             if (Randomizer.generateRandom(0, 100) <= drop[1])
-                                world.createEffects(EffectType.ItemSprite, 
-                                new Vector2(Randomizer.generateRandom((int)this.position.X + 20, (int)this.position.X + this.spriteFrame.Width - 20),
-                                        (int)(this.position.Y + this.spriteFrame.Height * 0.70f)), SpriteEffects.None, drop[0]);
+                                world.newEffect.Add(new ItemSprite(
+                                    new Vector2(Randomizer.generateRandom((int)this.position.X + 20, (int)this.position.X + this.spriteFrame.Width - 20),
+                                        (int)(this.position.Y + this.spriteFrame.Height * 0.70f)), drop[0]));
                         }
 
                         // Give player EXP
@@ -405,7 +409,12 @@ namespace XNA_ScreenManager.CharacterClasses
                             world = GameWorld.GetInstance;
 
                         // respawn a new monster
-                        world.createMonster(sprite, resp_pos, (int)resp_bord.X, (int)resp_bord.Y, MonsterID);
+                        world.newEntity.Add(new MonsterSprite(
+                                    MonsterID,
+                                    sprite,
+                                    resp_pos,
+                                    new Vector2((int)resp_bord.X, (int)resp_bord.Y)
+                                    ));
 
                         // remove monster from map
                         this.keepAliveTime = 0;
@@ -455,9 +464,9 @@ namespace XNA_ScreenManager.CharacterClasses
 
             previousAttackTimeSec = currentAttackTimeSec;
 
-            // check for monster collisions
-            foreach (Entity player in world.listEntity)
-            {
+
+            Entity player = world.Player;
+
                 if (player.EntityType == EntityType.Player)
                 {
                     if (new Rectangle(
@@ -495,14 +504,15 @@ namespace XNA_ScreenManager.CharacterClasses
                                 if (damage > 0)
                                     player.State = EntityState.Hit;
 
-                                // create a damage baloon
-                                world.createEffects(EffectType.DamageBaloon, new Vector2((player.Position.X + player.SpriteFrame.Width * 0.45f) - damage.ToString().Length * 5,
-                                                                         player.Position.Y + player.SpriteFrame.Height * 0.20f), SpriteEffects.None, damage, 2);
+                                world.newEffect.Add(new DamageBaloon(
+                                    ResourceManager.GetInstance.Content.Load<Texture2D>(@"gfx\effects\damage_counter2"),
+                                    new Vector2((player.Position.X + player.SpriteFrame.Width * 0.45f) - damage.ToString().Length * 5,
+                                                 player.Position.Y + player.SpriteFrame.Height * 0.20f),
+                                        damage));
                             }
                         }
                     }
                 }
-            }
 
             // reset timer when no player collision
             if (currentAttackTimeSec == previousAttackTimeSec)
