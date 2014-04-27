@@ -509,9 +509,13 @@ namespace XNA_ScreenManager.ScriptClasses
                         noConditions = true;
                     }
                 }
-
-                activeLine++; // line completed goto next line
+                
                 clearStringBuilders();
+
+                if (activeLine < lines.Count - 1)
+                    activeLine++;                   // line completed goto next line
+                else                                // In case no matching NPC found.
+                    this.Property = "end";
             }
         }
 

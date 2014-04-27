@@ -184,6 +184,10 @@ namespace XNA_ScreenManager.ScreenClasses
                             break;
                     }
                 }
+                else if (scriptManager.Property == "end")
+                {
+                    scriptActive = true;
+                }
             }
         }
 
@@ -213,7 +217,8 @@ namespace XNA_ScreenManager.ScreenClasses
             {
                 if (t_index == t_complete.Length) // Close
                 {
-                    if (scriptManager.Property == "close")
+                    if (scriptManager.Property == "close" ||
+                        scriptManager.Property == "end")
                     {
                         scriptManager.clearInstance();
                         clearStringBuilders();

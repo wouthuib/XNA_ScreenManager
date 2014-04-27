@@ -18,28 +18,28 @@ namespace XNA_ScreenManager
     {
         #region properties
         // The Gameworld
-        GameWorld world;
-        ResourceManager resourcemanager = ResourceManager.GetInstance;
+        protected GameWorld world;
+        protected ResourceManager resourcemanager = ResourceManager.GetInstance;
 
         // Keyboard- and Mousestate
-        KeyboardState keyboardStateCurrent, keyboardStatePrevious;
+        protected KeyboardState keyboardStateCurrent, keyboardStatePrevious;
 
         // Player inventory
-        Inventory inventory = Inventory.Instance;
-        ItemStore itemStore = ItemStore.Instance;
-        Equipment equipment = Equipment.Instance;
-        ScriptInterpreter scriptManager = ScriptInterpreter.Instance;
-        PlayerStore playerinfo = PlayerStore.Instance;
+        protected Inventory inventory = Inventory.Instance;
+        protected ItemStore itemStore = ItemStore.Instance;
+        protected Equipment equipment = Equipment.Instance;
+        protected ScriptInterpreter scriptManager = ScriptInterpreter.Instance;
+        protected PlayerStore playerinfo = PlayerStore.Instance;
 
         // link to world content manager
-        ContentManager Content;
+        protected ContentManager Content;
 
         // Player properties
         public Rectangle spriteScale;
         public int spriteWidth = 80;
         public int spriteHeight = 80;
         public Vector2 spriteOfset = new Vector2(80,0);
-        private SpriteEffects spriteEffect = SpriteEffects.None;
+        protected SpriteEffects spriteEffect = SpriteEffects.None;
         private float transperancy = 1;
 
         // Sprite Animation Properties
@@ -122,6 +122,15 @@ namespace XNA_ScreenManager
             {
                 switch (state)
                 {
+                    #region state skillactive
+                    case EntityState.Skill:
+
+                        // Apply Gravity 
+                        // Position += new Vector2(0, 1) * 250 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                        break;
+
+                    #endregion
                     #region state cooldown
                     case EntityState.Cooldown:
 
@@ -263,7 +272,8 @@ namespace XNA_ScreenManager
                         {
                             spriteFrame.X += spriteWidth;
 
-                            if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.LeftAlt))
+                            if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.LeftAlt)
+                                || keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.D1))
                             {
                                 // Later = charge arrow skill
                                 if (spriteFrame.X > spriteOfset.X + (spriteWidth * 1))
@@ -278,14 +288,14 @@ namespace XNA_ScreenManager
                                         world = GameWorld.GetInstance;
 
                                     // create and release an arrow
-                                    if(spriteEffect == SpriteEffects.FlipHorizontally)
-                                        world.newEntity.Add(new Arrow(Content.Load<Texture2D>(@"gfx\gameobjects\arrow"),
+                                    if (spriteEffect == SpriteEffects.FlipHorizontally)
+                                        world.newEffect.Add(new Arrow(Content.Load<Texture2D>(@"gfx\gameobjects\arrow"),
                                             new Vector2(this.Position.X, this.Position.Y + this.spriteFrame.Height * 0.6f),
-                                            800, new Vector2(1, 0)));
+                                            800, new Vector2(1, 0), Vector2.Zero));
                                     else
-                                        world.newEntity.Add(new Arrow(Content.Load<Texture2D>(@"gfx\gameobjects\arrow"),
+                                        world.newEffect.Add(new Arrow(Content.Load<Texture2D>(@"gfx\gameobjects\arrow"),
                                             new Vector2(this.Position.X, this.Position.Y + this.spriteFrame.Height * 0.6f),
-                                            800, new Vector2(-1, 0)));
+                                            800, new Vector2(-1, 0), Vector2.Zero));
 
                                     // Set the timer for cooldown
                                     previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerinfo.activePlayer.ASPD * 12) * 0.0006f) + 0.05f;
@@ -966,6 +976,13 @@ namespace XNA_ScreenManager
 
                 return false;
             }
+        }
+
+
+        public bool CheckKey(Microsoft.Xna.Framework.Input.Keys theKey)
+        {
+            KeyboardState keyboardStateCurrent = Keyboard.GetState();
+            return keyboardStatePrevious.IsKeyDown(theKey) && keyboardStateCurrent.IsKeyUp(theKey);
         }
     }
 }

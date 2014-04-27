@@ -240,6 +240,14 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
                     break;
             }
             #endregion
+
+            // get player jobclass
+            #region get player jobclass
+            if (propinfo.GetIndexParameters().Length == 0)
+                value = (StringCollection)propinfo.GetValue(properties[4], null);
+
+            this.newPlayer.Jobclass = value[properties[4].SelectedIndex].ToString();
+            #endregion
         }
 
         public override void Draw(GameTime gameTime)

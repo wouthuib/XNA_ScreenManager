@@ -124,18 +124,35 @@ namespace XNA_ScreenManager
 
         public void moveCamera()
         {
-            if ((world.playerSprite.Position.X - (gfxdevice.Viewport.Width / 2) > 0 &&
+
+            // follow player X
+            if (world.playerSprite.Position.X - (gfxdevice.Viewport.Width / 2) > 0 &&
                 world.playerSprite.Position.X + (gfxdevice.Viewport.Width / 2) < world.map.Width * world.map.TileWidth)
-                || cam._pos.X - (gfxdevice.Viewport.Width / 2) < 0)
             {
                 cam._pos.X = world.playerSprite.Position.X;
             }
+            else
+            {
+                // camera out of bound correction X
+                if (world.playerSprite.Position.X - (gfxdevice.Viewport.Width / 2) < 0)
+                    cam._pos.X = gfxdevice.Viewport.Width / 2;
+                else if (world.playerSprite.Position.X + (gfxdevice.Viewport.Width / 2) > world.map.Width * world.map.TileWidth)
+                    cam._pos.X = (world.map.Width * world.map.TileWidth) - (gfxdevice.Viewport.Width / 2);
+            }
 
-            if ((world.playerSprite.Position.Y - (gfxdevice.Viewport.Height / 2) > 0 &&
+            // follow player Y
+            if (world.playerSprite.Position.Y - (gfxdevice.Viewport.Height / 2) > 0 &&
                 world.playerSprite.Position.Y + (gfxdevice.Viewport.Height / 2) < world.map.Height * world.map.TileHeight)
-                || cam._pos.Y - (gfxdevice.Viewport.Height / 2) < 0)
             {
                 cam._pos.Y = world.playerSprite.Position.Y;
+            }
+            else
+            {
+                // camera out of bound correction Y
+                if (world.playerSprite.Position.Y - (gfxdevice.Viewport.Height / 2) < 0)
+                    cam._pos.Y = gfxdevice.Viewport.Height / 2;
+                else if (world.playerSprite.Position.Y + (gfxdevice.Viewport.Height / 2) > world.map.Height * world.map.TileHeight)
+                    cam._pos.Y = (world.map.Height * world.map.TileHeight) - (gfxdevice.Viewport.Height / 2);
             }
         }
 

@@ -28,22 +28,28 @@
   <object name="npc1" x="192" y="704">
    <properties>
     <property name="Face" value="npc01"/>
+    <property name="Frames" value="1"/>
+    <property name="Name" value="Weapon Merchant"/>
     <property name="OffsetX" value="225"/>
-    <property name="OffsetY" value="328"/>
+    <property name="OffsetY" value="358"/>
+    <property name="Script" value="victoria01"/>
     <property name="Texture" value="npc01"/>
     <property name="spriteSizeX" value="61"/>
-    <property name="spriteSizeY" value="113"/>
+    <property name="spriteSizeY" value="83"/>
    </properties>
    <ellipse/>
   </object>
   <object name="npc2" x="384" y="704">
    <properties>
     <property name="Face" value="npc01"/>
+    <property name="Frames" value="1"/>
+    <property name="Name" value="Clothes Merchant"/>
     <property name="OffsetX" value="288"/>
-    <property name="OffsetY" value="328"/>
+    <property name="OffsetY" value="358"/>
+    <property name="Script" value="victoria01"/>
     <property name="Texture" value="npc01"/>
     <property name="spriteSizeX" value="61"/>
-    <property name="spriteSizeY" value="113"/>
+    <property name="spriteSizeY" value="83"/>
    </properties>
    <ellipse/>
   </object>

@@ -12,6 +12,8 @@ using XNA_ScreenManager.PlayerClasses;
 using XNA_ScreenManager.ScreenClasses;
 using XNA_ScreenManager.GameWorldClasses.Entities;
 using XNA_ScreenManager.MonsterClasses;
+using XNA_ScreenManager.GameWorldClasses.Effects;
+using XNA_ScreenManager.PlayerClasses.JobClasses;
 
 
 namespace XNA_ScreenManager.MapClasses
@@ -33,7 +35,7 @@ namespace XNA_ScreenManager.MapClasses
         Camera2d cam;
 
         // Static Classes
-        PlayerStore playerInfo = PlayerStore.Instance;
+        PlayerStore playerStore = PlayerStore.Instance;
         ScreenManager screenManager = ScreenManager.Instance;
 
         // Map entities
@@ -114,21 +116,16 @@ namespace XNA_ScreenManager.MapClasses
                     Background = Content.Load<Texture2D>(@"gfx\background\" + property.Value);
             }
 
-            playerSprite = new PlayerSprite( //this,
-                (int)map.ObjectGroups["Hero"].Objects["hero"].X,
-                (int)map.ObjectGroups["Hero"].Objects["hero"].Y,
-                new Vector2(map.TileWidth, map.TileHeight));
+            playerSprite = new PlayerSprite(
+                    (int)map.ObjectGroups["Hero"].Objects["hero"].X,
+                    (int)map.ObjectGroups["Hero"].Objects["hero"].Y,
+                    new Vector2(map.TileWidth, map.TileHeight));
+
             listEntity.Add(playerSprite);
 
             ItemStore.Instance.loadItems(Content.RootDirectory + @"\itemDB\", "itemtable.bin");
             MonsterStore.Instance.loadMonster(Content.RootDirectory + @"\monsterDB\", "monstertable.bin");
             LoadEntities();
-
-            /*PlayerStore.Instance.addPlayer();
-
-            PlayerStore.Instance.activePlayer.body_sprite = @"gfx\player\body\player_basic";
-            PlayerStore.Instance.activePlayer.faceset_sprite = @"gfx\player\faceset\faceset01";
-            PlayerStore.Instance.activePlayer.hair_sprite = @"gfx\player\hairset\hairset01";*/
         }
         #endregion
 
@@ -153,17 +150,17 @@ namespace XNA_ScreenManager.MapClasses
                     newEffect.Clear();
                 }
 
-                // Update Player and other Entities
+                // Update non Player Entities (Monsters, NPC's)
                 foreach (Entity obj in listEntity)
                     if(obj.EntityType != EntityType.Player)
                         obj.Update(gameTime);
 
-                // Update player
+                // Update player Sprite
                 foreach (Entity obj in listEntity)
                     if (obj.EntityType == EntityType.Player)
                         obj.Update(gameTime);
                 
-                // Update Warp objects
+                // Update Effect objects (Warps, items, damage)
                 foreach (Effect obj in listEffect)
                     obj.Update(gameTime);
 
@@ -184,7 +181,7 @@ namespace XNA_ScreenManager.MapClasses
                 {
                     var obj = listEffect[i];
 
-                    if (obj.KeepAliveTime == 0)
+                    if (obj.KeepAliveTimer == 0)
                         listEffect.Remove(obj);
                 }
             }
@@ -192,6 +189,7 @@ namespace XNA_ScreenManager.MapClasses
 
         public void UpdateMapEntities(GameTime gameTime)
         {
+            #region map collisions
             string newmap = null;
             Vector2 newpos = Vector2.Zero;
             Vector2 campos = Vector2.Zero;
@@ -439,17 +437,17 @@ namespace XNA_ScreenManager.MapClasses
                     }
                 }
             }
+            #endregion
 
-            // First finish the foreach loop before cleaning 
-            // the list index and opening a new maps
-            if (newmap != null)
-            {
-                // read playersprite warptimer to start new map
-                if (playerSprite.Effect(gameTime))
-                {
-                    loadnewmap(newmap, newpos, campos);
-                }
-            }
+            #region events
+            // read playerinfo exp for level up
+            if (playerStore.activePlayer.Exp >= playerStore.activePlayer.NextLevelExp)
+                PlayerLevelUp();
+            
+            // read playersprite warptimer to start new map
+            if (newmap != null && playerSprite.Effect(gameTime))
+                loadnewmap(newmap, newpos, campos);
+            #endregion
         }
         #endregion
 
@@ -706,6 +704,7 @@ namespace XNA_ScreenManager.MapClasses
                 }
             }
         }
+        
         public void loadnewmap(string newmap, Vector2 newpos, Vector2 campos)
         {
             map = Map.Load(Path.Combine(Content.RootDirectory, @newmap), Content);
@@ -739,7 +738,63 @@ namespace XNA_ScreenManager.MapClasses
 
             LoadEntities();
         }
-        
+
+        private void PlayerLevelUp()
+        {
+            playerStore.activePlayer.Level++;
+            playerStore.activePlayer.Exp -= playerStore.activePlayer.NextLevelExp;
+            playerStore.activePlayer.NextLevelExp = (int)(playerStore.activePlayer.Level ^ 4 + (1000 * playerStore.activePlayer.Level));
+            listEffect.Add(new LevelUpEffect());
+        }
+
+        public void ChangeJobClass(PlayerInfo activePlayer)
+        {
+            // Remove Current Player
+            for (int i = 0; i < listEntity.Count; i++)
+                if (listEntity[i].EntityType == EntityType.Player)
+                    listEntity.Remove(listEntity[i]);
+
+            // Switch playerSprite
+            switch (activePlayer.Jobclass)
+            {
+                case "Bowman":
+                    playerSprite = new Bowman(
+                    (int)map.ObjectGroups["Hero"].Objects["hero"].X,
+                    (int)map.ObjectGroups["Hero"].Objects["hero"].Y,
+                    new Vector2(map.TileWidth, map.TileHeight));
+                    break;
+                case "Warrior":
+                    playerSprite = new Warrior(
+                    (int)map.ObjectGroups["Hero"].Objects["hero"].X,
+                    (int)map.ObjectGroups["Hero"].Objects["hero"].Y,
+                    new Vector2(map.TileWidth, map.TileHeight));
+                    break;
+                case "Magician":
+                    playerSprite = new Magician(
+                    (int)map.ObjectGroups["Hero"].Objects["hero"].X,
+                    (int)map.ObjectGroups["Hero"].Objects["hero"].Y,
+                    new Vector2(map.TileWidth, map.TileHeight));
+                    break;
+                case "Thief":
+                    playerSprite = new Thief(
+                    (int)map.ObjectGroups["Hero"].Objects["hero"].X,
+                    (int)map.ObjectGroups["Hero"].Objects["hero"].Y,
+                    new Vector2(map.TileWidth, map.TileHeight));
+                    break;
+                case "Pirate":
+                    playerSprite = new Pirate(
+                    (int)map.ObjectGroups["Hero"].Objects["hero"].X,
+                    (int)map.ObjectGroups["Hero"].Objects["hero"].Y,
+                    new Vector2(map.TileWidth, map.TileHeight));
+                    break;
+                default:
+                    break;
+            }
+
+            // Add new player Instance to worldmap
+            listEntity.Add(playerSprite);
+        }
+
         #endregion
     }
 }

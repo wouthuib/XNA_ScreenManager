@@ -81,6 +81,8 @@ namespace XNA_ScreenManager.PlayerClasses
             }
         }
 
+        public Vector2 Position;
+
         #endregion
 
         #region properties
@@ -126,7 +128,7 @@ namespace XNA_ScreenManager.PlayerClasses
             get { return this.gold; }
             set { this.gold = value; }
         }
-#endregion
+        #endregion
 
         #region battleinfo
         // Battle Info
@@ -319,20 +321,20 @@ namespace XNA_ScreenManager.PlayerClasses
         public PlayerInfo()
         {
             this.name = "New Player";
-            this.jobclass = "Fighter";
+            this.jobclass = "Archer";
 
             // temporary parameters these should eventually be imported from the Monster Database
             this.HP = 2000;
             this.MAXHP = 2000;
             this.SP = 500;
             this.MAXSP = 500;
-            this.Exp = 1;
-            this.NextLevelExp = 1000;
+            this.Level = 1;
+            this.Exp = 0;
+            this.NextLevelExp = (int)(Level ^ 4 + (1000 * Level));
             this.Strength = 10;
             this.Dexterity = 10;
             this.Luck = 1;
             this.Agility = 10;
-            this.Level = 1;
 
             this.body_sprite = @"gfx\player\body\player_basic";
             this.faceset_sprite = @"gfx\player\faceset\faceset01";

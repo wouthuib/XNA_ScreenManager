@@ -49,6 +49,7 @@
    </properties>
   </object>
   <object name="wall22" x="4848" y="400" width="125" height="6"/>
+  <object name="wall23" x="4192" y="848" width="115" height="6"/>
  </objectgroup>
  <objectgroup name="Slopes" width="186" height="34">
   <object name="slope1" x="544" y="694" width="96" height="64">
@@ -78,115 +79,115 @@
   <object name="npc1" x="2685" y="666">
    <properties>
     <property name="Face" value="rang"/>
+    <property name="Frames" value="1"/>
+    <property name="Name" value="Young Man"/>
     <property name="OffsetX" value="58"/>
     <property name="OffsetY" value="18"/>
+    <property name="Script" value="victoria01"/>
     <property name="Texture" value="npc01"/>
     <property name="spriteSizeX" value="60"/>
     <property name="spriteSizeY" value="78"/>
-    <property name="Frames" value="1"/>
-    <property name="Name" value="Young Man"/>
-    <property name="Script" value="victoria01"/>
    </properties>
    <ellipse/>
   </object>
   <object name="npc2" x="2336" y="672">
    <properties>
     <property name="Face" value="npc01"/>
+    <property name="Frames" value="1"/>
+    <property name="Name" value="Ranger"/>
     <property name="OffsetX" value="600"/>
     <property name="OffsetY" value="25"/>
+    <property name="Script" value="victoria01"/>
     <property name="Texture" value="npc01"/>
     <property name="spriteSizeX" value="60"/>
     <property name="spriteSizeY" value="70"/>
-    <property name="Frames" value="1"/>
-    <property name="Name" value="Ranger"/>
-    <property name="Script" value="victoria01"/>
    </properties>
    <ellipse/>
   </object>
-  <object name="npc3" x="1376" y="627">
+  <object name="npc3" x="1408" y="691">
    <properties>
     <property name="Face" value="rang"/>
+    <property name="Frames" value="7"/>
+    <property name="Name" value="Lucas"/>
     <property name="OffsetX" value="0"/>
     <property name="OffsetY" value="0"/>
+    <property name="Script" value="victoria01"/>
     <property name="Texture" value="lucas"/>
     <property name="spriteSizeX" value="66"/>
     <property name="spriteSizeY" value="70"/>
-    <property name="Frames" value="7"/>
-    <property name="Name" value="Lucas"/>
-    <property name="Script" value="victoria01"/>
    </properties>
    <ellipse/>
   </object>
   <object name="npc4" x="576" y="435">
    <properties>
     <property name="Face" value="npc01"/>
+    <property name="Frames" value="1"/>
+    <property name="Name" value="Herman"/>
     <property name="OffsetX" value="16"/>
     <property name="OffsetY" value="380"/>
+    <property name="Script" value="victoria01"/>
     <property name="Texture" value="npc01"/>
     <property name="spriteSizeX" value="65"/>
     <property name="spriteSizeY" value="71"/>
-    <property name="Frames" value="1"/>
-    <property name="Name" value="Herman"/>
-    <property name="Script" value="victoria01"/>
    </properties>
    <ellipse/>
   </object>
-  <object name="npc5" x="4416" y="768">
+  <object name="npc5" x="4352" y="288">
    <properties>
     <property name="Face" value="rang"/>
+    <property name="Frames" value="10"/>
+    <property name="Name" value="Mai"/>
     <property name="OffsetX" value="0"/>
     <property name="OffsetY" value="0"/>
+    <property name="Script" value="victoria01"/>
     <property name="Texture" value="mai"/>
     <property name="spriteSizeX" value="60"/>
     <property name="spriteSizeY" value="80"/>
-    <property name="Frames" value="10"/>
-    <property name="Name" value="Mai"/>
-    <property name="Script" value="victoria01"/>
    </properties>
    <ellipse/>
   </object>
-  <object name="npc6" x="4640" y="800">
+  <object name="npc6" x="4640" y="813">
    <properties>
     <property name="Face" value="npc01"/>
+    <property name="Frames" value="7"/>
+    <property name="Name" value="Pan"/>
     <property name="OffsetX" value="0"/>
     <property name="OffsetY" value="0"/>
+    <property name="Script" value="victoria01"/>
     <property name="Texture" value="pan"/>
     <property name="spriteSizeX" value="75"/>
     <property name="spriteSizeY" value="69"/>
-    <property name="Frames" value="7"/>
-    <property name="Name" value="Pan"/>
-     <property name="Script" value="victoria01"/>
    </properties>
    <ellipse/>
   </object>
-  <object name="npc7" x="5504" y="768">
+  <object name="npc7" x="5504" y="813">
    <properties>
     <property name="Face" value="rang"/>
+    <property name="Frames" value="3"/>
+    <property name="Name" value="Mina"/>
     <property name="OffsetX" value="0"/>
     <property name="OffsetY" value="0"/>
+    <property name="Script" value="victoria01"/>
     <property name="Texture" value="mina"/>
     <property name="spriteSizeX" value="59"/>
     <property name="spriteSizeY" value="69"/>
-    <property name="Frames" value="3"/>
-    <property name="Name" value="Mina"/>
-    <property name="Script" value="victoria01"/>
    </properties>
    <ellipse/>
   </object>
-   <object name="npc8" x="5000" y="768">
-     <properties>
-       <property name="Face" value="rang"/>
-       <property name="OffsetX" value="0"/>
-       <property name="OffsetY" value="0"/>
-       <property name="Texture" value="chief stan"/>
-       <property name="spriteSizeX" value="51"/>
-       <property name="spriteSizeY" value="73"/>
-       <property name="Frames" value="2"/>
-       <property name="Name" value="Chief Stan"/>
-       <property name="Script" value="victoria01"/>
-     </properties>
-     <ellipse/>
-   </object>
+  <object name="npc8" x="4680" y="288">
+   <properties>
+    <property name="Face" value="rang"/>
+    <property name="Frames" value="2"/>
+    <property name="Name" value="Chief Stan"/>
+    <property name="OffsetX" value="0"/>
+    <property name="OffsetY" value="0"/>
+    <property name="Script" value="victoria01"/>
+    <property name="Texture" value="chief stan"/>
+    <property name="spriteSizeX" value="51"/>
+    <property name="spriteSizeY" value="73"/>
+   </properties>
+   <ellipse/>
+  </object>
  </objectgroup>
  <objectgroup name="Monsters" width="65" height="69">
   <object name="mob01" x="1592" y="672">
@@ -205,7 +206,7 @@
    </properties>
    <ellipse/>
   </object>
-  <object name="mob03" x="4480" y="768">
+  <object name="mob03" x="4480" y="784">
    <properties>
     <property name="BorderL" value="130"/>
     <property name="BorderR" value="150"/>
@@ -213,7 +214,7 @@
    </properties>
    <ellipse/>
   </object>
-  <object name="mob04" x="640" y="672">
+  <object name="mob04" x="672" y="672">
    <properties>
     <property name="BorderL" value="10"/>
     <property name="BorderR" value="30"/>
@@ -221,7 +222,7 @@
    </properties>
    <ellipse/>
   </object>
-  <object name="mob05" x="5120" y="768">
+  <object name="mob05" x="5120" y="784">
    <properties>
     <property name="BorderL" value="140"/>
     <property name="BorderR" value="170"/>
@@ -229,7 +230,7 @@
    </properties>
    <ellipse/>
   </object>
-  <object name="mob06" x="3360" y="448">
+  <object name="mob06" x="3360" y="464">
    <properties>
     <property name="BorderL" value="95"/>
     <property name="BorderR" value="115"/>

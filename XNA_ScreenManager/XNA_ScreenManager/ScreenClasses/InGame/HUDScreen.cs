@@ -128,7 +128,8 @@ namespace XNA_ScreenManager.ScreenClasses
                     Color.White * 0.75f);
                 spriteBatch.Draw(Border, new Vector2(position.X + 40, position.Y + 55), Color.White * 0.75f);
 
-                string percentExp = string.Format("{0:0.00}", PlayerStore.Instance.activePlayer.Exp * 100 / PlayerStore.Instance.activePlayer.NextLevelExp) + "%";
+                string percentExp = string.Format("{0:0.00}", 
+                    Math.Round(Decimal.Divide((PlayerStore.Instance.activePlayer.Exp * 100), PlayerStore.Instance.activePlayer.NextLevelExp), 2) + "%");
                 spriteBatch.DrawString(smallFont, percentExp.ToString(),
                     new Vector2((Position.X + 40 + Border.Width * 0.5f) - (smallFont.MeasureString(percentExp).X * 0.5f), Position.Y + 55),
                     Color.White);

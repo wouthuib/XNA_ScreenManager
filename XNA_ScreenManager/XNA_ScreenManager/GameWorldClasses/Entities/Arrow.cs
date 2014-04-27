@@ -1,64 +1,77 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using XNA_ScreenManager.CharacterClasses;
+using XNA_ScreenManager.MapClasses;
+using XNA_ScreenManager.ScreenClasses.MainClasses;
 
 namespace XNA_ScreenManager.PlayerClasses
 {
-    class Arrow : Entity
+    class Arrow : XNA_ScreenManager.MapClasses.Effect
     {
         // Drawing properties
         private Vector2 spriteOfset = new Vector2(90, 0);
-        private SpriteEffects spriteEffect;
         private float Speed;
-        private Vector2 Direction;
-        private bool Activate = false;
+        private Vector2 Direction, Curving;
 
-        public Arrow(Texture2D texture, Vector2 position, float speed, Vector2 direction)
+        public Arrow(Texture2D texture, Vector2 position, float speed, Vector2 direction, Vector2 curving)
             : base()
         {
             // Derived properties
-            Active = true;
             sprite = texture;
             SpriteFrame = new Rectangle(0, 0, sprite.Width, sprite.Height);
             Position = position;
-            OldPosition = position;
             Speed = speed;
             Direction = direction;
-            entityType = EntityType.Arrow;
+            this.size = new Vector2(0.5f, 0.5f);
+            this.Curving = curving;
+
+            keepAliveTimer = (float)ResourceManager.GetInstance.
+                            gameTime.TotalGameTime.Seconds + 0.48f;
 
             if (Direction.X >= 1)
-                spriteEffect = SpriteEffects.FlipHorizontally;
+                sprite_effect = SpriteEffects.FlipHorizontally;
             else
-                spriteEffect = SpriteEffects.None;
+                sprite_effect = SpriteEffects.None;
         }
 
         public override void Update(GameTime gameTime)
         {
-            if (!Activate)
-            {
-                KeepAliveTime = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.48f;
-                Activate = true;
-            }
-
-            // Remove Arrow Timer
-            if (KeepAliveTime > 0)
-                KeepAliveTime -= (float)gameTime.ElapsedGameTime.TotalSeconds;
-            else
-                KeepAliveTime = 0;
-
-            // Move the Arrow
-            OldPosition = Position;
-
             // Arrow speed
-            Position += Direction * Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            Position += (Direction + Curving) * Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            CollisionCheck();
+
+            // base Effect Update
+            base.Update(gameTime);
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
+        private void CollisionCheck()
         {
-            if (Active)
-                spriteBatch.Draw(sprite, new Rectangle((int)Position.X, (int)Position.Y, 
-                    (int)(SpriteFrame.Width * 0.5f), (int)(SpriteFrame.Height * 0.5f)),
-                    SpriteFrame, Color.White, 0f, Vector2.Zero, spriteEffect, 0f);
+            foreach(var entity in GameWorld.GetInstance.listEntity)
+            {
+                if (entity.EntityType == EntityType.Monster)
+                {
+                    if (new Rectangle((int)entity.Position.X + (int)(entity.SpriteFrame.Width * 0.30f),
+                                          (int)entity.Position.Y + (int)(entity.SpriteFrame.Height * 0.45f),
+                                          (int)entity.SpriteFrame.Width - (int)(entity.SpriteFrame.Width * 0.30f),
+                                          (int)entity.SpriteFrame.Height - (int)(entity.SpriteFrame.Height * 0.45f)).
+                            Intersects(
+                                new Rectangle((int)this.Position.X + (int)(this.SpriteFrame.Width * 0.45f),
+                                    (int)this.Position.Y + (int)(this.SpriteFrame.Height * 0.45f),
+                                    (int)this.SpriteFrame.Width - (int)(this.SpriteFrame.Width * 0.45f),
+                                    (int)this.SpriteFrame.Height - (int)(this.SpriteFrame.Height * 0.45f))))
+                    {
+                        // make the monster suffer :-)
+                        // and remove the arrow
+                        if (entity.State != EntityState.Died &&
+                            entity.State != EntityState.Spawn)
+                        {
+                            entity.State = EntityState.Hit;
+                            this.keepAliveTimer = 0;
+                        }
+                    }
+                }
+            }
         }
     }
 }

@@ -13,6 +13,7 @@ namespace XNA_ScreenManager.CharacterClasses
         Stab,
         Shoot,
         Cooldown,
+        Skill,
         Sit,
         Rope,
         Ladder,

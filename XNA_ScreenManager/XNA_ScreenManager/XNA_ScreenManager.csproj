@@ -124,6 +124,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GameWorldClasses\Effects\LevelUpEffect.cs" />
     <Compile Include="GameWorldClasses\Entities\Entity.cs" />
     <Compile Include="GameWorldClasses\Entities\WeaponSwing.cs" />
     <Compile Include="MonsterClasses\Monster.cs" />
@@ -141,8 +142,14 @@
     <Compile Include="GameWorldClasses\Entities\Warp.cs" />
     <Compile Include="MonsterClasses\MonsterStore.cs" />
     <Compile Include="GameWorldClasses\Entities\Arrow.cs" />
+    <Compile Include="PlayerClasses\JobClasses\Bowman.cs" />
+    <Compile Include="PlayerClasses\JobClasses\Magician.cs" />
+    <Compile Include="PlayerClasses\JobClasses\Pirate.cs" />
+    <Compile Include="PlayerClasses\JobClasses\Thief.cs" />
+    <Compile Include="PlayerClasses\JobClasses\Warrior.cs" />
     <Compile Include="PlayerClasses\PlayerInfo.cs" />
     <Compile Include="PlayerClasses\PlayerStore.cs" />
+    <Compile Include="PlayerClasses\SkillSlots.cs" />
     <Compile Include="ScreenClasses\InGame\ActionScreen.cs" />
     <Compile Include="ScreenClasses\InGame\EquipmentMenuScreen.cs" />
     <Compile Include="ScreenClasses\InGame\ShopMenuScreen.cs" />

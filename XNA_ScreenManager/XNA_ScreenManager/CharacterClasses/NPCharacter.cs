@@ -142,7 +142,8 @@ namespace XNA_ScreenManager.CharacterClasses
                     SpriteFrame, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0f);
 
                 // draw NPC rectangle
-                Texture2D rect = new Texture2D(world.gfxdevice, (int)(spriteFont.MeasureString(this.entityName).X), (int)(spriteFont.MeasureString(this.entityName).Y));
+                Texture2D rect = new Texture2D(ResourceManager.GetInstance.gfxdevice, 
+                    (int)(spriteFont.MeasureString(this.entityName).X), (int)(spriteFont.MeasureString(this.entityName).Y));
 
                 Color[] data = new Color[(int)(spriteFont.MeasureString(this.entityName).X) * (int)(spriteFont.MeasureString(this.entityName).Y)];
                 for (int i = 0; i < data.Length; ++i) data[i] = Color.Black;

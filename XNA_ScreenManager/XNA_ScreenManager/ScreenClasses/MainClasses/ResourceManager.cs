@@ -14,6 +14,7 @@ namespace XNA_ScreenManager.ScreenClasses.MainClasses
         public SpriteBatch spriteBatch = null;
         public ContentManager Content;
         public GraphicsDevice gfxdevice;
+        public GameTime gameTime;
 
         private static ResourceManager mInstance;
         private static System.Object _mutex = new System.Object();
@@ -23,6 +24,7 @@ namespace XNA_ScreenManager.ScreenClasses.MainClasses
             spriteBatch = (SpriteBatch)game.Services.GetService(typeof(SpriteBatch));
             Content = (ContentManager)game.Services.GetService(typeof(ContentManager));
             gfxdevice = (GraphicsDevice)game.Services.GetService(typeof(GraphicsDevice));
+            gameTime = (GameTime)game.Services.GetService(typeof(GameTime));
         }
 
         public static ResourceManager CreateInstance(Game game)

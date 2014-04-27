@@ -21,8 +21,6 @@ namespace XNA_ScreenManager.ItemClasses
         Vector2 spritesize = new Vector2(48, 48);
         Vector2 circleOrigin = Vector2.Zero;
 
-        private float transperant = 0;
-        private float angle = 1;
         private bool angledirection = false;
         #endregion
 
@@ -48,7 +46,9 @@ namespace XNA_ScreenManager.ItemClasses
                 (int)spritesize.X, (int)spritesize.Y);
 
             //this.SpriteFrame = new Rectangle(60, 10, 34, 34);
-            circleOrigin = new Vector2(SpriteFrame.Width * 0.5f, SpriteFrame.Height * 0.5f);
+            transperant = 0;
+            angle = 1;
+            origin = new Vector2(SpriteFrame.Width * 0.5f, SpriteFrame.Height * 0.5f);
         }
 
         public void pickupItem()
@@ -57,17 +57,14 @@ namespace XNA_ScreenManager.ItemClasses
             inventory.addItem(this.item);
 
             // remove this sprite
-            this.KeepAliveTime = 0;
+            this.keepAliveTimer = 0;
         }
 
         public override void Update(GameTime gameTime)
         {
             // Start ItemSprite (default is -1)
-            if (KeepAliveTime < 0)
-                KeepAliveTime = (float)gameTime.TotalGameTime.Seconds + 20;
-
-            // Remove ItemSprite Timer
-            KeepAliveTime -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (keepAliveTimer < 0 && !settimer)
+                keepAliveTimer = (float)gameTime.TotalGameTime.Seconds + 10;
 
             // Make the item slowly appear
             if (transperant < 1)
@@ -97,13 +94,9 @@ namespace XNA_ScreenManager.ItemClasses
                     (int)SpriteFrame.Width, (int)SpriteFrame.Height)) == true && transperant >= 1)
                 pickupItem();
 
-        }
+            // base Effect Update
+            base.Update(gameTime);
 
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-           spriteBatch.Draw(sprite, new Rectangle((int)Position.X, (int)Position.Y,
-                    (int)SpriteFrame.Width, (int)SpriteFrame.Height),
-                    SpriteFrame, Color.White * transperant, angle, circleOrigin, SpriteEffects.None, 0f);
         }
     }
 }

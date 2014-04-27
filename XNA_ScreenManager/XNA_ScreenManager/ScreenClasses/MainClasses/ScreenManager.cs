@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using XNA_ScreenManager.ScreenClasses.InGame;
 using XNA_ScreenManager.ScreenClasses.Menus;
 using XNA_ScreenManager.PlayerClasses;
+using XNA_ScreenManager.MapClasses;
 
 namespace XNA_ScreenManager.ScreenClasses
 {
@@ -151,9 +152,12 @@ namespace XNA_ScreenManager.ScreenClasses
                         activeScreen.Show();
                         break;
                     case 1:
-                        activeScreen.Hide();
-                        activeScreen = actionScreen;
-                        actionScreen.Show();
+                        if (PlayerStore.Instance.Count > 0)
+                        {
+                            activeScreen.Hide();
+                            activeScreen = actionScreen;
+                            actionScreen.Show();
+                        }
                         break;
                     case 2:
                         activeScreen.Hide();
@@ -320,8 +324,11 @@ namespace XNA_ScreenManager.ScreenClasses
                 switch (selectCharScreen.SelectedIndex)
                 {
                     case 0:
-                        selectCharScreen.menu.StartIndex = 3;
-                        selectCharScreen.menu.EndIndex = 5;
+                        if (PlayerStore.Instance.Count > 0)
+                        {
+                            selectCharScreen.menu.StartIndex = 3;
+                            selectCharScreen.menu.EndIndex = 5;
+                        }
                         break;
                     case 1:
                         if (createCharScreen.initize())
@@ -339,6 +346,7 @@ namespace XNA_ScreenManager.ScreenClasses
                         selectCharScreen.menu.SelectedIndex = 0;
                         selectCharScreen.menu.StartIndex = 0;
                         selectCharScreen.menu.EndIndex = 3;
+                        GameWorld.GetInstance.ChangeJobClass(PlayerStore.Instance.activePlayer);
                         activeScreen.Hide();
                         activeScreen = actionScreen;
                         activeScreen.Show();

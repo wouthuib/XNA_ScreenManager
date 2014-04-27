@@ -13,7 +13,6 @@ namespace XNA_ScreenManager.MapClasses
         float transperancy = 1;
         public Vector2 Velocity = new Vector2(0, 1);
         int previousDmgTimeMSec = 0, previousDmgTimeSec = 0;
-        bool settimer = false;
 
         public DamageBaloon(Texture2D getsprite, Vector2 getposition, int getdamage)
             : base()
@@ -42,7 +41,7 @@ namespace XNA_ScreenManager.MapClasses
                 else
                 {
                     // will remove the object
-                    keepAliveTime = 0;
+                    KeepAliveTimer = 0;
                 }
             }
 
@@ -58,8 +57,6 @@ namespace XNA_ScreenManager.MapClasses
 
             // Apply Gravity 
             Position += new Vector2(0, 1) * 100 * (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-            base.Update(gameTime);
         }
 
         public override void Draw(SpriteBatch spriteBatch)

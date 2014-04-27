@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using XNA_ScreenManager.CharacterClasses;
 using XNA_ScreenManager.MapClasses;
+using XNA_ScreenManager.ScreenClasses.MainClasses;
 
 namespace XNA_ScreenManager.GameWorldClasses.Entities
 {
@@ -14,18 +15,12 @@ namespace XNA_ScreenManager.GameWorldClasses.Entities
         GameWorld world;
 
         WeaponSwingType swingtype;
-        SpriteEffects sprite_effect;
         Vector2 spritesize = new Vector2(48, 48);
-        Vector2 circleOrigin = Vector2.Zero;
-
-        private float transperant = 0;
-        private float angle = -3;
-        bool settimer = false, hit = false;
-        float keepAliveTimer = 0;
+        bool hit = false;
 
         #endregion
 
-        public WeaponSwing(Vector2 position, WeaponSwingType gettype, SpriteEffects spreffect) : 
+        public WeaponSwing(Vector2 position, WeaponSwingType gettype, SpriteEffects spreffect) :
             base()
         {
             // Link properties to instance
@@ -35,6 +30,7 @@ namespace XNA_ScreenManager.GameWorldClasses.Entities
             this.swingtype = gettype;
             this.position = position;
             this.sprite_effect = spreffect;
+            this.angle = -3;
 
             switch (swingtype)
             {
@@ -42,12 +38,17 @@ namespace XNA_ScreenManager.GameWorldClasses.Entities
                     this.sprite = world.Content.Load<Texture2D>(@"gfx\effects\weapon\0.stabO2.1_0");
                     if (sprite_effect == SpriteEffects.FlipHorizontally)
                         this.position.X += 80;
+                    keepAliveTimer = (float)ResourceManager.GetInstance.
+                                gameTime.TotalGameTime.Seconds + 0.12f;
                     break;
                 case WeaponSwingType.Swing01:
                     this.sprite = world.Content.Load<Texture2D>(@"gfx\effects\weapon\0.swingT2.2_0");
                     if (sprite_effect == SpriteEffects.FlipHorizontally)
-                        this.transperant = 0.5f;
-                    this.angle = -12;
+                        this.angle = -11.5f;
+                    else
+                        this.angle = -13.6f;
+                    keepAliveTimer = (float)ResourceManager.GetInstance.
+                                gameTime.TotalGameTime.Seconds + 0.06f;
                     break;
                 case WeaponSwingType.Swing02:
                     this.sprite = world.Content.Load<Texture2D>(@"gfx\effects\weapon\0.swingT3.2_0");
@@ -58,30 +59,11 @@ namespace XNA_ScreenManager.GameWorldClasses.Entities
             }
 
             this.spriteFrame = new Rectangle(0, 0, (int)sprite.Width, (int)sprite.Height);
-            circleOrigin = new Vector2(SpriteFrame.Width * 0.5f, SpriteFrame.Height * 0.5f);
-            this.KeepAliveTime = -1;
+            this.origin = new Vector2(SpriteFrame.Width * 0.5f, SpriteFrame.Height * 0.5f);
         }
 
         public override void Update(GameTime gameTime)
         {
-            if (keepAliveTimer <= 0)
-            {
-                if (!settimer)
-                {
-                    settimer = true;
-                    this.transperant = 1;
-                    this.keepAliveTimer = (int)gameTime.TotalGameTime.TotalSeconds + 0.6f;
-                }
-                else
-                {
-                    // will remove the object
-                    this.keepAliveTime = 0;
-                }
-            }
-
-            // Remove ItemSprite Timer
-            keepAliveTimer -= (float)gameTime.ElapsedGameTime.TotalSeconds;
-
             // Make the item slowly disapear
             if (transperant > 0)
                 transperant -= (float)gameTime.ElapsedGameTime.TotalSeconds * 3;
@@ -126,13 +108,16 @@ namespace XNA_ScreenManager.GameWorldClasses.Entities
                     }
                 }
             }
+
+            // base Effect Update
+            base.Update(gameTime);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
            spriteBatch.Draw(sprite, new Rectangle((int)Position.X, (int)Position.Y,
                     (int)(SpriteFrame.Width * 0.7f), (int)(SpriteFrame.Height* 0.7f)),
-                    SpriteFrame, Color.White * transperant, angle, circleOrigin, sprite_effect, 0f);
+                    SpriteFrame, Color.White * transperant, angle, origin, sprite_effect, 0f);
         }
     }
 }
