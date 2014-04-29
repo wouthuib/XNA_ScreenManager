@@ -75,18 +75,19 @@ namespace XNA_ScreenManager.MonsterClasses
                         monster.ATK = Convert.ToInt32(values[9]);
                         monster.Magic = Convert.ToInt32(values[10]);
                         monster.Speed = Convert.ToInt32(values[11]);
+                        monster.Size = Regex.Replace(values[12].ToString(), " ", "");
 
                         // Monster Drops
-                        monster.drop01Item = Convert.ToInt32(values[12]);
-                        monster.drop01Chance = Convert.ToInt32(values[13]);
-                        monster.drop02Item = Convert.ToInt32(values[14]);
-                        monster.drop02Chance = Convert.ToInt32(values[15]);
-                        monster.drop03Item = Convert.ToInt32(values[16]);
-                        monster.drop03Chance = Convert.ToInt32(values[17]);
-                        monster.drop04Item = Convert.ToInt32(values[18]);
-                        monster.drop04Chance = Convert.ToInt32(values[19]);
-                        monster.drop05Item = Convert.ToInt32(values[20]);
-                        monster.drop05Chance = Convert.ToInt32(values[21]);
+                        monster.drop01Item = Convert.ToInt32(values[13]);
+                        monster.drop01Chance = Convert.ToInt32(values[14]);
+                        monster.drop02Item = Convert.ToInt32(values[15]);
+                        monster.drop02Chance = Convert.ToInt32(values[16]);
+                        monster.drop03Item = Convert.ToInt32(values[17]);
+                        monster.drop03Chance = Convert.ToInt32(values[18]);
+                        monster.drop04Item = Convert.ToInt32(values[19]);
+                        monster.drop04Chance = Convert.ToInt32(values[20]);
+                        monster.drop05Item = Convert.ToInt32(values[21]);
+                        monster.drop05Chance = Convert.ToInt32(values[22]);
 
                     }
                     catch (Exception ee)

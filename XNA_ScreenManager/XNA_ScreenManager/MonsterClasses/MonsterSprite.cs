@@ -18,7 +18,7 @@ namespace XNA_ScreenManager.CharacterClasses
 
         // static randomizer
         randomizer Randomizer = randomizer.Instance;                                                // generate unique random ID
-        PlayerStore PlayerInfo = PlayerStore.Instance;                                                // get battle information of player
+        PlayerStore PlayerInfo = PlayerStore.Instance;                                              // get battle information of player
         GameWorld world;
 
         // Monster Store ID
@@ -87,6 +87,7 @@ namespace XNA_ScreenManager.CharacterClasses
             HIT = MonsterStore.Instance.getMonster(ID).Hit;
             FLEE = MonsterStore.Instance.getMonster(ID).Flee;
             EXP = MonsterStore.Instance.getMonster(ID).EXP;
+            SIZE = MonsterStore.Instance.getMonster(ID).Size;
             Speed = MonsterStore.Instance.getMonster(ID).Speed;
 
             // read the items drops (see region functions)

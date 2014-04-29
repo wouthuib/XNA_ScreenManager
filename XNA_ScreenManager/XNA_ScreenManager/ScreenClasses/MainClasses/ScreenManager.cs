@@ -23,6 +23,8 @@ namespace XNA_ScreenManager.ScreenClasses
         public InGameMainMenuScreen ingameMenuScreen;
         public ItemMenuScreen itemMenuScreen;
         public EquipmentMenuScreen equipmentMenuScreen;
+        public SkillScreen skillScreen;
+        public StatusScreen statusScreen;
         public ShopMenuScreen shopMenuScreen;
         public MessagePopup MessagePopupScreen;
         public LoadingScreen loadingScreen;
@@ -69,6 +71,8 @@ namespace XNA_ScreenManager.ScreenClasses
             ingameMenuScreen.Hide();
             itemMenuScreen.Hide();
             equipmentMenuScreen.Hide();
+            skillScreen.Hide();
+            statusScreen.Hide();
             shopMenuScreen.Hide();
             MessagePopupScreen.Hide();
             loadingScreen.Hide();
@@ -106,6 +110,14 @@ namespace XNA_ScreenManager.ScreenClasses
             else if (activeScreen == equipmentMenuScreen)
             {
                 HandleequipmentMenuScreen();
+            }
+            else if (activeScreen == skillScreen)
+            {
+                HandleskillMenuScreen();
+            }
+            else if (activeScreen == statusScreen)
+            {
+                HandlestatusMenuScreen();
             }
             else if (activeScreen == shopMenuScreen)
             {
@@ -195,7 +207,7 @@ namespace XNA_ScreenManager.ScreenClasses
                         break;
                     case 1:
                         activeScreen.Hide();
-                        activeScreen = shopMenuScreen;
+                        activeScreen = skillScreen;
                         activeScreen.Show();
                         break;
                     case 2:
@@ -204,6 +216,10 @@ namespace XNA_ScreenManager.ScreenClasses
                         activeScreen.Show();
                         break;
                     case 3:
+                        activeScreen.Hide();
+                        activeScreen = statusScreen;
+                        activeScreen.Show();
+                        break;
                     case 4:
                     case 5:
                     case 6:
@@ -245,6 +261,26 @@ namespace XNA_ScreenManager.ScreenClasses
         }
 
         private void HandleequipmentMenuScreen()
+        {
+            if (CheckKey(Keys.Back) || CheckKey(Keys.Escape))
+            {
+                activeScreen.Hide();
+                activeScreen = ingameMenuScreen;
+                activeScreen.Show();
+            }
+        }
+
+        private void HandleskillMenuScreen()
+        {
+            if (CheckKey(Keys.Back) || CheckKey(Keys.Escape))
+            {
+                activeScreen.Hide();
+                activeScreen = ingameMenuScreen;
+                activeScreen.Show();
+            }
+        }
+
+        private void HandlestatusMenuScreen()
         {
             if (CheckKey(Keys.Back) || CheckKey(Keys.Escape))
             {

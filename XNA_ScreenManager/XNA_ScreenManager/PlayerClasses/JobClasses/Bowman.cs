@@ -20,8 +20,7 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
 
     public class Bowman : PlayerSprite
     {
-        float previousGameTimeMsec,                                                                 // GameTime in Miliseconds
-              previousEffectTimeSec;                                                                // GameTime in Miliseconds
+        float previousGameTimeMsec;                                                                 // GameTime in Miliseconds
         private SkillState SkillState = SkillState.None;
         private bool SkillActive = false;
         private Vector2 curving;
@@ -164,14 +163,19 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
                                             {
                                                 arrow_count--;
 
-                                                curving += new Vector2(0, 0.01f);
+                                                curving += new Vector2(0, 0.05f);
 
-                                                world.newEffect.Add(new Arrow(Content.Load<Texture2D>(@"gfx\gameobjects\arrow"),
-                                                    new Vector2(this.Position.X, this.Position.Y + this.spriteFrame.Height * 0.6f),
-                                                    800, new Vector2(-1, 0), curving));
+                                                if (spriteEffect == SpriteEffects.FlipHorizontally)
+                                                    world.newEffect.Add(new Arrow(Content.Load<Texture2D>(@"gfx\gameobjects\arrow"),
+                                                        new Vector2(this.Position.X, this.Position.Y + this.spriteFrame.Height * 0.6f),
+                                                        800, new Vector2(1, 0), curving));
+                                                else
+                                                    world.newEffect.Add(new Arrow(Content.Load<Texture2D>(@"gfx\gameobjects\arrow"),
+                                                        new Vector2(this.Position.X, this.Position.Y + this.spriteFrame.Height * 0.6f),
+                                                        800, new Vector2(-1, 0), curving));
 
                                                 // Set the timer for cooldown
-                                                previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.4f;
+                                                previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.1f;
                                             }
                                             else
                                             {
@@ -180,7 +184,12 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
                                                 spriteFrame.X = 0;
                                                 state = EntityState.Cooldown;
                                                 SkillState = JobClasses.SkillState.None;
+                                                SkillActive = false;
                                             }
+
+                                            // make the player rappidly shoot
+                                            if (spriteFrame.X > spriteOfset.X + (spriteWidth * 2))
+                                                spriteFrame.X = 1;
                                         }
                                     }
                                 }

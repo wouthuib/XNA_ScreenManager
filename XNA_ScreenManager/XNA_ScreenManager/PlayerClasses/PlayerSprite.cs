@@ -54,8 +54,7 @@ namespace XNA_ScreenManager
         const int MOVE_DOWN = 1;                                                                    // player moving directions
         const int MOVE_LEFT = -1;                                                                   // player moving directions
         const int MOVE_RIGHT = 1;                                                                   // player moving directions
-        float previousGameTimeMsec,                                                                 // GameTime in Miliseconds
-              previousEffectTimeSec;                                                                // GameTime in Miliseconds
+        float previousGameTimeMsec;                                                                 // GameTime in Miliseconds
         private bool landed;                                                                        // land switch, arrow switch
 
         //map properties
@@ -953,29 +952,30 @@ namespace XNA_ScreenManager
                 this.effectCounter = 0;
                 this.color = Color.White;
                 return true;
-            } 
-
-            // standing in warp portal effect
-            if (this.effectCounter == 2)
-            {
-                this.effectCounter = 0;
-                this.color = Color.White;       // reset color
-                return true;
             }
-            else
-            {
-                previousEffectTimeSec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+            return false;
 
-                if (previousEffectTimeSec <= 0)
-                {
-                    previousEffectTimeSec = (float)gameTime.ElapsedGameTime.TotalSeconds + 3;
-                    this.effectCounter++;
-                }
+            //// standing in warp portal effect
+            //if (this.effectCounter == 2)
+            //{
+            //    this.effectCounter = 0;
+            //    playerinfo.activePlayer.col = Color.White;       // reset color
+            //    return true;
+            //}
+            //else
+            //{
+            //    previousEffectTimeSec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-                this.color.R = (byte)((previousEffectTimeSec * 250) - gameTime.ElapsedGameTime.TotalSeconds / 4);
+            //    if (previousEffectTimeSec <= 0)
+            //    {
+            //        previousEffectTimeSec = (float)gameTime.ElapsedGameTime.TotalSeconds + 3;
+            //        this.effectCounter++;
+            //    }
 
-                return false;
-            }
+            //    this.color.R = (byte)((previousEffectTimeSec * 250) - gameTime.ElapsedGameTime.TotalSeconds / 4);
+
+            //    return false;
+            //}
         }
 
 

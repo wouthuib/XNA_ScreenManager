@@ -23,6 +23,8 @@ namespace XNA_ScreenManager
         HelpScreen helpScreen;         ActionScreen actionScreen;
         CharacterCreationScreen createCharScreen; // new
         CharacterSelectionScreen selectCharScreen; // new
+        SkillScreen skillScreen; // new
+        StatusScreen statusScreen; // new
         InGameMainMenuScreen ingameMenuScreen;
         ItemMenuScreen itemMenuScreen;
         EquipmentMenuScreen equipmentMenuScreen;
@@ -96,6 +98,14 @@ namespace XNA_ScreenManager
             equipmentMenuScreen = new EquipmentMenuScreen(this, normalFont, Content.Load<Texture2D>(@"gfx\screens\equipment_menu2"));
             ScreenManager.Instance.equipmentMenuScreen = equipmentMenuScreen;
             Components.Add(equipmentMenuScreen);
+
+            skillScreen = new SkillScreen(this, Content.Load<Texture2D>(@"gfx\screens\equipment_menu2"));
+            ScreenManager.Instance.skillScreen = skillScreen;
+            Components.Add(skillScreen);
+
+            statusScreen = new StatusScreen(this, Content.Load<Texture2D>(@"gfx\screens\equipment_menu2"));
+            ScreenManager.Instance.statusScreen = statusScreen;
+            Components.Add(statusScreen);
 
             shopMenuScreen = new ShopMenuScreen(this, normalFont, Content.Load<Texture2D>(@"gfx\screens\shop_menu2"));
             ScreenManager.Instance.shopMenuScreen = shopMenuScreen;

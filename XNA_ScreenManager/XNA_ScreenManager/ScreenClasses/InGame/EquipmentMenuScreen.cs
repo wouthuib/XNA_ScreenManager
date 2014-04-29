@@ -38,7 +38,6 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
         int width, height;
         int selectedSlot = 0, selectedOption = 0;
         private bool itemOptions = false, slotOptions = false;
-
         #endregion
 
         public EquipmentMenuScreen(Game game, SpriteFont spriteFont, Texture2D background)
@@ -364,39 +363,30 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
                     position.X += 50 + (menuOptions[i].Length * 6);
             }
             #endregion
-            
-            #region player stats
+
+            #region player Battle Info
             // Draw Player Name
             spriteBatch.DrawString(spriteFont, PlayerStore.Instance.activePlayer.Name.ToString(),
                 new Vector2(20, 130), NormalColor);
 
-            // Draw Player Stat Values
+            // Draw Player Battle Info Values
             position = new Vector2(20, 170);
 
-            for (int i = 0; i < Enum.GetNames(typeof(PlayerStats)).Length; i++)
+            for (int i = 0; i < Enum.GetNames(typeof(PlayerBattleInfo)).Length; i++)
             {
                 // Draw Player Stat Name
                 spriteBatch.DrawString(spriteFont,
-                Enum.GetNames(typeof(PlayerStats))[i],
+                Enum.GetNames(typeof(PlayerBattleInfo))[i],
                 position, Color.DarkGray);
 
                 // Get Stat Value
                 Object player = PlayerStore.Instance.activePlayer;
-                PropertyInfo info = player.GetType().GetProperty(Enum.GetNames(typeof(PlayerStats))[i]);
+                PropertyInfo info = player.GetType().GetProperty(Enum.GetNames(typeof(PlayerBattleInfo))[i]);
 
                 // Draw Player Stat Value
                 spriteBatch.DrawString(spriteFont,
                 info.GetValue(player, null).ToString(),
                 new Vector2(120, position.Y), NormalColor);
-
-                /*
-                if (itemOptions)
-                {
-                    spriteBatch.DrawString(spriteFont,
-                    info.GetValue(player, null).ToString(),
-                    new Vector2(140, position.Y), NormalColor);
-                }
-                */
 
                 position.Y += spriteFont.LineSpacing;
             }

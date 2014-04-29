@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework;
 
 namespace XNA_ScreenManager.PlayerClasses
 {
-    public enum PlayerStats
+    public enum PlayerBattleInfo
     {
         ATK,
         DEF,
@@ -20,6 +20,16 @@ namespace XNA_ScreenManager.PlayerClasses
         FLEE,
         MAXHP,
         MAXSP,
+    }
+
+    public enum PlayerStats
+    {
+        Strength,
+        Agility,
+        Vitality,
+        Intelligence,
+        Dexterity,
+        Luck
     }
 
     public sealed class PlayerInfo

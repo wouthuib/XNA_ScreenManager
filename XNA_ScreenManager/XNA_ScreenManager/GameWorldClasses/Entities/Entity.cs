@@ -69,6 +69,7 @@ namespace XNA_ScreenManager.CharacterClasses
 
         #region health and Stat properties
         private int hp, mp, atk, def, exp, lvl, hit, flee;
+        private string size;
 
         public int HP
         {
@@ -109,6 +110,11 @@ namespace XNA_ScreenManager.CharacterClasses
         {
             get { return flee; }
             set { flee = value; }
+        }
+        public string SIZE
+        {
+            get { return size; }
+            set { size = value; }
         }
         #endregion
 

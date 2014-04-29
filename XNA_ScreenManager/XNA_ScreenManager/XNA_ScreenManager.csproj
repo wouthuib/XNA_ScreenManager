@@ -153,6 +153,8 @@
     <Compile Include="ScreenClasses\InGame\ActionScreen.cs" />
     <Compile Include="ScreenClasses\InGame\EquipmentMenuScreen.cs" />
     <Compile Include="ScreenClasses\InGame\ShopMenuScreen.cs" />
+    <Compile Include="ScreenClasses\InGame\SkillScreen.cs" />
+    <Compile Include="ScreenClasses\InGame\StatusScreen.cs" />
     <Compile Include="ScreenClasses\InGame\TopMessageScreen.cs" />
     <Compile Include="ScreenClasses\MainClasses\ResourceManager.cs" />
     <Compile Include="ScreenClasses\Menus\CharacterCreationScreen.cs" />

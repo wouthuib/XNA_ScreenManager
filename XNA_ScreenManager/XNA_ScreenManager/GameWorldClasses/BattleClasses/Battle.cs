@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using XNA_ScreenManager.CharacterClasses;
 using XNA_ScreenManager.PlayerClasses;
+using XNA_ScreenManager.ItemClasses;
 
 namespace XNA_ScreenManager.MapClasses
 {
@@ -14,8 +15,11 @@ namespace XNA_ScreenManager.MapClasses
         public static int battle_calc_damage(PlayerInfo playerinfo, MonsterSprite monsterinfo)
         {
             randomizer Randomizer = randomizer.Instance;
+            Item Weapon = Equipment.Instance.getEquip(ItemSlot.Weapon);
 
-            int finalDamage = 0, bDamage = 0, wDamage = 0;
+            int finalDamage = 0, 
+                bDamage = 0, 
+                wDamage = 0;
 
             int dodgerate = 100 - (playerinfo.HIT - monsterinfo.FLEE);
 
@@ -23,7 +27,7 @@ namespace XNA_ScreenManager.MapClasses
             {
                 bDamage = (playerinfo.ATK * 2) - monsterinfo.DEF;
                 wDamage = playerinfo.WeaponATK - monsterinfo.DEF;
-                finalDamage = bDamage + wDamage;
+                finalDamage = (int)((bDamage + wDamage) * (WeaponPenalty(Weapon, monsterinfo) * 0.01f));
             }
             else
                 finalDamage = 0;
@@ -56,6 +60,96 @@ namespace XNA_ScreenManager.MapClasses
                 return 0;
             else
                 return finalDamage;
+        }
+
+        // size penalty weapons
+        public static int WeaponPenalty(Item weapon, MonsterSprite monsterinfo)
+        {
+            switch (weapon.WeaponType)
+            {
+                case WeaponType.Bow:
+                    if (monsterinfo.SIZE == "small")
+                        return 75;
+                    if (monsterinfo.SIZE == "medium")
+                        return 100;
+                    if (monsterinfo.SIZE == "big")
+                        return 75;
+                    break;
+                case WeaponType.Dagger:
+                    if (monsterinfo.SIZE == "small")
+                        return 100;
+                    if (monsterinfo.SIZE == "medium")
+                        return 75;
+                    if (monsterinfo.SIZE == "big")
+                        return 50;
+                    break;
+                case WeaponType.Mace:
+                    if (monsterinfo.SIZE == "small")
+                        return 75;
+                    if (monsterinfo.SIZE == "medium")
+                        return 100;
+                    if (monsterinfo.SIZE == "big")
+                        return 100;
+                    break;
+                case WeaponType.One_handed_Axe:
+                    if (monsterinfo.SIZE == "small")
+                        return 50;
+                    if (monsterinfo.SIZE == "medium")
+                        return 75;
+                    if (monsterinfo.SIZE == "big")
+                        return 100;
+                    break;
+                case WeaponType.One_handed_Spear:
+                    if (monsterinfo.SIZE == "small")
+                        return 75;
+                    if (monsterinfo.SIZE == "medium")
+                        return 75;
+                    if (monsterinfo.SIZE == "big")
+                        return 100;
+                    break;
+                case WeaponType.One_handed_Sword:
+                    if (monsterinfo.SIZE == "small")
+                        return 75;
+                    if (monsterinfo.SIZE == "medium")
+                        return 100;
+                    if (monsterinfo.SIZE == "big")
+                        return 75;
+                    break;
+                case WeaponType.Staff:
+                    if (monsterinfo.SIZE == "small")
+                        return 100;
+                    if (monsterinfo.SIZE == "medium")
+                        return 100;
+                    if (monsterinfo.SIZE == "big")
+                        return 100;
+                    break;
+                case WeaponType.Two_handed_Axe:
+                    if (monsterinfo.SIZE == "small")
+                        return 50;
+                    if (monsterinfo.SIZE == "medium")
+                        return 75;
+                    if (monsterinfo.SIZE == "big")
+                        return 100;
+                    break;
+                case WeaponType.Two_handed_Spear:
+                    if (monsterinfo.SIZE == "small")
+                        return 75;
+                    if (monsterinfo.SIZE == "medium")
+                        return 75;
+                    if (monsterinfo.SIZE == "big")
+                        return 100;
+                    break;
+                case WeaponType.Two_handed_Sword:
+                    if (monsterinfo.SIZE == "small")
+                        return 75;
+                    if (monsterinfo.SIZE == "medium")
+                        return 75;
+                    if (monsterinfo.SIZE == "big")
+                        return 100;
+                    break;
+            }
+
+            return 100;
         }
     }
 }
