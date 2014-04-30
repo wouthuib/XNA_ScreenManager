@@ -7,6 +7,7 @@ using XNA_ScreenManager.CharacterClasses;
 using XNA_ScreenManager.ItemClasses;
 using XNA_ScreenManager.MapClasses;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace XNA_ScreenManager.PlayerClasses.JobClasses
 {
@@ -20,15 +21,17 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
 
     public class Bowman : PlayerSprite
     {
+        Texture2D animation;
         float previousGameTimeMsec;                                                                 // GameTime in Miliseconds
         private SkillState SkillState = SkillState.None;
         private bool SkillActive = false;
         private Vector2 curving;
-        private int arrow_count;
+        private int arrow_count, ani_count, cast_time;
 
         public Bowman(int _X, int _Y, Vector2 _tileSize) 
             : base(_X, _Y, _tileSize)
         {
+            animation = Content.Load<Texture2D>(@"gfx\skills\bowman\boost\effect_0");
         }
 
         public override void Update(GameTime gameTime)
@@ -45,74 +48,65 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
                         {
                             #region ArrowShower Skill
                             case SkillState.ArrowShower:
-                                Speed = 0;
-                                Direction = Vector2.Zero;
-                                Velocity = Vector2.Zero;
 
-                                // Move the Character
-                                OldPosition = Position;
-
-                                // player animation
-                                spriteOfset = new Vector2(spriteFrame.Width * 0, spriteFrame.Height * 4);
-                                spriteFrame.Y = (int)spriteOfset.Y;
-
-                                // reduce timer
-                                previousGameTimeMsec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-                                if (previousGameTimeMsec < 0)
+                                // cast should be completed
+                                if (!CastAnimation(gameTime))
                                 {
-                                    spriteFrame.X += spriteWidth;
+                                    // reduce timer
+                                    previousGameTimeMsec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-                                    if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.D1))
+                                    if (previousGameTimeMsec < 0)
                                     {
-                                        // Later = charge arrow skill
-                                        if (spriteFrame.X > spriteOfset.X + (spriteWidth * 1))
-                                            spriteFrame.X = (int)spriteOfset.X + spriteWidth;
-                                    }
-                                    else
-                                    {
-                                        if (spriteFrame.X > spriteOfset.X + (spriteWidth * 2))
+                                        spriteFrame.X += spriteWidth;
+
+                                        if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.D1))
                                         {
-                                            // make sure the world is connected
-                                            if (world == null)
-                                                world = GameWorld.GetInstance;
-
-                                            int arrow_amount = 1;
-                                            Vector2 curving = Vector2.Zero;
-
-                                            if(SkillSlots.Instance.active)
+                                            // Later = charge arrow skill
+                                            if (spriteFrame.X > spriteOfset.X + (spriteWidth * 1))
+                                                spriteFrame.X = (int)spriteOfset.X + spriteWidth;
+                                        }
+                                        else
+                                        {
+                                            if (spriteFrame.X > spriteOfset.X + (spriteWidth * 2))
                                             {
-                                                arrow_amount = 5;
-                                                curving = new Vector2(0, -0.3f);
+                                                // make sure the world is connected
+                                                if (world == null)
+                                                    world = GameWorld.GetInstance;
+
+                                                int arrow_amount = 1;
+                                                Vector2 curving = Vector2.Zero;
+
+                                                if (SkillSlots.Instance.active)
+                                                {
+                                                    arrow_amount = 5;
+                                                    curving = new Vector2(0, -0.3f);
+                                                }
+
+                                                for (int i = 0; i < arrow_amount; i++)
+                                                {
+                                                    if (SkillSlots.Instance.active)
+                                                        curving += new Vector2(0, 0.1f);
+
+                                                    // create and release an arrow
+                                                    if (spriteEffect == SpriteEffects.FlipHorizontally)
+                                                        world.newEffect.Add(new Arrow(Content.Load<Texture2D>(@"gfx\gameobjects\arrow"),
+                                                            new Vector2(this.Position.X, this.Position.Y + this.spriteFrame.Height * 0.6f),
+                                                            800, new Vector2(1, 0), curving));
+                                                    else
+                                                        world.newEffect.Add(new Arrow(Content.Load<Texture2D>(@"gfx\gameobjects\arrow"),
+                                                            new Vector2(this.Position.X, this.Position.Y + this.spriteFrame.Height * 0.6f),
+                                                            800, new Vector2(-1, 0), curving));
+                                                }
+                                                
+                                                // reset sprite frame and change state
+                                                // start cooldown
+                                                SkillSlots.Instance.active = false;
+                                                spriteFrame.X = 0;
+                                                ani_count = 0;
+                                                state = EntityState.Cooldown;
+                                                SkillState = JobClasses.SkillState.None;
+                                                SkillActive = false;
                                             }
-
-                                            for(int i = 0; i < arrow_amount; i++)
-                                            {
-                                                if(SkillSlots.Instance.active)
-                                                    curving += new Vector2(0, 0.1f);
-
-                                                // create and release an arrow
-                                                if(spriteEffect == SpriteEffects.FlipHorizontally)
-                                                    world.newEffect.Add(new Arrow(Content.Load<Texture2D>(@"gfx\gameobjects\arrow"),
-                                                        new Vector2(this.Position.X, this.Position.Y + this.spriteFrame.Height * 0.6f),
-                                                        800, new Vector2(1, 0), curving));
-                                                else
-                                                    world.newEffect.Add(new Arrow(Content.Load<Texture2D>(@"gfx\gameobjects\arrow"),
-                                                        new Vector2(this.Position.X, this.Position.Y + this.spriteFrame.Height * 0.6f),
-                                                        800, new Vector2(-1, 0), curving));
-                                            }
-
-                                            // Disable Skillslot
-                                            SkillSlots.Instance.active = false;
-
-                                            // Set the timer for cooldown
-                                            previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerinfo.activePlayer.ASPD * 12) * 0.0006f) + 0.05f;
-
-                                            // reset sprite frame and change state
-                                            // start cooldown
-                                            spriteFrame.X = 0;
-                                            state = EntityState.Cooldown;
-                                            SkillState = JobClasses.SkillState.None;
                                         }
                                     }
                                 }
@@ -120,76 +114,52 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
                             #endregion
                             #region ArrowShower Wave
                             case SkillState.ArrowWave:
-                                Speed = 0;
-                                Direction = Vector2.Zero;
-                                Velocity = Vector2.Zero;
 
-                                // Move the Character
-                                OldPosition = Position;
-
-                                // player animation
-                                spriteOfset = new Vector2(spriteFrame.Width * 0, spriteFrame.Height * 4);
-                                spriteFrame.Y = (int)spriteOfset.Y;
-
-                                // reduce timer
-                                previousGameTimeMsec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-                                if (previousGameTimeMsec < 0)
+                                // cast should be completed
+                                if (!CastAnimation(gameTime))
                                 {
-                                    spriteFrame.X += spriteWidth;
+                                    // reduce timer
+                                    previousGameTimeMsec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-                                    if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.D2)
-                                        && !SkillActive)
+                                    if (previousGameTimeMsec < 0)
                                     {
-                                        // Later = charge arrow skill
-                                        if (spriteFrame.X > spriteOfset.X + (spriteWidth * 1))
-                                            spriteFrame.X = (int)spriteOfset.X + spriteWidth;
-                                    }
-                                    else
-                                    {
+                                        spriteFrame.X += spriteWidth;
+
                                         // make sure the world is connected
                                         if (world == null)
                                             world = GameWorld.GetInstance;
 
-                                        if (!SkillActive)
+                                        if (arrow_count > 0)
                                         {
-                                            curving = new Vector2(0, -0.3f);
-                                            SkillActive = true;
-                                            arrow_count = 10;
-                                        }
-                                        else
-                                        {
-                                            if (arrow_count > 0)
-                                            {
-                                                arrow_count--;
+                                            arrow_count--;
+                                            curving += new Vector2(0, 0.05f);
 
-                                                curving += new Vector2(0, 0.05f);
-
-                                                if (spriteEffect == SpriteEffects.FlipHorizontally)
-                                                    world.newEffect.Add(new Arrow(Content.Load<Texture2D>(@"gfx\gameobjects\arrow"),
-                                                        new Vector2(this.Position.X, this.Position.Y + this.spriteFrame.Height * 0.6f),
-                                                        800, new Vector2(1, 0), curving));
-                                                else
-                                                    world.newEffect.Add(new Arrow(Content.Load<Texture2D>(@"gfx\gameobjects\arrow"),
-                                                        new Vector2(this.Position.X, this.Position.Y + this.spriteFrame.Height * 0.6f),
-                                                        800, new Vector2(-1, 0), curving));
-
-                                                // Set the timer for cooldown
-                                                previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.1f;
-                                            }
+                                            if (spriteEffect == SpriteEffects.FlipHorizontally)
+                                                world.newEffect.Add(new Arrow(Content.Load<Texture2D>(@"gfx\gameobjects\arrow"),
+                                                    new Vector2(this.Position.X, this.Position.Y + this.spriteFrame.Height * 0.6f),
+                                                    800, new Vector2(1, 0), curving));
                                             else
-                                            {
-                                                // reset sprite frame and change state
-                                                // start cooldown
-                                                spriteFrame.X = 0;
-                                                state = EntityState.Cooldown;
-                                                SkillState = JobClasses.SkillState.None;
-                                                SkillActive = false;
-                                            }
+                                                world.newEffect.Add(new Arrow(Content.Load<Texture2D>(@"gfx\gameobjects\arrow"),
+                                                    new Vector2(this.Position.X, this.Position.Y + this.spriteFrame.Height * 0.6f),
+                                                    800, new Vector2(-1, 0), curving));
+
+                                            // Set the timer for cooldown
+                                            previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.1f;
 
                                             // make the player rappidly shoot
                                             if (spriteFrame.X > spriteOfset.X + (spriteWidth * 2))
                                                 spriteFrame.X = 1;
+                                        }
+                                        else
+                                        {
+                                            // reset sprite frame and change state
+                                            // start cooldown
+                                            SkillSlots.Instance.active = false;
+                                            spriteFrame.X = 0;
+                                            ani_count = 0;
+                                            state = EntityState.Cooldown;
+                                            SkillState = JobClasses.SkillState.None;
+                                            SkillActive = false;
                                         }
                                     }
                                 }
@@ -200,48 +170,51 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
                     #endregion
                     #region Standing State
                     case EntityState.Stand:
-                        if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.D1))
+                        if (CheckKey(Keys.D1) || CheckKey(Keys.D2))
                         {
-                            SkillSlots.Instance.active = true;
-
-                            // check if weapon is equiped
-                            if (equipment.item_list.FindAll(delegate(Item item) { return item.Type == ItemType.Weapon; }).Count > 0)
+                            if (!SkillSlots.Instance.active)
                             {
-                                WeaponType weapontype = equipment.item_list.Find(delegate(Item item) { return item.Type == ItemType.Weapon; }).WeaponType;
+                                SkillSlots.Instance.active = true;
 
-                                // check the weapon type
-                                if (weapontype == WeaponType.Bow)
+                                // check if weapon is equiped
+                                if (equipment.item_list.FindAll(delegate(Item item) { return item.Type == ItemType.Weapon; }).Count > 0)
                                 {
-                                    previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerinfo.activePlayer.ASPD * 12) * 0.0006f) + 0.05f;
+                                    WeaponType weapontype = equipment.item_list.Find(delegate(Item item) { return item.Type == ItemType.Weapon; }).WeaponType;
 
-                                    spriteFrame.X = 0;
-                                    state = EntityState.Skill;
-                                    SkillState = JobClasses.SkillState.ArrowShower;
-                                }
-                            }
-                        }
-                        else if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.D2))
-                        {
-                            SkillSlots.Instance.active = true;
-
-                            // check if weapon is equiped
-                            if (equipment.item_list.FindAll(delegate(Item item) { return item.Type == ItemType.Weapon; }).Count > 0)
-                            {
-                                WeaponType weapontype = equipment.item_list.Find(delegate(Item item) { return item.Type == ItemType.Weapon; }).WeaponType;
-
-                                // check the weapon type
-                                if (weapontype == WeaponType.Bow)
-                                {
-                                    if (!SkillActive)
+                                    // check the weapon type
+                                    if (weapontype == WeaponType.Bow)
                                     {
-                                        previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerinfo.activePlayer.ASPD * 12) * 0.0006f) + 0.05f;
                                         spriteFrame.X = 0;
+                                        ani_count = 1;
                                         state = EntityState.Skill;
-                                        SkillState = JobClasses.SkillState.ArrowWave;
+
+                                        if (CheckKey(Keys.D1))
+                                        {
+                                            SkillState = JobClasses.SkillState.ArrowShower;
+                                            cast_time = 8;
+                                        }
+                                        else if (CheckKey(Keys.D2))
+                                        {
+                                            SkillState = JobClasses.SkillState.ArrowWave;
+                                            cast_time = 14;
+                                            arrow_count = 10; // 10 arrows
+                                            curving = new Vector2(0, -0.3f);
+                                        }
                                     }
                                 }
                             }
                         }
+                        break;
+                    #endregion
+                    #region Hit, Recover State
+                    case EntityState.Frozen:
+                        // reset sprite frame and change state
+                        // start cooldown
+                        SkillSlots.Instance.active = false;
+                        spriteFrame.X = 0;
+                        ani_count = 0;
+                        SkillState = JobClasses.SkillState.None;
+                        SkillActive = false;
                         break;
                     #endregion
                 }
@@ -251,6 +224,36 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
         public override void Draw(Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
+
+            if (!SkillActive && SkillSlots.Instance.active && ani_count <= 11)
+                spriteBatch.Draw(animation, new Vector2(position.X - 50, position.Y - 85), Color.White * 0.75f);
+        }
+
+        public bool CheckKey(Microsoft.Xna.Framework.Input.Keys theKey)
+        {
+            return Keyboard.GetState().IsKeyDown(theKey);
+        }
+
+        public bool CastAnimation(GameTime gameTime)
+        {
+            if (ani_count <= 11)
+            {
+                // reduce timer
+                previousGameTimeMsec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                if (previousGameTimeMsec <= 0)
+                {
+                    animation = Content.Load<Texture2D>(@"gfx\skills\general\cast\effect0_" + ani_count.ToString());
+                    previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (0.01f * cast_time);
+                    ani_count++;
+                }
+                return true;
+            }
+            else
+            {
+                SkillActive = true;
+                return false; // cast ends
+            }
         }
     }
 }

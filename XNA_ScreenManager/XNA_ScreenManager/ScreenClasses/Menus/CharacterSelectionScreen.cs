@@ -150,7 +150,8 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
                         playersprite.Position = new Vector2(Position.X, Position.Y);
                     }
 
-                    playersprite.Draw(spriteBatch, playerStore.getPlayer(null, ID));
+                    playersprite.Player = playerStore.getPlayer(null, ID);
+                    playersprite.Draw(spriteBatch);
 
                     // Draw player Name Rect
                     Texture2D rect = new Texture2D(ResourceManager.GetInstance.gfxdevice,

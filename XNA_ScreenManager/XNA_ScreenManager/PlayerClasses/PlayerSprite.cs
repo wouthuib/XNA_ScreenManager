@@ -123,10 +123,16 @@ namespace XNA_ScreenManager
                 {
                     #region state skillactive
                     case EntityState.Skill:
+                            Speed = 0;
+                            Direction = Vector2.Zero;
+                            Velocity = Vector2.Zero;
 
-                        // Apply Gravity 
-                        // Position += new Vector2(0, 1) * 250 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                            // Move the Character
+                            OldPosition = Position;
 
+                            // player animation
+                            spriteOfset = new Vector2(spriteFrame.Width * 0, spriteFrame.Height * 4);
+                            spriteFrame.Y = (int)spriteOfset.Y;    
                         break;
 
                     #endregion
@@ -883,11 +889,12 @@ namespace XNA_ScreenManager
             keyboardStatePrevious = keyboardStateCurrent;
         }
 
-        public void Draw(SpriteBatch spriteBatch, PlayerInfo player = null)
+        public override void Draw(SpriteBatch spriteBatch)
         {
-
             if (Active)
             {
+                PlayerInfo player = Player;
+
                 if (player == null)
                     player = this.playerinfo.activePlayer;
 
@@ -978,6 +985,7 @@ namespace XNA_ScreenManager
             //}
         }
 
+        public PlayerInfo Player { get; set; }
 
         public bool CheckKey(Microsoft.Xna.Framework.Input.Keys theKey)
         {

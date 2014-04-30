@@ -276,7 +276,8 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
             }
 
             // Draw Player
-            playersprite.Draw(spriteBatch, this.newPlayer);
+            playersprite.Player = this.newPlayer;
+            playersprite.Draw(spriteBatch);
         }
 
         private bool CheckKey(Keys theKey)

@@ -946,6 +946,556 @@
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Compile Include="gfx\skills\bowman\boost\effect_0.png">
+      <Name>effect_0</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\bowman\boost\effect_1.png">
+      <Name>effect_1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\bowman\boost\effect_2.png">
+      <Name>effect_2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\bowman\boost\effect_3.png">
+      <Name>effect_3</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\bowman\boost\effect_4.png">
+      <Name>effect_4</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\bowman\boost\effect_5.png">
+      <Name>effect_5</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\bowman\boost\effect_6.png">
+      <Name>effect_6</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\bowman\boost\effect_7.png">
+      <Name>effect_7</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\bowman\boost\effect_8.png">
+      <Name>effect_8</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\bowman\boost\effect_9.png">
+      <Name>effect_9</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="gfx\skills\general\cast\effect0_0.png">
+      <Name>effect0_0</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\general\cast\effect0_1.png">
+      <Name>effect0_1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\general\cast\effect0_10.png">
+      <Name>effect0_10</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\general\cast\effect0_11.png">
+      <Name>effect0_11</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\general\cast\effect0_2.png">
+      <Name>effect0_2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\general\cast\effect0_3.png">
+      <Name>effect0_3</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\general\cast\effect0_4.png">
+      <Name>effect0_4</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\general\cast\effect0_5.png">
+      <Name>effect0_5</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\general\cast\effect0_6.png">
+      <Name>effect0_6</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\general\cast\effect0_7.png">
+      <Name>effect0_7</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\general\cast\effect0_8.png">
+      <Name>effect0_8</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\general\cast\effect0_9.png">
+      <Name>effect0_9</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="gfx\skills\beginner\agi-up\effect_0.png">
+      <Name>effect_0</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\agi-up\effect_1.png">
+      <Name>effect_1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\agi-up\effect_10.png">
+      <Name>effect_10</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\agi-up\effect_11.png">
+      <Name>effect_11</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\agi-up\effect_2.png">
+      <Name>effect_2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\agi-up\effect_3.png">
+      <Name>effect_3</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\agi-up\effect_4.png">
+      <Name>effect_4</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\agi-up\effect_5.png">
+      <Name>effect_5</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\agi-up\effect_6.png">
+      <Name>effect_6</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\agi-up\effect_7.png">
+      <Name>effect_7</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\agi-up\effect_8.png">
+      <Name>effect_8</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\agi-up\effect_9.png">
+      <Name>effect_9</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="gfx\skills\beginner\atk-up\effect_0.png">
+      <Name>effect_0</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\atk-up\effect_1.png">
+      <Name>effect_1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\atk-up\effect_10.png">
+      <Name>effect_10</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\atk-up\effect_11.png">
+      <Name>effect_11</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\atk-up\effect_12.png">
+      <Name>effect_12</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\atk-up\effect_13.png">
+      <Name>effect_13</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\atk-up\effect_14.png">
+      <Name>effect_14</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\atk-up\effect_15.png">
+      <Name>effect_15</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\atk-up\effect_16.png">
+      <Name>effect_16</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\atk-up\effect_17.png">
+      <Name>effect_17</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\atk-up\effect_18.png">
+      <Name>effect_18</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\atk-up\effect_19.png">
+      <Name>effect_19</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\atk-up\effect_2.png">
+      <Name>effect_2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\atk-up\effect_20.png">
+      <Name>effect_20</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\atk-up\effect_21.png">
+      <Name>effect_21</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\atk-up\effect_22.png">
+      <Name>effect_22</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\atk-up\effect_23.png">
+      <Name>effect_23</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\atk-up\effect_24.png">
+      <Name>effect_24</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\atk-up\effect_25.png">
+      <Name>effect_25</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\atk-up\effect_26.png">
+      <Name>effect_26</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\atk-up\effect_3.png">
+      <Name>effect_3</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\atk-up\effect_4.png">
+      <Name>effect_4</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\atk-up\effect_5.png">
+      <Name>effect_5</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\atk-up\effect_6.png">
+      <Name>effect_6</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\atk-up\effect_7.png">
+      <Name>effect_7</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\atk-up\effect_8.png">
+      <Name>effect_8</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\atk-up\effect_9.png">
+      <Name>effect_9</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="gfx\skills\beginner\def-up\effect_0.png">
+      <Name>effect_0</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\def-up\effect_1.png">
+      <Name>effect_1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\def-up\effect_10.png">
+      <Name>effect_10</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\def-up\effect_11.png">
+      <Name>effect_11</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\def-up\effect_12.png">
+      <Name>effect_12</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\def-up\effect_13.png">
+      <Name>effect_13</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\def-up\effect_14.png">
+      <Name>effect_14</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\def-up\effect_15.png">
+      <Name>effect_15</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\def-up\effect_16.png">
+      <Name>effect_16</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\def-up\effect_17.png">
+      <Name>effect_17</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\def-up\effect_18.png">
+      <Name>effect_18</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\def-up\effect_19.png">
+      <Name>effect_19</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\def-up\effect_2.png">
+      <Name>effect_2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\def-up\effect_20.png">
+      <Name>effect_20</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\def-up\effect_21.png">
+      <Name>effect_21</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\def-up\effect_22.png">
+      <Name>effect_22</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\def-up\effect_23.png">
+      <Name>effect_23</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\def-up\effect_24.png">
+      <Name>effect_24</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\def-up\effect_25.png">
+      <Name>effect_25</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\def-up\effect_26.png">
+      <Name>effect_26</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\def-up\effect_3.png">
+      <Name>effect_3</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\def-up\effect_4.png">
+      <Name>effect_4</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\def-up\effect_5.png">
+      <Name>effect_5</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\def-up\effect_6.png">
+      <Name>effect_6</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\def-up\effect_7.png">
+      <Name>effect_7</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\def-up\effect_8.png">
+      <Name>effect_8</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\beginner\def-up\effect_9.png">
+      <Name>effect_9</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="gfx\skills\warrior\slash1\effect_0.png">
+      <Name>effect_0</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\warrior\slash1\effect_1.png">
+      <Name>effect_1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\warrior\slash1\effect_2.png">
+      <Name>effect_2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\warrior\slash1\effect_3.png">
+      <Name>effect_3</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\warrior\slash1\effect_4.png">
+      <Name>effect_4</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\warrior\slash1\effect_5.png">
+      <Name>effect_5</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\warrior\slash1\effect_6.png">
+      <Name>effect_6</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\warrior\slash1\effect_7.png">
+      <Name>effect_7</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\warrior\slash1\effect_8.png">
+      <Name>effect_8</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\warrior\slash1\effect_9.png">
+      <Name>effect_9</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="gfx\skills\warrior\wave\effect_0.png">
+      <Name>effect_0</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\warrior\wave\effect_1.png">
+      <Name>effect_1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\warrior\wave\effect_2.png">
+      <Name>effect_2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\warrior\wave\effect_3.png">
+      <Name>effect_3</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\warrior\wave\effect_4.png">
+      <Name>effect_4</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\warrior\wave\effect_5.png">
+      <Name>effect_5</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\warrior\wave\effect_6.png">
+      <Name>effect_6</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\warrior\wave\effect_7.png">
+      <Name>effect_7</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\warrior\wave\effect_8.png">
+      <Name>effect_8</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
   <!--  To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
