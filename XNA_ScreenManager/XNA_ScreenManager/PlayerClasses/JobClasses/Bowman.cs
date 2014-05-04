@@ -79,11 +79,9 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
             // Draw Skill Animation
             if (SkillActive && SkillSlots.Instance.active)
                 if (skill_animation != null)
-                    spriteBatch.Draw(skill_animation, 
-                        new Vector2(
-                            position.X - (skill_animation.Width * 0.28f),
-                            position.Y - (skill_animation.Width * 0.68f)
-                            ), 
+                    spriteBatch.Draw(skill_animation,
+                        new Vector2(position.X - (skill_animation.Width - spriteFrame.Width) * 0.5f,
+                                    position.Y - ((skill_animation.Height * 0.9f) - spriteFrame.Height)), 
                         Color.White * 0.75f);
         }
 

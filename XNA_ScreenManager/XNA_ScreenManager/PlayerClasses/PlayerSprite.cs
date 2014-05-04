@@ -866,7 +866,7 @@ namespace XNA_ScreenManager
             else if (keyboardStateCurrent.IsKeyUp(Microsoft.Xna.Framework.Input.Keys.F2) == true &&
                       keyboardStatePrevious.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.F2) == true)
             {
-                inventory.addItem(itemStore.getItem(randomizer.Instance.generateRandom(2300,2302)));
+                inventory.addItem(itemStore.getItem(randomizer.Instance.generateRandom(2300,2304)));
             }
             else if (keyboardStateCurrent.IsKeyUp(Microsoft.Xna.Framework.Input.Keys.F3) == true &&
                       keyboardStatePrevious.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.F3) == true)
@@ -899,7 +899,8 @@ namespace XNA_ScreenManager
                     player = this.playerinfo.activePlayer;
 
                 // because in some states the hair sprite is out of bound (80x80)
-                Rectangle hairFrame = spriteFrame, 
+                Rectangle hairFrame = spriteFrame,
+                          hatFrame = spriteFrame,
                           clothFrame = spriteFrame,
                           weaponFrame = spriteFrame,
                           faceFrame = spriteFrame,
@@ -909,7 +910,11 @@ namespace XNA_ScreenManager
                 {
                     case EntityState.Jump:
                     case EntityState.Falling:
-                        hairFrame = new Rectangle(spriteFrame.X, spriteFrame.Y - 10, spriteFrame.Width, SpriteFrame.Height + 10);
+                        if(equipment.getEquip(ItemSlot.Headgear) == null)
+                            hairFrame = new Rectangle(spriteFrame.X, spriteFrame.Y - 10, spriteFrame.Width, SpriteFrame.Height + 10);
+                        else
+                            hairFrame = new Rectangle(spriteFrame.X, spriteFrame.Y + 30, spriteFrame.Width, SpriteFrame.Height - 30);
+                        hatFrame = new Rectangle(spriteFrame.X, spriteFrame.Y - 10, spriteFrame.Width, SpriteFrame.Height + 10);
                         clothFrame = new Rectangle(spriteFrame.X, spriteFrame.Y + 10, spriteFrame.Width, SpriteFrame.Height + 10);
                         bodyFrame = new Rectangle(spriteFrame.X, spriteFrame.Y + 10, spriteFrame.Width, SpriteFrame.Height + 10);
                         weaponFrame = new Rectangle(spriteFrame.X, spriteFrame.Y + 10, spriteFrame.Width, SpriteFrame.Height + 10);
@@ -918,8 +923,12 @@ namespace XNA_ScreenManager
                     case EntityState.Cooldown:
                         if (equipment.item_list.Find(delegate(Item item) { return item.Type == ItemType.Weapon; }).WeaponType != WeaponType.Bow)
                             weaponFrame = new Rectangle(spriteFrame.X - 20, spriteFrame.Y, spriteFrame.Width + 20, SpriteFrame.Height);
+                        if (equipment.getEquip(ItemSlot.Headgear) != null)
+                            hairFrame = new Rectangle(spriteFrame.X, spriteFrame.Y + 30, spriteFrame.Width, SpriteFrame.Height - 30);
                         break;
                     default:
+                        if (equipment.getEquip(ItemSlot.Headgear) != null)
+                            hairFrame = new Rectangle(spriteFrame.X, spriteFrame.Y + 30, spriteFrame.Width, SpriteFrame.Height - 30);
                         break;
                 }
 
@@ -934,6 +943,10 @@ namespace XNA_ScreenManager
                 if (player.hair_sprite != null)
                     spriteBatch.Draw(Content.Load<Texture2D>(player.hair_sprite), new Rectangle((int)Position.X, (int)(Position.Y - (hairFrame.Height - spriteFrame.Height)), spriteFrame.Width, hairFrame.Height),
                     hairFrame, player.hair_color * this.transperancy, 0f, Vector2.Zero, spriteEffect, 0f);
+
+                if (player.hatgear_sprite != null)
+                    spriteBatch.Draw(Content.Load<Texture2D>(player.hatgear_sprite), new Rectangle((int)Position.X, (int)(Position.Y - (hatFrame.Height - spriteFrame.Height)), spriteFrame.Width, hatFrame.Height),
+                    hatFrame, this.color * this.transperancy, 0f, Vector2.Zero, spriteEffect, 0f);
 
                 if (player.costume_sprite != null)
                     spriteBatch.Draw(Content.Load<Texture2D>(player.costume_sprite), new Rectangle((int)Position.X, (int)(Position.Y + (clothFrame.Height - spriteFrame.Height)), spriteFrame.Width, clothFrame.Height),

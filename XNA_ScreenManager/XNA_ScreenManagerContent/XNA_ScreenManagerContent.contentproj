@@ -946,7 +946,13 @@
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Compile Include="gfx\effects\itemicons\hatgear01.png">
+      <Name>hatgear01</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
   <ItemGroup>
     <Compile Include="gfx\skills\bowman\boost\effect_0.png">
       <Name>effect_0</Name>
@@ -1492,6 +1498,20 @@
     </Compile>
     <Compile Include="gfx\skills\warrior\wave\effect_8.png">
       <Name>effect_8</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="gfx\player\hatgear\hat01.png">
+      <Name>hat01</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="gfx\player\hatgear\hat00.png">
+      <Name>hat00</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
