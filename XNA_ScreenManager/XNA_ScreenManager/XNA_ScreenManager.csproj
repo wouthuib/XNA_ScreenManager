@@ -183,6 +183,8 @@
     <Compile Include="ScriptClasses\QuestStore.cs" />
     <Compile Include="ScriptClasses\ScriptInterpreter.cs" />
     <Compile Include="ScriptClasses\SwitchStore.cs" />
+    <Compile Include="SkillClasses\Skill.cs" />
+    <Compile Include="SkillClasses\SkillStore.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />

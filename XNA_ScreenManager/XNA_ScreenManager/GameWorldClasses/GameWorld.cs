@@ -14,6 +14,7 @@ using XNA_ScreenManager.GameWorldClasses.Entities;
 using XNA_ScreenManager.MonsterClasses;
 using XNA_ScreenManager.GameWorldClasses.Effects;
 using XNA_ScreenManager.PlayerClasses.JobClasses;
+using XNA_ScreenManager.SkillClasses;
 
 
 namespace XNA_ScreenManager.MapClasses
@@ -123,8 +124,9 @@ namespace XNA_ScreenManager.MapClasses
 
             listEntity.Add(playerSprite);
 
-            ItemStore.Instance.loadItems(Content.RootDirectory + @"\itemDB\", "itemtable.bin");
-            MonsterStore.Instance.loadMonster(Content.RootDirectory + @"\monsterDB\", "monstertable.bin");
+            ItemStore.Instance.loadItems(Content.RootDirectory + @"\tables\", "itemtable.bin");
+            MonsterStore.Instance.loadMonster(Content.RootDirectory + @"\tables\", "monstertable.bin");
+            SkillStore.Instance.loadSkills(Content.RootDirectory + @"\tables\", "skilltable.bin");
             LoadEntities();
         }
         #endregion

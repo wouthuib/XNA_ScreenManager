@@ -204,7 +204,7 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <None Include="itemDB\itemtable.bin">
+    <None Include="tables\itemtable.bin">
       <Name>itemtable</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -223,6 +223,10 @@
     </None>
     <None Include="scriptDB\victoria01.txt">
       <Name>victoria01</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="tables\skilltable.bin">
+      <Name>skilltable</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -531,7 +535,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="monsterDB\monstertable.bin">
+    <None Include="tables\monstertable.bin">
       <Name>monstertable</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -1515,6 +1519,9 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="gfx\skills\icons\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
   <!--  To modify your build process, add your task inside one of the targets below and uncomment it. 
