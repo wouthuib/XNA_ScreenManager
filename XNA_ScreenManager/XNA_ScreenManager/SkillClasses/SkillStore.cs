@@ -45,7 +45,21 @@ namespace XNA_ScreenManager.SkillClasses
 
         public Skill getSkill(int ID)
         {
-            return this.skill_list.Find(delegate(Skill Skill) { return Skill.SkillID == ID; });
+            return this.skill_list.Find(delegate(Skill skill) { return skill.SkillID == ID; });
+        }
+
+        public Skill getSkill(string Name)
+        {
+            return this.skill_list.Find(delegate(Skill skill) { return skill.SkillName == Name; });
+        }
+
+        public bool hasSkillRequirement(int ID)
+        {
+            for (int i = 0; i < 4; i++)
+                if (skill_list.Find(delegate(Skill skill) { return skill.SkillID == ID; }).UnlockSkill[i] != null)
+                    return true;
+            // no requirements found
+            return false;
         }
 
         public void loadSkills(string dir, string file)
@@ -102,15 +116,19 @@ namespace XNA_ScreenManager.SkillClasses
 
                             // Skill Level properties
                             skill.MaxLevel = Convert.ToInt32(values[18]);
+                            skill.SkillTreeColumn = Convert.ToInt32(values[19]); 
 
-                            for (int i = 0; i < 8; i+=2)
+                            for (int i = 0; i < 4; i++)
                             {
-                                skill.UnlockSkill[i] = TrimParameter(values[19 + i]);
-                                skill.UnlockLevel[i] = Convert.ToInt32(values[20 + i]);
+                                if (TrimParameter(values[20 + (i * 2)]) != "")
+                                {
+                                    skill.UnlockSkill[i] = TrimParameter(values[20 + (i * 2)]);
+                                    skill.UnlockLevel[i] = Convert.ToInt32(values[21 + (i * 2)]);
+                                }
                             }
 
-                            skill.Type = (SkillType)Enum.Parse(typeof(SkillType), values[27]);
-                            skill.Class = (SkillClass)Enum.Parse(typeof(SkillClass), values[28]);
+                            skill.Type = (SkillType)Enum.Parse(typeof(SkillType), values[28]);
+                            skill.Class = (SkillClass)Enum.Parse(typeof(SkillClass), values[29]);
 
                         }
                     }

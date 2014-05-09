@@ -46,22 +46,27 @@ namespace XNA_ScreenManager.SkillClasses
         public float DynamicDamage { get; set; } // e.g. 1500 * lvl * 0.75f
 
         // Skill unlocks other skills in skill tree
+        public int Level { get; set; }
         public int MaxLevel { get; set; }
         public string[] UnlockSkill { get; set; }
         public int[] UnlockLevel { get; set; }
+        public int SkillTreeColumn { get; set; }
 
         public SkillType Type { get; set; }
         public SkillClass Class { get; set; }
 
         public static Skill create(int identifier, string name, SkillType type)
         {
-            var results = new Skill();
+            var skill = new Skill();
 
-            results.SkillID = identifier;
-            results.SkillName = name;
-            results.Type = type;
+            skill.SkillID = identifier;
+            skill.SkillName = name;
+            skill.Type = type;
+            skill.UnlockSkill = new string[4];
+            skill.UnlockLevel = new int[4];
+            skill.Level = 0;
 
-            return results;
+            return skill;
         }
     }
 }

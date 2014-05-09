@@ -274,9 +274,37 @@ namespace XNA_ScreenManager.ScreenClasses
         {
             if (CheckKey(Keys.Back) || CheckKey(Keys.Escape))
             {
+                skillScreen.OptionsActive = true;
+                skillScreen.SelectActive = false;
+                skillScreen.SelectedOption = 0;
                 activeScreen.Hide();
                 activeScreen = ingameMenuScreen;
                 activeScreen.Show();
+            }
+            if (skillScreen.OptionsActive)
+            {
+                if (CheckKey(Keys.Enter) || CheckKey(Keys.Space))
+                {
+                    switch (skillScreen.SelectedOption)
+                    {
+                        case 0:
+                            skillScreen.OptionsActive = false;
+                            skillScreen.SelectActive = true;
+                            break;
+                        case 1:
+                            skillScreen.OptionsActive = false;
+                            skillScreen.SelectActive = true;
+                            break;
+                        case 2:
+                            skillScreen.SelectedOption = 0;
+                            activeScreen.Hide();
+                            activeScreen = ingameMenuScreen;
+                            activeScreen.Show();
+                            break;
+                        default:
+                            break;
+                    }
+                }
             }
         }
 

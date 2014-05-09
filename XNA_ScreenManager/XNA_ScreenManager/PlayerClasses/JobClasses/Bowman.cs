@@ -120,8 +120,6 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
             {
                 if (!SkillSlots.Instance.active)
                 {
-                    SkillSlots.Instance.active = true;
-
                     // check if weapon is equiped
                     if (equipment.item_list.FindAll(delegate(Item item) { return item.Type == ItemType.Weapon; }).Count > 0)
                     {
@@ -130,6 +128,7 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
                         // check the weapon type
                         if (weapontype == WeaponType.Bow)
                         {
+                            SkillSlots.Instance.active = true;
                             spriteFrame.X = 0;
                             ani_count = 1;              // reset for cast animations
                             state = EntityState.Skill;

@@ -185,6 +185,7 @@
     <Compile Include="ScriptClasses\SwitchStore.cs" />
     <Compile Include="SkillClasses\Skill.cs" />
     <Compile Include="SkillClasses\SkillStore.cs" />
+    <Compile Include="SkillClasses\SkillTree.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />

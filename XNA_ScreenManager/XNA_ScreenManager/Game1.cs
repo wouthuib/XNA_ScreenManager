@@ -99,7 +99,7 @@ namespace XNA_ScreenManager
             ScreenManager.Instance.equipmentMenuScreen = equipmentMenuScreen;
             Components.Add(equipmentMenuScreen);
 
-            skillScreen = new SkillScreen(this, Content.Load<Texture2D>(@"gfx\screens\equipment_menu2"));
+            skillScreen = new SkillScreen(this, Content.Load<Texture2D>(@"gfx\screens\item_menu2"));
             ScreenManager.Instance.skillScreen = skillScreen;
             Components.Add(skillScreen);
 
