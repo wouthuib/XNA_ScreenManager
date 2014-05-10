@@ -85,13 +85,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="gfx\player\player_basic.png">
-      <Name>player_basic</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="gfx\screens\title_menu2.png">
       <Name>title_menu2</Name>
       <Importer>TextureImporter</Importer>
@@ -235,13 +228,6 @@
       <Name>inventory</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="gfx\player\player_complete.png">
-      <Name>player_complete</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="gfx\player\costume\hunter_clothes01.png">

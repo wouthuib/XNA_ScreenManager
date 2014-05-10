@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace XNA_ScreenManager.PlayerClasses.JobClasses
 {
-    public enum SkillState
+    public enum SkillStateBowman
     {
         ArrowShower,
         DoubleStrave,
@@ -24,7 +24,7 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
     {
         Texture2D cast_animation, skill_animation;
         float previousGameTimeMsec, previousSkillTimeMsec, previousCastTimeMsec;
-        private SkillState SkillState = SkillState.None;
+        private SkillStateBowman SkillState = SkillStateBowman.None;
         private bool SkillActive = false;
         private Vector2 curving;
         private int arrow_count, ani_count;
@@ -46,13 +46,13 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
                     case EntityState.Skill:
                         switch (SkillState)
                         {
-                            case SkillState.ArrowShower:
+                            case SkillStateBowman.ArrowShower:
                                 ArrowShower(gameTime);
                                 break;
-                            case SkillState.ArrowWave:
+                            case SkillStateBowman.ArrowWave:
                                 ArrowWave(gameTime);
                                 break;
-                            case SkillState.ImprovedFocus:
+                            case SkillStateBowman.ImprovedFocus:
                                 ImprovedFocus(gameTime);
                                 break;
                         }
@@ -99,7 +99,7 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
             SkillSlots.Instance.active = false;
             spriteFrame.X = 0;
             ani_count = 0;
-            SkillState = JobClasses.SkillState.None;
+            SkillState = JobClasses.SkillStateBowman.None;
             SkillActive = false;
             cast_animation = null;
             skill_animation = null;
@@ -135,12 +135,12 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
 
                             if (CheckKeyDown(Keys.D1))
                             {
-                                SkillState = JobClasses.SkillState.ArrowShower;
+                                SkillState = JobClasses.SkillStateBowman.ArrowShower;
                                 previousCastTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 1.2f;
                             }
                             else if (CheckKeyDown(Keys.D2))
                             {
-                                SkillState = JobClasses.SkillState.ArrowWave;
+                                SkillState = JobClasses.SkillStateBowman.ArrowWave;
                                 previousCastTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 2.1f;
 
                                 // needs to be stored in skill info:
@@ -149,7 +149,7 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
                             }
                             else if (CheckKeyDown(Keys.D3))
                             {
-                                SkillState = JobClasses.SkillState.ImprovedFocus;
+                                SkillState = JobClasses.SkillStateBowman.ImprovedFocus;
                                 previousCastTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 2.1f;
                                 previousSkillTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds;
                             }

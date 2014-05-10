@@ -173,7 +173,7 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
             }
 
             // update 2d array records with skill items
-            record = fetchSkills(gameTime);  // <-- get skill data
+            record = fetchSkills();  // <-- get skill data
 
             // base update
             base.Update(gameTime);
@@ -270,40 +270,19 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
             #endregion
         }
 
-        private string[,] fetchSkills(GameTime gameTime)
+        private string[,] fetchSkills()
         {
-            List<Skill> list = new List<Skill>();
             string[,] record = new string[4, 5];
-            float getTime = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.5f;
 
-            int count = SkillStore.Instance.skill_list.FindAll(
-                                    delegate(Skill getclass)
-                                    { return getclass.Class.ToString() == PlayerStore.Instance.activePlayer.Jobclass.ToString(); }
-                                    ).Count;
-
-            // fetch all skills in columns and rows
-            while (list.Count < count)
+            foreach (Skill skill in SkillStore.Instance.skill_list.FindAll(delegate(Skill getclass)
+                           { return getclass.Class.ToString() == PlayerStore.Instance.activePlayer.Jobclass.ToString(); }))
             {
-                foreach (Skill skill in SkillStore.Instance.skill_list)
-                {
-                    if (list.FindAll(delegate(Skill getskill) { return getskill.SkillID == skill.SkillID; }).Count == 0)
+                for (int i = 0; i < 5; i++)
+                    if (record[skill.SkillTreeColumn, i] == null)
                     {
-                        list.Add(SkillStore.Instance.getSkill(skill.SkillID));
-                        for(int i = 0; i < 5; i++)
-                        {
-                            if (record[skill.SkillTreeColumn, i] == null)
-                            {
-                                record[skill.SkillTreeColumn, i] = skill.SkillName;
-                                break;
-                            }
-                        }
+                        record[skill.SkillTreeColumn, i] = skill.SkillName;
+                        break;
                     }
-                }        
-
-                // endless loop protection
-                getTime -= (float)gameTime.ElapsedGameTime.TotalSeconds;
-                if (getTime < 0)
-                    throw new Exception("Endless loop detected!! Please check your skilltree for errors.");
             }
 
             return record;

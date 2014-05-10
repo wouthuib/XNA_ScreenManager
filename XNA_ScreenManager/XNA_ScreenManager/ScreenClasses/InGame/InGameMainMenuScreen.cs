@@ -48,7 +48,7 @@ namespace XNA_ScreenManager.ScreenClasses
         {
             base.LoadContent();
             infoFont = Content.Load<SpriteFont>(@"font\Arial_12px");
-            HudPicture = Content.Load<Texture2D>(@"gfx\player\player_basic");
+            HudPicture = Content.Load<Texture2D>(@"gfx\player\body\player_basic");
         }
 
         public int SelectedIndex

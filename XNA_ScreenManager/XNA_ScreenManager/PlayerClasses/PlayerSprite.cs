@@ -48,7 +48,7 @@ namespace XNA_ScreenManager
         public Vector2 Direction = Vector2.Zero;                                                    // Sprite Move direction
         public float Speed;                                                                         // Speed used in functions
         public Vector2 Velocity = new Vector2(0,1);                                                 // speed used in jump
-        const int PLAYER_SPEED = 200;                                                               // The actual speed of the player
+        private const int PLAYER_SPEED = 200;                                                       // The actual speed of the player
         const int ANIMATION_SPEED = 120;                                                            // Animation speed, 120 = default 
         const int MOVE_UP = -1;                                                                     // player moving directions
         const int MOVE_DOWN = 1;                                                                    // player moving directions
@@ -123,16 +123,20 @@ namespace XNA_ScreenManager
                 {
                     #region state skillactive
                     case EntityState.Skill:
-                            Speed = 0;
-                            Direction = Vector2.Zero;
-                            Velocity = Vector2.Zero;
 
                             // Move the Character
                             OldPosition = Position;
 
+                            // Walk speed
+                            Position += Direction * Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
                             // player animation
-                            spriteOfset = new Vector2(spriteFrame.Width * 0, spriteFrame.Height * 4);
-                            spriteFrame.Y = (int)spriteOfset.Y;    
+                            if (playerinfo.activePlayer.Jobclass == "bowman")
+                            {
+                                spriteOfset = new Vector2(spriteFrame.Width * 0, spriteFrame.Height * 4);
+                                spriteFrame.Y = (int)spriteOfset.Y;
+                            }
+
                         break;
 
                     #endregion
