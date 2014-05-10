@@ -148,7 +148,7 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
 
             #region menu options
             // Draw Menu Option Types
-            position = new Vector2(320, 130);
+            position = new Vector2(80, 60);
 
             for (int i = 0; i < menuOptions.Length; i++)
             {
@@ -174,11 +174,10 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
 
             #region player Battle Info
             // Draw Player Name
-            spriteBatch.DrawString(spriteFont, PlayerStore.Instance.activePlayer.Name.ToString(),
-                new Vector2(20, 130), NormalColor);
+            spriteBatch.DrawString(spriteFont, "Battle information", new Vector2(500, 150), NormalColor);
 
             // Draw Player Battle Info Values
-            position = new Vector2(20, 170);
+            position = new Vector2(500, 190);
 
             for (int i = 0; i < Enum.GetNames(typeof(PlayerBattleInfo)).Length; i++)
             {
@@ -191,10 +190,10 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
                 Object player = PlayerStore.Instance.activePlayer;
                 PropertyInfo info = player.GetType().GetProperty(Enum.GetNames(typeof(PlayerBattleInfo))[i]);
 
-                // Draw Player Stat Value
+                // Draw Player Battle Values
                 spriteBatch.DrawString(spriteFont,
                 info.GetValue(player, null).ToString(),
-                new Vector2(120, position.Y), NormalColor);
+                new Vector2(600, position.Y), Color.White);
 
                 position.Y += spriteFont.LineSpacing;
             }
@@ -202,8 +201,10 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
 
             #region player Stat Info
 
-            // Draw Player Battle Info Values
-            position = new Vector2(320, 178);
+            // Draw Player Status Details Values
+            spriteBatch.DrawString(spriteFont, "Status details", new Vector2(80, 150), NormalColor);
+
+            position = new Vector2(80, 190);
 
             for (int i = 0; i < Enum.GetNames(typeof(PlayerStats)).Length; i++)
             {
@@ -216,9 +217,9 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
                 Object player = PlayerStore.Instance.activePlayer;
                 PropertyInfo info = player.GetType().GetProperty(Enum.GetNames(typeof(PlayerStats))[i]);
 
-                int columnspacing = 470;
+                int columnspacing = 200;
 
-                if (spriteFont.MeasureString(Enum.GetNames(typeof(PlayerStats))[i]).X > 150)
+                if (spriteFont.MeasureString(Enum.GetNames(typeof(PlayerStats))[i]).X > 120)
                     columnspacing = (int)(spriteFont.MeasureString(PlayerStore.Instance.activePlayer.Name).X + 50);
 
                 // Draw Player Stat Value

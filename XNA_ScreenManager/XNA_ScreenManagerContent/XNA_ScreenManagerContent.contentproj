@@ -1523,6 +1523,18 @@
   <ItemGroup>
     <Folder Include="gfx\skills\icons\" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="gfx\screens\skilltree_menu2.png">
+      <Name>skilltree_menu2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\screens\status_menu2.png">
+      <Name>status_menu2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
   <!--  To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

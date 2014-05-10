@@ -191,7 +191,7 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
 
             #region menu options
             // Draw Menu Option Types
-            position = new Vector2(80, 70);
+            position = new Vector2(80, 60);
 
             for (int i = 0; i < menuOptions.Length; i++)
             {
