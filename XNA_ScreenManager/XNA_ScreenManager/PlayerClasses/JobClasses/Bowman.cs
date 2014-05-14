@@ -20,7 +20,7 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
         None
     }
 
-    public class Bowman : PlayerSprite
+    public class Bowman : PlayerSprite2
     {
         Texture2D cast_animation, skill_animation;
         float previousGameTimeMsec, previousSkillTimeMsec, previousCastTimeMsec;
@@ -187,22 +187,29 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
             // cast should be completed
             if (SkillActive)
             {
+                // Player animation
+                for (int i = 0; i < spritepath.Length; i++)
+                {
+                    spritename = "shoot1_" + spriteframe.ToString();
+                    spriteOfset[i] = getoffsetfromXML(i);
+                }
+
                 // reduce timer
                 previousGameTimeMsec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                 if (previousGameTimeMsec < 0)
                 {
-                    spriteFrame.X += spriteWidth;
+                    spriteframe++;
 
                     if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.D1))
                     {
                         // Later = charge arrow skill
-                        if (spriteFrame.X > spriteOfset.X + (spriteWidth * 1))
-                            spriteFrame.X = (int)spriteOfset.X + spriteWidth;
+                        if (spriteframe > 1)
+                        spriteframe = 1;
                     }
                     else
                     {
-                        if (spriteFrame.X > spriteOfset.X + (spriteWidth * 2))
+                        if (spriteframe > 2)
                         {
                             // make sure the world is connected
                             if (world == null)
@@ -249,12 +256,19 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
             // cast should be completed
             if (SkillActive)
             {
+                // Player animation
+                for (int i = 0; i < spritepath.Length; i++)
+                {
+                    spritename = "shoot1_" + spriteframe.ToString();
+                    spriteOfset[i] = getoffsetfromXML(i);
+                }
+
                 // reduce timer
                 previousGameTimeMsec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                 if (previousGameTimeMsec < 0)
                 {
-                    spriteFrame.X += spriteWidth;
+                    spriteframe++;
 
                     // make sure the world is connected
                     if (world == null)
@@ -278,8 +292,8 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
                         previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.1f;
 
                         // make the player rappidly shoot
-                        if (spriteFrame.X > spriteOfset.X + (spriteWidth * 2))
-                            spriteFrame.X = 1;
+                        if (spriteframe > 2)
+                            spriteframe = 1;
                     }
                     else
                     {

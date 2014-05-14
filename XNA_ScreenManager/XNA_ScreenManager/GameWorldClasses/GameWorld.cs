@@ -32,7 +32,7 @@ namespace XNA_ScreenManager.MapClasses
 
         // Class Instances
         public Map map;
-        public PlayerSprite playerSprite;
+        public PlayerSprite2 playerSprite;
         Camera2d cam;
 
         // Static Classes
@@ -117,7 +117,7 @@ namespace XNA_ScreenManager.MapClasses
                     Background = Content.Load<Texture2D>(@"gfx\background\" + property.Value);
             }
 
-            playerSprite = new PlayerSprite(
+            playerSprite = new PlayerSprite2(
                     (int)map.ObjectGroups["Hero"].Objects["hero"].X,
                     (int)map.ObjectGroups["Hero"].Objects["hero"].Y,
                     new Vector2(map.TileWidth, map.TileHeight));

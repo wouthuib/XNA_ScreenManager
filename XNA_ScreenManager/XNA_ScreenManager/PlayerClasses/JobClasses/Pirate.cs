@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace XNA_ScreenManager.PlayerClasses.JobClasses
 {
-    public class Pirate : PlayerSprite
+    public class Pirate : PlayerSprite2
     {
         public Pirate(int _X, int _Y, Vector2 _tileSize) 
             : base(_X, _Y, _tileSize)

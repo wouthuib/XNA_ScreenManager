@@ -19,7 +19,7 @@
     <ApplicationIcon>Game.ico</ApplicationIcon>
     <Thumbnail>GameThumbnail.png</Thumbnail>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>C:\Users\Wouter\Documents\Visual Studio 2010\Published Projects\</PublishUrl>
+    <PublishUrl>C:\Users\cnlwhuib\Desktop\projects\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
@@ -142,6 +142,7 @@
     <Compile Include="GameWorldClasses\Entities\Warp.cs" />
     <Compile Include="MonsterClasses\MonsterStore.cs" />
     <Compile Include="GameWorldClasses\Entities\Arrow.cs" />
+    <Compile Include="PlayerClasses\PlayerSprite2.cs" />
     <Compile Include="PlayerClasses\JobClasses\Bowman.cs" />
     <Compile Include="PlayerClasses\JobClasses\Magician.cs" />
     <Compile Include="PlayerClasses\JobClasses\Pirate.cs" />

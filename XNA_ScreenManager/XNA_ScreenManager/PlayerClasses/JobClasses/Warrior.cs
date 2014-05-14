@@ -21,7 +21,7 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
         None
     }
 
-    class Warrior : PlayerSprite
+    class Warrior : PlayerSprite2
     {
         Texture2D cast_animation, skill_animation;
         float previousGameTimeMsec, previousSkillTimeMsec, previousCastTimeMsec;
@@ -225,22 +225,13 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
 
                     // player sprite animation and move
                     if (ani_count <= 4)
-                        spriteOfset = new Vector2(spriteFrame.Width * 0, spriteFrame.Height * 10);
+                        spriteframe = 0;
                     else if (ani_count == 5)
                     {
-                        //if(this.spriteEffect == SpriteEffects.FlipHorizontally)
-                        //    this.Direction = new Vector2(1, 0);
-                        //else
-                        //    this.Direction = new Vector2(-1, 0);
-
-                        //this.Speed = 400;
-                        spriteOfset = new Vector2(spriteFrame.Width * 2, spriteFrame.Height * 10);
+                        spriteframe = 1;
                     }
                     else if (ani_count >= 6)
-                        spriteOfset = new Vector2(spriteFrame.Width * 4, spriteFrame.Height * 10);
-
-                    spriteFrame = new Rectangle((int)spriteOfset.X, (int)spriteOfset.Y, 
-                                        spriteFrame.Width, spriteFrame.Height);
+                        spriteframe = 2;
                 }
             }
             else
@@ -276,14 +267,11 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
 
                     // player sprite animation and move
                     if (ani_count == 1)
-                        spriteOfset = new Vector2(spriteFrame.Width * 0, spriteFrame.Height * 10);
+                        spriteframe = 0;
                     else if (ani_count == 2)
-                        spriteOfset = new Vector2(spriteFrame.Width * 2, spriteFrame.Height * 10);
+                        spriteframe = 1;
                     else if (ani_count == 3)
-                        spriteOfset = new Vector2(spriteFrame.Width * 4, spriteFrame.Height * 10);
-
-                    spriteFrame = new Rectangle((int)spriteOfset.X, (int)spriteOfset.Y,
-                                        spriteFrame.Width, spriteFrame.Height);
+                        spriteframe = 2;
                 }
             }
             else

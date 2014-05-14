@@ -179,7 +179,7 @@ namespace XNA_ScreenManager.CharacterClasses
             get { return sprite; }
             protected set { sprite = value; }
         }
-        public Rectangle SpriteFrame
+        public virtual Rectangle SpriteFrame
         {
             get { return spriteFrame; }
             protected set { spriteFrame = value; }
