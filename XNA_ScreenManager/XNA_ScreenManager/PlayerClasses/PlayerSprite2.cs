@@ -57,7 +57,7 @@ namespace XNA_ScreenManager
         private bool landed;                                                                        // land switch, arrow switch
 
         // new Texture properties
-        protected string spritename;
+        protected string spritename = "stand1_0";
         protected string[] spritepath = new string[] 
         { 
             @"gfx\player\body\head\",
@@ -67,7 +67,7 @@ namespace XNA_ScreenManager
             "",
             "", 
         };
-        protected Vector2[] spriteOfset = new Vector2[6];
+        public Vector2[] spriteOfset = new Vector2[6];
         protected int spriteframe = 0, prevspriteframe = 0;
 
         #endregion
@@ -961,7 +961,8 @@ namespace XNA_ScreenManager
                     {
                         if (getspritepath(i) != null)
                         {
-                            drawsprite = Content.Load<Texture2D>(getspritepath(i) + spritename);
+                            string spritepath1 = getspritepath(i); // temporary for debugging
+                            drawsprite = Content.Load<Texture2D>(spritepath1 + spritename);
 
                             if (spriteEffect == SpriteEffects.None)
                                 calculatedPosition = (int)Position.X + (int)spriteOfset[i].X + 35;

@@ -350,8 +350,8 @@ namespace XNA_ScreenManager.PlayerClasses
 
             this.body_sprite = @"gfx\player\body\torso\";
             this.head_sprite = @"gfx\player\body\head\";
-            this.faceset_sprite = @"gfx\player\faceset\face1\";
-            this.hair_sprite = @"gfx\player\hairset\hair1\";
+            this.faceset_sprite = @"gfx\player\faceset\face0\";
+            this.hair_sprite = @"gfx\player\hairset\hair0\";
         }
         #endregion
     }

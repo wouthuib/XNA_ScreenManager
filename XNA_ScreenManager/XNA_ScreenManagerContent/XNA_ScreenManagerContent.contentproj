@@ -1906,1026 +1906,1026 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="gfx\player\faceset\face1\alert_0.png">
+    <Compile Include="gfx\player\faceset\face0\alert_0.png">
       <Name>alert_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\alert_1.png">
+    <Compile Include="gfx\player\faceset\face0\alert_1.png">
       <Name>alert_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\alert_2.png">
+    <Compile Include="gfx\player\faceset\face0\alert_2.png">
       <Name>alert_2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\alert_3.png">
+    <Compile Include="gfx\player\faceset\face0\alert_3.png">
       <Name>alert_3</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\alert_4.png">
+    <Compile Include="gfx\player\faceset\face0\alert_4.png">
       <Name>alert_4</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <None Include="gfx\player\faceset\face1\data.xml">
+    <None Include="gfx\player\faceset\face0\data.xml">
       <Name>data</Name>
       <Importer>XmlImporter</Importer>
       <Processor>PassThroughProcessor</Processor>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <Compile Include="gfx\player\faceset\face1\fly_0.png">
+    <Compile Include="gfx\player\faceset\face0\fly_0.png">
       <Name>fly_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\fly_1.png">
+    <Compile Include="gfx\player\faceset\face0\fly_1.png">
       <Name>fly_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\heal_0.png">
+    <Compile Include="gfx\player\faceset\face0\heal_0.png">
       <Name>heal_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\heal_1.png">
+    <Compile Include="gfx\player\faceset\face0\heal_1.png">
       <Name>heal_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\heal_2.png">
+    <Compile Include="gfx\player\faceset\face0\heal_2.png">
       <Name>heal_2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\jump_0.png">
+    <Compile Include="gfx\player\faceset\face0\jump_0.png">
       <Name>jump_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\ladder_0.png">
+    <Compile Include="gfx\player\faceset\face0\ladder_0.png">
       <Name>ladder_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\ladder_1.png">
+    <Compile Include="gfx\player\faceset\face0\ladder_1.png">
       <Name>ladder_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\proneStab_0.png">
+    <Compile Include="gfx\player\faceset\face0\proneStab_0.png">
       <Name>proneStab_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\proneStab_1.png">
+    <Compile Include="gfx\player\faceset\face0\proneStab_1.png">
       <Name>proneStab_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\prone_0.png">
+    <Compile Include="gfx\player\faceset\face0\prone_0.png">
       <Name>prone_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\rope_0.png">
+    <Compile Include="gfx\player\faceset\face0\rope_0.png">
       <Name>rope_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\rope_1.png">
+    <Compile Include="gfx\player\faceset\face0\rope_1.png">
       <Name>rope_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\shoot1_0.png">
+    <Compile Include="gfx\player\faceset\face0\shoot1_0.png">
       <Name>shoot1_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\shoot1_1.png">
+    <Compile Include="gfx\player\faceset\face0\shoot1_1.png">
       <Name>shoot1_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\shoot1_2.png">
+    <Compile Include="gfx\player\faceset\face0\shoot1_2.png">
       <Name>shoot1_2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\shoot2_0.png">
+    <Compile Include="gfx\player\faceset\face0\shoot2_0.png">
       <Name>shoot2_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\shoot2_1.png">
+    <Compile Include="gfx\player\faceset\face0\shoot2_1.png">
       <Name>shoot2_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\shoot2_2.png">
+    <Compile Include="gfx\player\faceset\face0\shoot2_2.png">
       <Name>shoot2_2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\shoot2_3.png">
+    <Compile Include="gfx\player\faceset\face0\shoot2_3.png">
       <Name>shoot2_3</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\shoot2_4.png">
+    <Compile Include="gfx\player\faceset\face0\shoot2_4.png">
       <Name>shoot2_4</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\shootF_0.png">
+    <Compile Include="gfx\player\faceset\face0\shootF_0.png">
       <Name>shootF_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\shootF_1.png">
+    <Compile Include="gfx\player\faceset\face0\shootF_1.png">
       <Name>shootF_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\shootF_2.png">
+    <Compile Include="gfx\player\faceset\face0\shootF_2.png">
       <Name>shootF_2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\sit_0.png">
+    <Compile Include="gfx\player\faceset\face0\sit_0.png">
       <Name>sit_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\stabO1_0.png">
+    <Compile Include="gfx\player\faceset\face0\stabO1_0.png">
       <Name>stabO1_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\stabO1_1.png">
+    <Compile Include="gfx\player\faceset\face0\stabO1_1.png">
       <Name>stabO1_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\stabO2_0.png">
+    <Compile Include="gfx\player\faceset\face0\stabO2_0.png">
       <Name>stabO2_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\stabO2_1.png">
+    <Compile Include="gfx\player\faceset\face0\stabO2_1.png">
       <Name>stabO2_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\stabOF_0.png">
+    <Compile Include="gfx\player\faceset\face0\stabOF_0.png">
       <Name>stabOF_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\stabOF_1.png">
+    <Compile Include="gfx\player\faceset\face0\stabOF_1.png">
       <Name>stabOF_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\stabOF_2.png">
+    <Compile Include="gfx\player\faceset\face0\stabOF_2.png">
       <Name>stabOF_2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\stabT1_0.png">
+    <Compile Include="gfx\player\faceset\face0\stabT1_0.png">
       <Name>stabT1_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\stabT1_1.png">
+    <Compile Include="gfx\player\faceset\face0\stabT1_1.png">
       <Name>stabT1_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\stabT1_2.png">
+    <Compile Include="gfx\player\faceset\face0\stabT1_2.png">
       <Name>stabT1_2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\stabT2_0.png">
+    <Compile Include="gfx\player\faceset\face0\stabT2_0.png">
       <Name>stabT2_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\stabT2_1.png">
+    <Compile Include="gfx\player\faceset\face0\stabT2_1.png">
       <Name>stabT2_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\stabT2_2.png">
+    <Compile Include="gfx\player\faceset\face0\stabT2_2.png">
       <Name>stabT2_2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\stabTF_0.png">
+    <Compile Include="gfx\player\faceset\face0\stabTF_0.png">
       <Name>stabTF_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\stabTF_1.png">
+    <Compile Include="gfx\player\faceset\face0\stabTF_1.png">
       <Name>stabTF_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\stabTF_2.png">
+    <Compile Include="gfx\player\faceset\face0\stabTF_2.png">
       <Name>stabTF_2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\stabTF_3.png">
+    <Compile Include="gfx\player\faceset\face0\stabTF_3.png">
       <Name>stabTF_3</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\stand1_0.png">
+    <Compile Include="gfx\player\faceset\face0\stand1_0.png">
       <Name>stand1_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\stand1_1.png">
+    <Compile Include="gfx\player\faceset\face0\stand1_1.png">
       <Name>stand1_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\stand1_2.png">
+    <Compile Include="gfx\player\faceset\face0\stand1_2.png">
       <Name>stand1_2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\stand1_3.png">
+    <Compile Include="gfx\player\faceset\face0\stand1_3.png">
       <Name>stand1_3</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\stand1_4.png">
+    <Compile Include="gfx\player\faceset\face0\stand1_4.png">
       <Name>stand1_4</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\stand2_0.png">
+    <Compile Include="gfx\player\faceset\face0\stand2_0.png">
       <Name>stand2_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\stand2_1.png">
+    <Compile Include="gfx\player\faceset\face0\stand2_1.png">
       <Name>stand2_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\stand2_2.png">
+    <Compile Include="gfx\player\faceset\face0\stand2_2.png">
       <Name>stand2_2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\stand2_3.png">
+    <Compile Include="gfx\player\faceset\face0\stand2_3.png">
       <Name>stand2_3</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\stand2_4.png">
+    <Compile Include="gfx\player\faceset\face0\stand2_4.png">
       <Name>stand2_4</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\swingO1_0.png">
+    <Compile Include="gfx\player\faceset\face0\swingO1_0.png">
       <Name>swingO1_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\swingO1_1.png">
+    <Compile Include="gfx\player\faceset\face0\swingO1_1.png">
       <Name>swingO1_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\swingO1_2.png">
+    <Compile Include="gfx\player\faceset\face0\swingO1_2.png">
       <Name>swingO1_2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\swingO2_0.png">
+    <Compile Include="gfx\player\faceset\face0\swingO2_0.png">
       <Name>swingO2_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\swingO2_1.png">
+    <Compile Include="gfx\player\faceset\face0\swingO2_1.png">
       <Name>swingO2_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\swingO2_2.png">
+    <Compile Include="gfx\player\faceset\face0\swingO2_2.png">
       <Name>swingO2_2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\swingO3_0.png">
+    <Compile Include="gfx\player\faceset\face0\swingO3_0.png">
       <Name>swingO3_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\swingO3_1.png">
+    <Compile Include="gfx\player\faceset\face0\swingO3_1.png">
       <Name>swingO3_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\swingO3_2.png">
+    <Compile Include="gfx\player\faceset\face0\swingO3_2.png">
       <Name>swingO3_2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\swingOF_0.png">
+    <Compile Include="gfx\player\faceset\face0\swingOF_0.png">
       <Name>swingOF_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\swingOF_1.png">
+    <Compile Include="gfx\player\faceset\face0\swingOF_1.png">
       <Name>swingOF_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\swingOF_2.png">
+    <Compile Include="gfx\player\faceset\face0\swingOF_2.png">
       <Name>swingOF_2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\swingOF_3.png">
+    <Compile Include="gfx\player\faceset\face0\swingOF_3.png">
       <Name>swingOF_3</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\swingP1_0.png">
+    <Compile Include="gfx\player\faceset\face0\swingP1_0.png">
       <Name>swingP1_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\swingP1_1.png">
+    <Compile Include="gfx\player\faceset\face0\swingP1_1.png">
       <Name>swingP1_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\swingP1_2.png">
+    <Compile Include="gfx\player\faceset\face0\swingP1_2.png">
       <Name>swingP1_2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\swingP2_0.png">
+    <Compile Include="gfx\player\faceset\face0\swingP2_0.png">
       <Name>swingP2_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\swingP2_1.png">
+    <Compile Include="gfx\player\faceset\face0\swingP2_1.png">
       <Name>swingP2_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\swingP2_2.png">
+    <Compile Include="gfx\player\faceset\face0\swingP2_2.png">
       <Name>swingP2_2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\swingPF_0.png">
+    <Compile Include="gfx\player\faceset\face0\swingPF_0.png">
       <Name>swingPF_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\swingPF_1.png">
+    <Compile Include="gfx\player\faceset\face0\swingPF_1.png">
       <Name>swingPF_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\swingPF_2.png">
+    <Compile Include="gfx\player\faceset\face0\swingPF_2.png">
       <Name>swingPF_2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\swingPF_3.png">
+    <Compile Include="gfx\player\faceset\face0\swingPF_3.png">
       <Name>swingPF_3</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\swingT1_0.png">
+    <Compile Include="gfx\player\faceset\face0\swingT1_0.png">
       <Name>swingT1_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\swingT1_1.png">
+    <Compile Include="gfx\player\faceset\face0\swingT1_1.png">
       <Name>swingT1_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\swingT1_2.png">
+    <Compile Include="gfx\player\faceset\face0\swingT1_2.png">
       <Name>swingT1_2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\swingT2_0.png">
+    <Compile Include="gfx\player\faceset\face0\swingT2_0.png">
       <Name>swingT2_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\swingT2_1.png">
+    <Compile Include="gfx\player\faceset\face0\swingT2_1.png">
       <Name>swingT2_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\swingT2_2.png">
+    <Compile Include="gfx\player\faceset\face0\swingT2_2.png">
       <Name>swingT2_2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\swingT3_0.png">
+    <Compile Include="gfx\player\faceset\face0\swingT3_0.png">
       <Name>swingT3_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\swingT3_1.png">
+    <Compile Include="gfx\player\faceset\face0\swingT3_1.png">
       <Name>swingT3_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\swingT3_2.png">
+    <Compile Include="gfx\player\faceset\face0\swingT3_2.png">
       <Name>swingT3_2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\swingTF_0.png">
+    <Compile Include="gfx\player\faceset\face0\swingTF_0.png">
       <Name>swingTF_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\swingTF_1.png">
+    <Compile Include="gfx\player\faceset\face0\swingTF_1.png">
       <Name>swingTF_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\swingTF_2.png">
+    <Compile Include="gfx\player\faceset\face0\swingTF_2.png">
       <Name>swingTF_2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\swingTF_3.png">
+    <Compile Include="gfx\player\faceset\face0\swingTF_3.png">
       <Name>swingTF_3</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\walk1_0.png">
+    <Compile Include="gfx\player\faceset\face0\walk1_0.png">
       <Name>walk1_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\walk1_1.png">
+    <Compile Include="gfx\player\faceset\face0\walk1_1.png">
       <Name>walk1_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\walk1_2.png">
+    <Compile Include="gfx\player\faceset\face0\walk1_2.png">
       <Name>walk1_2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\walk1_3.png">
+    <Compile Include="gfx\player\faceset\face0\walk1_3.png">
       <Name>walk1_3</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\walk2_0.png">
+    <Compile Include="gfx\player\faceset\face0\walk2_0.png">
       <Name>walk2_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\walk2_1.png">
+    <Compile Include="gfx\player\faceset\face0\walk2_1.png">
       <Name>walk2_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\walk2_2.png">
+    <Compile Include="gfx\player\faceset\face0\walk2_2.png">
       <Name>walk2_2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\faceset\face1\walk2_3.png">
+    <Compile Include="gfx\player\faceset\face0\walk2_3.png">
       <Name>walk2_3</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="gfx\player\hairset\hair1\alert_0.png">
+    <Compile Include="gfx\player\hairset\hair0\alert_0.png">
       <Name>alert_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\alert_1.png">
+    <Compile Include="gfx\player\hairset\hair0\alert_1.png">
       <Name>alert_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\alert_2.png">
+    <Compile Include="gfx\player\hairset\hair0\alert_2.png">
       <Name>alert_2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\alert_3.png">
+    <Compile Include="gfx\player\hairset\hair0\alert_3.png">
       <Name>alert_3</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\alert_4.png">
+    <Compile Include="gfx\player\hairset\hair0\alert_4.png">
       <Name>alert_4</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <None Include="gfx\player\hairset\hair1\data.xml">
+    <None Include="gfx\player\hairset\hair0\data.xml">
       <Name>data</Name>
       <Importer>XmlImporter</Importer>
       <Processor>PassThroughProcessor</Processor>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <Compile Include="gfx\player\hairset\hair1\fly_0.png">
+    <Compile Include="gfx\player\hairset\hair0\fly_0.png">
       <Name>fly_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\fly_1.png">
+    <Compile Include="gfx\player\hairset\hair0\fly_1.png">
       <Name>fly_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\heal_0.png">
+    <Compile Include="gfx\player\hairset\hair0\heal_0.png">
       <Name>heal_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\heal_1.png">
+    <Compile Include="gfx\player\hairset\hair0\heal_1.png">
       <Name>heal_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\heal_2.png">
+    <Compile Include="gfx\player\hairset\hair0\heal_2.png">
       <Name>heal_2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\jump_0.png">
+    <Compile Include="gfx\player\hairset\hair0\jump_0.png">
       <Name>jump_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\ladder_0.png">
+    <Compile Include="gfx\player\hairset\hair0\ladder_0.png">
       <Name>ladder_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\ladder_1.png">
+    <Compile Include="gfx\player\hairset\hair0\ladder_1.png">
       <Name>ladder_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\proneStab_0.png">
+    <Compile Include="gfx\player\hairset\hair0\proneStab_0.png">
       <Name>proneStab_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\proneStab_1.png">
+    <Compile Include="gfx\player\hairset\hair0\proneStab_1.png">
       <Name>proneStab_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\prone_0.png">
+    <Compile Include="gfx\player\hairset\hair0\prone_0.png">
       <Name>prone_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\rope_0.png">
+    <Compile Include="gfx\player\hairset\hair0\rope_0.png">
       <Name>rope_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\rope_1.png">
+    <Compile Include="gfx\player\hairset\hair0\rope_1.png">
       <Name>rope_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\shoot1_0.png">
+    <Compile Include="gfx\player\hairset\hair0\shoot1_0.png">
       <Name>shoot1_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\shoot1_1.png">
+    <Compile Include="gfx\player\hairset\hair0\shoot1_1.png">
       <Name>shoot1_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\shoot1_2.png">
+    <Compile Include="gfx\player\hairset\hair0\shoot1_2.png">
       <Name>shoot1_2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\shoot2_0.png">
+    <Compile Include="gfx\player\hairset\hair0\shoot2_0.png">
       <Name>shoot2_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\shoot2_1.png">
+    <Compile Include="gfx\player\hairset\hair0\shoot2_1.png">
       <Name>shoot2_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\shoot2_2.png">
+    <Compile Include="gfx\player\hairset\hair0\shoot2_2.png">
       <Name>shoot2_2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\shoot2_3.png">
+    <Compile Include="gfx\player\hairset\hair0\shoot2_3.png">
       <Name>shoot2_3</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\shoot2_4.png">
+    <Compile Include="gfx\player\hairset\hair0\shoot2_4.png">
       <Name>shoot2_4</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\shootF_0.png">
+    <Compile Include="gfx\player\hairset\hair0\shootF_0.png">
       <Name>shootF_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\shootF_1.png">
+    <Compile Include="gfx\player\hairset\hair0\shootF_1.png">
       <Name>shootF_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\shootF_2.png">
+    <Compile Include="gfx\player\hairset\hair0\shootF_2.png">
       <Name>shootF_2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\sit_0.png">
+    <Compile Include="gfx\player\hairset\hair0\sit_0.png">
       <Name>sit_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\stabO1_0.png">
+    <Compile Include="gfx\player\hairset\hair0\stabO1_0.png">
       <Name>stabO1_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\stabO1_1.png">
+    <Compile Include="gfx\player\hairset\hair0\stabO1_1.png">
       <Name>stabO1_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\stabO2_0.png">
+    <Compile Include="gfx\player\hairset\hair0\stabO2_0.png">
       <Name>stabO2_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\stabO2_1.png">
+    <Compile Include="gfx\player\hairset\hair0\stabO2_1.png">
       <Name>stabO2_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\stabOF_0.png">
+    <Compile Include="gfx\player\hairset\hair0\stabOF_0.png">
       <Name>stabOF_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\stabOF_1.png">
+    <Compile Include="gfx\player\hairset\hair0\stabOF_1.png">
       <Name>stabOF_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\stabOF_2.png">
+    <Compile Include="gfx\player\hairset\hair0\stabOF_2.png">
       <Name>stabOF_2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\stabT1_0.png">
+    <Compile Include="gfx\player\hairset\hair0\stabT1_0.png">
       <Name>stabT1_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\stabT1_1.png">
+    <Compile Include="gfx\player\hairset\hair0\stabT1_1.png">
       <Name>stabT1_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\stabT1_2.png">
+    <Compile Include="gfx\player\hairset\hair0\stabT1_2.png">
       <Name>stabT1_2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\stabT2_0.png">
+    <Compile Include="gfx\player\hairset\hair0\stabT2_0.png">
       <Name>stabT2_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\stabT2_1.png">
+    <Compile Include="gfx\player\hairset\hair0\stabT2_1.png">
       <Name>stabT2_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\stabT2_2.png">
+    <Compile Include="gfx\player\hairset\hair0\stabT2_2.png">
       <Name>stabT2_2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\stabTF_0.png">
+    <Compile Include="gfx\player\hairset\hair0\stabTF_0.png">
       <Name>stabTF_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\stabTF_1.png">
+    <Compile Include="gfx\player\hairset\hair0\stabTF_1.png">
       <Name>stabTF_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\stabTF_2.png">
+    <Compile Include="gfx\player\hairset\hair0\stabTF_2.png">
       <Name>stabTF_2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\stabTF_3.png">
+    <Compile Include="gfx\player\hairset\hair0\stabTF_3.png">
       <Name>stabTF_3</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\stand1_0.png">
+    <Compile Include="gfx\player\hairset\hair0\stand1_0.png">
       <Name>stand1_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\stand1_1.png">
+    <Compile Include="gfx\player\hairset\hair0\stand1_1.png">
       <Name>stand1_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\stand1_2.png">
+    <Compile Include="gfx\player\hairset\hair0\stand1_2.png">
       <Name>stand1_2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\stand1_3.png">
+    <Compile Include="gfx\player\hairset\hair0\stand1_3.png">
       <Name>stand1_3</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\stand1_4.png">
+    <Compile Include="gfx\player\hairset\hair0\stand1_4.png">
       <Name>stand1_4</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\stand2_0.png">
+    <Compile Include="gfx\player\hairset\hair0\stand2_0.png">
       <Name>stand2_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\stand2_1.png">
+    <Compile Include="gfx\player\hairset\hair0\stand2_1.png">
       <Name>stand2_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\stand2_2.png">
+    <Compile Include="gfx\player\hairset\hair0\stand2_2.png">
       <Name>stand2_2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\stand2_3.png">
+    <Compile Include="gfx\player\hairset\hair0\stand2_3.png">
       <Name>stand2_3</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\stand2_4.png">
+    <Compile Include="gfx\player\hairset\hair0\stand2_4.png">
       <Name>stand2_4</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\swingO1_0.png">
+    <Compile Include="gfx\player\hairset\hair0\swingO1_0.png">
       <Name>swingO1_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\swingO1_1.png">
+    <Compile Include="gfx\player\hairset\hair0\swingO1_1.png">
       <Name>swingO1_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\swingO1_2.png">
+    <Compile Include="gfx\player\hairset\hair0\swingO1_2.png">
       <Name>swingO1_2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\swingO2_0.png">
+    <Compile Include="gfx\player\hairset\hair0\swingO2_0.png">
       <Name>swingO2_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\swingO2_1.png">
+    <Compile Include="gfx\player\hairset\hair0\swingO2_1.png">
       <Name>swingO2_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\swingO2_2.png">
+    <Compile Include="gfx\player\hairset\hair0\swingO2_2.png">
       <Name>swingO2_2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\swingO3_0.png">
+    <Compile Include="gfx\player\hairset\hair0\swingO3_0.png">
       <Name>swingO3_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\swingO3_1.png">
+    <Compile Include="gfx\player\hairset\hair0\swingO3_1.png">
       <Name>swingO3_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\swingO3_2.png">
+    <Compile Include="gfx\player\hairset\hair0\swingO3_2.png">
       <Name>swingO3_2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\swingOF_0.png">
+    <Compile Include="gfx\player\hairset\hair0\swingOF_0.png">
       <Name>swingOF_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\swingOF_1.png">
+    <Compile Include="gfx\player\hairset\hair0\swingOF_1.png">
       <Name>swingOF_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\swingOF_2.png">
+    <Compile Include="gfx\player\hairset\hair0\swingOF_2.png">
       <Name>swingOF_2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\swingOF_3.png">
+    <Compile Include="gfx\player\hairset\hair0\swingOF_3.png">
       <Name>swingOF_3</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\swingP1_0.png">
+    <Compile Include="gfx\player\hairset\hair0\swingP1_0.png">
       <Name>swingP1_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\swingP1_1.png">
+    <Compile Include="gfx\player\hairset\hair0\swingP1_1.png">
       <Name>swingP1_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\swingP1_2.png">
+    <Compile Include="gfx\player\hairset\hair0\swingP1_2.png">
       <Name>swingP1_2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\swingP2_0.png">
+    <Compile Include="gfx\player\hairset\hair0\swingP2_0.png">
       <Name>swingP2_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\swingP2_1.png">
+    <Compile Include="gfx\player\hairset\hair0\swingP2_1.png">
       <Name>swingP2_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\swingP2_2.png">
+    <Compile Include="gfx\player\hairset\hair0\swingP2_2.png">
       <Name>swingP2_2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\swingPF_0.png">
+    <Compile Include="gfx\player\hairset\hair0\swingPF_0.png">
       <Name>swingPF_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\swingPF_1.png">
+    <Compile Include="gfx\player\hairset\hair0\swingPF_1.png">
       <Name>swingPF_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\swingPF_2.png">
+    <Compile Include="gfx\player\hairset\hair0\swingPF_2.png">
       <Name>swingPF_2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\swingPF_3.png">
+    <Compile Include="gfx\player\hairset\hair0\swingPF_3.png">
       <Name>swingPF_3</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\swingT1_0.png">
+    <Compile Include="gfx\player\hairset\hair0\swingT1_0.png">
       <Name>swingT1_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\swingT1_1.png">
+    <Compile Include="gfx\player\hairset\hair0\swingT1_1.png">
       <Name>swingT1_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\swingT1_2.png">
+    <Compile Include="gfx\player\hairset\hair0\swingT1_2.png">
       <Name>swingT1_2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\swingT2_0.png">
+    <Compile Include="gfx\player\hairset\hair0\swingT2_0.png">
       <Name>swingT2_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\swingT2_1.png">
+    <Compile Include="gfx\player\hairset\hair0\swingT2_1.png">
       <Name>swingT2_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\swingT2_2.png">
+    <Compile Include="gfx\player\hairset\hair0\swingT2_2.png">
       <Name>swingT2_2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\swingT3_0.png">
+    <Compile Include="gfx\player\hairset\hair0\swingT3_0.png">
       <Name>swingT3_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\swingT3_1.png">
+    <Compile Include="gfx\player\hairset\hair0\swingT3_1.png">
       <Name>swingT3_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\swingT3_2.png">
+    <Compile Include="gfx\player\hairset\hair0\swingT3_2.png">
       <Name>swingT3_2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\swingTF_0.png">
+    <Compile Include="gfx\player\hairset\hair0\swingTF_0.png">
       <Name>swingTF_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\swingTF_1.png">
+    <Compile Include="gfx\player\hairset\hair0\swingTF_1.png">
       <Name>swingTF_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\swingTF_2.png">
+    <Compile Include="gfx\player\hairset\hair0\swingTF_2.png">
       <Name>swingTF_2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\swingTF_3.png">
+    <Compile Include="gfx\player\hairset\hair0\swingTF_3.png">
       <Name>swingTF_3</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\walk1_0.png">
+    <Compile Include="gfx\player\hairset\hair0\walk1_0.png">
       <Name>walk1_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\walk1_1.png">
+    <Compile Include="gfx\player\hairset\hair0\walk1_1.png">
       <Name>walk1_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\walk1_2.png">
+    <Compile Include="gfx\player\hairset\hair0\walk1_2.png">
       <Name>walk1_2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\walk1_3.png">
+    <Compile Include="gfx\player\hairset\hair0\walk1_3.png">
       <Name>walk1_3</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\walk2_0.png">
+    <Compile Include="gfx\player\hairset\hair0\walk2_0.png">
       <Name>walk2_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\walk2_1.png">
+    <Compile Include="gfx\player\hairset\hair0\walk2_1.png">
       <Name>walk2_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\walk2_2.png">
+    <Compile Include="gfx\player\hairset\hair0\walk2_2.png">
       <Name>walk2_2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\hairset\hair1\walk2_3.png">
+    <Compile Include="gfx\player\hairset\hair0\walk2_3.png">
       <Name>walk2_3</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>

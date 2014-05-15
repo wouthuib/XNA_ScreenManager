@@ -82,7 +82,7 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
             // Draw Cast Animation
             if (!SkillActive && SkillSlots.Instance.active && ani_count <= 11)
                 if (cast_animation != null)
-                    spriteBatch.Draw(cast_animation, new Vector2(position.X - 50, position.Y - 85), Color.White * 0.75f);
+                    spriteBatch.Draw(cast_animation, new Vector2(position.X - 60, position.Y - 85), Color.White * 0.75f);
 
             // Draw Skill Animation
             if (SkillActive && SkillSlots.Instance.active)
@@ -225,13 +225,23 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
 
                     // player sprite animation and move
                     if (ani_count <= 4)
-                        spriteframe = 0;
+                    {
+                        spritename = "swingO1_0";
+                        for (int i = 0; i < spritepath.Length; i++)
+                            spriteOfset[i] = getoffsetfromXML(i);
+                    }
                     else if (ani_count == 5)
                     {
-                        spriteframe = 1;
+                        spritename = "swingO1_1";
+                        for (int i = 0; i < spritepath.Length; i++)
+                            spriteOfset[i] = getoffsetfromXML(i);
                     }
                     else if (ani_count >= 6)
-                        spriteframe = 2;
+                    {
+                        spritename = "swingO1_2";
+                        for (int i = 0; i < spritepath.Length; i++)
+                            spriteOfset[i] = getoffsetfromXML(i);
+                    }
                 }
             }
             else
@@ -267,11 +277,23 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
 
                     // player sprite animation and move
                     if (ani_count == 1)
-                        spriteframe = 0;
+                    {
+                        spritename = "swingO1_0";
+                        for (int i = 0; i < spritepath.Length; i++)
+                            spriteOfset[i] = getoffsetfromXML(i);
+                    }
                     else if (ani_count == 2)
-                        spriteframe = 1;
+                    {
+                        spritename = "swingO1_1";
+                        for (int i = 0; i < spritepath.Length; i++)
+                            spriteOfset[i] = getoffsetfromXML(i);
+                    }
                     else if (ani_count == 3)
-                        spriteframe = 2;
+                    {
+                        spritename = "swingO1_2";
+                        for (int i = 0; i < spritepath.Length; i++)
+                            spriteOfset[i] = getoffsetfromXML(i);
+                    }
                 }
             }
             else

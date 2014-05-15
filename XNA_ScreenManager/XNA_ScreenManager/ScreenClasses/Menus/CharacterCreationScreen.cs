@@ -109,7 +109,6 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
 
             // player sprite
             playersprite = new PlayerSprite2(352, 188, new Vector2(32, 32));
-
         }
 
         public override void Update(GameTime gameTime)
@@ -179,6 +178,10 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
             {
                 phase = Phase.Name;
                 newPlayer = new PlayerInfo();
+                playersprite.Player = this.newPlayer;
+                for (int i = 0; i < 6; i++ )
+                    playersprite.spriteOfset[i] = playersprite.getoffsetfromXML(i);
+
                 keyboardiput.Activate(newPlayer.Name.ToString());
 
                 return true;
@@ -191,10 +194,8 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
 
         private void updatePlayerInfo()
         {
-            /*
-            this.newPlayer.faceset_sprite = @"gfx\player\faceset\faceset0" + properties[0].SelectedIndex.ToString();
-            this.newPlayer.hair_sprite = @"gfx\player\hairset\hairset0" + properties[1].SelectedIndex.ToString();
-             * */
+            this.newPlayer.faceset_sprite = @"gfx\player\faceset\face" + properties[0].SelectedIndex.ToString() + "\\";
+            this.newPlayer.hair_sprite = @"gfx\player\hairset\hair" + properties[1].SelectedIndex.ToString() + "\\";
 
             PropertyInfo propinfo = properties[2].GetType().GetProperty("MenuItems");
             StringCollection value = new StringCollection();
@@ -211,7 +212,7 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
             #endregion
 
             // get skin color
-            #region get hair color
+            #region get skin color
             if (propinfo.GetIndexParameters().Length == 0)
                 value = (StringCollection)propinfo.GetValue(properties[3], null);
 
@@ -278,7 +279,6 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
             }
 
             // Draw Player
-            playersprite.Player = this.newPlayer;
             playersprite.Draw(spriteBatch);
         }
 

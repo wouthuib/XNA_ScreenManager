@@ -19,6 +19,7 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
         ContentManager Content;
 
         PlayerStore playerStore = PlayerStore.Instance;
+        PlayerInfo player;
 
         KeyboardState oldState;
         BackgroundComponent bgcomp1, bgcomp2, bgcomp3;
@@ -28,6 +29,7 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
         Texture2D slot;
         Texture2D option_board, screen_board;
         PlayerSprite2 playersprite;
+        public Vector2[] spriteOfset = new Vector2[6];
 
         string[] menuItems = {
             "Select", 
@@ -72,13 +74,19 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
 
             // player sprite
             playersprite = new PlayerSprite2(100, 123, new Vector2(32, 32));
+            player = new PlayerInfo();
+            playersprite.Player = this.player;
+
+            // player offsets
+            for (int i = 0; i < 6; i++)
+                this.spriteOfset[i] = playersprite.getoffsetfromXML(i);
 
             // options
             option_board = Content.Load<Texture2D>(@"gfx\screens\screenobjects\option_board");
             screen_board = Content.Load<Texture2D>(@"gfx\screens\screenobjects\next_board");
 
             // slots
-            slot = Content.Load<Texture2D>(@"gfx\screens\screenobjects\empty_character_slot");
+            slot = Content.Load<Texture2D>(@"gfx\screens\screenobjects\empty_character_slot");            
         }
         
         public int SelectedIndex
@@ -151,6 +159,8 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
                     }
 
                     playersprite.Player = playerStore.getPlayer(null, ID);
+                    for (int i = 0; i < 6; i++ )
+                        playersprite.spriteOfset[i] = this.spriteOfset[i];
                     playersprite.Draw(spriteBatch);
 
                     // Draw player Name Rect
