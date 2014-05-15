@@ -90,13 +90,13 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
                 {
                     if (this.spriteEffect == SpriteEffects.None)
                         spriteBatch.Draw(skill_animation,
-                            new Vector2(position.X - ((skill_animation.Width - spriteFrame.Width) * 0.5f) + animationOffset.X,
-                                    position.Y - ((skill_animation.Height * 0.9f) - spriteFrame.Height) + animationOffset.Y),
+                            new Vector2(position.X - ((skill_animation.Width - SpriteFrame.Width) * 0.5f) + animationOffset.X,
+                                    position.Y - ((skill_animation.Height * 0.9f) - SpriteFrame.Height) + animationOffset.Y),
                             Color.White * 0.75f);
                     else
                         spriteBatch.Draw(skill_animation,
-                            new Rectangle((int)(position.X - ((skill_animation.Width - spriteFrame.Width) * 0.5f) + animationOffset.X),
-                                          (int)(position.Y - ((skill_animation.Height * 0.9f) - spriteFrame.Height) + animationOffset.Y),
+                            new Rectangle((int)(position.X - ((skill_animation.Width - SpriteFrame.Width) * 0.5f) + animationOffset.X),
+                                          (int)(position.Y - ((skill_animation.Height * 0.9f) - SpriteFrame.Height) + animationOffset.Y),
                                           skill_animation.Width, skill_animation.Height),
                             new Rectangle(0, 0, skill_animation.Width,skill_animation.Height),
                             Color.White * 0.75f, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);

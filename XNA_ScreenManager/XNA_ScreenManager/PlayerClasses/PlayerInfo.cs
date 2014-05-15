@@ -38,7 +38,9 @@ namespace XNA_ScreenManager.PlayerClasses
 
         #region texture properties
 
+        public string head_sprite;
         public string body_sprite;
+        public string hands_sprite;
         public string hair_sprite;
         public string faceset_sprite;
 
@@ -346,9 +348,10 @@ namespace XNA_ScreenManager.PlayerClasses
             this.Luck = 1;
             this.Agility = 10;
 
-            this.body_sprite = @"gfx\player\body\player_basic";
-            this.faceset_sprite = @"gfx\player\faceset\faceset01";
-            this.hair_sprite = @"gfx\player\hairset\hairset01";
+            this.body_sprite = @"gfx\player\body\torso\";
+            this.head_sprite = @"gfx\player\body\head\";
+            this.faceset_sprite = @"gfx\player\faceset\face1\";
+            this.hair_sprite = @"gfx\player\hairset\hair1\";
         }
         #endregion
     }

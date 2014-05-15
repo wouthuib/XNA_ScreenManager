@@ -27,7 +27,7 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
 
         Texture2D slot;
         Texture2D option_board, screen_board;
-        PlayerSprite playersprite;
+        PlayerSprite2 playersprite;
 
         string[] menuItems = {
             "Select", 
@@ -71,7 +71,7 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
             menu.EndIndex = 3;
 
             // player sprite
-            playersprite = new PlayerSprite(100, 123, new Vector2(32, 32));
+            playersprite = new PlayerSprite2(100, 123, new Vector2(32, 32));
 
             // options
             option_board = Content.Load<Texture2D>(@"gfx\screens\screenobjects\option_board");

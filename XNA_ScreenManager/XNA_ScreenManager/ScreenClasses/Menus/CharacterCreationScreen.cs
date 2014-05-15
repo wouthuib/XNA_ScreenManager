@@ -30,7 +30,7 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
         public KeyboardInput keyboardiput;
         BackgroundComponent[] bgcomp = new BackgroundComponent[8];
         SpriteFont spriteFont, smallFont;
-        PlayerSprite playersprite;
+        PlayerSprite2 playersprite;
         //PlayerStore playerInfo = PlayerStore.Instance;
         public PlayerInfo newPlayer = null;
         public Phase phase = new Phase();
@@ -108,7 +108,7 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
             phase = Phase.Name;
 
             // player sprite
-            playersprite = new PlayerSprite(352, 188, new Vector2(32, 32));
+            playersprite = new PlayerSprite2(352, 188, new Vector2(32, 32));
 
         }
 
@@ -191,8 +191,10 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
 
         private void updatePlayerInfo()
         {
+            /*
             this.newPlayer.faceset_sprite = @"gfx\player\faceset\faceset0" + properties[0].SelectedIndex.ToString();
             this.newPlayer.hair_sprite = @"gfx\player\hairset\hairset0" + properties[1].SelectedIndex.ToString();
+             * */
 
             PropertyInfo propinfo = properties[2].GetType().GetProperty("MenuItems");
             StringCollection value = new StringCollection();

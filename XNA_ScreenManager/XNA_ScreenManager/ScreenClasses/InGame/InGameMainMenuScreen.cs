@@ -48,7 +48,7 @@ namespace XNA_ScreenManager.ScreenClasses
         {
             base.LoadContent();
             infoFont = Content.Load<SpriteFont>(@"font\Arial_12px");
-            HudPicture = Content.Load<Texture2D>(@"gfx\player\body\player_basic");
+            HudPicture = Content.Load<Texture2D>(@"gfx\player\body\head\stand1_0");
         }
 
         public int SelectedIndex
@@ -106,8 +106,9 @@ namespace XNA_ScreenManager.ScreenClasses
 
         private void drawPlayerInfo(GameTime gameTime)
         {
-            spriteBatch.Draw(HudPicture, new Rectangle(300,75,60,60), 
-                new Rectangle(20, 0, 60, 60), Color.White, 
+            spriteBatch.Draw(Content.Load<Texture2D>(@"gfx\player\body\head\stand1_0"), 
+                new Rectangle(300, 75, 60, 60),
+                new Rectangle(0, 0, HudPicture.Width, HudPicture.Height), PlayerStore.Instance.activePlayer.skin_color, 
                 0f, new Vector2(0,0), SpriteEffects.FlipHorizontally, 1);
 
             int columnspacing = 450;

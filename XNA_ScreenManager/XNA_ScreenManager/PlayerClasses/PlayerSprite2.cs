@@ -19,6 +19,7 @@ namespace XNA_ScreenManager
     public class PlayerSprite2 : Entity
     {
         #region properties
+
         // The Gameworld
         protected GameWorld world;
         protected ResourceManager resourcemanager = ResourceManager.GetInstance;
@@ -59,20 +60,19 @@ namespace XNA_ScreenManager
         protected string spritename;
         protected string[] spritepath = new string[] 
         { 
-            @"gfx\player\head2\head2\",
-            @"gfx\player\body2\body2\", 
-            @"gfx\player\face2\face1\",
-            @"gfx\player\hair2\hair1\",
-            @"gfx\player\overal2\overal1\",
-            @"gfx\player\weapon2\sword1\", 
+            @"gfx\player\body\head\",
+            @"gfx\player\body\torso\", 
+            @"gfx\player\faceset\face1\",
+            @"gfx\player\hairset\hair1\",
+            "",
+            "", 
         };
         protected Vector2[] spriteOfset = new Vector2[6];
-        protected int spriteframe = 0;
+        protected int spriteframe = 0, prevspriteframe = 0;
 
         #endregion
 
-        public PlayerSprite2(//GameWorld getworld,
-            int _X, int _Y, Vector2 _tileSize)
+        public PlayerSprite2(int _X, int _Y, Vector2 _tileSize)
             : base()
         {
             // Derived properties
@@ -151,15 +151,19 @@ namespace XNA_ScreenManager
                         previousGameTimeMsec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                         // Player animation
-                        for (int i = 0; i < spritepath.Length; i++)
+                        if (prevspriteframe != spriteframe)
                         {
-                            spritename = "swingO1_" + spriteframe.ToString();
-                            spriteOfset[i] = getoffsetfromXML(i);
+                            prevspriteframe = spriteframe;
+                            for (int i = 0; i < spritepath.Length; i++)
+                            {
+                                spritename = "swingO1_" + spriteframe.ToString();
+                                spriteOfset[i] = getoffsetfromXML(i);
+                            }
                         }
 
                         if (previousGameTimeMsec < 0)
                         {
-                            previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - this.playerinfo.activePlayer.ASPD * 12) * 0.0006f) + 0.05f;
+                            previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.10f;
 
                             // set sprite frames
                             spriteframe++;
@@ -167,7 +171,7 @@ namespace XNA_ScreenManager
                             if (spriteframe > 2)
                             {
                                 spriteframe = 2;
-                                previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - this.playerinfo.activePlayer.ASPD * 12) * 0.0006f) + 0.05f;
+                                previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.10f;
 
                                 // make sure the world is connected
                                 if (world == null)
@@ -176,12 +180,12 @@ namespace XNA_ScreenManager
                                 // create swing effect
                                 if (spriteEffect == SpriteEffects.FlipHorizontally)
                                     world.newEffect.Add(new WeaponSwing(
-                                        new Vector2(this.Position.X + this.spriteFrame.Height * 1.2f, this.Position.Y + this.spriteFrame.Height * 0.7f),
+                                        new Vector2(this.Position.X + this.SpriteFrame.Width * 1.4f, this.Position.Y + this.SpriteFrame.Height * 0.7f),
                                         WeaponSwingType.Swing01,
                                         spriteEffect));
                                 else
                                     world.newEffect.Add(new WeaponSwing(
-                                        new Vector2(this.Position.X - this.spriteFrame.Height * 0.2f, this.Position.Y + this.spriteFrame.Height * 0.7f),
+                                        new Vector2(this.Position.X - this.SpriteFrame.Width * 0.6f, this.Position.Y + this.SpriteFrame.Height * 0.7f),
                                         WeaponSwingType.Swing01,
                                         spriteEffect));
 
@@ -207,17 +211,21 @@ namespace XNA_ScreenManager
 
                         // reduce timer
                         previousGameTimeMsec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
-                        
+
                         // Player animation
-                        for (int i = 0; i < spritepath.Length; i++)
+                        if (prevspriteframe != spriteframe)
                         {
-                            spritename = "stabO1_" + spriteframe.ToString();
-                            spriteOfset[i] = getoffsetfromXML(i);
+                            prevspriteframe = spriteframe;
+                            for (int i = 0; i < spritepath.Length; i++)
+                            {
+                                spritename = "stabO1_" + spriteframe.ToString();
+                                spriteOfset[i] = getoffsetfromXML(i);
+                            }
                         }
 
                         if (previousGameTimeMsec < 0)
                         {
-                            previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerinfo.activePlayer.ASPD * 12) * 0.0006f) + 0.05f;
+                            previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.10f;
 
                             // set sprite frames
                             spriteframe++;
@@ -225,15 +233,21 @@ namespace XNA_ScreenManager
                             if (spriteframe > 1)
                             {
                                 spriteframe = 1;
-                                previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerinfo.activePlayer.ASPD * 12) * 0.0006f) + 0.05f;
+                                previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.10f;
 
                                 // make sure the world is connected
                                 if (world == null)
                                     world = GameWorld.GetInstance;
 
-                                // create swing effect
-                                world.newEffect.Add(new WeaponSwing(
-                                        new Vector2(this.Position.X, this.Position.Y + this.spriteFrame.Height * 0.7f),
+                                // create stab effect
+                                if (spriteEffect == SpriteEffects.FlipHorizontally)
+                                    world.newEffect.Add(new WeaponSwing(
+                                        new Vector2(this.Position.X + this.SpriteFrame.Width * 0.3f, this.Position.Y + this.SpriteFrame.Height * 0.7f),
+                                        WeaponSwingType.Stab01,
+                                        spriteEffect));
+                                else
+                                    world.newEffect.Add(new WeaponSwing(
+                                        new Vector2(this.Position.X - this.SpriteFrame.Width * 0.7f, this.Position.Y + this.SpriteFrame.Height * 0.7f),
                                         WeaponSwingType.Stab01,
                                         spriteEffect));
 
@@ -261,10 +275,14 @@ namespace XNA_ScreenManager
                         previousGameTimeMsec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
                         
                         // Player animation
-                        for (int i = 0; i < spritepath.Length; i++)
+                        if (prevspriteframe != spriteframe)
                         {
-                            spritename = "shoot1_" + spriteframe.ToString();
-                            spriteOfset[i] = getoffsetfromXML(i);
+                            prevspriteframe = spriteframe;
+                            for (int i = 0; i < spritepath.Length; i++)
+                            {
+                                spritename = "shoot1_" + spriteframe.ToString();
+                                spriteOfset[i] = getoffsetfromXML(i);
+                            }
                         }
 
                         if (previousGameTimeMsec < 0)
@@ -289,15 +307,15 @@ namespace XNA_ScreenManager
                                     // create and release an arrow
                                     if (spriteEffect == SpriteEffects.FlipHorizontally)
                                         world.newEffect.Add(new Arrow(Content.Load<Texture2D>(@"gfx\gameobjects\arrow"),
-                                            new Vector2(this.Position.X, this.Position.Y + this.spriteFrame.Height * 0.6f),
+                                            new Vector2(this.Position.X, this.Position.Y + this.SpriteFrame.Height * 0.6f),
                                             800, new Vector2(1, 0), Vector2.Zero));
                                     else
                                         world.newEffect.Add(new Arrow(Content.Load<Texture2D>(@"gfx\gameobjects\arrow"),
-                                            new Vector2(this.Position.X, this.Position.Y + this.spriteFrame.Height * 0.6f),
+                                            new Vector2(this.Position.X, this.Position.Y + this.SpriteFrame.Height * 0.6f),
                                             800, new Vector2(-1, 0), Vector2.Zero));
 
                                     // Set the timer for cooldown
-                                    previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerinfo.activePlayer.ASPD * 12) * 0.0006f) + 0.05f;
+                                    previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.10f;
 
                                     // reset sprite frame and change state
                                     // start cooldown
@@ -338,10 +356,14 @@ namespace XNA_ScreenManager
                         OldPosition = Position;
 
                         // Player animation
-                        for (int i = 0; i < spritepath.Length; i++)
+                        if (prevspriteframe != spriteframe)
                         {
-                            spritename = "sit_0";
-                            spriteOfset[i] = getoffsetfromXML(i);
+                            prevspriteframe = spriteframe;
+                            for (int i = 0; i < spritepath.Length; i++)
+                            {
+                                spritename = "sit_0";
+                                spriteOfset[i] = getoffsetfromXML(i);
+                            }
                         }                        
 
                         // Apply Gravity 
@@ -401,10 +423,14 @@ namespace XNA_ScreenManager
                         }
 
                         // Player animation
-                        for (int i = 0; i < spritepath.Length; i++)
+                        if (prevspriteframe != spriteframe)
                         {
-                            spritename = "stand1_" + spriteframe.ToString();
-                            spriteOfset[i] = getoffsetfromXML(i);
+                            prevspriteframe = spriteframe;
+                            for (int i = 0; i < spritepath.Length; i++)
+                            {
+                                spritename = "stand1_" + spriteframe.ToString();
+                                spriteOfset[i] = getoffsetfromXML(i);
+                            }
                         }
 
                         // Move the Character
@@ -467,10 +493,14 @@ namespace XNA_ScreenManager
                         }
 
                         // Player animation
-                        for (int i = 0; i < spritepath.Length; i++)
+                        if (prevspriteframe != spriteframe)
                         {
-                            spritename = "ladder_" + spriteframe.ToString();
-                            spriteOfset[i] = getoffsetfromXML(i);
+                            prevspriteframe = spriteframe;
+                            for (int i = 0; i < spritepath.Length; i++)
+                            {
+                                spritename = "ladder_" + spriteframe.ToString();
+                                spriteOfset[i] = getoffsetfromXML(i);
+                            }
                         }
 
                         // Move the Character
@@ -570,10 +600,14 @@ namespace XNA_ScreenManager
                         }
 
                         // Player animation
-                        for (int i = 0; i < spritepath.Length; i++)
+                        if (prevspriteframe != spriteframe)
                         {
-                            spritename = "stand1_" + spriteframe.ToString();
-                            spriteOfset[i] = getoffsetfromXML(i);
+                            prevspriteframe = spriteframe;
+                            for (int i = 0; i < spritepath.Length; i++)
+                            {
+                                spritename = "stand1_" + spriteframe.ToString();
+                                spriteOfset[i] = getoffsetfromXML(i);
+                            }
                         }
 
                         // Apply Gravity 
@@ -628,10 +662,14 @@ namespace XNA_ScreenManager
                             spriteframe = 0;
 
                         // Player animation
-                        for (int i = 0; i < spritepath.Length; i++)
+                        if (prevspriteframe != spriteframe)
                         {
-                            spritename = "walk1_" + spriteframe.ToString();
-                            spriteOfset[i] = getoffsetfromXML(i);
+                            prevspriteframe = spriteframe;
+                            for (int i = 0; i < spritepath.Length; i++)
+                            {
+                                spritename = "walk1_" + spriteframe.ToString();
+                                spriteOfset[i] = getoffsetfromXML(i);
+                            }
                         }
 
                         // Check if player is steady standing
@@ -701,7 +739,7 @@ namespace XNA_ScreenManager
                             {
                                 spritename = "jump_0";
                                 spriteOfset[i] = getoffsetfromXML(i);
-                            }                
+                            }
         
                             // Apply Gravity + jumping
                             if (Velocity.Y < -1.2f)
@@ -725,13 +763,6 @@ namespace XNA_ScreenManager
                     #endregion
                     #region state falling
                     case EntityState.Falling:
-
-                        // Player animation
-                        for (int i = 0; i < spritepath.Length; i++)
-                        {
-                            spritename = "fly_0";
-                            spriteOfset[i] = getoffsetfromXML(i);
-                        }                        
 
                         if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Left))
                         {
@@ -793,6 +824,14 @@ namespace XNA_ScreenManager
                             // Walk / Jump speed
                             Position += Direction * (Speed / 2) * (float)gameTime.ElapsedGameTime.TotalSeconds;
                         }
+
+                        // Player animation
+                        for (int i = 0; i < spritepath.Length; i++)
+                        {
+                            spritename = "fly_0";
+                            spriteOfset[i] = getoffsetfromXML(i);
+                        }
+
                         break;
                     #endregion
                     #region state hit
@@ -811,13 +850,13 @@ namespace XNA_ScreenManager
 
                         // Move the Character
                         OldPosition = Position;
-                        
+
                         // Player animation
                         for (int i = 0; i < spritepath.Length; i++)
                         {
-                            spritename = "fly_0";
+                            spritename = "fly_0" + spriteframe.ToString();
                             spriteOfset[i] = getoffsetfromXML(i);
-                        } 
+                        }
 
                         // Set new state
                         state = EntityState.Frozen;
@@ -839,11 +878,11 @@ namespace XNA_ScreenManager
 
                         // Move the Character
                         OldPosition = Position;
-                        
+
                         // Player animation
                         for (int i = 0; i < spritepath.Length; i++)
                         {
-                            spritename = "fly_0";
+                            spritename = "fly_0" + spriteframe.ToString();
                             spriteOfset[i] = getoffsetfromXML(i);
                         }
 
@@ -912,37 +951,42 @@ namespace XNA_ScreenManager
         {
             if (Active)
             {
-                Texture2D rect = new Texture2D(resourcemanager.gfxdevice, SpriteFrame.Width, SpriteFrame.Height);
-
-                Color[] data = new Color[(int)(SpriteFrame.Width * SpriteFrame.Height)];
-                for (int i = 0; i < data.Length; ++i) data[i] = Color.Black;
-                rect.SetData(data);
-
-                spriteBatch.Draw(rect, new Vector2(position.X, position.Y + 0), Color.White * 0.5f);
-
                 for (int i = 0; i < spritepath.Length; i++)
                 {
-                    Texture2D spriteframe = Content.Load<Texture2D>(spritepath[i] + spritename);
+                    Color drawcolor = Color.White;
+                    Texture2D drawsprite = null;
+                    int calculatedPosition = 0;
 
-                    if (spriteEffect == SpriteEffects.None)
-                        spriteBatch.Draw(spriteframe,
-                        new Rectangle(
-                            (int)Position.X + (int)spriteOfset[i].X + 35,
-                            (int)Position.Y + (int)spriteOfset[i].Y + 78,
-                            spriteframe.Width, spriteframe.Height),
-                        new Rectangle(0, 0, spriteframe.Width, spriteframe.Height),
-                        Color.White,
-                        0f, Vector2.Zero, spriteEffect, 0f);
-                    else
-                        spriteBatch.Draw(spriteframe,
-                        new Rectangle(
-                            (int)Position.X + (int)spriteOfset[i].X - 15,
-                            (int)Position.Y + (int)spriteOfset[i].Y + 78,
-                            spriteframe.Width, spriteframe.Height),
-                        new Rectangle(0, 0, spriteframe.Width, spriteframe.Height),
-                        Color.White,
-                        0f, Vector2.Zero, spriteEffect, 0f);
+                    try
+                    {
+                        if (getspritepath(i) != null)
+                        {
+                            drawsprite = Content.Load<Texture2D>(getspritepath(i) + spritename);
 
+                            if (spriteEffect == SpriteEffects.None)
+                                calculatedPosition = (int)Position.X + (int)spriteOfset[i].X + 35;
+                            else
+                                calculatedPosition = (int)Position.X + (int)Math.Abs(spriteOfset[i].X) - drawsprite.Width + 25;
+
+                            if (i == 0 || i == 1)
+                            {
+                                if (this.Player == null)
+                                    drawcolor = PlayerStore.Instance.activePlayer.skin_color;
+                                else
+                                    drawcolor = this.Player.skin_color;
+                            }
+
+                            spriteBatch.Draw(drawsprite,
+                                new Rectangle(calculatedPosition, (int)Position.Y + (int)spriteOfset[i].Y + 78,
+                                    drawsprite.Width, drawsprite.Height),
+                                new Rectangle(0, 0, drawsprite.Width, drawsprite.Height),
+                                drawcolor * this.transperancy, 0f, Vector2.Zero, spriteEffect, 0f);
+                        }
+                    }
+                    catch
+                    {
+                        // no texture found
+                    }
                 }
             }
         }
@@ -979,61 +1023,91 @@ namespace XNA_ScreenManager
         {
             List<string> attribute = new List<string>();
 
-            using (var reader = new StreamReader(Path.Combine(Content.RootDirectory + "\\" + spritepath[spriteID], "data.xml")))
+            if (getspritepath(spriteID) != null)
             {
-                while (!reader.EndOfStream)
+                using (var reader = new StreamReader(Path.Combine(Content.RootDirectory + "\\" + getspritepath(spriteID), "data.xml")))
                 {
-                    var line = reader.ReadLine();
-                    var values = line.Split(' ');
-
-                    try
+                    while (!reader.EndOfStream)
                     {
-                        if (values[0] != "<i>")
+                        var line = reader.ReadLine();
+                        var values = line.Split(' ');
+
+                        try
                         {
-                            for (int i = 0; i < values.Length; i++)
+                            if (values[0] != "<i>")
                             {
-                                if (values[i].StartsWith("image="))
+                                for (int i = 0; i < values.Length; i++)
                                 {
-                                    char[] arrstart = new char[] { 'i', 'm', 'a', 'g', 'e', '=', '"' };
-                                    char[] arrend = new char[] { '"' };
-                                    string result = values[i].TrimStart(arrstart);
-                                    result = result.TrimEnd(arrend);
-                                    attribute.Add(result);
-                                }
-                                else if (values[i].StartsWith("x="))
-                                {
-                                    char[] arrstart = new char[] { 'x', '=', '"' };
-                                    char[] arrend = new char[] { '"' };
-                                    string result = values[i].TrimStart(arrstart);
-                                    result = result.TrimEnd(arrend);
-                                    attribute.Add(result);
-                                }
-                                else if (values[i].StartsWith("y="))
-                                {
-                                    char[] arrstart = new char[] { 'y', '=', '"' };
-                                    char[] arrend = new char[] { '"', '\\', '"', '/', '>' };
-                                    string result = values[i].TrimStart(arrstart);
-                                    result = result.TrimEnd(arrend);
-                                    attribute.Add(result);
+                                    if (values[i].StartsWith("image="))
+                                    {
+                                        char[] arrstart = new char[] { 'i', 'm', 'a', 'g', 'e', '=', '"' };
+                                        char[] arrend = new char[] { '"' };
+                                        string result = values[i].TrimStart(arrstart);
+                                        result = result.TrimEnd(arrend);
+                                        attribute.Add(result);
+                                    }
+                                    else if (values[i].StartsWith("x="))
+                                    {
+                                        char[] arrstart = new char[] { 'x', '=', '"' };
+                                        char[] arrend = new char[] { '"' };
+                                        string result = values[i].TrimStart(arrstart);
+                                        result = result.TrimEnd(arrend);
+                                        attribute.Add(result);
+                                    }
+                                    else if (values[i].StartsWith("y="))
+                                    {
+                                        char[] arrstart = new char[] { 'y', '=', '"' };
+                                        char[] arrend = new char[] { '"', '\\', '"', '/', '>' };
+                                        string result = values[i].TrimStart(arrstart);
+                                        result = result.TrimEnd(arrend);
+                                        attribute.Add(result);
+                                    }
                                 }
                             }
                         }
+                        catch (Exception ex)
+                        {
+                            string ee = ex.ToString();
+                        }
                     }
-                    catch (Exception ex)
-                    {
-                        string ee = ex.ToString();
-                    }
+                }
+
+                for (int i = 0; i < attribute.Count; i++)
+                {
+                    if (attribute[i].ToString() == spritename.ToString() + ".png")
+                        return new Vector2(Convert.ToInt32(attribute[i + 1]),
+                                           Convert.ToInt32(attribute[i + 2]));
                 }
             }
 
-            for (int i = 0; i < attribute.Count; i ++ )
-            {
-                if (attribute[i].ToString() == spritename.ToString() + ".png")
-                    return new Vector2(Convert.ToInt32(attribute[i + 1]), 
-                                       Convert.ToInt32(attribute[i + 2]));
-            }
-
             return Vector2.Zero;
+        }
+
+        public string getspritepath(int spriteID)
+        {
+            PlayerInfo player = null;
+
+            if (this.Player == null)
+                player = PlayerStore.Instance.activePlayer;
+            else
+                player = this.Player;
+
+            switch (spriteID)
+            {
+                case 0:
+                    return player.head_sprite;
+                case 1:
+                    return player.body_sprite;
+                case 2:
+                    return player.faceset_sprite;
+                case 3:
+                    return player.hair_sprite;
+                case 4:
+                    return player.costume_sprite;
+                case 5:
+                    return player.weapon_sprite;
+            }
+            return null;
         }
     }
 }
