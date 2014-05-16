@@ -191,7 +191,7 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
                 for (int i = 0; i < spritepath.Length; i++)
                 {
                     spritename = "shoot1_" + spriteframe.ToString();
-                    spriteOfset[i] = getoffsetfromXML(i);
+                    playerStore.activePlayer.spriteOfset[i] = getoffset(i);
                 }
 
                 // reduce timer
@@ -260,7 +260,7 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
                 for (int i = 0; i < spritepath.Length; i++)
                 {
                     spritename = "shoot1_" + spriteframe.ToString();
-                    spriteOfset[i] = getoffsetfromXML(i);
+                    playerStore.activePlayer.spriteOfset[i] = getoffset(i);
                 }
 
                 // reduce timer

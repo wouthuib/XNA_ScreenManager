@@ -57,6 +57,20 @@ namespace XNA_ScreenManager.ItemClasses
         Accessory,      // rings etc..
         None           // not applicable
     };
+    
+    public struct spriteOffset
+    {
+        public string Name;
+        public int ID, X, Y;
+
+        public spriteOffset(int id, string name, int x, int y)
+        {
+            this.ID = id;
+            this.Name = name;
+            this.X = x;
+            this.Y = y;
+        }
+    }
 
     [Serializable]
     public class Item
@@ -82,6 +96,8 @@ namespace XNA_ScreenManager.ItemClasses
         public ItemClass Class { get; set; }
         public ItemSlot Slot { get; set; }
         public WeaponType WeaponType { get; set; }
+                
+        public List<spriteOffset> list_offsets = new List<spriteOffset>();
 
         public static Item create(int identifier, string name, ItemType type)
         {

@@ -81,6 +81,7 @@ namespace XNA_ScreenManager.ItemClasses
                             item.Class = (ItemClass)Enum.Parse(typeof(ItemClass), values[15]);
                             item.Slot = (ItemSlot)Enum.Parse(typeof(ItemSlot), values[16]);
                             item.WeaponType = (WeaponType)Enum.Parse(typeof(WeaponType), values[17]);
+                            item.list_offsets = loadoffsetfromXML(item);                            
                         }
                     }
                     catch (Exception ee)
@@ -129,5 +130,82 @@ namespace XNA_ScreenManager.ItemClasses
                 }
             }
         }
+
+        private List<spriteOffset> loadoffsetfromXML(Item item)
+        { 
+            List<spriteOffset> newlist = new List<spriteOffset>();
+            List<string> attribute = new List<string>();
+
+            int equipID = 0;
+            if (item.Type == ItemType.Armor)
+                equipID = 4;
+            else if (item.Type == ItemType.Weapon)
+                equipID = 5;
+
+            if (item.equipSpritePath != null)
+            {
+                using (var reader = new StreamReader(Path.Combine("Content\\" + item.equipSpritePath, "data.xml")))
+                {
+                    while (!reader.EndOfStream)
+                    {
+                        var line = reader.ReadLine();
+                        var values = line.Split(' ');
+
+                        try
+                        {
+                            if (values[0] != "<i>")
+                            {
+                                for (int i = 0; i < values.Length; i++)
+                                {
+                                    if (values[i].StartsWith("image="))
+                                    {
+                                        char[] arrstart = new char[] { 'i', 'm', 'a', 'g', 'e', '=', '"' };
+                                        char[] arrend = new char[] { '"' };
+                                        string result = values[i].TrimStart(arrstart);
+                                        result = result.TrimEnd(arrend);
+                                        attribute.Add(result);
+                                    }
+                                    else if (values[i].StartsWith("x="))
+                                    {
+                                        char[] arrstart = new char[] { 'x', '=', '"' };
+                                        char[] arrend = new char[] { '"' };
+                                        string result = values[i].TrimStart(arrstart);
+                                        result = result.TrimEnd(arrend);
+                                        attribute.Add(result);
+                                    }
+                                    else if (values[i].StartsWith("y="))
+                                    {
+                                        char[] arrstart = new char[] { 'y', '=', '"' };
+                                        char[] arrend = new char[] { '"', '\\', '"', '/', '>' };
+                                        string result = values[i].TrimStart(arrstart);
+                                        result = result.TrimEnd(arrend);
+                                        attribute.Add(result);
+                                    }
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            string ee = ex.ToString();
+                        }
+                    }
+                }
+
+                // fill list with XML structures
+
+                for (int i = 0; i < attribute.Count; i++)
+                    if (attribute[i].EndsWith(".png"))
+                        newlist.Add(new spriteOffset(
+                                equipID,
+                                attribute[i].ToString(),
+                                Convert.ToInt32(attribute[i + 1]),
+                                Convert.ToInt32(attribute[i + 2])));
+
+                return newlist;
+            }
+
+            return null;
+        }
+
     }
 }

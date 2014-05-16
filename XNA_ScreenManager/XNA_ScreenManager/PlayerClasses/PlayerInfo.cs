@@ -6,6 +6,7 @@ using XNA_ScreenManager.ItemClasses;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework;
+using System.IO;
 
 namespace XNA_ScreenManager.PlayerClasses
 {
@@ -43,6 +44,9 @@ namespace XNA_ScreenManager.PlayerClasses
         public string hands_sprite;
         public string hair_sprite;
         public string faceset_sprite;
+
+        public Vector2[] spriteOfset = new Vector2[7];
+        public List<spriteOffset> list_offsets = new List<spriteOffset>();
 
         public Color hair_color = Color.Red;
         public Color skin_color = new Color(255, 206, 180);
@@ -354,5 +358,6 @@ namespace XNA_ScreenManager.PlayerClasses
             this.hair_sprite = @"gfx\player\hairset\hair0\";
         }
         #endregion
+
     }
 }

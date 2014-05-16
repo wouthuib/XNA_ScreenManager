@@ -39,6 +39,7 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
         KeyboardState newState, oldState;
 
         public MenuComponent[] properties = new MenuComponent[6];
+        private int[] oldindex = new int[7];
 
         string[] menuItems = {
             "Face", 
@@ -50,10 +51,9 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
 
         int selectedIndex = 0;
 
-        string[] item0 = { "Face 01", "Face 02", "Face 03", "Face 04", "Face 05", "Face 06" };
-        string[] item1 = { "Style 01", "Style 02", "Style 03", "Style 04", "Style 05", "Style 06" };
-        string[] item2 = { "Red", "Green", "Blue", "Yellow", 
-                           "Orange", "Purple", "Pink", "Brown", "Black", "Gray", "White" };
+        string[] item0 = { "Face 01", "Face 02", "Face 03", "Face 04", "Face 05", "Face 06", "Face 07", "Face 08", "Face 09" };
+        string[] item1 = { "Style 01", "Style 02", "Style 03", "Style 04", "Style 05", "Style 06", "Style 07", "Style 08", "Style 09" };
+        string[] item2 = { "Red", "Green", "Blue", "Yellow", "Orange", "Purple", "Pink", "Brown", "Black", "Gray", "White" };
         string[] item3 = { "Pale", "Light", "Tanned", "Dark", "Blue", "Green" };
         string[] item4 = { "Warrior", "Magician", "Bowman", "Thief", "Pirate" };
         string[] item5 = { "Male", "Female"};
@@ -121,14 +121,6 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
 
                     keyboardiput.Update(gameTime);
 
-                    // Equip Beginner Clothes + Knife
-                    if (Equipment.Instance.item_list.FindAll(delegate(Item item)
-                    { return item.Slot == ItemSlot.Bodygear; }).Count == 0)
-                        Equipment.Instance.addItem(ItemStore.Instance.getItem(2301));
-                    if (Equipment.Instance.item_list.FindAll(delegate(Item item)
-                    { return item.Slot == ItemSlot.Weapon; }).Count == 0)
-                        Equipment.Instance.addItem(ItemStore.Instance.getItem(1200));
-
                     break;
                 case Phase.Properties:
                     for (int i = 0; i <= properties.Length - 1; i++)
@@ -136,8 +128,19 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
                         float strlength = 0;
 
                         foreach (char ii in properties[i].MenuItems[properties[i].SelectedIndex])
-                            strlength += properties[i].SpriteFont.MeasureString(ii.ToString()).X;
+                            strlength += properties[i].SpriteFont.MeasureString(ii.ToString()).X; // fix selected index text
 
+                        // save properties indexes, if changed (e.g. new hairstype) update all the offsets
+                        if (oldindex[i] != properties[i].SelectedIndex)
+                        {
+                            oldindex[i] = properties[i].SelectedIndex;
+                            for (int ofset = 0; ofset < 6; ofset++)
+                            {
+                                playersprite.clearoffset(ofset);
+                                this.newPlayer.spriteOfset[ofset] = playersprite.getoffset(ofset); // update offsets
+                            }
+                        }
+                        
                         properties[i].Position =
                             new Vector2(210 - strlength / 2, 
                             140 + (i * 24));
@@ -149,7 +152,7 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
                     if (CheckKey(Keys.Down))
                     {
                         selectedIndex++;
-                        if (selectedIndex == properties.Length) //menuItems.Count)
+                        if (selectedIndex == properties.Length)
                             selectedIndex = 0;
                     }
 
@@ -157,7 +160,7 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
                     {
                         selectedIndex--;
                         if (selectedIndex == - 1)
-                            selectedIndex = properties.Length - 1; //menuItems.Count - 1;
+                            selectedIndex = properties.Length - 1;
                     }
 
                     properties[selectedIndex].Update(gameTime);
@@ -179,8 +182,22 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
                 phase = Phase.Name;
                 newPlayer = new PlayerInfo();
                 playersprite.Player = this.newPlayer;
-                for (int i = 0; i < 6; i++ )
-                    playersprite.spriteOfset[i] = playersprite.getoffsetfromXML(i);
+
+                // Equip Beginner Clothes + Knife
+                if (Equipment.Instance.item_list.FindAll(delegate(Item item)
+                { return item.Slot == ItemSlot.Bodygear; }).Count == 0)
+                    Equipment.Instance.addItem(ItemStore.Instance.getItem(2301));
+                if (Equipment.Instance.item_list.FindAll(delegate(Item item)
+                { return item.Slot == ItemSlot.Weapon; }).Count == 0)
+                    Equipment.Instance.addItem(ItemStore.Instance.getItem(1200));
+
+                // Check player + equipment offsets
+                for (int i = 0; i < 7; i++)
+                    this.newPlayer.spriteOfset[i] = playersprite.getoffset(i);
+
+                // initize properties
+                for (int i = 0; i <= properties.Length - 1; i++)
+                    properties[i].SelectedIndex = 0;
 
                 keyboardiput.Activate(newPlayer.Name.ToString());
 

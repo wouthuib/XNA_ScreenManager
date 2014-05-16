@@ -228,19 +228,19 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
                     {
                         spritename = "swingO1_0";
                         for (int i = 0; i < spritepath.Length; i++)
-                            spriteOfset[i] = getoffsetfromXML(i);
+                            playerStore.activePlayer.spriteOfset[i] = getoffset(i);
                     }
                     else if (ani_count == 5)
                     {
                         spritename = "swingO1_1";
                         for (int i = 0; i < spritepath.Length; i++)
-                            spriteOfset[i] = getoffsetfromXML(i);
+                            playerStore.activePlayer.spriteOfset[i] = getoffset(i);
                     }
                     else if (ani_count >= 6)
                     {
                         spritename = "swingO1_2";
                         for (int i = 0; i < spritepath.Length; i++)
-                            spriteOfset[i] = getoffsetfromXML(i);
+                            playerStore.activePlayer.spriteOfset[i] = getoffset(i);
                     }
                 }
             }
@@ -280,19 +280,19 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
                     {
                         spritename = "swingO1_0";
                         for (int i = 0; i < spritepath.Length; i++)
-                            spriteOfset[i] = getoffsetfromXML(i);
+                            playerStore.activePlayer.spriteOfset[i] = getoffset(i);
                     }
                     else if (ani_count == 2)
                     {
                         spritename = "swingO1_1";
                         for (int i = 0; i < spritepath.Length; i++)
-                            spriteOfset[i] = getoffsetfromXML(i);
+                            playerStore.activePlayer.spriteOfset[i] = getoffset(i);
                     }
                     else if (ani_count == 3)
                     {
                         spritename = "swingO1_2";
                         for (int i = 0; i < spritepath.Length; i++)
-                            spriteOfset[i] = getoffsetfromXML(i);
+                            playerStore.activePlayer.spriteOfset[i] = getoffset(i);
                     }
                 }
             }

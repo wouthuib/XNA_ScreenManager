@@ -32,7 +32,7 @@ namespace XNA_ScreenManager
         protected ItemStore itemStore = ItemStore.Instance;
         protected Equipment equipment = Equipment.Instance;
         protected ScriptInterpreter scriptManager = ScriptInterpreter.Instance;
-        protected PlayerStore playerinfo = PlayerStore.Instance;
+        protected PlayerStore playerStore = PlayerStore.Instance;
 
         // link to world content manager
         protected ContentManager Content;
@@ -57,6 +57,7 @@ namespace XNA_ScreenManager
         private bool landed;                                                                        // land switch, arrow switch
 
         // new Texture properties
+        protected int spriteframe = 0, prevspriteframe = 0;
         protected string spritename = "stand1_0";
         protected string[] spritepath = new string[] 
         { 
@@ -67,8 +68,6 @@ namespace XNA_ScreenManager
             "",
             "", 
         };
-        public Vector2[] spriteOfset = new Vector2[6];
-        protected int spriteframe = 0, prevspriteframe = 0;
 
         #endregion
 
@@ -157,7 +156,7 @@ namespace XNA_ScreenManager
                             for (int i = 0; i < spritepath.Length; i++)
                             {
                                 spritename = "swingO1_" + spriteframe.ToString();
-                                spriteOfset[i] = getoffsetfromXML(i);
+                                playerStore.activePlayer.spriteOfset[i] = getoffset(i);
                             }
                         }
 
@@ -219,7 +218,7 @@ namespace XNA_ScreenManager
                             for (int i = 0; i < spritepath.Length; i++)
                             {
                                 spritename = "stabO1_" + spriteframe.ToString();
-                                spriteOfset[i] = getoffsetfromXML(i);
+                                playerStore.activePlayer.spriteOfset[i] = getoffset(i);
                             }
                         }
 
@@ -281,7 +280,7 @@ namespace XNA_ScreenManager
                             for (int i = 0; i < spritepath.Length; i++)
                             {
                                 spritename = "shoot1_" + spriteframe.ToString();
-                                spriteOfset[i] = getoffsetfromXML(i);
+                                playerStore.activePlayer.spriteOfset[i] = getoffset(i);
                             }
                         }
 
@@ -362,7 +361,7 @@ namespace XNA_ScreenManager
                             for (int i = 0; i < spritepath.Length; i++)
                             {
                                 spritename = "sit_0";
-                                spriteOfset[i] = getoffsetfromXML(i);
+                                playerStore.activePlayer.spriteOfset[i] = getoffset(i);
                             }
                         }                        
 
@@ -429,7 +428,7 @@ namespace XNA_ScreenManager
                             for (int i = 0; i < spritepath.Length; i++)
                             {
                                 spritename = "stand1_" + spriteframe.ToString();
-                                spriteOfset[i] = getoffsetfromXML(i);
+                                playerStore.activePlayer.spriteOfset[i] = getoffset(i);
                             }
                         }
 
@@ -499,7 +498,7 @@ namespace XNA_ScreenManager
                             for (int i = 0; i < spritepath.Length; i++)
                             {
                                 spritename = "ladder_" + spriteframe.ToString();
-                                spriteOfset[i] = getoffsetfromXML(i);
+                                playerStore.activePlayer.spriteOfset[i] = getoffset(i);
                             }
                         }
 
@@ -562,14 +561,14 @@ namespace XNA_ScreenManager
                                 // check the weapon type
                                 if (weapontype == WeaponType.Bow)
                                 {
-                                    previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerinfo.activePlayer.ASPD * 12) * 0.0006f) + 0.05f;
+                                    previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerStore.activePlayer.ASPD * 12) * 0.0006f) + 0.05f;
 
                                     spriteframe = 0;
                                     state = EntityState.Shoot;
                                 }
                                 else if (weapontype == WeaponType.Dagger || weapontype == WeaponType.One_handed_Sword)
                                 {
-                                    previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerinfo.activePlayer.ASPD * 12) * 0.0006f) + 0.05f;
+                                    previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerStore.activePlayer.ASPD * 12) * 0.0006f) + 0.05f;
 
                                     spriteframe = 0;
 
@@ -606,7 +605,7 @@ namespace XNA_ScreenManager
                             for (int i = 0; i < spritepath.Length; i++)
                             {
                                 spritename = "stand1_" + spriteframe.ToString();
-                                spriteOfset[i] = getoffsetfromXML(i);
+                                playerStore.activePlayer.spriteOfset[i] = getoffset(i);
                             }
                         }
 
@@ -668,7 +667,7 @@ namespace XNA_ScreenManager
                             for (int i = 0; i < spritepath.Length; i++)
                             {
                                 spritename = "walk1_" + spriteframe.ToString();
-                                spriteOfset[i] = getoffsetfromXML(i);
+                                playerStore.activePlayer.spriteOfset[i] = getoffset(i);
                             }
                         }
 
@@ -738,7 +737,7 @@ namespace XNA_ScreenManager
                             for (int i = 0; i < spritepath.Length; i++)
                             {
                                 spritename = "jump_0";
-                                spriteOfset[i] = getoffsetfromXML(i);
+                                playerStore.activePlayer.spriteOfset[i] = getoffset(i);
                             }
         
                             // Apply Gravity + jumping
@@ -829,7 +828,7 @@ namespace XNA_ScreenManager
                         for (int i = 0; i < spritepath.Length; i++)
                         {
                             spritename = "fly_0";
-                            spriteOfset[i] = getoffsetfromXML(i);
+                            playerStore.activePlayer.spriteOfset[i] = getoffset(i);
                         }
 
                         break;
@@ -855,7 +854,7 @@ namespace XNA_ScreenManager
                         for (int i = 0; i < spritepath.Length; i++)
                         {
                             spritename = "fly_0" + spriteframe.ToString();
-                            spriteOfset[i] = getoffsetfromXML(i);
+                            playerStore.activePlayer.spriteOfset[i] = getoffset(i);
                         }
 
                         // Set new state
@@ -883,7 +882,7 @@ namespace XNA_ScreenManager
                         for (int i = 0; i < spritepath.Length; i++)
                         {
                             spritename = "fly_0" + spriteframe.ToString();
-                            spriteOfset[i] = getoffsetfromXML(i);
+                            playerStore.activePlayer.spriteOfset[i] = getoffset(i);
                         }
 
                         // Apply Gravity + jumping
@@ -964,21 +963,19 @@ namespace XNA_ScreenManager
                             string spritepath1 = getspritepath(i); // temporary for debugging
                             drawsprite = Content.Load<Texture2D>(spritepath1 + spritename);
 
+                            // Calculate position based on spriteEffect
                             if (spriteEffect == SpriteEffects.None)
-                                calculatedPosition = (int)Position.X + (int)spriteOfset[i].X + 35;
+                                calculatedPosition = (int)Position.X + (int)getoffset(i).X + 35;
                             else
-                                calculatedPosition = (int)Position.X + (int)Math.Abs(spriteOfset[i].X) - drawsprite.Width + 25;
+                                calculatedPosition = (int)Position.X + (int)Math.Abs(getoffset(i).X) - drawsprite.Width + 25;
 
+                            // give skin color to head and torso sprite
                             if (i == 0 || i == 1)
-                            {
-                                if (this.Player == null)
-                                    drawcolor = PlayerStore.Instance.activePlayer.skin_color;
-                                else
-                                    drawcolor = this.Player.skin_color;
-                            }
+                                drawcolor = getPlayer().skin_color;
 
+                            // draw player sprite
                             spriteBatch.Draw(drawsprite,
-                                new Rectangle(calculatedPosition, (int)Position.Y + (int)spriteOfset[i].Y + 78,
+                                new Rectangle(calculatedPosition, (int)Position.Y + (int)getoffset(i).Y + 78,
                                     drawsprite.Width, drawsprite.Height),
                                 new Rectangle(0, 0, drawsprite.Width, drawsprite.Height),
                                 drawcolor * this.transperancy, 0f, Vector2.Zero, spriteEffect, 0f);
@@ -1011,8 +1008,6 @@ namespace XNA_ScreenManager
             }
             return false;
         }
-
-        public PlayerInfo Player { get; set; }
                 
         public bool CheckKey(Microsoft.Xna.Framework.Input.Keys theKey)
         {
@@ -1020,7 +1015,54 @@ namespace XNA_ScreenManager
             return keyboardStatePrevious.IsKeyDown(theKey) && keyboardStateCurrent.IsKeyUp(theKey);
         }
 
-        public Vector2 getoffsetfromXML(int spriteID)
+        #region load spriteoffset
+        public Vector2 getoffset(int spriteID)
+        {
+            if (spriteID < 4)
+            {
+                if (getPlayer().list_offsets.FindAll(x => x.ID == spriteID).Count == 0)
+                    loadoffsetfromXML(spriteID);
+
+                return new Vector2(getPlayer().list_offsets.Find(x => x.Name == spritename.ToString() + ".png" && x.ID == spriteID).X,
+                                   getPlayer().list_offsets.Find(x => x.Name == spritename.ToString() + ".png" && x.ID == spriteID).Y);
+            }
+            else if (spriteID == 4)
+            {
+                if (equipment.item_list.Count > 0)
+                {
+                    if (equipment.item_list.Find(x => x.Type == ItemType.Armor).list_offsets.FindAll(y => y.Name == spritename.ToString() + ".png").Count > 0)
+                    {
+                        Item item = equipment.item_list.Find(x => x.Type == ItemType.Armor);
+                        int X = item.list_offsets.Find(y => y.Name == spritename.ToString() + ".png").X;
+                        int Y = item.list_offsets.Find(y => y.Name == spritename.ToString() + ".png").Y;
+                        return new Vector2(X, Y);
+                    }
+                }                    
+            }
+            else if (spriteID == 5)
+            {
+                if (equipment.item_list.Count > 0)
+                {
+                    if (equipment.item_list.Find(x => x.Type == ItemType.Weapon).list_offsets.FindAll(y => y.Name == spritename.ToString() + ".png").Count > 0)
+                    {
+                        Item item = equipment.item_list.Find(x => x.Type == ItemType.Weapon);
+                        int X = item.list_offsets.Find(y => y.Name == spritename.ToString() + ".png").X;
+                        int Y = item.list_offsets.Find(y => y.Name == spritename.ToString() + ".png").Y;
+                        return new Vector2(X, Y);
+                    }
+                }
+            }
+
+            return Vector2.Zero;
+        }
+
+        public void clearoffset(int spriteID)
+        {
+            // fill list with XML structures
+            getPlayer().list_offsets.RemoveAll(x => x.ID == spriteID);
+        }
+
+        public void loadoffsetfromXML(int spriteID)
         {
             List<string> attribute = new List<string>();
 
@@ -1073,15 +1115,21 @@ namespace XNA_ScreenManager
                     }
                 }
 
+                // fill list with XML structures
+                getPlayer().list_offsets.RemoveAll(x => x.ID == spriteID);
+
                 for (int i = 0; i < attribute.Count; i++)
                 {
-                    if (attribute[i].ToString() == spritename.ToString() + ".png")
-                        return new Vector2(Convert.ToInt32(attribute[i + 1]),
-                                           Convert.ToInt32(attribute[i + 2]));
+                    if (attribute[i].EndsWith(".png"))
+                    {
+                        getPlayer().list_offsets.Add(new spriteOffset(
+                                spriteID,
+                                attribute[i].ToString(),
+                                Convert.ToInt32(attribute[i + 1]),
+                                Convert.ToInt32(attribute[i + 2])));
+                    }
                 }
             }
-
-            return Vector2.Zero;
         }
 
         public string getspritepath(int spriteID)
@@ -1109,6 +1157,34 @@ namespace XNA_ScreenManager
                     return player.weapon_sprite;
             }
             return null;
+        }
+        #endregion
+
+        #region bound new player
+        private PlayerInfo getPlayer()
+        {
+            // check which player is bound
+            if (this.Player == null)
+                return playerStore.activePlayer;
+            else
+                return this.Player;
+        }
+
+        public PlayerInfo Player { get; set; }
+        #endregion
+    }
+
+    public struct spriteOffset
+    {
+        public string Name;
+        public int ID, X, Y;
+
+        public spriteOffset(int id, string name, int x, int y)
+        {
+            this.ID = id;
+            this.Name = name;
+            this.X = x;
+            this.Y = y;
         }
     }
 }

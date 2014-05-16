@@ -15,6 +15,8 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
 {
     public class CharacterSelectionScreen : GameScreen
     {
+        #region properties
+
         SpriteBatch spriteBatch;
         ContentManager Content;
 
@@ -37,6 +39,7 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
             "Delete",
             "Continue",
             "Back"};
+        #endregion
 
         public CharacterSelectionScreen(Game game)
             : base(game)
@@ -79,7 +82,7 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
 
             // player offsets
             for (int i = 0; i < 6; i++)
-                this.spriteOfset[i] = playersprite.getoffsetfromXML(i);
+                this.spriteOfset[i] = playersprite.getoffset(i);
 
             // options
             option_board = Content.Load<Texture2D>(@"gfx\screens\screenobjects\option_board");
@@ -118,6 +121,7 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
                 if (CheckKey(Keys.Right))
                 {
                     SelectedPlayer++;
+                    updateOfset();
                     if (SelectedPlayer == PlayerStore.Instance.Count)
                         SelectedPlayer = 0;
                 }
@@ -125,6 +129,7 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
                 if (CheckKey(Keys.Left))
                 {
                     SelectedPlayer--;
+                    updateOfset();
                     if (SelectedPlayer == - 1)
                         SelectedPlayer = PlayerStore.Instance.Count - 1;
                 }
@@ -159,8 +164,9 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
                     }
 
                     playersprite.Player = playerStore.getPlayer(null, ID);
-                    for (int i = 0; i < 6; i++ )
-                        playersprite.spriteOfset[i] = this.spriteOfset[i];
+                    for (int i = 0; i < 6; i++)
+                        playersprite.Player.spriteOfset[i] = playersprite.getoffset(i);
+
                     playersprite.Draw(spriteBatch);
 
                     // Draw player Name Rect
@@ -215,6 +221,19 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
         {
             KeyboardState newState = Keyboard.GetState();
             return oldState.IsKeyDown(theKey) && newState.IsKeyUp(theKey);
+        }
+
+        public void updateOfset()
+        {
+            foreach (var getplayer in PlayerStore.Instance.playerlist)
+            {
+                if(getplayer != null)
+                    for (int ofset = 0; ofset < 6; ofset++)
+                    {
+                        playersprite.clearoffset(ofset);
+                        getplayer.spriteOfset[ofset] = playersprite.getoffset(ofset); // update offsets
+                    }
+            }
         }
     }
 }
