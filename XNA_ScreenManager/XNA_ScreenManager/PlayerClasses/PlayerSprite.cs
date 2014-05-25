@@ -849,7 +849,7 @@ namespace XNA_ScreenManager
                         else
                             Direction = new Vector2(-1.6f, 0);
 
-                        // Damage controll and balloon is triggered in monster sprite
+                        // Damage controll and balloon is triggered in monster-sprite Class
 
                         // Move the Character
                         OldPosition = Position;
@@ -857,7 +857,7 @@ namespace XNA_ScreenManager
                         // Player animation
                         for (int i = 0; i < spritepath.Length; i++)
                         {
-                            spritename = "fly_0" + spriteframe.ToString();
+                            spritename = "fly_0";
                             playerStore.activePlayer.spriteOfset[i] = getoffset(i);
                         }
 
@@ -866,7 +866,7 @@ namespace XNA_ScreenManager
 
                         break;
                     #endregion
-                    #region state recover hit
+                    #region state frozen
                     case EntityState.Frozen:
 
                         // Upward Position
@@ -885,7 +885,7 @@ namespace XNA_ScreenManager
                         // Player animation
                         for (int i = 0; i < spritepath.Length; i++)
                         {
-                            spritename = "fly_0" + spriteframe.ToString();
+                            spritename = "fly_0";
                             playerStore.activePlayer.spriteOfset[i] = getoffset(i);
                         }
 
@@ -958,36 +958,49 @@ namespace XNA_ScreenManager
                 {
                     Color drawcolor = Color.White;
                     Texture2D drawsprite = null;
-                    int calculatedPosition = 0;
+                    Vector2 drawPosition = Vector2.Zero;
+                    Vector2 sprCorrect = Vector2.Zero;
 
                     try
                     {
                         if (getspritepath(i) != null)
                         {
-                            string spritepath1 = getspritepath(i); // temporary for debugging
-                            drawsprite = Content.Load<Texture2D>(spritepath1 + spritename);
+                            // check if sprite exist before loading from Content Manager 
+                            // load texture into sprite from Content Manager
+                            if (!findSpriteCheck(i))
+                                break;
+                            drawsprite = Content.Load<Texture2D>(getspritepath(i) + spritename);
 
                             // Calculate position based on spriteEffect
                             if (spriteEffect == SpriteEffects.None)
-                                calculatedPosition = (int)Position.X + (int)getoffset(i).X + 35;
+                                drawPosition.X = (int)Position.X + (int)getoffset(i).X + 35;
                             else
-                                calculatedPosition = (int)Position.X + (int)Math.Abs(getoffset(i).X) - drawsprite.Width + 25;
+                                drawPosition.X = (int)Position.X + (int)Math.Abs(getoffset(i).X) - drawsprite.Width + 25;
 
-                            // give skin color to head and torso sprite
-                            if (i == 0 || i == 1)
+                            // give skin color to head, hands and torso sprite
+                            if (i == 0 || i == 1 || i == 9)
                                 drawcolor = getPlayer().skin_color;
 
                             // draw player sprite
                             spriteBatch.Draw(drawsprite,
-                                new Rectangle(calculatedPosition, (int)Position.Y + (int)getoffset(i).Y + 78,
-                                    drawsprite.Width, drawsprite.Height),
-                                new Rectangle(0, 0, drawsprite.Width, drawsprite.Height),
+                                new Rectangle(
+                                    (int)drawPosition.X + (int)sprCorrect.X,
+                                    (int)Position.Y + (int)getoffset(i).Y + 78 + (int)spriteCorrect(i, drawsprite).Y,
+                                    drawsprite.Width, 
+                                    drawsprite.Height),
+                                new Rectangle(
+                                    0,
+                                    (int)spriteCorrect(i, drawsprite).Y, 
+                                    drawsprite.Width, 
+                                    drawsprite.Height),
                                 drawcolor * this.transperancy, 0f, Vector2.Zero, spriteEffect, 0f);
                         }
                     }
-                    catch
+                    catch(Exception ee)
                     {
-                        // no texture found
+                        string exception = ee.ToString();
+                        string error = "Cannot find " + getspritepath(i) + spritename + "!" ;
+                        throw new Exception(error);
                     }
                 }
             }
@@ -1018,6 +1031,36 @@ namespace XNA_ScreenManager
             KeyboardState keyboardStateCurrent = Keyboard.GetState();
             return keyboardStatePrevious.IsKeyDown(theKey) && keyboardStateCurrent.IsKeyUp(theKey);
         }
+
+        #region Draw Spite Corrections
+        private Vector2 spriteCorrect(int spriteID, Texture2D spr)
+        {
+            Vector2 sprCorrect = Vector2.Zero;
+
+            // if hatgear equiped, reduce hairsprite
+            if (spriteID == 3 && getspritepath(7) != null)
+            {
+                if (spritename.StartsWith("ladder") || spritename.StartsWith("rope"))
+                    sprCorrect.Y = spr.Height * 0.75f;
+                else
+                    sprCorrect.Y = spr.Height * 0.50f;
+            }
+
+            return sprCorrect;
+        }
+
+        private bool findSpriteCheck(int spriteID)
+        {
+            // Process the list of files found in the directory. 
+            string[] fileEntries = Directory.GetFiles(Content.RootDirectory + "\\" + getspritepath(spriteID));
+            foreach (string fileName in fileEntries)
+                if (fileName == spritename + ".png")
+                    return true;
+
+            // no file found
+            return true;
+        }
+        #endregion
 
         #region load spriteoffset
         public Vector2 getoffset(int spriteID)
@@ -1172,7 +1215,7 @@ namespace XNA_ScreenManager
                     return player.costume_sprite;
                 // accessory 5 and 6 comes later...
                 case 7:
-                    return player.weapon_sprite;
+                    return player.hatgear_sprite;
                 case 8:
                     return player.weapon_sprite;
                 case 9:

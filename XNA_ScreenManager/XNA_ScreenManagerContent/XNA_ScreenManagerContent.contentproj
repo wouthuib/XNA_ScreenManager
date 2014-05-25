@@ -17176,16 +17176,6 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\player\body\hands\ladder_0.png">
-      <Name>ladder_0</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="gfx\player\body\hands\ladder_1.png">
-      <Name>ladder_1</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
     <Compile Include="gfx\player\body\hands\proneStab_0.png">
       <Name>proneStab_0</Name>
       <Importer>TextureImporter</Importer>
@@ -17198,16 +17188,6 @@
     </Compile>
     <Compile Include="gfx\player\body\hands\prone_0.png">
       <Name>prone_0</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="gfx\player\body\hands\rope_0.png">
-      <Name>rope_0</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="gfx\player\body\hands\rope_1.png">
-      <Name>rope_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
