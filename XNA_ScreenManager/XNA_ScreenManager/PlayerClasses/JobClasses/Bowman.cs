@@ -20,7 +20,7 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
         None
     }
 
-    public class Bowman : PlayerSprite2
+    public class Bowman : PlayerSprite
     {
         Texture2D cast_animation, skill_animation;
         float previousGameTimeMsec, previousSkillTimeMsec, previousCastTimeMsec;

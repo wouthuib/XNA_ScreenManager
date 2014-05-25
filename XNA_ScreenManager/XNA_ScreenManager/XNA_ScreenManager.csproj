@@ -142,7 +142,7 @@
     <Compile Include="GameWorldClasses\Entities\Warp.cs" />
     <Compile Include="MonsterClasses\MonsterStore.cs" />
     <Compile Include="GameWorldClasses\Entities\Arrow.cs" />
-    <Compile Include="PlayerClasses\PlayerSprite2.cs" />
+    <Compile Include="PlayerClasses\PlayerSprite.cs" />
     <Compile Include="PlayerClasses\JobClasses\Bowman.cs" />
     <Compile Include="PlayerClasses\JobClasses\Magician.cs" />
     <Compile Include="PlayerClasses\JobClasses\Pirate.cs" />
@@ -172,7 +172,7 @@
     <Compile Include="ScreenClasses\SubComponents\ItemlistComponent.cs" />
     <Compile Include="ScreenClasses\SubComponents\KeyboardInput.cs" />
     <Compile Include="ScreenClasses\SubComponents\MenuComponent.cs" />
-    <Compile Include="PlayerClasses\PlayerSprite.cs" />
+    <None Include="PlayerClasses\PlayerSprite_old.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />

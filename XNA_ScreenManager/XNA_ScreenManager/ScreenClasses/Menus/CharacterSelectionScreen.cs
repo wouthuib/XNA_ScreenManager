@@ -30,7 +30,7 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
 
         Texture2D slot;
         Texture2D option_board, screen_board;
-        PlayerSprite2 playersprite;
+        PlayerSprite playersprite;
         public Vector2[] spriteOfset = new Vector2[6];
 
         string[] menuItems = {
@@ -76,7 +76,7 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
             menu.EndIndex = 3;
 
             // player sprite
-            playersprite = new PlayerSprite2(100, 123, new Vector2(32, 32));
+            playersprite = new PlayerSprite(100, 123, new Vector2(32, 32));
             player = new PlayerInfo();
             playersprite.Player = this.player;
 

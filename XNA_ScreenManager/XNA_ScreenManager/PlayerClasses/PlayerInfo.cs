@@ -45,7 +45,7 @@ namespace XNA_ScreenManager.PlayerClasses
         public string hair_sprite;
         public string faceset_sprite;
 
-        public Vector2[] spriteOfset = new Vector2[7];
+        public Vector2[] spriteOfset = new Vector2[10]; // refer to playersprite -> spritepath
         public List<spriteOffset> list_offsets = new List<spriteOffset>();
 
         public Color hair_color = Color.Red;
@@ -356,6 +356,7 @@ namespace XNA_ScreenManager.PlayerClasses
             this.head_sprite = @"gfx\player\body\head\";
             this.faceset_sprite = @"gfx\player\faceset\face0\";
             this.hair_sprite = @"gfx\player\hairset\hair0\";
+            this.hands_sprite = @"gfx\player\body\hands\";
         }
         #endregion
 

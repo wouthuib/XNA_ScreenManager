@@ -30,5 +30,5 @@ atkModifier; defModifier; equipSpritePath; itemClass; itemDescription; itemID; i
 1300; Hunter Bow;"A mighty bow that can only be effectively used by Hunters and Snipers.";"gfx\effects\itemicons\bows01";"gfx\player\weapon\bow1\"; 1; 0; 0; 125; 0; 0; 64000; 0; 0; Weapon; Archer; Weapon; Bow;
 2300; Hunter Clothes;"Skintight, form fitting clothing that allows easy movement.";"gfx\effects\itemicons\armor_hunter";"gfx\player\costume\overal1\"; 4; 1; 6; 0; 0; 0; 71000; 0; 0; Armor; Archer; Bodygear; None;
 2301; Beginner Clothes;"An exclusive clothset for new adventurers.";"gfx\effects\itemicons\armor_hunter";"gfx\player\costume\overal2\"; 4; 10; 0; 0; 0; 0; 10; 0; 0; Armor; All; Bodygear; None;
-2302; Red Feather Hat;"A fabulous, red feathered hat.";"gfx\effects\itemicons\hatgear01";"gfx\player\hatgear\hat00"; 2; 0; 0; 0; 0; 0; 10; 0; 0; Armor; All; Headgear; None;
-2303; Red Robin Hat;"Robin Hood has been glamorized as wearing a green feathered hat.";"gfx\effects\itemicons\hatgear01";"gfx\player\hatgear\hat01"; 0; 1; 0; 0; 0; 0; 10; 0; 0; Armor; All; Headgear; None;
+2302; Feather Hat;"A fabulous, red feathered hat.";"gfx\effects\itemicons\hatgear01";"gfx\player\headgear\featherberet\"; 2; 0; 0; 0; 0; 0; 10; 0; 0; Armor; All; Headgear; None;
+2303; Robin Hat;"Robin Hood has been glamorized as wearing a green feathered hat.";"gfx\effects\itemicons\hatgear01";"gfx\player\headgear\robbinhood\"; 0; 1; 0; 0; 0; 0; 10; 0; 0; Armor; All; Headgear; None;

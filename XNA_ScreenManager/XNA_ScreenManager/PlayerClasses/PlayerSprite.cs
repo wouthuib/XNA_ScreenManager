@@ -11,12 +11,15 @@ using Microsoft.Xna.Framework.Content;
 using XNA_ScreenManager.ScreenClasses.MainClasses;
 using System.Collections.Generic;
 using XNA_ScreenManager.GameWorldClasses.Entities;
+using System.Xml;
+using System.IO;
 
 namespace XNA_ScreenManager
 {
     public class PlayerSprite : Entity
     {
         #region properties
+
         // The Gameworld
         protected GameWorld world;
         protected ResourceManager resourcemanager = ResourceManager.GetInstance;
@@ -29,16 +32,12 @@ namespace XNA_ScreenManager
         protected ItemStore itemStore = ItemStore.Instance;
         protected Equipment equipment = Equipment.Instance;
         protected ScriptInterpreter scriptManager = ScriptInterpreter.Instance;
-        protected PlayerStore playerinfo = PlayerStore.Instance;
+        protected PlayerStore playerStore = PlayerStore.Instance;
 
         // link to world content manager
         protected ContentManager Content;
 
         // Player properties
-        public Rectangle spriteScale;
-        public int spriteWidth = 80;
-        public int spriteHeight = 80;
-        public Vector2 spriteOfset = new Vector2(80,0);
         protected SpriteEffects spriteEffect = SpriteEffects.None;
         private float transperancy = 1;
 
@@ -57,27 +56,35 @@ namespace XNA_ScreenManager
         float previousGameTimeMsec;                                                                 // GameTime in Miliseconds
         private bool landed;                                                                        // land switch, arrow switch
 
-        //map properties
-        private Vector2 TileSize = Vector2.Zero;
+        // new Texture properties
+        protected int spriteframe = 0, prevspriteframe = 0;
+        protected string spritename = "stand1_0";
+        protected string[] spritepath = new string[] 
+        { 
+            @"gfx\player\body\head\",                                                               // Head Sprite  (0)
+            @"gfx\player\body\torso\",                                                              // Body Sprite (1)
+            @"gfx\player\faceset\face1\",                                                           // Faceset Sprite (2)
+            @"gfx\player\hairset\hair1\",                                                           // Hairset Sprite (3)
+            "",                                                                                     // Armor and Costume Sprite (4)
+            "",                                                                                     // Accessory top Sprite (Sunglasses, Ear rings) (5)
+            "",                                                                                     // Accessory bottom Sprite (mouth items, capes) (6)
+            "",                                                                                     // Headgear Sprite (Hats, Helmets) (7)
+            "",                                                                                     // Weapon Sprite (8)
+            @"gfx\player\body\hands\",                                                              // Hands Sprite (9)
+        };
+
         #endregion
 
-        public PlayerSprite(//GameWorld getworld,
-            int _X, int _Y, Vector2 _tileSize)
+        public PlayerSprite(int _X, int _Y, Vector2 _tileSize)
             : base()
         {
             // Derived properties
             Active = true;
-            SpriteFrame = new Rectangle((int)spriteOfset.X, (int)spriteOfset.Y, spriteWidth, spriteHeight);
-            SpriteSize = new Rectangle(0, 0, spriteWidth, spriteHeight);
+            SpriteSize = new Rectangle(0, 0, 50, 70);
             Position = new Vector2(_X, _Y);
             OldPosition = new Vector2(_X, _Y);
             
             // Local properties
-            TileSize = _tileSize;
-            spriteScale = new Rectangle(                                                            // Obsolete but can be used for events
-                Convert.ToInt32(Position.X),
-                Convert.ToInt32(Position.Y),
-                spriteWidth, spriteHeight);
             Direction = new Vector2();                                                              // Move direction
             state = EntityState.Stand;                                                              // Player state
 
@@ -85,26 +92,7 @@ namespace XNA_ScreenManager
             spriteEffect = SpriteEffects.FlipHorizontally;
         }
 
-        public EntityState SetState
-        {
-            get { return state; }
-            set
-            {
-                state = value;
-                switch (state)
-                {
-                    case EntityState.Sit:
-                        spriteOfset = new Vector2(spriteFrame.Width * 0, spriteFrame.Height * 5);
-                        spriteFrame = new Rectangle((int)spriteOfset.X, (int)spriteOfset.Y, spriteFrame.Width, spriteFrame.Height);
-                        break;
-                    case EntityState.Stand:
-                    default:
-                        spriteOfset = new Vector2(spriteFrame.Width * 0, spriteFrame.Height * 0);
-                        spriteFrame = new Rectangle((int)spriteOfset.X, (int)spriteOfset.Y, spriteFrame.Width, spriteFrame.Height);
-                        break;
-                }
-            }
-        }
+        public EntityState SetState { get; set; }
 
         public override void Update(GameTime gameTime)
         {
@@ -126,16 +114,8 @@ namespace XNA_ScreenManager
 
                             // Move the Character
                             OldPosition = Position;
-
                             // Walk speed
                             Position += Direction * Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-                            // player animation
-                            if (playerinfo.activePlayer.Jobclass == "bowman")
-                            {
-                                spriteOfset = new Vector2(spriteFrame.Width * 0, spriteFrame.Height * 4);
-                                spriteFrame.Y = (int)spriteOfset.Y;
-                            }
 
                         break;
 
@@ -170,22 +150,31 @@ namespace XNA_ScreenManager
                         // Move the Character
                         OldPosition = Position;
 
-                        // player animation
-                        spriteOfset = new Vector2(spriteFrame.Width * 0, spriteFrame.Height * 7);
-                        spriteFrame.Y = (int)spriteOfset.Y;
-
                         // reduce timer
                         previousGameTimeMsec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 
+                        // Player animation
+                        if (prevspriteframe != spriteframe)
+                        {
+                            prevspriteframe = spriteframe;
+                            for (int i = 0; i < spritepath.Length; i++)
+                            {
+                                spritename = "swingO1_" + spriteframe.ToString();
+                                playerStore.activePlayer.spriteOfset[i] = getoffset(i);
+                            }
+                        }
+
                         if (previousGameTimeMsec < 0)
                         {
-                            previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - this.playerinfo.activePlayer.ASPD * 12) * 0.0006f) + 0.05f;
+                            previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.10f;
 
-                            spriteFrame.X += spriteWidth * 2;
+                            // set sprite frames
+                            spriteframe++;
 
-                            if (spriteFrame.X > spriteOfset.X + (spriteWidth * 2))
+                            if (spriteframe > 2)
                             {
-                                previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - this.playerinfo.activePlayer.ASPD * 12) * 0.0006f) + 0.05f;
+                                spriteframe = 2;
+                                previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.10f;
 
                                 // make sure the world is connected
                                 if (world == null)
@@ -194,12 +183,12 @@ namespace XNA_ScreenManager
                                 // create swing effect
                                 if (spriteEffect == SpriteEffects.FlipHorizontally)
                                     world.newEffect.Add(new WeaponSwing(
-                                        new Vector2(this.Position.X + this.spriteFrame.Height * 1.2f, this.Position.Y + this.spriteFrame.Height * 0.7f), 
+                                        new Vector2(this.Position.X + this.SpriteFrame.Width * 1.4f, this.Position.Y + this.SpriteFrame.Height * 0.7f),
                                         WeaponSwingType.Swing01,
                                         spriteEffect));
                                 else
                                     world.newEffect.Add(new WeaponSwing(
-                                        new Vector2(this.Position.X - this.spriteFrame.Height * 0.2f, this.Position.Y + this.spriteFrame.Height * 0.7f),
+                                        new Vector2(this.Position.X - this.SpriteFrame.Width * 0.6f, this.Position.Y + this.SpriteFrame.Height * 0.7f),
                                         WeaponSwingType.Swing01,
                                         spriteEffect));
 
@@ -223,30 +212,45 @@ namespace XNA_ScreenManager
                         // Move the Character
                         OldPosition = Position;
 
-                        // player animation
-                        spriteOfset = new Vector2(spriteFrame.Width * 0, spriteFrame.Height * 6);
-                        spriteFrame.Y = (int)spriteOfset.Y;
-
                         // reduce timer
                         previousGameTimeMsec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 
+                        // Player animation
+                        if (prevspriteframe != spriteframe)
+                        {
+                            prevspriteframe = spriteframe;
+                            for (int i = 0; i < spritepath.Length; i++)
+                            {
+                                spritename = "stabO1_" + spriteframe.ToString();
+                                playerStore.activePlayer.spriteOfset[i] = getoffset(i);
+                            }
+                        }
+
                         if (previousGameTimeMsec < 0)
                         {
-                            previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerinfo.activePlayer.ASPD * 12) * 0.0006f) + 0.05f;
+                            previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.10f;
 
-                            spriteFrame.X += spriteWidth * 2;
+                            // set sprite frames
+                            spriteframe++;
 
-                            if (spriteFrame.X > spriteWidth * 1)
+                            if (spriteframe > 1)
                             {
-                                previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerinfo.activePlayer.ASPD * 12) * 0.0006f) + 0.05f;
+                                spriteframe = 1;
+                                previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.10f;
 
                                 // make sure the world is connected
                                 if (world == null)
                                     world = GameWorld.GetInstance;
 
-                                // create swing effect
-                                world.newEffect.Add(new WeaponSwing(
-                                        new Vector2(this.Position.X, this.Position.Y + this.spriteFrame.Height * 0.7f),
+                                // create stab effect
+                                if (spriteEffect == SpriteEffects.FlipHorizontally)
+                                    world.newEffect.Add(new WeaponSwing(
+                                        new Vector2(this.Position.X + this.SpriteFrame.Width * 0.3f, this.Position.Y + this.SpriteFrame.Height * 0.7f),
+                                        WeaponSwingType.Stab01,
+                                        spriteEffect));
+                                else
+                                    world.newEffect.Add(new WeaponSwing(
+                                        new Vector2(this.Position.X - this.SpriteFrame.Width * 0.7f, this.Position.Y + this.SpriteFrame.Height * 0.7f),
                                         WeaponSwingType.Stab01,
                                         spriteEffect));
 
@@ -270,27 +274,34 @@ namespace XNA_ScreenManager
                         // Move the Character
                         OldPosition = Position;
 
-                        // player animation
-                        spriteOfset = new Vector2(spriteFrame.Width * 0, spriteFrame.Height * 4);
-                        spriteFrame.Y = (int)spriteOfset.Y;
-
                         // reduce timer
                         previousGameTimeMsec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                        
+                        // Player animation
+                        if (prevspriteframe != spriteframe)
+                        {
+                            prevspriteframe = spriteframe;
+                            for (int i = 0; i < spritepath.Length; i++)
+                            {
+                                spritename = "shoot1_" + spriteframe.ToString();
+                                playerStore.activePlayer.spriteOfset[i] = getoffset(i);
+                            }
+                        }
 
                         if (previousGameTimeMsec < 0)
                         {
-                            spriteFrame.X += spriteWidth;
+                            spriteframe++;
 
                             if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.LeftAlt)
                                 || keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.D1))
                             {
                                 // Later = charge arrow skill
-                                if (spriteFrame.X > spriteOfset.X + (spriteWidth * 1))
-                                    spriteFrame.X = (int)spriteOfset.X + spriteWidth;
+                                if (spriteframe > 1)
+                                    spriteframe = 1;
                             }
                             else
                             {
-                                if (spriteFrame.X > spriteOfset.X + (spriteWidth * 2))
+                                if (spriteframe > 2)
                                 {
                                     // make sure the world is connected
                                     if (world == null)
@@ -299,15 +310,15 @@ namespace XNA_ScreenManager
                                     // create and release an arrow
                                     if (spriteEffect == SpriteEffects.FlipHorizontally)
                                         world.newEffect.Add(new Arrow(Content.Load<Texture2D>(@"gfx\gameobjects\arrow"),
-                                            new Vector2(this.Position.X, this.Position.Y + this.spriteFrame.Height * 0.6f),
+                                            new Vector2(this.Position.X, this.Position.Y + this.SpriteFrame.Height * 0.6f),
                                             800, new Vector2(1, 0), Vector2.Zero));
                                     else
                                         world.newEffect.Add(new Arrow(Content.Load<Texture2D>(@"gfx\gameobjects\arrow"),
-                                            new Vector2(this.Position.X, this.Position.Y + this.spriteFrame.Height * 0.6f),
+                                            new Vector2(this.Position.X, this.Position.Y + this.SpriteFrame.Height * 0.6f),
                                             800, new Vector2(-1, 0), Vector2.Zero));
 
                                     // Set the timer for cooldown
-                                    previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerinfo.activePlayer.ASPD * 12) * 0.0006f) + 0.05f;
+                                    previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.10f;
 
                                     // reset sprite frame and change state
                                     // start cooldown
@@ -347,9 +358,16 @@ namespace XNA_ScreenManager
                         // Move the Character
                         OldPosition = Position;
 
-                        // player sprite sit
-                        spriteOfset = new Vector2(spriteFrame.Width * 0, spriteFrame.Height * 5);
-                        spriteFrame = new Rectangle((int)spriteOfset.X, (int)spriteOfset.Y, spriteFrame.Width, spriteFrame.Height);
+                        // Player animation
+                        if (prevspriteframe != spriteframe)
+                        {
+                            prevspriteframe = spriteframe;
+                            for (int i = 0; i < spritepath.Length; i++)
+                            {
+                                spritename = "sit_0";
+                                playerStore.activePlayer.spriteOfset[i] = getoffset(i);
+                            }
+                        }                        
 
                         // Apply Gravity 
                         Position += new Vector2(0, 1) * 250 * (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -374,24 +392,18 @@ namespace XNA_ScreenManager
                             this.Direction.Y = MOVE_DOWN;
                             this.Speed = PLAYER_SPEED * 0.75f;
 
-                            //player animation
-                            spriteOfset = new Vector2(spriteFrame.Width * 2, spriteFrame.Height * 3);
-                            spriteFrame.Y = (int)spriteOfset.Y;
-
-                            // double check frame if previous state has higher X
-                            if (spriteFrame.X > spriteWidth * 3)
-                                spriteFrame.X = (int)spriteOfset.X;
-
                             // reduce timer
                             previousGameTimeMsec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                             if (previousGameTimeMsec < 0)
                             {
-                                previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.12f;
-                                spriteFrame.X += spriteWidth;
-                                if (spriteFrame.X > spriteWidth * 3)
-                                    spriteFrame.X = (int)spriteOfset.X;
+                                previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.10f;
+                                spriteframe++;
                             }
+
+                            // double check frame if previous state has higher X
+                            if (spriteframe > 1)
+                                spriteframe = 0;
                         }
                         else if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Up))
                         {
@@ -399,23 +411,28 @@ namespace XNA_ScreenManager
                             this.Direction.Y = MOVE_UP;
                             this.Speed = PLAYER_SPEED * 0.75f;
 
-                            //player animation
-                            spriteOfset = new Vector2(spriteFrame.Width * 2, spriteFrame.Height * 3);
-                            spriteFrame.Y = (int)spriteOfset.Y;
-
-                            // double check frame if previous state has higher X
-                            if (spriteFrame.X > spriteWidth * 3)
-                                spriteFrame.X = (int)spriteOfset.X;
-
                             // reduce timer
                             previousGameTimeMsec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                             if (previousGameTimeMsec < 0)
                             {
-                                previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.12f;
-                                spriteFrame.X += spriteWidth;
-                                if (spriteFrame.X > spriteWidth * 3)
-                                    spriteFrame.X = (int)spriteOfset.X;
+                                previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.10f;
+                                spriteframe++;
+                            }
+
+                            // double check frame if previous state has higher X
+                            if (spriteframe > 1)
+                                spriteframe = 0;
+                        }
+
+                        // Player animation
+                        if (prevspriteframe != spriteframe)
+                        {
+                            prevspriteframe = spriteframe;
+                            for (int i = 0; i < spritepath.Length; i++)
+                            {
+                                spritename = "stand1_" + spriteframe.ToString();
+                                playerStore.activePlayer.spriteOfset[i] = getoffset(i);
                             }
                         }
 
@@ -445,24 +462,18 @@ namespace XNA_ScreenManager
                             this.Direction.Y = MOVE_DOWN;
                             this.Speed = PLAYER_SPEED * 0.75f;
 
-                            //player animation
-                            spriteOfset = new Vector2(spriteFrame.Width * 0, spriteFrame.Height * 3);
-                            spriteFrame.Y = (int)spriteOfset.Y;
-
-                            // double check frame if previous state has higher X
-                            if (spriteFrame.X > spriteWidth * 1)
-                                spriteFrame.X = (int)spriteOfset.X;
-
                             // reduce timer
                             previousGameTimeMsec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                             if (previousGameTimeMsec < 0)
                             {
                                 previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.10f;
-                                spriteFrame.X += spriteWidth;
-                                if (spriteFrame.X > spriteWidth * 1)
-                                    spriteFrame.X = (int)spriteOfset.X;
+                                spriteframe++;
                             }
+
+                            // double check frame if previous state has higher X
+                            if (spriteframe > 1)
+                                spriteframe = 0;
                         }
                         else if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Up))
                         {
@@ -470,23 +481,28 @@ namespace XNA_ScreenManager
                             this.Direction.Y = MOVE_UP;
                             this.Speed = PLAYER_SPEED * 0.75f;
 
-                            //player animation
-                            spriteOfset = new Vector2(spriteFrame.Width * 0, spriteFrame.Height * 3);
-                            spriteFrame.Y = (int)spriteOfset.Y;
-
-                            // double check frame if previous state has higher X
-                            if (spriteFrame.X > spriteWidth * 1)
-                                spriteFrame.X = (int)spriteOfset.X;
-
                             // reduce timer
                             previousGameTimeMsec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                             if (previousGameTimeMsec < 0)
                             {
                                 previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.10f;
-                                spriteFrame.X += spriteWidth;
-                                if (spriteFrame.X > spriteWidth * 1)
-                                    spriteFrame.X = (int)spriteOfset.X;
+                                spriteframe++;
+                            }
+
+                            // double check frame if previous state has higher X
+                            if (spriteframe > 1)
+                                spriteframe = 0;
+                        }
+
+                        // Player animation
+                        if (prevspriteframe != spriteframe)
+                        {
+                            prevspriteframe = spriteframe;
+                            for (int i = 0; i < spritepath.Length; i++)
+                            {
+                                spritename = "ladder_" + spriteframe.ToString();
+                                playerStore.activePlayer.spriteOfset[i] = getoffset(i);
                             }
                         }
 
@@ -507,11 +523,13 @@ namespace XNA_ScreenManager
 
                         if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Right))
                         {
+                            spriteframe = 0;
                             state = EntityState.Walk;
                             spriteEffect = SpriteEffects.FlipHorizontally;
                         }
                         else if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Left))
                         {
+                            spriteframe = 0;
                             state = EntityState.Walk;
                             spriteEffect = SpriteEffects.None;
                         }
@@ -519,16 +537,19 @@ namespace XNA_ScreenManager
                         {
                             if (!collideNPC)
                             {
+                                spriteframe = 0;
                                 Velocity += new Vector2(0, -1.6f); // Add an upward impulse
                                 state = EntityState.Jump;
                             }
                         }
                         else if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Insert))
                         {
-                                state = EntityState.Sit;
+                            spriteframe = 0;
+                            state = EntityState.Sit;
                         }
                         else if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Up))
                         {
+                            spriteframe = 0;
                             if (this.collideLadder)
                                 state = EntityState.Ladder;
                             else if (this.collideRope)
@@ -544,16 +565,16 @@ namespace XNA_ScreenManager
                                 // check the weapon type
                                 if (weapontype == WeaponType.Bow)
                                 {
-                                    previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerinfo.activePlayer.ASPD * 12) * 0.0006f) + 0.05f;
+                                    previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerStore.activePlayer.ASPD * 12) * 0.0006f) + 0.05f;
 
-                                    spriteFrame.X = 0;
+                                    spriteframe = 0;
                                     state = EntityState.Shoot;
                                 }
                                 else if (weapontype == WeaponType.Dagger || weapontype == WeaponType.One_handed_Sword)
                                 {
-                                    previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerinfo.activePlayer.ASPD * 12) * 0.0006f) + 0.05f;
+                                    previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerStore.activePlayer.ASPD * 12) * 0.0006f) + 0.05f;
 
-                                    spriteFrame.X = 0;
+                                    spriteframe = 0;
 
                                     if(randomizer.Instance.generateRandom(0,2) == 1)
                                         state = EntityState.Stab;
@@ -570,9 +591,27 @@ namespace XNA_ScreenManager
                         // Move the Character
                         OldPosition = Position;
 
-                        // player sprite jump
-                        spriteOfset = new Vector2(spriteFrame.Width * 0, spriteFrame.Height * 0);
-                        spriteFrame = new Rectangle((int)spriteOfset.X, (int)spriteOfset.Y, spriteFrame.Width, spriteFrame.Height);
+                        // reduce timer
+                        previousGameTimeMsec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                        if (previousGameTimeMsec < 0)
+                        {
+                            previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.10f;
+                            spriteframe++;
+                            if (spriteframe > 4)
+                                spriteframe = 0;
+                        }
+
+                        // Player animation
+                        if (prevspriteframe != spriteframe)
+                        {
+                            prevspriteframe = spriteframe;
+                            for (int i = 0; i < spritepath.Length; i++)
+                            {
+                                spritename = "stand1_" + spriteframe.ToString();
+                                playerStore.activePlayer.spriteOfset[i] = getoffset(i);
+                            }
+                        }
 
                         // Apply Gravity 
                         Position += new Vector2(0, 1) * 250 * (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -613,19 +652,27 @@ namespace XNA_ScreenManager
                             }
                         }
 
-                        // Player animation
-                        spriteOfset = new Vector2(spriteFrame.Width * 0, spriteFrame.Height * 1);
-                        spriteFrame.Y = (int)spriteOfset.Y;
-
                         // reduce timer
                         previousGameTimeMsec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 
+                        // set sprite frames
                         if (previousGameTimeMsec < 0)
                         {
                             previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.10f;
-                            spriteFrame.X += spriteWidth;
-                            if (spriteFrame.X > spriteWidth * 3)
-                                spriteFrame.X = (int)spriteOfset.X;
+                            spriteframe ++;
+                        }
+                        if (spriteframe > 3)
+                            spriteframe = 0;
+
+                        // Player animation
+                        if (prevspriteframe != spriteframe)
+                        {
+                            prevspriteframe = spriteframe;
+                            for (int i = 0; i < spritepath.Length; i++)
+                            {
+                                spritename = "walk1_" + spriteframe.ToString();
+                                playerStore.activePlayer.spriteOfset[i] = getoffset(i);
+                            }
                         }
 
                         // Check if player is steady standing
@@ -690,10 +737,13 @@ namespace XNA_ScreenManager
                             // Move the Character
                             OldPosition = Position;
 
-                            // player sprite jump
-                            spriteOfset = new Vector2(spriteFrame.Width * 4, spriteFrame.Height * 2);
-                            spriteFrame = new Rectangle((int)spriteOfset.X, (int)spriteOfset.Y, spriteFrame.Width, spriteFrame.Height);
-
+                            // Player animation
+                            for (int i = 0; i < spritepath.Length; i++)
+                            {
+                                spritename = "jump_0";
+                                playerStore.activePlayer.spriteOfset[i] = getoffset(i);
+                            }
+        
                             // Apply Gravity + jumping
                             if (Velocity.Y < -1.2f)
                             {
@@ -716,10 +766,6 @@ namespace XNA_ScreenManager
                     #endregion
                     #region state falling
                     case EntityState.Falling:
-                    
-                        // player sprite falling
-                        spriteOfset = new Vector2(spriteFrame.Width * 5, spriteFrame.Height * 2);
-                        spriteFrame = new Rectangle((int)spriteOfset.X, (int)spriteOfset.Y, spriteFrame.Width, spriteFrame.Height);
 
                         if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Left))
                         {
@@ -750,9 +796,6 @@ namespace XNA_ScreenManager
                             OldPosition = Position;
 
                             Velocity.Y += (float)gameTime.ElapsedGameTime.TotalSeconds;
-                            
-                            // Apply jumping
-                            // Position += Velocity * 250 * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                             // Apply Gravity 
                             Position += new Vector2(0, 1) * 250 * (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -784,6 +827,14 @@ namespace XNA_ScreenManager
                             // Walk / Jump speed
                             Position += Direction * (Speed / 2) * (float)gameTime.ElapsedGameTime.TotalSeconds;
                         }
+
+                        // Player animation
+                        for (int i = 0; i < spritepath.Length; i++)
+                        {
+                            spritename = "fly_0";
+                            playerStore.activePlayer.spriteOfset[i] = getoffset(i);
+                        }
+
                         break;
                     #endregion
                     #region state hit
@@ -803,9 +854,12 @@ namespace XNA_ScreenManager
                         // Move the Character
                         OldPosition = Position;
 
-                        // player sprite hit
-                        spriteOfset = new Vector2(spriteFrame.Width * 0, spriteFrame.Height * 0);
-                        spriteFrame = new Rectangle((int)spriteOfset.X, (int)spriteOfset.Y, spriteFrame.Width, spriteFrame.Height);
+                        // Player animation
+                        for (int i = 0; i < spritepath.Length; i++)
+                        {
+                            spritename = "fly_0" + spriteframe.ToString();
+                            playerStore.activePlayer.spriteOfset[i] = getoffset(i);
+                        }
 
                         // Set new state
                         state = EntityState.Frozen;
@@ -828,9 +882,12 @@ namespace XNA_ScreenManager
                         // Move the Character
                         OldPosition = Position;
 
-                        // player sprite hit
-                        spriteOfset = new Vector2(spriteFrame.Width * 0, spriteFrame.Height * 0);
-                        spriteFrame = new Rectangle((int)spriteOfset.X, (int)spriteOfset.Y, spriteFrame.Width, spriteFrame.Height);
+                        // Player animation
+                        for (int i = 0; i < spritepath.Length; i++)
+                        {
+                            spritename = "fly_0" + spriteframe.ToString();
+                            playerStore.activePlayer.spriteOfset[i] = getoffset(i);
+                        }
 
                         // Apply Gravity + jumping
                         if (Velocity.Y < -1.2f)
@@ -897,74 +954,50 @@ namespace XNA_ScreenManager
         {
             if (Active)
             {
-                PlayerInfo player = Player;
-
-                if (player == null)
-                    player = this.playerinfo.activePlayer;
-
-                // because in some states the hair sprite is out of bound (80x80)
-                Rectangle hairFrame = spriteFrame,
-                          hatFrame = spriteFrame,
-                          clothFrame = spriteFrame,
-                          weaponFrame = spriteFrame,
-                          faceFrame = spriteFrame,
-                          bodyFrame = spriteFrame;
-
-                switch(state)
+                for (int i = 0; i < spritepath.Length; i++)
                 {
-                    case EntityState.Jump:
-                    case EntityState.Falling:
-                        if(equipment.getEquip(ItemSlot.Headgear) == null)
-                            hairFrame = new Rectangle(spriteFrame.X, spriteFrame.Y - 10, spriteFrame.Width, SpriteFrame.Height + 10);
-                        else
-                            hairFrame = new Rectangle(spriteFrame.X, spriteFrame.Y + 30, spriteFrame.Width, SpriteFrame.Height - 30);
-                        hatFrame = new Rectangle(spriteFrame.X, spriteFrame.Y - 10, spriteFrame.Width, SpriteFrame.Height + 10);
-                        clothFrame = new Rectangle(spriteFrame.X, spriteFrame.Y + 10, spriteFrame.Width, SpriteFrame.Height + 10);
-                        bodyFrame = new Rectangle(spriteFrame.X, spriteFrame.Y + 10, spriteFrame.Width, SpriteFrame.Height + 10);
-                        weaponFrame = new Rectangle(spriteFrame.X, spriteFrame.Y + 10, spriteFrame.Width, SpriteFrame.Height + 10);
-                        faceFrame = new Rectangle(spriteFrame.X, spriteFrame.Y, spriteFrame.Width, SpriteFrame.Height);
-                        break;
-                    case EntityState.Cooldown:
-                        if (equipment.item_list.Find(delegate(Item item) { return item.Type == ItemType.Weapon; }).WeaponType != WeaponType.Bow)
-                            weaponFrame = new Rectangle(spriteFrame.X - 20, spriteFrame.Y, spriteFrame.Width + 20, SpriteFrame.Height);
-                        if (equipment.getEquip(ItemSlot.Headgear) != null)
-                            hairFrame = new Rectangle(spriteFrame.X, spriteFrame.Y + 30, spriteFrame.Width, SpriteFrame.Height - 30);
-                        break;
-                    default:
-                        if (equipment.getEquip(ItemSlot.Headgear) != null)
-                            hairFrame = new Rectangle(spriteFrame.X, spriteFrame.Y + 30, spriteFrame.Width, SpriteFrame.Height - 30);
-                        break;
+                    Color drawcolor = Color.White;
+                    Texture2D drawsprite = null;
+                    int calculatedPosition = 0;
+
+                    try
+                    {
+                        if (getspritepath(i) != null)
+                        {
+                            string spritepath1 = getspritepath(i); // temporary for debugging
+                            drawsprite = Content.Load<Texture2D>(spritepath1 + spritename);
+
+                            // Calculate position based on spriteEffect
+                            if (spriteEffect == SpriteEffects.None)
+                                calculatedPosition = (int)Position.X + (int)getoffset(i).X + 35;
+                            else
+                                calculatedPosition = (int)Position.X + (int)Math.Abs(getoffset(i).X) - drawsprite.Width + 25;
+
+                            // give skin color to head and torso sprite
+                            if (i == 0 || i == 1)
+                                drawcolor = getPlayer().skin_color;
+
+                            // draw player sprite
+                            spriteBatch.Draw(drawsprite,
+                                new Rectangle(calculatedPosition, (int)Position.Y + (int)getoffset(i).Y + 78,
+                                    drawsprite.Width, drawsprite.Height),
+                                new Rectangle(0, 0, drawsprite.Width, drawsprite.Height),
+                                drawcolor * this.transperancy, 0f, Vector2.Zero, spriteEffect, 0f);
+                        }
+                    }
+                    catch
+                    {
+                        // no texture found
+                    }
                 }
+            }
+        }
 
-                if (player.body_sprite != null)
-                    spriteBatch.Draw(Content.Load<Texture2D>(player.body_sprite), new Rectangle((int)Position.X, (int)(Position.Y + (bodyFrame.Height - spriteFrame.Height)), spriteFrame.Width, bodyFrame.Height),
-                    bodyFrame, player.skin_color * this.transperancy, 0f, Vector2.Zero, spriteEffect, 0f);
-
-                if (player.faceset_sprite != null)
-                    spriteBatch.Draw(Content.Load<Texture2D>(player.faceset_sprite), new Rectangle((int)Position.X, (int)Position.Y, spriteFrame.Width, spriteFrame.Height),
-                    faceFrame, this.color * this.transperancy, 0f, Vector2.Zero, spriteEffect, 0f);
-
-                if (player.hair_sprite != null)
-                    spriteBatch.Draw(Content.Load<Texture2D>(player.hair_sprite), new Rectangle((int)Position.X, (int)(Position.Y - (hairFrame.Height - spriteFrame.Height)), spriteFrame.Width, hairFrame.Height),
-                    hairFrame, player.hair_color * this.transperancy, 0f, Vector2.Zero, spriteEffect, 0f);
-
-                if (player.hatgear_sprite != null)
-                    spriteBatch.Draw(Content.Load<Texture2D>(player.hatgear_sprite), new Rectangle((int)Position.X, (int)(Position.Y - (hatFrame.Height - spriteFrame.Height)), spriteFrame.Width, hatFrame.Height),
-                    hatFrame, this.color * this.transperancy, 0f, Vector2.Zero, spriteEffect, 0f);
-
-                if (player.costume_sprite != null)
-                    spriteBatch.Draw(Content.Load<Texture2D>(player.costume_sprite), new Rectangle((int)Position.X, (int)(Position.Y + (clothFrame.Height - spriteFrame.Height)), spriteFrame.Width, clothFrame.Height),
-                    clothFrame, this.color * this.transperancy, 0f, Vector2.Zero, spriteEffect, 0f);
-
-                if (player.weapon_sprite != null)
-                {
-                    if (spriteEffect == SpriteEffects.None)
-                        spriteBatch.Draw(Content.Load<Texture2D>(player.weapon_sprite), new Rectangle((int)(Position.X - (weaponFrame.Width - spriteFrame.Width)), (int)(Position.Y + (weaponFrame.Height - spriteFrame.Height)), weaponFrame.Width, weaponFrame.Height),
-                        weaponFrame, this.color * this.transperancy, 0f, Vector2.Zero, spriteEffect, 0f);
-                    else
-                        spriteBatch.Draw(Content.Load<Texture2D>(player.weapon_sprite), new Rectangle((int)Position.X, (int)(Position.Y + (weaponFrame.Height - spriteFrame.Height)), weaponFrame.Width, weaponFrame.Height),
-                        weaponFrame, this.color * this.transperancy, 0f, Vector2.Zero, spriteEffect, 0f);
-                }
+        public override Rectangle SpriteFrame
+        {
+            get 
+            {
+                return new Rectangle((int)Position.X, (int)Position.Y, 60, 80);
             }
         }
 
@@ -978,36 +1011,202 @@ namespace XNA_ScreenManager
                 return true;
             }
             return false;
-
-            //// standing in warp portal effect
-            //if (this.effectCounter == 2)
-            //{
-            //    this.effectCounter = 0;
-            //    playerinfo.activePlayer.col = Color.White;       // reset color
-            //    return true;
-            //}
-            //else
-            //{
-            //    previousEffectTimeSec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-            //    if (previousEffectTimeSec <= 0)
-            //    {
-            //        previousEffectTimeSec = (float)gameTime.ElapsedGameTime.TotalSeconds + 3;
-            //        this.effectCounter++;
-            //    }
-
-            //    this.color.R = (byte)((previousEffectTimeSec * 250) - gameTime.ElapsedGameTime.TotalSeconds / 4);
-
-            //    return false;
-            //}
         }
-
-        public PlayerInfo Player { get; set; }
-
+                
         public bool CheckKey(Microsoft.Xna.Framework.Input.Keys theKey)
         {
             KeyboardState keyboardStateCurrent = Keyboard.GetState();
             return keyboardStatePrevious.IsKeyDown(theKey) && keyboardStateCurrent.IsKeyUp(theKey);
+        }
+
+        #region load spriteoffset
+        public Vector2 getoffset(int spriteID)
+        {
+            if (spriteID < 4 || spriteID == 9 )
+            {
+                if (getPlayer().list_offsets.FindAll(x => x.ID == spriteID).Count == 0)
+                    loadoffsetfromXML(spriteID);
+
+                return new Vector2(getPlayer().list_offsets.Find(x => x.Name == spritename.ToString() + ".png" && x.ID == spriteID).X,
+                                   getPlayer().list_offsets.Find(x => x.Name == spritename.ToString() + ".png" && x.ID == spriteID).Y);
+            }
+            else if (spriteID == 4) // get the Armor Sprite information
+            {
+                if (equipment.item_list.FindAll(x => x.Slot == ItemSlot.Bodygear).Count > 0)
+                {
+                    if (equipment.item_list.Find(x => x.Slot == ItemSlot.Bodygear).list_offsets.FindAll(y => y.Name == spritename.ToString() + ".png").Count > 0)
+                    {
+                        Item item = equipment.item_list.Find(x => x.Slot == ItemSlot.Bodygear);
+                        int X = item.list_offsets.Find(y => y.Name == spritename.ToString() + ".png").X;
+                        int Y = item.list_offsets.Find(y => y.Name == spritename.ToString() + ".png").Y;
+                        return new Vector2(X, Y);
+                    }
+                }
+            }
+            else if (spriteID == 7) // get the Headgear Sprite information
+            {
+                if (equipment.item_list.FindAll(x => x.Slot == ItemSlot.Headgear).Count > 0)
+                {
+                    if (equipment.item_list.Find(x => x.Slot == ItemSlot.Headgear).list_offsets.FindAll(y => y.Name == spritename.ToString() + ".png").Count > 0)
+                    {
+                        Item item = equipment.item_list.Find(x => x.Slot == ItemSlot.Headgear);
+                        int X = item.list_offsets.Find(y => y.Name == spritename.ToString() + ".png").X;
+                        int Y = item.list_offsets.Find(y => y.Name == spritename.ToString() + ".png").Y;
+                        return new Vector2(X, Y);
+                    }
+                }
+            }
+            else if (spriteID == 8) // get the Weapon Sprite information
+            {
+                if (equipment.item_list.FindAll(x => x.Slot == ItemSlot.Weapon).Count > 0)
+                {
+                    if (equipment.item_list.Find(x => x.Slot == ItemSlot.Weapon).list_offsets.FindAll(y => y.Name == spritename.ToString() + ".png").Count > 0)
+                    {
+                        Item item = equipment.item_list.Find(x => x.Slot == ItemSlot.Weapon);
+                        int X = item.list_offsets.Find(y => y.Name == spritename.ToString() + ".png").X;
+                        int Y = item.list_offsets.Find(y => y.Name == spritename.ToString() + ".png").Y;
+                        return new Vector2(X, Y);
+                    }
+                }
+            }
+
+            return Vector2.Zero;
+        }
+
+        public void clearoffset(int spriteID)
+        {
+            // fill list with XML structures
+            getPlayer().list_offsets.RemoveAll(x => x.ID == spriteID);
+        }
+
+        public void loadoffsetfromXML(int spriteID)
+        {
+            List<string> attribute = new List<string>();
+
+            if (getspritepath(spriteID) != null)
+            {
+                using (var reader = new StreamReader(Path.Combine(Content.RootDirectory + "\\" + getspritepath(spriteID), "data.xml")))
+                {
+                    while (!reader.EndOfStream)
+                    {
+                        var line = reader.ReadLine();
+                        var values = line.Split(' ');
+
+                        try
+                        {
+                            if (values[0] != "<i>")
+                            {
+                                for (int i = 0; i < values.Length; i++)
+                                {
+                                    if (values[i].StartsWith("image="))
+                                    {
+                                        char[] arrstart = new char[] { 'i', 'm', 'a', 'g', 'e', '=', '"' };
+                                        char[] arrend = new char[] { '"' };
+                                        string result = values[i].TrimStart(arrstart);
+                                        result = result.TrimEnd(arrend);
+                                        attribute.Add(result);
+                                    }
+                                    else if (values[i].StartsWith("x="))
+                                    {
+                                        char[] arrstart = new char[] { 'x', '=', '"' };
+                                        char[] arrend = new char[] { '"' };
+                                        string result = values[i].TrimStart(arrstart);
+                                        result = result.TrimEnd(arrend);
+                                        attribute.Add(result);
+                                    }
+                                    else if (values[i].StartsWith("y="))
+                                    {
+                                        char[] arrstart = new char[] { 'y', '=', '"' };
+                                        char[] arrend = new char[] { '"', '\\', '"', '/', '>' };
+                                        string result = values[i].TrimStart(arrstart);
+                                        result = result.TrimEnd(arrend);
+                                        attribute.Add(result);
+                                    }
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            string ee = ex.ToString();
+                        }
+                    }
+                }
+
+                // fill list with XML structures
+                getPlayer().list_offsets.RemoveAll(x => x.ID == spriteID);
+
+                for (int i = 0; i < attribute.Count; i++)
+                {
+                    if (attribute[i].EndsWith(".png"))
+                    {
+                        getPlayer().list_offsets.Add(new spriteOffset(
+                                spriteID,
+                                attribute[i].ToString(),
+                                Convert.ToInt32(attribute[i + 1]),
+                                Convert.ToInt32(attribute[i + 2])));
+                    }
+                }
+            }
+        }
+
+        public string getspritepath(int spriteID)
+        {
+            PlayerInfo player = null;
+
+            if (this.Player == null)
+                player = PlayerStore.Instance.activePlayer;
+            else
+                player = this.Player;
+
+            switch (spriteID)
+            {
+                case 0:
+                    return player.head_sprite;
+                case 1:
+                    return player.body_sprite;
+                case 2:
+                    return player.faceset_sprite;
+                case 3:
+                    return player.hair_sprite;
+                case 4:
+                    return player.costume_sprite;
+                // accessory 5 and 6 comes later...
+                case 7:
+                    return player.weapon_sprite;
+                case 8:
+                    return player.weapon_sprite;
+                case 9:
+                    return player.hands_sprite;
+            }
+            return null;
+        }
+        #endregion
+
+        #region bound new player
+        private PlayerInfo getPlayer()
+        {
+            // check which player is bound
+            if (this.Player == null)
+                return playerStore.activePlayer;
+            else
+                return this.Player;
+        }
+
+        public PlayerInfo Player { get; set; }
+        #endregion
+    }
+
+    public struct spriteOffset
+    {
+        public string Name;
+        public int ID, X, Y;
+
+        public spriteOffset(int id, string name, int x, int y)
+        {
+            this.ID = id;
+            this.Name = name;
+            this.X = x;
+            this.Y = y;
         }
     }
 }

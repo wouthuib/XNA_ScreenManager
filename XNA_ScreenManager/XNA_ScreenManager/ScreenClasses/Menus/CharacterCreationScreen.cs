@@ -30,7 +30,7 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
         public KeyboardInput keyboardiput;
         BackgroundComponent[] bgcomp = new BackgroundComponent[8];
         SpriteFont spriteFont, smallFont;
-        PlayerSprite2 playersprite;
+        PlayerSprite playersprite;
         //PlayerStore playerInfo = PlayerStore.Instance;
         public PlayerInfo newPlayer = null;
         public Phase phase = new Phase();
@@ -108,7 +108,7 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
             phase = Phase.Name;
 
             // player sprite
-            playersprite = new PlayerSprite2(352, 188, new Vector2(32, 32));
+            playersprite = new PlayerSprite(352, 188, new Vector2(32, 32));
         }
 
         public override void Update(GameTime gameTime)

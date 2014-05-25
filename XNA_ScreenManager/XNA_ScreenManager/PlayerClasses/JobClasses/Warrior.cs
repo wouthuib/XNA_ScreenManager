@@ -21,7 +21,7 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
         None
     }
 
-    class Warrior : PlayerSprite2
+    class Warrior : PlayerSprite
     {
         Texture2D cast_animation, skill_animation;
         float previousGameTimeMsec, previousSkillTimeMsec, previousCastTimeMsec;
