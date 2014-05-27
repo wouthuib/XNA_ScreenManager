@@ -56,6 +56,7 @@ namespace XNA_ScreenManager.CharacterClasses
               previousWalkTimeSec,                                                                  // WalkTime in Seconds
               previousIdleTimeSec,                                                                  // IdleTime in Seconds
               previousHitTimeSec,                                                                   // IdleTime in Seconds
+              previousFrozenTimeSec,                                                                // IdleTime in Seconds
               previousDiedTimeSec,                                                                  // IdleTime in Seconds
               previousSpawnTimeSec,                                                                 // IdleTime in Seconds
               previousAttackTimeSec = 0,                                                            // IdleTime in Seconds
@@ -304,48 +305,42 @@ namespace XNA_ScreenManager.CharacterClasses
                 #endregion
                 #region hit
                 case EntityState.Hit:
-                    
-                    // Start freeze timer 
-                    previousHitTimeSec = (int)gameTime.ElapsedGameTime.TotalSeconds + 0.7f;
 
-                    // Check of world instance is created
-                    if (world == null)
-                        world = GameWorld.GetInstance;
-
-                    // Start damage controll
-                    damage = Battle.battle_calc_damage(PlayerStore.Instance.activePlayer, this);
-                    this.HP -= damage;
-
-                    // create a damage baloon
-                    world.newEffect.Add(new DamageBaloon(
-                        ResourceManager.GetInstance.Content.Load<Texture2D>(@"gfx\effects\damage_counter1"),
-                        new Vector2((this.position.X + this.SpriteFrame.Width * 0.45f) - damage.ToString().Length * 5, 
-                                     this.position.Y + this.SpriteFrame.Height * 0.20f), damage));
-
-                    // change state (freeze or kill)
-                    if (this.HP <= 0)
+                    if (previousHitTimeSec <= 0)
                     {
-                        // Monster respawn timer
-                        previousDiedTimeSec = (int)gameTime.ElapsedGameTime.TotalSeconds + RESPAWN_TIME;
+                        // Start Hit timer (Avoid rapid hit)
+                        previousHitTimeSec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.1f;
 
-                        // Monster Item Drops
-                        foreach (var drop in ItemDrop)
+                        // Start freeze timer 
+                        previousFrozenTimeSec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.7f;
+
+                        // change state (freeze or kill)
+                        if (this.HP <= 0)
                         {
-                            // drop[0] = item, drop[1] = chance in %
-                            if (Randomizer.generateRandom(0, 100) <= drop[1])
-                                world.newEffect.Add(new ItemSprite(
-                                    new Vector2(Randomizer.generateRandom((int)this.position.X + 20, (int)this.position.X + this.spriteFrame.Width - 20),
-                                        (int)(this.position.Y + this.spriteFrame.Height * 0.70f)), drop[0]));
+                            // Monster respawn timer
+                            previousDiedTimeSec = (int)gameTime.ElapsedGameTime.TotalSeconds + RESPAWN_TIME;
+
+                            // Monster Item Drops
+                            foreach (var drop in ItemDrop)
+                            {
+                                // drop[0] = item, drop[1] = chance in %
+                                if (Randomizer.generateRandom(0, 100) <= drop[1])
+                                    GameWorld.GetInstance.newEffect.Add(new ItemSprite(
+                                        new Vector2(Randomizer.generateRandom((int)this.position.X + 20, (int)this.position.X + this.spriteFrame.Width - 20),
+                                            (int)(this.position.Y + this.spriteFrame.Height * 0.70f)), drop[0]));
+                            }
+
+                            // Give player EXP
+                            PlayerStore.Instance.activePlayer.Exp += this.EXP;
+
+                            // Change state monster
+                            state = EntityState.Died;
                         }
-
-                        // Give player EXP
-                        PlayerStore.Instance.activePlayer.Exp += this.EXP;
-
-                        // Change state monster
-                        state = EntityState.Died;
+                        else
+                            state = EntityState.Frozen;
                     }
-                    else
-                        state = EntityState.Frozen;
+
+                    previousHitTimeSec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                     break;
                 #endregion
@@ -361,9 +356,10 @@ namespace XNA_ScreenManager.CharacterClasses
                     spriteFrame.Y = Convert.ToInt32(spriteOfset.Y);
 
                     // reduce timer
+                    previousFrozenTimeSec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
                     previousHitTimeSec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-                    if (previousHitTimeSec <= 0)
+                    if (previousFrozenTimeSec <= 0)
                     {
                         // reset sprite frame
                         spriteFrame.X = 0;

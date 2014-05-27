@@ -182,15 +182,19 @@ namespace XNA_ScreenManager
 
                                 // create swing effect
                                 if (spriteEffect == SpriteEffects.FlipHorizontally)
-                                    world.newEffect.Add(new WeaponSwing(
-                                        new Vector2(this.Position.X + this.SpriteFrame.Width * 1.4f, this.Position.Y + this.SpriteFrame.Height * 0.7f),
-                                        WeaponSwingType.Swing01,
-                                        spriteEffect));
+                                {
+                                    Vector2 pos = new Vector2(this.Position.X + this.SpriteFrame.Width * 1.4f, this.Position.Y + this.SpriteFrame.Height * 0.7f);
+                                    world.newEffect.Add(new DamageArea(this, new Vector2(pos.X - 50, pos.Y), new Rectangle(0, 0, 80, 10), false,
+                                        (float)gameTime.ElapsedGameTime.TotalSeconds + 0.2f, 1));
+                                    world.newEffect.Add(new WeaponSwing(pos, WeaponSwingType.Swing01, spriteEffect));
+                                }
                                 else
-                                    world.newEffect.Add(new WeaponSwing(
-                                        new Vector2(this.Position.X - this.SpriteFrame.Width * 0.6f, this.Position.Y + this.SpriteFrame.Height * 0.7f),
-                                        WeaponSwingType.Swing01,
-                                        spriteEffect));
+                                {
+                                    Vector2 pos = new Vector2(this.Position.X - this.SpriteFrame.Width * 0.6f, this.Position.Y + this.SpriteFrame.Height * 0.7f);
+                                    world.newEffect.Add(new DamageArea(this, new Vector2(pos.X - 18, pos.Y), new Rectangle(0, 0, 80, 10), false,
+                                        (float)gameTime.ElapsedGameTime.TotalSeconds + 0.2f, 1));
+                                    world.newEffect.Add(new WeaponSwing(pos, WeaponSwingType.Swing01, spriteEffect));
+                                }
 
                                 // start cooldown
                                 state = EntityState.Cooldown;
@@ -244,15 +248,19 @@ namespace XNA_ScreenManager
 
                                 // create stab effect
                                 if (spriteEffect == SpriteEffects.FlipHorizontally)
-                                    world.newEffect.Add(new WeaponSwing(
-                                        new Vector2(this.Position.X + this.SpriteFrame.Width * 0.3f, this.Position.Y + this.SpriteFrame.Height * 0.7f),
-                                        WeaponSwingType.Stab01,
-                                        spriteEffect));
+                                {
+                                    Vector2 pos = new Vector2(this.Position.X + this.SpriteFrame.Width * 0.3f, this.Position.Y + this.SpriteFrame.Height * 0.7f);
+                                    world.newEffect.Add(new DamageArea(this, new Vector2(pos.X + 15, pos.Y), new Rectangle(0, 0, 80, 10), false, 
+                                        (float)gameTime.ElapsedGameTime.TotalSeconds + 0.1f, 1));
+                                    world.newEffect.Add(new WeaponSwing(pos, WeaponSwingType.Stab01, spriteEffect));
+                                }
                                 else
-                                    world.newEffect.Add(new WeaponSwing(
-                                        new Vector2(this.Position.X - this.SpriteFrame.Width * 0.7f, this.Position.Y + this.SpriteFrame.Height * 0.7f),
-                                        WeaponSwingType.Stab01,
-                                        spriteEffect));
+                                {
+                                    Vector2 pos = new Vector2(this.Position.X - this.SpriteFrame.Width * 0.7f, this.Position.Y + this.SpriteFrame.Height * 0.7f);
+                                    world.newEffect.Add(new DamageArea(this, new Vector2(pos.X - 18, pos.Y), new Rectangle(0, 0, 80, 10), false,
+                                        (float)gameTime.ElapsedGameTime.TotalSeconds + 0.1f, 1));
+                                    world.newEffect.Add(new WeaponSwing(pos, WeaponSwingType.Stab01, spriteEffect));
+                                }
 
                                 // reset sprite frame and change state
                                 state = EntityState.Cooldown;
@@ -963,12 +971,11 @@ namespace XNA_ScreenManager
 
                     try
                     {
-                        if (getspritepath(i) != null)
+                        if (getspritepath(i) != null && getoffset(i) != Vector2.Zero) // getoffset(i) = (does sprite exist, if not then skip)
                         {
-                            // check if sprite exist before loading from Content Manager 
+                            Vector2 debugvector = getoffset(i);
+
                             // load texture into sprite from Content Manager
-                            if (!findSpriteCheck(i))
-                                break;
                             drawsprite = Content.Load<Texture2D>(getspritepath(i) + spritename);
 
                             // Calculate position based on spriteEffect
@@ -1032,7 +1039,7 @@ namespace XNA_ScreenManager
             return keyboardStatePrevious.IsKeyDown(theKey) && keyboardStateCurrent.IsKeyUp(theKey);
         }
 
-        #region Draw Spite Corrections
+        #region load spriteoffset
         private Vector2 spriteCorrect(int spriteID, Texture2D spr)
         {
             Vector2 sprCorrect = Vector2.Zero;
@@ -1047,31 +1054,22 @@ namespace XNA_ScreenManager
             }
 
             return sprCorrect;
-        }
+        }              
 
-        private bool findSpriteCheck(int spriteID)
-        {
-            // Process the list of files found in the directory. 
-            string[] fileEntries = Directory.GetFiles(Content.RootDirectory + "\\" + getspritepath(spriteID));
-            foreach (string fileName in fileEntries)
-                if (fileName == spritename + ".png")
-                    return true;
-
-            // no file found
-            return true;
-        }
-        #endregion
-
-        #region load spriteoffset
         public Vector2 getoffset(int spriteID)
         {
             if (spriteID < 4 || spriteID == 9 )
             {
                 if (getPlayer().list_offsets.FindAll(x => x.ID == spriteID).Count == 0)
-                    loadoffsetfromXML(spriteID);
+                    loadoffsetfromXML(spriteID); // load from XML
 
-                return new Vector2(getPlayer().list_offsets.Find(x => x.Name == spritename.ToString() + ".png" && x.ID == spriteID).X,
-                                   getPlayer().list_offsets.Find(x => x.Name == spritename.ToString() + ".png" && x.ID == spriteID).Y);
+                if (getPlayer().list_offsets.FindAll(x => x.ID == spriteID && x.Name == spritename + ".png").Count > 0)
+                {
+                    return new Vector2(getPlayer().list_offsets.Find(x => x.Name == spritename.ToString() + ".png" && x.ID == spriteID).X,
+                                       getPlayer().list_offsets.Find(x => x.Name == spritename.ToString() + ".png" && x.ID == spriteID).Y);
+                }
+                else
+                    return Vector2.Zero; // the sprite simply does not exist (e.g. hands for ladder and rope are disabled)
             }
             else if (spriteID == 4) // get the Armor Sprite information
             {
@@ -1194,12 +1192,7 @@ namespace XNA_ScreenManager
 
         public string getspritepath(int spriteID)
         {
-            PlayerInfo player = null;
-
-            if (this.Player == null)
-                player = PlayerStore.Instance.activePlayer;
-            else
-                player = this.Player;
+            PlayerInfo player = getPlayer();
 
             switch (spriteID)
             {

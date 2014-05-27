@@ -167,6 +167,10 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
 
             if (previousGameTimeMsec <= 0)
             {
+                // reset sprite frame
+                spritename = "shoot1_0";
+                spriteframe = 0;
+
                 cast_animation = Content.Load<Texture2D>(@"gfx\skills\general\cast\effect0_" + ani_count.ToString());
                 previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.10f;
                 ani_count++;

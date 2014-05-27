@@ -8,6 +8,7 @@ using XNA_ScreenManager.ItemClasses;
 using XNA_ScreenManager.MapClasses;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using XNA_ScreenManager.GameWorldClasses.Entities;
 
 namespace XNA_ScreenManager.PlayerClasses.JobClasses
 {
@@ -181,6 +182,7 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
 
             if (previousGameTimeMsec <= 0)
             {
+                spritename = "stand1_0";
                 cast_animation = Content.Load<Texture2D>(@"gfx\skills\general\cast\effect0_" + ani_count.ToString());
                 previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.10f;
                 ani_count++;
@@ -235,6 +237,20 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
                         spritename = "swingO1_1";
                         for (int i = 0; i < spritepath.Length; i++)
                             playerStore.activePlayer.spriteOfset[i] = getoffset(i);
+
+                        // create swing effect
+                        if (spriteEffect == SpriteEffects.FlipHorizontally)
+                        {
+                            Vector2 pos = new Vector2(this.Position.X + this.SpriteFrame.Width * 1.4f, this.Position.Y);
+                            GameWorld.GetInstance.newEffect.Add(new DamageArea(this, new Vector2(pos.X - 40, pos.Y), new Rectangle(0, 0, 200, 80), false,
+                                (float)gameTime.ElapsedGameTime.TotalSeconds + 0.4f, 8));
+                        }
+                        else
+                        {
+                            Vector2 pos = new Vector2(this.Position.X, this.Position.Y);
+                            GameWorld.GetInstance.newEffect.Add(new DamageArea(this, new Vector2(pos.X - 180, pos.Y), new Rectangle(0, 0, 200, 80), false,
+                                (float)gameTime.ElapsedGameTime.TotalSeconds + 0.4f, 8));
+                        }
                     }
                     else if (ani_count >= 6)
                     {
@@ -287,6 +303,20 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
                         spritename = "swingO1_1";
                         for (int i = 0; i < spritepath.Length; i++)
                             playerStore.activePlayer.spriteOfset[i] = getoffset(i);
+
+                        // create swing effect
+                        if (spriteEffect == SpriteEffects.FlipHorizontally)
+                        {
+                            Vector2 pos = new Vector2(this.Position.X + this.SpriteFrame.Width * 1.4f, this.Position.Y);
+                            GameWorld.GetInstance.newEffect.Add(new DamageArea(this, new Vector2(pos.X - 40, pos.Y), new Rectangle(0, 0, 200, 80), true,
+                                (float)gameTime.ElapsedGameTime.TotalSeconds + 0.4f, 2));
+                        }
+                        else
+                        {
+                            Vector2 pos = new Vector2(this.Position.X, this.Position.Y);
+                            GameWorld.GetInstance.newEffect.Add(new DamageArea(this, new Vector2(pos.X - 180, pos.Y), new Rectangle(0, 0, 200, 80), true,
+                                (float)gameTime.ElapsedGameTime.TotalSeconds + 0.4f, 2));
+                        }
                     }
                     else if (ani_count == 3)
                     {

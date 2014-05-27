@@ -66,8 +66,19 @@ namespace XNA_ScreenManager.PlayerClasses
                         if (entity.State != EntityState.Died &&
                             entity.State != EntityState.Spawn)
                         {
+                            // monster hit
                             entity.State = EntityState.Hit;
                             this.keepAliveTimer = 0;
+
+                            // Start damage controll
+                            int damage = (int)Battle.battle_calc_damage(PlayerStore.Instance.activePlayer, (MonsterSprite)entity, 1);
+                            entity.HP -= damage;
+
+                            // create damage balloon
+                            GameWorld.GetInstance.newEffect.Add(new DamageBaloon(
+                                    ResourceManager.GetInstance.Content.Load<Texture2D>(@"gfx\effects\damage_counter1"),
+                                    new Vector2((entity.Position.X + entity.SpriteFrame.Width * 0.45f) - damage.ToString().Length * 5,
+                                    entity.Position.Y + entity.SpriteFrame.Height * 0.20f), damage));
                         }
                     }
                 }

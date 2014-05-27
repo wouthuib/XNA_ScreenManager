@@ -87,28 +87,6 @@ namespace XNA_ScreenManager.GameWorldClasses.Entities
             if (swingtype == WeaponSwingType.Stab01)
                 angle = 0;
 
-            // check for monster collisions
-            foreach (Entity monster in world.listEntity)
-            {
-                if (monster.EntityType == EntityType.Monster)
-                {
-                    if (new Rectangle((int)(monster.Position.X + monster.SpriteFrame.Width * 0.60f),
-                        (int)monster.Position.Y,
-                        (int)(monster.SpriteFrame.Width * 0.30f),
-                        (int)monster.SpriteFrame.Height).
-                    Intersects(new Rectangle(
-                        (int)(Position.X - SpriteFrame.Width * 0.2f), (int)Position.Y,
-                        (int)(SpriteFrame.Width * 1.2f), (int)SpriteFrame.Height)) == true && transperant > 0.8f && this.hit == false)
-                    {
-                        if (monster.State != EntityState.Hit && monster.State != EntityState.Died && monster.State != EntityState.Spawn)
-                        {
-                            monster.State = EntityState.Hit;
-                            hit = true;
-                        }
-                    }
-                }
-            }
-
             // base Effect Update
             base.Update(gameTime);
         }

@@ -96,8 +96,4 @@
   <i image="fly_1.png" delay="300" x="-16" y="-37"/>
   <i image="jump_0.png" delay="200" x="-16" y="-30"/>
   <i image="sit_0.png" delay="100" x="-11" y="-20"/>
-  <i image="ladder_0.png" delay="250" x="-10" y="-43"/>
-  <i image="ladder_1.png" delay="250" x="-10" y="-43"/>
-  <i image="rope_0.png" delay="250" x="-5" y="-43"/>
-  <i image="rope_1.png" delay="250" x="-5" y="-43"/>
 </i>

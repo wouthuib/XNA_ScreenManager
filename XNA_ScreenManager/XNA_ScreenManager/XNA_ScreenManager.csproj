@@ -125,6 +125,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GameWorldClasses\Effects\LevelUpEffect.cs" />
+    <Compile Include="GameWorldClasses\Entities\DamageArea.cs" />
     <Compile Include="GameWorldClasses\Entities\Entity.cs" />
     <Compile Include="GameWorldClasses\Entities\WeaponSwing.cs" />
     <Compile Include="MonsterClasses\Monster.cs" />

@@ -12,7 +12,7 @@ namespace XNA_ScreenManager.MapClasses
     public static class Battle
     {
         // player hits monster
-        public static int battle_calc_damage(PlayerInfo playerinfo, MonsterSprite monsterinfo)
+        public static int battle_calc_damage(PlayerInfo playerinfo, MonsterSprite monsterinfo, float percent)
         {
             randomizer Randomizer = randomizer.Instance;
             Item Weapon = Equipment.Instance.getEquip(ItemSlot.Weapon);
@@ -27,7 +27,7 @@ namespace XNA_ScreenManager.MapClasses
             {
                 bDamage = (playerinfo.ATK * 2) - monsterinfo.DEF;
                 wDamage = playerinfo.WeaponATK - monsterinfo.DEF;
-                finalDamage = (int)((bDamage + wDamage) * (WeaponPenalty(Weapon, monsterinfo) * 0.01f));
+                finalDamage = (int)((bDamage + wDamage) * percent * (WeaponPenalty(Weapon, monsterinfo) * 0.01f));
             }
             else
                 finalDamage = 0;
