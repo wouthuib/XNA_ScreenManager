@@ -22,7 +22,7 @@ namespace XNA_ScreenManager.CharacterClasses
         GameWorld world;
 
         // Monster Store ID
-        int MonsterID = 0;
+        public int MonsterID = 0;
         List<int[]> ItemDrop = new List<int[]>();
 
         // Drawing properties
@@ -30,8 +30,8 @@ namespace XNA_ScreenManager.CharacterClasses
         private int spriteHeight = 90;
         private Vector2 spriteOfset = new Vector2(90, 0);
         private SpriteEffects spriteEffect = SpriteEffects.None;
-        private int damage = 0;
         private float transperancy = 0;
+        private bool debug = true;
 
         // Respawn properties
         private Vector2 resp_pos = Vector2.Zero,                                                    // Respawn Position
@@ -466,16 +466,7 @@ namespace XNA_ScreenManager.CharacterClasses
 
                 if (player.EntityType == EntityType.Player)
                 {
-                    if (new Rectangle(
-                            (int)(player.Position.X + player.SpriteFrame.Width * 0.40f),
-                            (int)player.Position.Y,
-                            (int)(player.SpriteFrame.Width * 0.30f),
-                            (int)player.SpriteFrame.Height).
-                        Intersects(new Rectangle(
-                            (int)(this.Position.X + this.SpriteFrame.Width * 0.40f), 
-                            (int)this.Position.Y,
-                            (int)(this.SpriteFrame.Width * 0.30f), 
-                            (int)this.SpriteFrame.Height)) == true)
+                    if (player.SpriteFrame.Intersects(SpriteBoundries))
                     {
                         // player + monster state not equal to hit or frozen
                         if (this.State != EntityState.Hit &&
@@ -525,8 +516,25 @@ namespace XNA_ScreenManager.CharacterClasses
         public override void Draw(SpriteBatch spriteBatch)
         {
             if (Active)
+            {
+                DrawSpriteFrame(spriteBatch);
                 spriteBatch.Draw(sprite, new Rectangle((int)Position.X, (int)Position.Y, SpriteFrame.Width, SpriteFrame.Height),
                     SpriteFrame, Color.White * transperancy, 0f, Vector2.Zero, spriteEffect, 0f);
+            }
+        }
+
+        private void DrawSpriteFrame(SpriteBatch spriteBatch)
+        {
+            if (this.debug)
+            {
+                Texture2D rect = new Texture2D(ResourceManager.GetInstance.gfxdevice, (int)Math.Abs(SpriteFrame.Width), (int)SpriteFrame.Height);
+
+                Color[] data = new Color[(int)Math.Abs(SpriteFrame.Width) * (int)SpriteFrame.Height];
+                for (int i = 0; i < data.Length; ++i) data[i] = Color.Blue;
+                rect.SetData(data);
+
+                spriteBatch.Draw(rect, SpriteBoundries, SpriteFrame, Color.White * 0.5f, 0, Vector2.Zero, spriteEffect, 0f);
+            }
         }
         #endregion
 
@@ -565,6 +573,18 @@ namespace XNA_ScreenManager.CharacterClasses
                     ItemDrop.Add(new int[] { itemdrop[0], itemdrop[1] });
                     index = 0;
                 }
+            }
+        }
+
+        public Rectangle SpriteBoundries
+        {
+            get
+            {
+                return new Rectangle(
+                            (int)(Position.X + SpriteFrame.Width * 0.20f + MonsterStore.Instance.monster_list.Find(x => x.monsterID == this.MonsterID).sizeMod.X),
+                            (int)(Position.Y + SpriteFrame.Height * 0.40f + MonsterStore.Instance.monster_list.Find(x => x.monsterID == this.MonsterID).sizeMod.Y),
+                            (int)Math.Abs(SpriteFrame.Width * 0.60f - MonsterStore.Instance.monster_list.Find(x => x.monsterID == this.MonsterID).sizeMod.X),
+                            (int)Math.Abs(SpriteFrame.Height * 0.60f - MonsterStore.Instance.monster_list.Find(x => x.monsterID == this.MonsterID).sizeMod.Y));
             }
         }
         #endregion

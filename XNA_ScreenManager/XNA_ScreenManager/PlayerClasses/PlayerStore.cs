@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.IO;
+using XNA_ScreenManager.ScreenClasses.MainClasses;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Security.Cryptography;
 
 namespace XNA_ScreenManager.PlayerClasses
 {
@@ -73,7 +77,13 @@ namespace XNA_ScreenManager.PlayerClasses
 
         public PlayerInfo activePlayer
         {
-            get { return playerlist[activeSlot]; }
+            get 
+            {
+                if (playerlist[activeSlot] != null)
+                    return playerlist[activeSlot];
+                else
+                    return new PlayerInfo();
+            }
         }
 
         public PlayerInfo getPlayer(string name = null, int slot = -1)
@@ -88,6 +98,53 @@ namespace XNA_ScreenManager.PlayerClasses
             }
 
             return null;
+        }
+
+        public void loadPlayerStore(string file)
+        {
+            // unload current players
+            for (int i = 0; i < playerlist.Length; i++)
+                playerlist[i] = null;
+
+            string dir = @"..\..\..\..\XNA_ScreenManagerContent\playerstore\";
+            string serializationFile = Path.Combine(dir, file);
+
+            byte[] key = { 1, 2, 3, 4, 5, 6, 7, 8 }; // Where to store these keys is the tricky part, you may need to obfuscate them or get the user to input a password each time
+            byte[] iv = { 1, 2, 3, 4, 5, 6, 7, 8 };
+            DESCryptoServiceProvider des = new DESCryptoServiceProvider();
+
+            // Decryption
+            using (var fs = new FileStream(serializationFile, FileMode.Open, FileAccess.Read))
+            {
+                var cryptoStream = new CryptoStream(fs, des.CreateDecryptor(key, iv), CryptoStreamMode.Read);
+                BinaryFormatter formatter = new BinaryFormatter();
+
+                // This is where you deserialize the class
+                playerlist = (PlayerInfo[])formatter.Deserialize(cryptoStream);
+            }
+
+            activeSlot = 0;
+        }
+
+        public void savePlayerStore(string file)
+        {
+            string dir = @"..\..\..\..\XNA_ScreenManagerContent\playerstore\";
+            string serializationFile = Path.Combine(dir, file);
+
+            byte[] key = { 1, 2, 3, 4, 5, 6, 7, 8 }; // Where to store these keys is the tricky part, you may need to obfuscate them or get the user to input a password each time
+            byte[] iv = { 1, 2, 3, 4, 5, 6, 7, 8 };
+            DESCryptoServiceProvider des = new DESCryptoServiceProvider();
+
+            // Encryption
+            using (var fs = new FileStream(serializationFile, FileMode.Create, FileAccess.Write))
+            {
+                var cryptoStream = new CryptoStream(fs, des.CreateEncryptor(key, iv), CryptoStreamMode.Write);
+                BinaryFormatter formatter = new BinaryFormatter();
+
+                // This is where you serialize the class
+                formatter.Serialize(cryptoStream, playerlist);
+                cryptoStream.FlushFinalBlock();
+            }
         }
     }
 }

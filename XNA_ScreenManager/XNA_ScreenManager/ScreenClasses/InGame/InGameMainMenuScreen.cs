@@ -54,6 +54,7 @@ namespace XNA_ScreenManager.ScreenClasses
         public int SelectedIndex
         {
             get { return menu.SelectedIndex; }
+            set { menu.SelectedIndex = value; }
         }
 
         public override void Show()

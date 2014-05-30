@@ -16,8 +16,8 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
     public class StatusScreen : GameScreen
     {
         #region properties
-        Inventory inventory = Inventory.Instance;
-        Equipment equipment = Equipment.Instance;
+        //Inventory inventory = Inventory.Instance;
+        //Equipment equipment = Equipment.Instance;
         ScreenManager manager = ScreenManager.Instance;
 
         SpriteFont spriteFont;

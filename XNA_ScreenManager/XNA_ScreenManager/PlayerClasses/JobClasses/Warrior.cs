@@ -139,9 +139,9 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
                 if (!SkillSlots.Instance.active)
                 {
                     // check if weapon is equiped
-                    if (equipment.item_list.FindAll(delegate(Item item) { return item.Type == ItemType.Weapon; }).Count > 0)
+                    if (getPlayer().equipment.item_list.FindAll(delegate(Item item) { return item.Type == ItemType.Weapon; }).Count > 0)
                     {
-                        WeaponType weapontype = equipment.item_list.Find(delegate(Item item) { return item.Type == ItemType.Weapon; }).WeaponType;
+                        WeaponType weapontype = getPlayer().equipment.item_list.Find(delegate(Item item) { return item.Type == ItemType.Weapon; }).WeaponType;
 
                         // check the weapon type
                         if (weapontype == WeaponType.One_handed_Sword ||

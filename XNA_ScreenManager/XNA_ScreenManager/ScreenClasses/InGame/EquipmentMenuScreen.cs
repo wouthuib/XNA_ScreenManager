@@ -16,8 +16,9 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
     {
         #region properties
         ItemlistComponent itemlist;
-        Inventory inventory = Inventory.Instance;
-        Equipment equipment = Equipment.Instance;
+        //Inventory inventory = Inventory.Instance;
+        //Equipment equipment = Equipment.Instance;
+        PlayerStore playerStore = PlayerStore.Instance;
         ScreenManager manager = ScreenManager.Instance;
 
         List<Item> itemobjects = new List<Item>();
@@ -79,19 +80,19 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
             switch (SelectedSlot)
             {
                 case 0: // Weapon
-                    return inventory.item_list.FindAll(delegate(Item item) { return item.Slot == ItemSlot.Weapon; });
+                    return playerStore.activePlayer.inventory.item_list.FindAll(delegate(Item item) { return item.Slot == ItemSlot.Weapon; });
                 case 1: // Shield
-                    return inventory.item_list.FindAll(delegate(Item item) { return item.Slot == ItemSlot.Shield; });
+                    return playerStore.activePlayer.inventory.item_list.FindAll(delegate(Item item) { return item.Slot == ItemSlot.Shield; });
                 case 2: // Headgear
-                    return inventory.item_list.FindAll(delegate(Item item) { return item.Slot == ItemSlot.Headgear; });
+                    return playerStore.activePlayer.inventory.item_list.FindAll(delegate(Item item) { return item.Slot == ItemSlot.Headgear; });
                 case 3: // Neck
-                    return inventory.item_list.FindAll(delegate(Item item) { return item.Slot == ItemSlot.Neck; });
+                    return playerStore.activePlayer.inventory.item_list.FindAll(delegate(Item item) { return item.Slot == ItemSlot.Neck; });
                 case 4: // Bodygear
-                    return inventory.item_list.FindAll(delegate(Item item) { return item.Slot == ItemSlot.Bodygear; });
+                    return playerStore.activePlayer.inventory.item_list.FindAll(delegate(Item item) { return item.Slot == ItemSlot.Bodygear; });
                 case 5: // Accessory
-                    return inventory.item_list.FindAll(delegate(Item item) { return item.Slot == ItemSlot.Accessory; });
+                    return playerStore.activePlayer.inventory.item_list.FindAll(delegate(Item item) { return item.Slot == ItemSlot.Accessory; });
                 default:
-                    return inventory.item_list;
+                    return playerStore.activePlayer.inventory.item_list;
             }
         }
 
@@ -407,23 +408,23 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
                 ItemStore.Instance.getItem(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemID).Type == ItemType.Armor ||
                 ItemStore.Instance.getItem(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemID).Type == ItemType.Accessory)
             {
-                if (equipment.getEquip(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].Slot) == null)
+                if (playerStore.activePlayer.equipment.getEquip(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].Slot) == null)
                 {
                     // equip item from inventory
-                    equipment.addItem(itemlist.menuItemsnoDupes[itemlist.SelectedIndex]);
-                    inventory.removeItem(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemID);
+                    playerStore.activePlayer.equipment.addItem(itemlist.menuItemsnoDupes[itemlist.SelectedIndex]);
+                    playerStore.activePlayer.inventory.removeItem(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemID);
                 }
                 else
                 {
                     // swap inventory and equipment
-                    Item getequip = equipment.getEquip(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].Slot);
+                    Item getequip = playerStore.activePlayer.equipment.getEquip(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].Slot);
                     Item getinvent = itemlist.menuItemsnoDupes[itemlist.SelectedIndex];
 
-                    equipment.removeItem(getinvent.Slot);
-                    equipment.addItem(getinvent);
+                    playerStore.activePlayer.equipment.removeItem(getinvent.Slot);
+                    playerStore.activePlayer.equipment.addItem(getinvent);
 
-                    inventory.removeItem(getinvent.itemID);
-                    inventory.addItem(getequip);
+                    playerStore.activePlayer.inventory.removeItem(getinvent.itemID);
+                    playerStore.activePlayer.inventory.addItem(getequip);
                 }
             }
 
@@ -437,7 +438,7 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
 
         private void itemUnEquip()
         {
-            if (equipment.getEquip(equipment.item_list.Find(delegate(Item item) 
+            if (playerStore.activePlayer.equipment.getEquip(playerStore.activePlayer.equipment.item_list.Find(delegate(Item item) 
                 { 
                     return item.Slot == (ItemSlot)Enum.Parse(typeof(ItemSlot),
                        Enum.GetNames(typeof(ItemSlot))[SelectedSlot]);
@@ -448,8 +449,8 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
                 Item getequip = getslotItem(SelectedSlot);
                 //Item getinvent = itemlist.menuItemsnoDupes[itemlist.SelectedIndex];
 
-                equipment.removeItem(getequip.Slot);
-                inventory.addItem(getequip);
+                playerStore.activePlayer.equipment.removeItem(getequip.Slot);
+                playerStore.activePlayer.inventory.addItem(getequip);
             }
 
             updateItemList();       // update item menu
@@ -461,7 +462,7 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
 
         private bool slotEquiped(int i)
         {
-            if (equipment.item_list.FindAll(delegate(Item item)
+            if (playerStore.activePlayer.equipment.item_list.FindAll(delegate(Item item)
                             {
                                 return item.Slot == (ItemSlot)Enum.Parse(typeof(ItemSlot),
                                    Enum.GetNames(typeof(ItemSlot))[i]);
@@ -474,7 +475,7 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
 
         private Item getslotItem(int i)
         {
-            return equipment.item_list.Find(delegate(Item item) { return item.Slot == (ItemSlot)Enum.Parse(typeof(ItemSlot), Enum.GetNames(typeof(ItemSlot))[i]); });
+            return playerStore.activePlayer.equipment.item_list.Find(delegate(Item item) { return item.Slot == (ItemSlot)Enum.Parse(typeof(ItemSlot), Enum.GetNames(typeof(ItemSlot))[i]); });
         }
         #endregion
     }

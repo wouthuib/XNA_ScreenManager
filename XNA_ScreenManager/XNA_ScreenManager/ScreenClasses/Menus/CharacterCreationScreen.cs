@@ -52,7 +52,7 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
         int selectedIndex = 0;
 
         string[] item0 = { "Face 01", "Face 02", "Face 03", "Face 04", "Face 05", "Face 06", "Face 07", "Face 08", "Face 09" };
-        string[] item1 = { "Style 01", "Style 02", "Style 03", "Style 04", "Style 05", "Style 06", "Style 07", "Style 08", "Style 09" };
+        string[] item1 = { "Style 01", "Style 02", "Style 03", "Style 04", "Style 05", "Style 06", "Style 07", "Style 08", "Style 09", "Style 10", "Style 11", "Style 12" };
         string[] item2 = { "Red", "Green", "Blue", "Yellow", "Orange", "Purple", "Pink", "Brown", "Black", "Gray", "White" };
         string[] item3 = { "Pale", "Light", "Tanned", "Dark", "Blue", "Green" };
         string[] item4 = { "Warrior", "Magician", "Bowman", "Thief", "Pirate" };
@@ -184,12 +184,12 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
                 playersprite.Player = this.newPlayer;
 
                 // Equip Beginner Clothes + Knife
-                if (Equipment.Instance.item_list.FindAll(delegate(Item item)
+                if (newPlayer.equipment.item_list.FindAll(delegate(Item item)
                 { return item.Slot == ItemSlot.Bodygear; }).Count == 0)
-                    Equipment.Instance.addItem(ItemStore.Instance.getItem(2301));
-                if (Equipment.Instance.item_list.FindAll(delegate(Item item)
+                    newPlayer.equipment.addItem(ItemStore.Instance.getItem(2301));
+                if (newPlayer.equipment.item_list.FindAll(delegate(Item item)
                 { return item.Slot == ItemSlot.Weapon; }).Count == 0)
-                    Equipment.Instance.addItem(ItemStore.Instance.getItem(1200));
+                    newPlayer.equipment.addItem(ItemStore.Instance.getItem(1200));
 
                 // Check player + equipment offsets
                 for (int i = 0; i < 7; i++)

@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using XNA_ScreenManager.MapClasses;
 using Microsoft.Xna.Framework.Content;
+using XNA_ScreenManager.PlayerClasses;
 
 namespace XNA_ScreenManager.ItemClasses
 {
@@ -14,7 +15,8 @@ namespace XNA_ScreenManager.ItemClasses
     {
         #region properties
         ItemStore itemDB;
-        Inventory inventory;
+        //Inventory inventory;
+        PlayerStore playerStore = PlayerStore.Instance;
         GameWorld world;
         Item item;
 
@@ -29,7 +31,7 @@ namespace XNA_ScreenManager.ItemClasses
         {
             // Link properties to instance
             this.itemDB = ItemStore.Instance;
-            this.inventory = Inventory.Instance;
+            //this.inventory = Inventory.Instance;
             this.world = GameWorld.GetInstance;
 
             // get item information from general DB
@@ -54,7 +56,7 @@ namespace XNA_ScreenManager.ItemClasses
         public void pickupItem()
         {
             // add item to inventory
-            inventory.addItem(this.item);
+            playerStore.activePlayer.inventory.addItem(this.item);
 
             // remove this sprite
             this.keepAliveTimer = 0;

@@ -8,6 +8,7 @@ using XNA_ScreenManager.MapClasses;
 using Microsoft.Xna.Framework.Graphics;
 using XNA_ScreenManager.ScreenClasses.MainClasses;
 using XNA_ScreenManager.PlayerClasses;
+using XNA_ScreenManager.MonsterClasses;
 
 namespace XNA_ScreenManager.GameWorldClasses.Entities
 {
@@ -46,17 +47,18 @@ namespace XNA_ScreenManager.GameWorldClasses.Entities
         public override void Update(GameTime gameTime)
         {
             // check for monster collisions
-            foreach (Entity monster in GameWorld.GetInstance.listEntity)
+            foreach (Entity entity in GameWorld.GetInstance.listEntity)
             {
-                if (monster.EntityType == EntityType.Monster)
+                if (entity.EntityType == EntityType.Monster)
                 {
-                    if (new Rectangle((int)(monster.Position.X + monster.SpriteFrame.Width * 0.60f),
-                        (int)monster.Position.Y,
-                        (int)(monster.SpriteFrame.Width * 0.30f),
-                        (int)monster.SpriteFrame.Height).
+                    MonsterSprite monster = (MonsterSprite)entity;
+
+                    if (monster.SpriteBoundries.
                     Intersects(new Rectangle(
-                        (int)Position.X, (int)Position.Y,
-                        (int)SpriteFrame.Width, (int)SpriteFrame.Height)) == true)
+                        (int)Position.X, 
+                        (int)Position.Y,
+                        (int)SpriteFrame.Width, 
+                        (int)SpriteFrame.Height)) == true)
                     {
                         if (monster.State != EntityState.Hit && 
                             monster.State != EntityState.Died && 

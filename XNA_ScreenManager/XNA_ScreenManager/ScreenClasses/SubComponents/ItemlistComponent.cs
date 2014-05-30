@@ -19,7 +19,7 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
     class ItemlistComponent : DrawableGameComponent
     {
         #region properties
-        Inventory inventory = Inventory.Instance;
+        //Inventory inventory = Inventory.Instance;
         GameWorld world;
 
         ContentManager Content;

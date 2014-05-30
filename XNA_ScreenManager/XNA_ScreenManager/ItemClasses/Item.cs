@@ -32,17 +32,12 @@ namespace XNA_ScreenManager.ItemClasses
 
     public enum ItemClass
     {
-        Archer,
-        Fighter,
-        Wizard,
+        Bowman,
+        Warrior,
+        Magician,
         Priest,
-        Monk,
-        ArcherFighter,
-        ArcherFighterMonk,
-        WizardPriest,
-        PriestMonk,
-        WizardPriestMonk,
-        FighterMonk,
+        Thief,
+        Pirate,
         All
     };
 
@@ -57,7 +52,8 @@ namespace XNA_ScreenManager.ItemClasses
         Accessory,      // rings etc..
         None           // not applicable
     };
-    
+
+    [Serializable]
     public struct spriteOffset
     {
         public string Name;

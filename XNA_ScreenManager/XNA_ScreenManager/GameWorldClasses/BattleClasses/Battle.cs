@@ -15,7 +15,7 @@ namespace XNA_ScreenManager.MapClasses
         public static int battle_calc_damage(PlayerInfo playerinfo, MonsterSprite monsterinfo, float percent)
         {
             randomizer Randomizer = randomizer.Instance;
-            Item Weapon = Equipment.Instance.getEquip(ItemSlot.Weapon);
+            Item Weapon = playerinfo.equipment.getEquip(ItemSlot.Weapon);
 
             int finalDamage = 0, 
                 bDamage = 0, 

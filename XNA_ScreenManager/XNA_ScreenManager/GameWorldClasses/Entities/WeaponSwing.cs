@@ -16,7 +16,6 @@ namespace XNA_ScreenManager.GameWorldClasses.Entities
 
         WeaponSwingType swingtype;
         Vector2 spritesize = new Vector2(48, 48);
-        bool hit = false;
 
         #endregion
 

@@ -7,6 +7,7 @@ using XNA_ScreenManager.ItemClasses;
 using System.Collections.Generic;
 using XNA_ScreenManager.ScreenClasses.SubComponents;
 using Microsoft.Xna.Framework.Content;
+using XNA_ScreenManager.PlayerClasses;
 
 namespace XNA_ScreenManager.ScreenClasses
 {
@@ -15,9 +16,10 @@ namespace XNA_ScreenManager.ScreenClasses
         #region properties
         ItemlistComponent itemlist;
         MenuComponent options;
-        Inventory inventory = Inventory.Instance;
-        Equipment equipment = Equipment.Instance;
+        //Inventory inventory = Inventory.Instance;
+        //Equipment equipment = Equipment.Instance;
         ScreenManager manager = ScreenManager.Instance;
+        PlayerStore playerStore = PlayerStore.Instance;
 
         List<Item> itemobjects = new List<Item>();
 
@@ -91,19 +93,19 @@ namespace XNA_ScreenManager.ScreenClasses
             switch(selectedCategory)
             {
                 case 0: //All
-                    return inventory.item_list;
+                    return playerStore.activePlayer.inventory.item_list;
                 case 1: // Collectables
-                    return inventory.item_list.FindAll(delegate(Item item) { return item.Type == ItemType.Collectable; });
+                    return playerStore.activePlayer.inventory.item_list.FindAll(delegate(Item item) { return item.Type == ItemType.Collectable; });
                 case 2: // Weapons
-                    return inventory.item_list.FindAll(delegate(Item item) { return item.Type == ItemType.Weapon; });
+                    return playerStore.activePlayer.inventory.item_list.FindAll(delegate(Item item) { return item.Type == ItemType.Weapon; });
                 case 3: // Armor
-                    return inventory.item_list.FindAll(delegate(Item item) { return item.Type == ItemType.Armor; });
+                    return playerStore.activePlayer.inventory.item_list.FindAll(delegate(Item item) { return item.Type == ItemType.Armor; });
                 case 4: // Accessory
-                    return inventory.item_list.FindAll(delegate(Item item) { return item.Type == ItemType.Accessory; });
+                    return playerStore.activePlayer.inventory.item_list.FindAll(delegate(Item item) { return item.Type == ItemType.Accessory; });
                 case 5: // KeyItem
-                    return inventory.item_list.FindAll(delegate(Item item) { return item.Type == ItemType.KeyItem; });
+                    return playerStore.activePlayer.inventory.item_list.FindAll(delegate(Item item) { return item.Type == ItemType.KeyItem; });
                 default:
-                    return inventory.item_list;
+                    return playerStore.activePlayer.inventory.item_list;
             }
         }
 
@@ -349,21 +351,21 @@ namespace XNA_ScreenManager.ScreenClasses
                 ItemStore.Instance.getItem(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemID).Type == ItemType.Armor ||
                 ItemStore.Instance.getItem(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemID).Type == ItemType.Accessory)
             {
-                if (equipment.getEquip(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].Slot) == null)
+                if (playerStore.activePlayer.equipment.getEquip(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].Slot) == null)
                 {
-                    equipment.addItem(itemlist.menuItemsnoDupes[itemlist.SelectedIndex]);
-                    inventory.removeItem(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemID);
+                    playerStore.activePlayer.equipment.addItem(itemlist.menuItemsnoDupes[itemlist.SelectedIndex]);
+                    playerStore.activePlayer.inventory.removeItem(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemID);
                 }
                 else
                 {
-                    Item getequip = equipment.getEquip(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].Slot);
+                    Item getequip = playerStore.activePlayer.equipment.getEquip(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].Slot);
                     Item getinvent = itemlist.menuItemsnoDupes[itemlist.SelectedIndex];
 
-                    equipment.removeItem(getinvent.Slot);
-                    equipment.addItem(getinvent);
+                    playerStore.activePlayer.equipment.removeItem(getinvent.Slot);
+                    playerStore.activePlayer.equipment.addItem(getinvent);
 
-                    inventory.removeItem(getinvent.itemID);
-                    inventory.addItem(getequip);
+                    playerStore.activePlayer.inventory.removeItem(getinvent.itemID);
+                    playerStore.activePlayer.inventory.addItem(getequip);
                 }
             }
 
@@ -383,7 +385,7 @@ namespace XNA_ScreenManager.ScreenClasses
 
         private void itemRemove()
         {
-            inventory.removeItem(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemID);
+            playerStore.activePlayer.inventory.removeItem(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemID);
 
             // Update selected index
             if (itemlist.SelectedIndex > itemlist.menuItemsnoDupes.Count - 1)

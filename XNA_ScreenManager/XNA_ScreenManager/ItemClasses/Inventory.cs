@@ -12,32 +12,40 @@ namespace XNA_ScreenManager.ItemClasses
     // Sealed modifier prevents other classes from inheriting A : B.
     // Static with get { return instance; } makes the class Global.
 
+    [Serializable]
     public sealed class Inventory
     {
-        ScreenManager screenmanager = ScreenManager.Instance;
+        //ScreenManager screenmanager = ScreenManager.Instance;
         public List<Item> item_list { get; set; }
 
-        private static Inventory instance;
-        private Inventory()
+        #region constructor
+        //private static Inventory instance;
+        //private Inventory()
+        //{
+        //    item_list = new List<Item>();
+        //}
+
+        //public static Inventory Instance
+        //{
+        //    get
+        //    {
+        //        if (instance == null)
+        //        {
+        //            instance = new Inventory();
+        //        }
+        //        return instance;
+        //    }
+        //}
+
+        public Inventory()
         {
             item_list = new List<Item>();
         }
-
-        public static Inventory Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new Inventory();
-                }
-                return instance;
-            }
-        }
+        #endregion
 
         public void addItem(Item addItem)
         {
-            screenmanager.actionScreen.topmessage.Display(addItem, "added");
+            ScreenManager.Instance.actionScreen.topmessage.Display(addItem, "added");
             item_list.Add(addItem);
         }
 
@@ -45,7 +53,7 @@ namespace XNA_ScreenManager.ItemClasses
         {
             var onlyMatch = item_list.First(i => i.itemID == ID);
 
-            if (screenmanager.activeScreen == screenmanager.actionScreen)
+            if (ScreenManager.Instance.activeScreen == ScreenManager.Instance.actionScreen)
                 ScreenClasses.ScreenManager.Instance.actionScreen.topmessage.Display(onlyMatch, "removed");
 
             item_list.Remove(onlyMatch);

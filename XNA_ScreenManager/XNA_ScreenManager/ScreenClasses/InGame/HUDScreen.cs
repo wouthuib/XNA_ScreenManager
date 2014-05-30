@@ -25,7 +25,7 @@ namespace XNA_ScreenManager.ScreenClasses
         GraphicsDevice gfxdevice;
 
         PlayerStore playerInfo = PlayerStore.Instance;
-        Texture2D Border, HP, SP, EXP;
+        Texture2D Border, HP, SP, EXP, Skillbar;
         Vector2 position = new Vector2();
         #endregion
 
@@ -51,6 +51,8 @@ namespace XNA_ScreenManager.ScreenClasses
             HP = Content.Load<Texture2D>(@"gfx\hud\HP");
             SP = Content.Load<Texture2D>(@"gfx\hud\SP");
             EXP = Content.Load<Texture2D>(@"gfx\hud\EXP");
+
+            Skillbar = Content.Load<Texture2D>(@"gfx\hud\skillbar");
         }
         #endregion
 
@@ -137,6 +139,10 @@ namespace XNA_ScreenManager.ScreenClasses
                 // Level and Gold
                 // message = "Gold: " + playerInfo.Gold;
                 // spriteBatch.DrawString(spriteFont, message, new Vector2(Position.X + 5, Position.Y + 70), Color.White);
+
+                spriteBatch.Draw(Skillbar,
+                    new Vector2(position.X + 200, position.Y + 430), 
+                    Color.White * 0.75f);
             }
         }
     }

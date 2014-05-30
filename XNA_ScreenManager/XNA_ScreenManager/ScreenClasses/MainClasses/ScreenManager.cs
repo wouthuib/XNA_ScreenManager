@@ -221,10 +221,23 @@ namespace XNA_ScreenManager.ScreenClasses
                         activeScreen.Show();
                         break;
                     case 4:
+                        activeScreen.Hide();
+                        activeScreen = startScreen;
+                        ingameMenuScreen.SelectedIndex = 0;
+                        PlayerStore.Instance.savePlayerStore("savegame.bin");
+                        activeScreen.Show();
+                        break;
                     case 5:
+                        activeScreen.Hide();
+                        activeScreen = startScreen;
+                        ingameMenuScreen.SelectedIndex = 0;
+                        PlayerStore.Instance.loadPlayerStore("savegame.bin");
+                        activeScreen.Show();
+                        break;
                     case 6:
                         activeScreen.Hide();
                         activeScreen = startScreen;
+                        ingameMenuScreen.SelectedIndex = 0;
                         activeScreen.Show();
                         break;
                 }
@@ -233,6 +246,7 @@ namespace XNA_ScreenManager.ScreenClasses
             {
                 activeScreen.Hide();
                 activeScreen = actionScreen;
+                ingameMenuScreen.SelectedIndex = 0;
                 activeScreen.Show();
             }
         }

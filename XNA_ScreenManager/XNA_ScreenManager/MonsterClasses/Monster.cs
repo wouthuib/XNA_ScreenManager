@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
 
 namespace XNA_ScreenManager.MonsterClasses
 {
@@ -34,6 +35,26 @@ namespace XNA_ScreenManager.MonsterClasses
         public int drop04Chance { get; set; }
         public int drop05Item { get; set; }
         public int drop05Chance { get; set; }
+
+        public Vector2 sizeMod
+        {
+            get 
+            {
+                switch (this.Size)
+                {
+                    case "small":
+                        return new Vector2(5, 15);
+                    case "medium":
+                        return Vector2.Zero;
+                    case "big":
+                        return new Vector2(-5, -15);
+                    case "huge":
+                        return new Vector2(-10, -30);
+                    default:
+                        return Vector2.Zero;
+                }
+            }
+        }
 
         public static Monster create(int identifier, string name, string sprite)
         {

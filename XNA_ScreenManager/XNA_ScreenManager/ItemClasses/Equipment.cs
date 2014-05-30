@@ -6,28 +6,36 @@ using System.IO;
 
 namespace XNA_ScreenManager.ItemClasses
 {
+    [Serializable]
     public sealed class Equipment
     {
         public List<Item> item_list { get; set; }
 
-        private static Equipment instance;
-        private Equipment()
+        #region constructor
+        //private static Equipment instance;
+        //private Equipment()
+        //{
+        //    item_list = new List<Item>();
+        //}
+
+        //public static Equipment Instance
+        //{
+        //    get
+        //    {
+        //        if (instance == null)
+        //        {
+        //            instance = new Equipment();
+        //        }
+        //        return instance;
+        //    }
+        //}
+
+        public Equipment()
         {
             item_list = new List<Item>();
         }
-
-        public static Equipment Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new Equipment();
-                }
-                return instance;
-            }
-        }
-
+        #endregion
+                
         public void addItem(Item addItem)
         {
             item_list.Add(addItem);

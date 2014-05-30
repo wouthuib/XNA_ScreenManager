@@ -28,9 +28,7 @@ namespace XNA_ScreenManager
         protected KeyboardState keyboardStateCurrent, keyboardStatePrevious;
 
         // Player inventory
-        protected Inventory inventory = Inventory.Instance;
         protected ItemStore itemStore = ItemStore.Instance;
-        protected Equipment equipment = Equipment.Instance;
         protected ScriptInterpreter scriptManager = ScriptInterpreter.Instance;
         protected PlayerStore playerStore = PlayerStore.Instance;
 
@@ -40,6 +38,7 @@ namespace XNA_ScreenManager
         // Player properties
         protected SpriteEffects spriteEffect = SpriteEffects.None;
         private float transperancy = 1;
+        private bool debug = true;
 
         // Sprite Animation Properties
         public int effectCounter = 0;                                                               // for the warp effect
@@ -183,7 +182,7 @@ namespace XNA_ScreenManager
                                 // create swing effect
                                 if (spriteEffect == SpriteEffects.FlipHorizontally)
                                 {
-                                    Vector2 pos = new Vector2(this.Position.X + this.SpriteFrame.Width * 1.4f, this.Position.Y + this.SpriteFrame.Height * 0.7f);
+                                    Vector2 pos = new Vector2(this.Position.X + this.SpriteFrame.Width * 1.6f, this.Position.Y + this.SpriteFrame.Height * 0.7f);
                                     world.newEffect.Add(new DamageArea(this, new Vector2(pos.X - 50, pos.Y), new Rectangle(0, 0, 80, 10), false,
                                         (float)gameTime.ElapsedGameTime.TotalSeconds + 0.2f, 1));
                                     world.newEffect.Add(new WeaponSwing(pos, WeaponSwingType.Swing01, spriteEffect));
@@ -566,9 +565,9 @@ namespace XNA_ScreenManager
                         else if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.LeftAlt))
                         {
                             // check if weapon is equiped
-                            if (equipment.item_list.FindAll(delegate(Item item) { return item.Type == ItemType.Weapon; }).Count > 0)
+                            if (getPlayer().equipment.item_list.FindAll(delegate(Item item) { return item.Type == ItemType.Weapon; }).Count > 0)
                             {
-                                WeaponType weapontype = equipment.item_list.Find(delegate(Item item) { return item.Type == ItemType.Weapon; }).WeaponType;
+                                WeaponType weapontype = getPlayer().equipment.item_list.Find(delegate(Item item) { return item.Type == ItemType.Weapon; }).WeaponType;
 
                                 // check the weapon type
                                 if (weapontype == WeaponType.Bow)
@@ -616,7 +615,15 @@ namespace XNA_ScreenManager
                             prevspriteframe = spriteframe;
                             for (int i = 0; i < spritepath.Length; i++)
                             {
-                                spritename = "stand1_" + spriteframe.ToString();
+                                Item weapon = getPlayer().equipment.item_list.Find(x => x.Slot == ItemSlot.Weapon);
+
+                                if(weapon.WeaponType == WeaponType.Two_handed_Axe ||
+                                   weapon.WeaponType == WeaponType.Two_handed_Spear ||
+                                   weapon.WeaponType == WeaponType.Two_handed_Sword)
+                                    spritename = "stand2_" + spriteframe.ToString();
+                                else
+                                    spritename = "stand1_" + spriteframe.ToString();
+
                                 playerStore.activePlayer.spriteOfset[i] = getoffset(i);
                             }
                         }
@@ -930,27 +937,27 @@ namespace XNA_ScreenManager
             if (keyboardStateCurrent.IsKeyUp(Microsoft.Xna.Framework.Input.Keys.F1) == true &&
                      keyboardStatePrevious.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.F1) == true)
             {
-                inventory.addItem(itemStore.getItem(new Random().Next(1100, 1114)));
+                getPlayer().inventory.addItem(itemStore.getItem(new Random().Next(1100, 1114)));
             } 
             else if (keyboardStateCurrent.IsKeyUp(Microsoft.Xna.Framework.Input.Keys.F2) == true &&
                       keyboardStatePrevious.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.F2) == true)
             {
-                inventory.addItem(itemStore.getItem(randomizer.Instance.generateRandom(2300,2304)));
+                getPlayer().inventory.addItem(itemStore.getItem(randomizer.Instance.generateRandom(2300, 2308)));
             }
             else if (keyboardStateCurrent.IsKeyUp(Microsoft.Xna.Framework.Input.Keys.F3) == true &&
                       keyboardStatePrevious.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.F3) == true)
             {
-                inventory.addItem(itemStore.getItem(1300));
+                getPlayer().inventory.addItem(itemStore.getItem(randomizer.Instance.generateRandom(1300, 1303)));
             }
             else if (keyboardStateCurrent.IsKeyUp(Microsoft.Xna.Framework.Input.Keys.F4) == true &&
                      keyboardStatePrevious.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.F4) == true)
             {
-                inventory.saveItem("inventory.bin");
+                getPlayer().inventory.saveItem("inventory.bin");
             }
             else if (keyboardStateCurrent.IsKeyUp(Microsoft.Xna.Framework.Input.Keys.F5) == true &&
                      keyboardStatePrevious.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.F5) == true)
             {
-                inventory.loadItems("inventory.bin");
+                getPlayer().inventory.loadItems("inventory.bin");
             }
             // temporary
             #endregion
@@ -962,6 +969,8 @@ namespace XNA_ScreenManager
         {
             if (Active)
             {
+                DrawSpriteFrame(spriteBatch); // display spriteframe
+
                 for (int i = 0; i < spritepath.Length; i++)
                 {
                     Color drawcolor = Color.White;
@@ -971,7 +980,9 @@ namespace XNA_ScreenManager
 
                     try
                     {
-                        if (getspritepath(i) != null && getoffset(i) != Vector2.Zero) // getoffset(i) = (does sprite exist, if not then skip)
+                        if (getspritepath(i) != null && 
+                            getoffset(i) != Vector2.Zero && // getoffset(i) = (does sprite exist, if not then skip)
+                            (i != 3 || getPlayer().equipment.item_list.FindAll(x=> x.Slot == ItemSlot.Headgear).Count == 0)) // when headgear equiped, skip hairsprite
                         {
                             Vector2 debugvector = getoffset(i);
 
@@ -988,11 +999,15 @@ namespace XNA_ScreenManager
                             if (i == 0 || i == 1 || i == 9)
                                 drawcolor = getPlayer().skin_color;
 
+                            // give hair color to hairset sprite
+                            if (i == 3)
+                                drawcolor = getPlayer().hair_color;
+
                             // draw player sprite
                             spriteBatch.Draw(drawsprite,
                                 new Rectangle(
-                                    (int)drawPosition.X + (int)sprCorrect.X,
-                                    (int)Position.Y + (int)getoffset(i).Y + 78 + (int)spriteCorrect(i, drawsprite).Y,
+                                    (int)drawPosition.X, //+ (int)sprCorrect.X,
+                                    (int)Position.Y + (int)getoffset(i).Y + 78, //+ (int)spriteCorrect(i, drawsprite).Y,
                                     drawsprite.Width, 
                                     drawsprite.Height),
                                 new Rectangle(
@@ -1013,11 +1028,27 @@ namespace XNA_ScreenManager
             }
         }
 
+        private void DrawSpriteFrame(SpriteBatch spriteBatch)
+        {
+            if (this.debug)
+            {
+                Texture2D rect = new Texture2D(ResourceManager.GetInstance.gfxdevice, (int)Math.Abs(SpriteFrame.Width), (int)SpriteFrame.Height);
+
+                Color[] data = new Color[(int)Math.Abs(SpriteFrame.Width) * (int)SpriteFrame.Height];
+                for (int i = 0; i < data.Length; ++i) data[i] = Color.Red;
+                rect.SetData(data);
+
+                spriteBatch.Draw(rect, new Rectangle((int)SpriteFrame.X, (int)SpriteFrame.Y,
+                         (int)Math.Abs(SpriteFrame.Width), (int)SpriteFrame.Height),
+                         SpriteFrame, Color.White * 0.5f, 0, Vector2.Zero, spriteEffect, 0f);
+            }
+        }
+
         public override Rectangle SpriteFrame
         {
             get 
             {
-                return new Rectangle((int)Position.X, (int)Position.Y, 60, 80);
+                return new Rectangle((int)Position.X + 5, (int)Position.Y + 5, 50, 75);
             }
         }
 
@@ -1050,7 +1081,7 @@ namespace XNA_ScreenManager
                 if (spritename.StartsWith("ladder") || spritename.StartsWith("rope"))
                     sprCorrect.Y = spr.Height * 0.75f;
                 else
-                    sprCorrect.Y = spr.Height * 0.50f;
+                    sprCorrect.Y = spr.Height * 0.20f;
             }
 
             return sprCorrect;
@@ -1058,6 +1089,9 @@ namespace XNA_ScreenManager
 
         public Vector2 getoffset(int spriteID)
         {
+            PlayerInfo player = getPlayer();
+            Equipment equipment = getPlayer().equipment;
+
             if (spriteID < 4 || spriteID == 9 )
             {
                 if (getPlayer().list_offsets.FindAll(x => x.ID == spriteID).Count == 0)
@@ -1075,9 +1109,9 @@ namespace XNA_ScreenManager
             {
                 if (equipment.item_list.FindAll(x => x.Slot == ItemSlot.Bodygear).Count > 0)
                 {
-                    if (equipment.item_list.Find(x => x.Slot == ItemSlot.Bodygear).list_offsets.FindAll(y => y.Name == spritename.ToString() + ".png").Count > 0)
+                    if (getPlayer().equipment.item_list.Find(x => x.Slot == ItemSlot.Bodygear).list_offsets.FindAll(y => y.Name == spritename.ToString() + ".png").Count > 0)
                     {
-                        Item item = equipment.item_list.Find(x => x.Slot == ItemSlot.Bodygear);
+                        Item item = getPlayer().equipment.item_list.Find(x => x.Slot == ItemSlot.Bodygear);
                         int X = item.list_offsets.Find(y => y.Name == spritename.ToString() + ".png").X;
                         int Y = item.list_offsets.Find(y => y.Name == spritename.ToString() + ".png").Y;
                         return new Vector2(X, Y);
@@ -1086,11 +1120,11 @@ namespace XNA_ScreenManager
             }
             else if (spriteID == 7) // get the Headgear Sprite information
             {
-                if (equipment.item_list.FindAll(x => x.Slot == ItemSlot.Headgear).Count > 0)
+                if (getPlayer().equipment.item_list.FindAll(x => x.Slot == ItemSlot.Headgear).Count > 0)
                 {
-                    if (equipment.item_list.Find(x => x.Slot == ItemSlot.Headgear).list_offsets.FindAll(y => y.Name == spritename.ToString() + ".png").Count > 0)
+                    if (getPlayer().equipment.item_list.Find(x => x.Slot == ItemSlot.Headgear).list_offsets.FindAll(y => y.Name == spritename.ToString() + ".png").Count > 0)
                     {
-                        Item item = equipment.item_list.Find(x => x.Slot == ItemSlot.Headgear);
+                        Item item = getPlayer().equipment.item_list.Find(x => x.Slot == ItemSlot.Headgear);
                         int X = item.list_offsets.Find(y => y.Name == spritename.ToString() + ".png").X;
                         int Y = item.list_offsets.Find(y => y.Name == spritename.ToString() + ".png").Y;
                         return new Vector2(X, Y);
@@ -1099,11 +1133,11 @@ namespace XNA_ScreenManager
             }
             else if (spriteID == 8) // get the Weapon Sprite information
             {
-                if (equipment.item_list.FindAll(x => x.Slot == ItemSlot.Weapon).Count > 0)
+                if (getPlayer().equipment.item_list.FindAll(x => x.Slot == ItemSlot.Weapon).Count > 0)
                 {
-                    if (equipment.item_list.Find(x => x.Slot == ItemSlot.Weapon).list_offsets.FindAll(y => y.Name == spritename.ToString() + ".png").Count > 0)
+                    if (getPlayer().equipment.item_list.Find(x => x.Slot == ItemSlot.Weapon).list_offsets.FindAll(y => y.Name == spritename.ToString() + ".png").Count > 0)
                     {
-                        Item item = equipment.item_list.Find(x => x.Slot == ItemSlot.Weapon);
+                        Item item = getPlayer().equipment.item_list.Find(x => x.Slot == ItemSlot.Weapon);
                         int X = item.list_offsets.Find(y => y.Name == spritename.ToString() + ".png").X;
                         int Y = item.list_offsets.Find(y => y.Name == spritename.ToString() + ".png").Y;
                         return new Vector2(X, Y);
@@ -1219,11 +1253,14 @@ namespace XNA_ScreenManager
         #endregion
 
         #region bound new player
-        private PlayerInfo getPlayer()
+        protected PlayerInfo getPlayer()
         {
             // check which player is bound
             if (this.Player == null)
-                return playerStore.activePlayer;
+                if (playerStore.activePlayer != null)
+                    return playerStore.activePlayer;
+                else
+                    return new PlayerInfo();
             else
                 return this.Player;
         }
@@ -1232,6 +1269,7 @@ namespace XNA_ScreenManager
         #endregion
     }
 
+    [Serializable]
     public struct spriteOffset
     {
         public string Name;

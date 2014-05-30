@@ -33,9 +33,11 @@ namespace XNA_ScreenManager.PlayerClasses
         Luck
     }
 
+    [Serializable]
     public sealed class PlayerInfo
     {
-        Equipment equipment = Equipment.Instance;   // Equipment
+        public Equipment equipment;   // Equipment
+        public Inventory inventory;   // Equipment
 
         #region texture properties
 
@@ -357,6 +359,9 @@ namespace XNA_ScreenManager.PlayerClasses
             this.faceset_sprite = @"gfx\player\faceset\face0\";
             this.hair_sprite = @"gfx\player\hairset\hair0\";
             this.hands_sprite = @"gfx\player\body\hands\";
+
+            this.equipment = new Equipment();
+            this.inventory = new Inventory();
         }
         #endregion
 

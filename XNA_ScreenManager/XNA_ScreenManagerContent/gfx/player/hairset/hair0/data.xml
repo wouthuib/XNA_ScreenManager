@@ -31,10 +31,10 @@
   <i image="swingO3_0.png" delay="300" x="-57" y="-67"/>
   <i image="swingO3_1.png" delay="150" x="-57" y="-67"/>
   <i image="swingO3_2.png" delay="350" x="-57" y="-67"/>
-  <i image="swingOF_0.png" delay="200" x="-75" y="-81"/>
-  <i image="swingOF_1.png" delay="100" x="-75" y="-81"/>
-  <i image="swingOF_2.png" delay="100" x="-75" y="-81"/>
-  <i image="swingOF_3.png" delay="300" x="-75" y="-81"/>
+  <i image="swingOF_0.png" delay="200" x="-75" y="-80"/>
+  <i image="swingOF_1.png" delay="100" x="-75" y="-80"/>
+  <i image="swingOF_2.png" delay="100" x="-75" y="-80"/>
+  <i image="swingOF_3.png" delay="300" x="-75" y="-80"/>
   <i image="swingT1_0.png" delay="300" x="-56" y="-71"/>
   <i image="swingT1_1.png" delay="150" x="-56" y="-71"/>
   <i image="swingT1_2.png" delay="350" x="-56" y="-71"/>
@@ -75,20 +75,20 @@
   <i image="stabTF_1.png" delay="200" x="-58" y="-97"/>
   <i image="stabTF_2.png" delay="200" x="-58" y="-97"/>
   <i image="stabTF_3.png" delay="200" x="-58" y="-97"/>
-  <i image="shoot1_0.png" delay="300" x="-31" y="-71"/>
-  <i image="shoot1_1.png" delay="150" x="-31" y="-71"/>
-  <i image="shoot1_2.png" delay="350" x="-31" y="-71"/>
+  <i image="shoot1_0.png" delay="300" x="-27" y="-71"/>
+  <i image="shoot1_1.png" delay="150" x="-27" y="-71"/>
+  <i image="shoot1_2.png" delay="350" x="-27" y="-71"/>
   <i image="shoot2_0.png" delay="160" x="-28" y="-70"/>
   <i image="shoot2_1.png" delay="160" x="-28" y="-70"/>
   <i image="shoot2_2.png" delay="250" x="-28" y="-70"/>
   <i image="shoot2_3.png" delay="100" x="-28" y="-70"/>
   <i image="shoot2_4.png" delay="150" x="-28" y="-70"/>
-  <i image="shootF_0.png" delay="300" x="-34" y="-71"/>
-  <i image="shootF_1.png" delay="150" x="-34" y="-71"/>
-  <i image="shootF_2.png" delay="250" x="-34" y="-71"/>
-  <i image="proneStab_0.png" delay="300" x="-47" y="-43"/>
-  <i image="proneStab_1.png" delay="400" x="-47" y="-43"/>
-  <i image="prone_0.png" delay="100" x="-47" y="-43"/>
+  <i image="shootF_0.png" delay="300" x="-27" y="-71"/>
+  <i image="shootF_1.png" delay="150" x="-27" y="-71"/>
+  <i image="shootF_2.png" delay="250" x="-27" y="-71"/>
+  <i image="proneStab_0.png" delay="300" x="-46" y="-43"/>
+  <i image="proneStab_1.png" delay="400" x="-46" y="-43"/>
+  <i image="prone_0.png" delay="100" x="-46" y="-43"/>
   <i image="heal_0.png" delay="300" x="-34" y="-71"/>
   <i image="heal_1.png" delay="150" x="-34" y="-71"/>
   <i image="heal_2.png" delay="350" x="-34" y="-71"/>
@@ -96,8 +96,8 @@
   <i image="fly_1.png" delay="300" x="-27" y="-76"/>
   <i image="jump_0.png" delay="200" x="-27" y="-69"/>
   <i image="sit_0.png" delay="100" x="-24" y="-67"/>
-  <i image="ladder_0.png" delay="250" x="-23" y="-69"/>
-  <i image="ladder_1.png" delay="250" x="-23" y="-69"/>
-  <i image="rope_0.png" delay="250" x="-21" y="-72"/>
-  <i image="rope_1.png" delay="250" x="-21" y="-72"/>
+  <i image="ladder_0.png" delay="250" x="-22" y="-68"/>
+  <i image="ladder_1.png" delay="250" x="-22" y="-68"/>
+  <i image="rope_0.png" delay="250" x="-20" y="-71"/>
+  <i image="rope_1.png" delay="250" x="-20" y="-71"/>
 </i>

@@ -18,9 +18,10 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
         #region properties
         ItemlistComponent itemlist;
         MenuComponent options;
-        Inventory inventory = Inventory.Instance;
-        Equipment equipment = Equipment.Instance;
+        //Inventory inventory = Inventory.Instance;
+        //Equipment equipment = Equipment.Instance;
         ScreenManager manager = ScreenManager.Instance;
+        PlayerStore PlayerStore = PlayerStore.Instance;
 
         List<Item> shopobjects = new List<Item>();
 
@@ -90,13 +91,13 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
                     return shopobjects;
                 case 1: // sell
                     itemlist.Price = ShopPrice.Sell;
-                    return inventory.item_list;
+                    return PlayerStore.activePlayer.inventory.item_list;
                 case 2: // equip
                     itemlist.Price = ShopPrice.None;
-                    return inventory.item_list;
+                    return PlayerStore.activePlayer.inventory.item_list;
                 default: // cancel
                     itemlist.Price = ShopPrice.None;
-                    return inventory.item_list;
+                    return PlayerStore.activePlayer.inventory.item_list;
             }
         }
 
@@ -449,7 +450,7 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
             }
 
             // Get item details of equipment, shop and inventory lists based on selected index
-            Item equipItem = equipment.item_list.Find(delegate(Item item) { return item.Slot == slot; });
+            Item equipItem = PlayerStore.activePlayer.equipment.item_list.Find(delegate(Item item) { return item.Slot == slot; });
                         
             // nothing equiped on slot, use item 1000 which is a dummy for nothing
             if (equipItem == null)
@@ -566,7 +567,7 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
         {
             int SellValue = (int)(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].Price / 2);
 
-            inventory.removeItem(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemID);
+            PlayerStore.activePlayer.inventory.removeItem(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemID);
 
             // Update selected index
             if (itemlist.SelectedIndex > itemlist.menuItemsnoDupes.Count - 1)
@@ -590,9 +591,9 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
             if (PlayerStore.Instance.activePlayer.Gold >= BuyValue)
             {
 
-                inventory.addItem(shopobjects[SelectedItem]);
+                PlayerStore.activePlayer.inventory.addItem(shopobjects[SelectedItem]);
 
-                PlayerStore.Instance.activePlayer.Gold -= BuyValue;
+                PlayerStore.activePlayer.Gold -= BuyValue;
 
                 updateItemList();       // update item menu
                 itemOptions = false;    // close options

@@ -241,7 +241,7 @@ namespace XNA_ScreenManager.ScriptClasses
                                         {
                                             for (int getItem = 0; getItem < Convert.ToInt32(Values[1]); getItem++)
                                             {
-                                                ItemClasses.Inventory.Instance.addItem(
+                                                PlayerStore.Instance.activePlayer.inventory.addItem(
                                                         ItemClasses.ItemStore.Instance.getItem(Convert.ToInt32(Values[0]))
                                                     );
                                             }
@@ -276,7 +276,7 @@ namespace XNA_ScreenManager.ScriptClasses
                                         {
                                             for (int getItem = 0; getItem < Convert.ToInt32(Values[1]); getItem++)
                                             {
-                                                ItemClasses.Inventory.Instance.removeItem(
+                                                PlayerStore.Instance.activePlayer.inventory.removeItem(
                                                         Convert.ToInt32(Values[0])
                                                     );
                                             }
@@ -543,7 +543,7 @@ namespace XNA_ScreenManager.ScriptClasses
                             intValues.Add(PlayerStore.Instance.activePlayer.Exp);
                             continue;
                         case "item":
-                                intValues.Add(ItemClasses.Inventory.Instance.item_list.FindAll(delegate(ItemClasses.Item item) 
+                            intValues.Add(PlayerStore.Instance.activePlayer.inventory.item_list.FindAll(delegate(ItemClasses.Item item) 
                                 {
                                     return item.itemID == Convert.ToInt32(Values[index + 1]); 
                                 }).Count);
