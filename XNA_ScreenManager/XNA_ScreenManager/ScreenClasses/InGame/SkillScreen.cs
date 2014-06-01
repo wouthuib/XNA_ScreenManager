@@ -229,7 +229,7 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
                         if (SelectActive && col == selectedColumn && row == selectedRow)
                         {
                             // check if the skill prerequisites are met
-                            if (SkillTree.Instance.getSkillRequiments(SkillStore.Instance.getSkill(record[col, row]).SkillID))
+                            if (SkillTree.Instance.getSkillRequiments(SkillStore.Instance.getSkill(record[col, row]).ID))
                             {
                                 myColor = Color.Red;
                                 adColor = new Color(255, 81, 81);
@@ -243,7 +243,7 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
                         else
                         {
                             // check if the skill prerequisites are met
-                            if (SkillTree.Instance.getSkillRequiments(SkillStore.Instance.getSkill(record[col, row]).SkillID))
+                            if (SkillTree.Instance.getSkillRequiments(SkillStore.Instance.getSkill(record[col, row]).ID))
                             {
                                 myColor = Color.Yellow;
                                 adColor = Color.Yellow;
@@ -257,10 +257,16 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
 
                         spriteBatch.DrawString(smallFont, record[col, row], new Vector2(position.X + col * 180, position.Y + row * 40), myColor);
 
-                        if(SkillTree.Instance.getSkill(record[col, row]) != null)
-                            spriteBatch.DrawString(smallFont, 
+                        if (SkillTree.Instance.getSkill(record[col, row]) != null)
+                        {
+                            if(SkillTree.Instance.getSkill(record[col, row]).IconSpritePath != null)
+                                spriteBatch.Draw(Content.Load<Texture2D>(SkillTree.Instance.getSkill(record[col, row]).IconSpritePath),
+                                    new Vector2(position.X + col * 180, position.Y + (row * 40) + 15), adColor);
+
+                            spriteBatch.DrawString(smallFont,
                                 "Level - " + SkillTree.Instance.getSkill(record[col, row]).Level.ToString(),
                                 new Vector2(position.X + col * 180, position.Y + (row * 40) + 15), adColor);
+                        }
                         else
                             spriteBatch.DrawString(smallFont,
                                 "Level - 0",
@@ -280,7 +286,7 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
                 for (int i = 0; i < 5; i++)
                     if (record[skill.SkillTreeColumn, i] == null)
                     {
-                        record[skill.SkillTreeColumn, i] = skill.SkillName;
+                        record[skill.SkillTreeColumn, i] = skill.Name;
                         break;
                     }
             }

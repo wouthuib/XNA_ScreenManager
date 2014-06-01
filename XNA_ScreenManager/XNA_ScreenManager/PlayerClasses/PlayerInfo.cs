@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using XNA_ScreenManager.ItemClasses;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework;
 using System.IO;
+using XNA_ScreenManager.SkillClasses;
+using XNA_ScreenManager.ItemClasses;
 
 namespace XNA_ScreenManager.PlayerClasses
 {
@@ -37,7 +38,8 @@ namespace XNA_ScreenManager.PlayerClasses
     public sealed class PlayerInfo
     {
         public Equipment equipment;   // Equipment
-        public Inventory inventory;   // Equipment
+        public Inventory inventory;   // Inventory
+        public SkillBar skillbar;     // Skillbar
 
         #region texture properties
 
@@ -362,6 +364,7 @@ namespace XNA_ScreenManager.PlayerClasses
 
             this.equipment = new Equipment();
             this.inventory = new Inventory();
+            this.skillbar = new SkillBar();
         }
         #endregion
 

@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using XNA_ScreenManager.PlayerClasses;
+using XNA_ScreenManager.SkillClasses;
 
 
 namespace XNA_ScreenManager.ScreenClasses
@@ -140,9 +141,26 @@ namespace XNA_ScreenManager.ScreenClasses
                 // message = "Gold: " + playerInfo.Gold;
                 // spriteBatch.DrawString(spriteFont, message, new Vector2(Position.X + 5, Position.Y + 70), Color.White);
 
-                spriteBatch.Draw(Skillbar,
-                    new Vector2(position.X + 200, position.Y + 430), 
-                    Color.White * 0.75f);
+                DrawSkillBar(gameTime);
+            }
+        }
+
+        public void DrawSkillBar(GameTime gameTime)
+        {
+            spriteBatch.Draw(Skillbar, new Vector2(position.X + 200, position.Y + 430), Color.White * 0.75f);
+
+            SkillBar skillbar = playerInfo.activePlayer.skillbar;
+
+            for (int i = 0; i < skillbar.skillslot.Length - 1; i++)
+            {
+                if (skillbar.skillslot[i + 1] != null)
+                {
+                    Texture2D sprite = Content.Load<Texture2D>(skillbar.skillslot[i + 1].IconSpritePath);
+                    spriteBatch.Draw(
+                        sprite,
+                        new Vector2(position.X + 200 + (sprite.Width * i), position.Y + 430),
+                        Color.White * 0.75f);
+                }
             }
         }
     }

@@ -1279,52 +1279,52 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="gfx\skills\warrior\slash1\effect_0.png">
+    <Compile Include="gfx\skills\warrior\Slash Blast\effect_0.png">
       <Name>effect_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\skills\warrior\slash1\effect_1.png">
+    <Compile Include="gfx\skills\warrior\Slash Blast\effect_1.png">
       <Name>effect_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\skills\warrior\slash1\effect_2.png">
+    <Compile Include="gfx\skills\warrior\Slash Blast\effect_2.png">
       <Name>effect_2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\skills\warrior\slash1\effect_3.png">
+    <Compile Include="gfx\skills\warrior\Slash Blast\effect_3.png">
       <Name>effect_3</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\skills\warrior\slash1\effect_4.png">
+    <Compile Include="gfx\skills\warrior\Slash Blast\effect_4.png">
       <Name>effect_4</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\skills\warrior\slash1\effect_5.png">
+    <Compile Include="gfx\skills\warrior\Slash Blast\effect_5.png">
       <Name>effect_5</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\skills\warrior\slash1\effect_6.png">
+    <Compile Include="gfx\skills\warrior\Slash Blast\effect_6.png">
       <Name>effect_6</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\skills\warrior\slash1\effect_7.png">
+    <Compile Include="gfx\skills\warrior\Slash Blast\effect_7.png">
       <Name>effect_7</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\skills\warrior\slash1\effect_8.png">
+    <Compile Include="gfx\skills\warrior\Slash Blast\effect_8.png">
       <Name>effect_8</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\skills\warrior\slash1\effect_9.png">
+    <Compile Include="gfx\skills\warrior\Slash Blast\effect_9.png">
       <Name>effect_9</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
@@ -1379,7 +1379,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="gfx\player\accessory\" />
-    <Folder Include="gfx\skills\icons\" />
     <Folder Include="playerstore\" />
   </ItemGroup>
   <ItemGroup>
@@ -22224,6 +22223,138 @@
     </Compile>
     <Compile Include="gfx\player\costume\crusaderchainmail\walk2_3.png">
       <Name>walk2_3</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="gfx\skills\icons\HP Boost\1000006_0.png">
+      <Name>1000006_0</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\icons\HP Boost\1000006_1.png">
+      <Name>1000006_1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\icons\HP Boost\1000006_2.png">
+      <Name>1000006_2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="gfx\skills\icons\Iron Body\1001003_0.png">
+      <Name>1001003_0</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\icons\Iron Body\1001003_1.png">
+      <Name>1001003_1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\icons\Iron Body\1001003_2.png">
+      <Name>1001003_2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="gfx\skills\icons\Power Strike\1001004_0.png">
+      <Name>1001004_0</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\icons\Power Strike\1001004_1.png">
+      <Name>1001004_1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\icons\Power Strike\1001004_2.png">
+      <Name>1001004_2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="gfx\skills\icons\Slash Blast\1001005_0.png">
+      <Name>1001005_0</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\icons\Slash Blast\1001005_1.png">
+      <Name>1001005_1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\icons\Slash Blast\1001005_2.png">
+      <Name>1001005_2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="gfx\skills\warrior\Slash Blast\hit.0_0.png">
+      <Name>hit.0_0</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\warrior\Slash Blast\hit.0_1.png">
+      <Name>hit.0_1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\warrior\Slash Blast\hit.0_2.png">
+      <Name>hit.0_2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\warrior\Slash Blast\hit.0_3.png">
+      <Name>hit.0_3</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="gfx\skills\warrior\Power Strike\effect_0.png">
+      <Name>effect_0</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\warrior\Power Strike\effect_1.png">
+      <Name>effect_1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\warrior\Power Strike\effect_2.png">
+      <Name>effect_2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\warrior\Power Strike\effect_3.png">
+      <Name>effect_3</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\warrior\Power Strike\effect_4.png">
+      <Name>effect_4</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\warrior\Power Strike\effect_5.png">
+      <Name>effect_5</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\warrior\Power Strike\hit.0_0.png">
+      <Name>hit.0_0</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="gfx\skills\warrior\Power Strike\hit.0_1.png">
+      <Name>hit.0_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

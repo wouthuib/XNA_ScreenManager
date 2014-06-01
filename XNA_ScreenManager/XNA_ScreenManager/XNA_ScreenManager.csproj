@@ -125,9 +125,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GameWorldClasses\Effects\LevelUpEffect.cs" />
+    <Compile Include="GameWorldClasses\Effects\WeaponHitEffect.cs" />
     <Compile Include="GameWorldClasses\Entities\DamageArea.cs" />
     <Compile Include="GameWorldClasses\Entities\Entity.cs" />
-    <Compile Include="GameWorldClasses\Entities\WeaponSwing.cs" />
+    <Compile Include="GameWorldClasses\Effects\WeaponSwing.cs" />
     <Compile Include="MonsterClasses\Monster.cs" />
     <Compile Include="MonsterClasses\MonsterSprite.cs" />
     <Compile Include="CharacterClasses\NPCharacter.cs" />
@@ -138,7 +139,7 @@
     <Compile Include="ItemClasses\ItemStore.cs" />
     <Compile Include="GameWorldClasses\BattleClasses\Battle.cs" />
     <Compile Include="GameWorldClasses\BattleClasses\DamageBaloon.cs" />
-    <Compile Include="GameWorldClasses\Entities\Effect.cs" />
+    <Compile Include="GameWorldClasses\Effects\Effect.cs" />
     <Compile Include="GameWorldClasses\GameWorld.cs" />
     <Compile Include="GameWorldClasses\Entities\Warp.cs" />
     <Compile Include="MonsterClasses\MonsterStore.cs" />
@@ -186,6 +187,7 @@
     <Compile Include="ScriptClasses\ScriptInterpreter.cs" />
     <Compile Include="ScriptClasses\SwitchStore.cs" />
     <Compile Include="SkillClasses\Skill.cs" />
+    <Compile Include="SkillClasses\SkillBar.cs" />
     <Compile Include="SkillClasses\SkillStore.cs" />
     <Compile Include="SkillClasses\SkillTree.cs" />
   </ItemGroup>

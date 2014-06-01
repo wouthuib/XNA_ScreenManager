@@ -17,7 +17,6 @@ namespace XNA_ScreenManager.GameWorldClasses.Effects
             : base()
         {
             this.sprite = ResourceManager.GetInstance.Content.Load<Texture2D>(@"gfx\effects\LevelUp\LevelUp_" + frame.ToString());
-            //this.SpriteFrame = new Rectangle((int)0, (int)0, (int)(sprite.Width / 11), (int)(sprite.Height / 2));
             this.SpriteFrame = new Rectangle((int)0, (int)0, (int)sprite.Width, (int)sprite.Height);
             this.keepAliveTimer = 21 * 0.10f; // 21 frames
             this.size = new Vector2(0.75f, 0.75f);

@@ -30,7 +30,7 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
         private bool SkillActive = false;
         private Vector2 animationOffset;
         private int ani_count;
-
+        public string skillname = null;
 
         public Warrior(int _X, int _Y, Vector2 _tileSize) 
             : base(_X, _Y, _tileSize)
@@ -50,7 +50,7 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
                         switch (SkillState)
                         {
                             case SkillStateWarrior.Slash1:
-                                Skill_SlashType1(gameTime);
+                                Skill_SlashBlast(gameTime);
                                 break;
                             case SkillStateWarrior.Wave:
                                 Skill_Wave(gameTime);
@@ -121,6 +121,7 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
             cast_animation = null;
             skill_animation = null;
             animationOffset = Vector2.Zero;
+            skillname = null;
         }
 
         private void IdleState(GameTime gameTime)
@@ -156,16 +157,19 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
                             if (CheckKeyDown(Keys.D1))
                             {
                                 SkillState = JobClasses.SkillStateWarrior.Slash1;
+                                skillname = "Slash Blast";
                                 previousCastTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 1.2f;
                             }
                             else if (CheckKeyDown(Keys.D2))
                             {
                                 SkillState = JobClasses.SkillStateWarrior.Wave;
+                                skillname = "Wave";
                                 previousCastTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 2.1f;
                             }
                             else if (CheckKeyDown(Keys.D3))
                             {
                                 SkillState = JobClasses.SkillStateWarrior.AGIup;
+                                skillname = "AGI Up";
                                 previousCastTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 2.1f;
                             }
                         }
@@ -198,7 +202,7 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
             }
         }
 
-        private void Skill_SlashType1(GameTime gameTime)
+        private void Skill_SlashBlast(GameTime gameTime)
         {
             // cast should be completed
             if (SkillActive)
@@ -208,7 +212,7 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
 
                 if (previousSkillTimeMsec <= 0)
                 {
-                    skill_animation = Content.Load<Texture2D>(@"gfx\skills\warrior\slash1\effect_" + ani_count.ToString());
+                    skill_animation = Content.Load<Texture2D>(@"gfx\skills\warrior\Slash Blast\effect_" + ani_count.ToString());
                     previousSkillTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.10f;
 
                     if (this.spriteEffect == SpriteEffects.FlipHorizontally)
@@ -238,18 +242,20 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
                         for (int i = 0; i < spritepath.Length; i++)
                             playerStore.activePlayer.spriteOfset[i] = getoffset(i);
 
-                        // create swing effect
+                        // create skill swing effect
                         if (spriteEffect == SpriteEffects.FlipHorizontally)
                         {
                             Vector2 pos = new Vector2(this.Position.X + this.SpriteFrame.Width * 1.4f, this.Position.Y);
                             GameWorld.GetInstance.newEffect.Add(new DamageArea(this, new Vector2(pos.X - 40, pos.Y), new Rectangle(0, 0, 200, 80), false,
-                                (float)gameTime.ElapsedGameTime.TotalSeconds + 0.4f, 8));
+                                (float)gameTime.ElapsedGameTime.TotalSeconds + 0.4f, 8,
+                                true, @"gfx\skills\warrior\Slash Blast\hit.0_", 4));
                         }
                         else
                         {
                             Vector2 pos = new Vector2(this.Position.X, this.Position.Y);
                             GameWorld.GetInstance.newEffect.Add(new DamageArea(this, new Vector2(pos.X - 180, pos.Y), new Rectangle(0, 0, 200, 80), false,
-                                (float)gameTime.ElapsedGameTime.TotalSeconds + 0.4f, 8));
+                                (float)gameTime.ElapsedGameTime.TotalSeconds + 0.4f, 8,
+                                true, @"gfx\skills\warrior\Slash Blast\hit.0_", 4));
                         }
                     }
                     else if (ani_count >= 6)

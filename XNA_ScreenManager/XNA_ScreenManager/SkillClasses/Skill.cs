@@ -20,30 +20,15 @@ namespace XNA_ScreenManager.SkillClasses
     public class Skill
     {
         // General properties
-        public int SkillID { get; set; }
-        public string SkillName { get; set; }
-        public string SkillDescription { get; set; }
-        public string SkillIconSpritePath { get; set; }
+        public int ID { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string IconSpritePath { get; set; }
 
         // Casting properties
         public int MagicCost { get; set; }
         public float CastTime { get; set; }
         public float CooldownTime { get; set; }
-
-        // Animation properties
-        public string launchSpritePath { get; set; }
-        public int launchAnimationCount { get; set; }
-        public string bulletSpritePath { get; set; }
-        public int bulletAnimationCount { get; set; }
-        public string hitSpritePath { get; set; }
-        public int hitAnimationCount { get; set; }
-
-        // Offensive skill info
-        public int BulletCount { get; set; }
-        public float BulletAngle { get; set; }
-        public float BulletSpeed { get; set; }
-        public float StaticDamage { get; set; } // e.g. fixed damage = 1500
-        public float DynamicDamage { get; set; } // e.g. 1500 * lvl * 0.75f
 
         // Skill unlocks other skills in skill tree
         public int Level { get; set; }
@@ -59,8 +44,8 @@ namespace XNA_ScreenManager.SkillClasses
         {
             var skill = new Skill();
 
-            skill.SkillID = identifier;
-            skill.SkillName = name;
+            skill.ID = identifier;
+            skill.Name = name;
             skill.Type = type;
             skill.UnlockSkill = new string[4];
             skill.UnlockLevel = new int[4];

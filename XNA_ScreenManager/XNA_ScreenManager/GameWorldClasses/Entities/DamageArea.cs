@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using XNA_ScreenManager.ScreenClasses.MainClasses;
 using XNA_ScreenManager.PlayerClasses;
 using XNA_ScreenManager.MonsterClasses;
+using XNA_ScreenManager.GameWorldClasses.Effects;
 
 namespace XNA_ScreenManager.GameWorldClasses.Entities
 {
@@ -23,6 +24,11 @@ namespace XNA_ScreenManager.GameWorldClasses.Entities
         bool Permanent = false;
         private bool debug = false;
 
+        // skill hit sprite properties
+        private bool hiteffect = false;
+        private string hitsprpath = null;
+        private int hitsprframes = 0;
+
         #endregion
 
         public DamageArea(
@@ -31,7 +37,10 @@ namespace XNA_ScreenManager.GameWorldClasses.Entities
             Rectangle area,
             bool permanent,
             float timer, 
-            float dmgpercent) : base()
+            float dmgpercent,
+            bool gethiteffect = false,
+            string gethitsprpath = null,
+            int gethitsprframes = 0) : base()
         {
             this.Owner = owner;
             this.Area = area;
@@ -42,6 +51,13 @@ namespace XNA_ScreenManager.GameWorldClasses.Entities
 
             transperant = 0.5f;
             keepAliveTimer = timer;
+
+            if (gethiteffect)
+            {
+                this.hiteffect = true;
+                this.hitsprpath = gethitsprpath;
+                this.hitsprframes = gethitsprframes;
+            }
         }
 
         public override void Update(GameTime gameTime)
@@ -71,6 +87,10 @@ namespace XNA_ScreenManager.GameWorldClasses.Entities
                             // Start damage controll
                             int damage = (int)Battle.battle_calc_damage(PlayerStore.Instance.activePlayer, (MonsterSprite)monster, DamagePercent);
                             monster.HP -= damage;
+
+                            // start skill hit effect
+                            if (this.hiteffect)
+                                 GameWorld.GetInstance.newEffect.Add(new WeaponHitEffect(this.hitsprpath, monster.Position, this.hitsprframes));
 
                             // create damage balloon
                             GameWorld.GetInstance.newEffect.Add(new DamageBaloon(

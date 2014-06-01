@@ -31,7 +31,7 @@ namespace XNA_ScreenManager.CharacterClasses
         private Vector2 spriteOfset = new Vector2(90, 0);
         private SpriteEffects spriteEffect = SpriteEffects.None;
         private float transperancy = 0;
-        private bool debug = true;
+        private bool debug = false;
 
         // Respawn properties
         private Vector2 resp_pos = Vector2.Zero,                                                    // Respawn Position

@@ -34,25 +34,25 @@ namespace XNA_ScreenManager.SkillClasses
 
         public void removeSkill(string name)
         {
-            skill_list.Remove(new Skill() { SkillName = name });
+            skill_list.Remove(new Skill() { Name = name });
         }
 
         public Skill getSkill(int ID)
         {
-            return this.skill_list.Find(delegate(Skill skill) { return skill.SkillID == ID; });
+            return this.skill_list.Find(delegate(Skill skill) { return skill.ID == ID; });
         }
 
         public Skill getSkill(string Name)
         {
-            return this.skill_list.Find(delegate(Skill skill) { return skill.SkillName == Name; });
+            return this.skill_list.Find(delegate(Skill skill) { return skill.Name == Name; });
         }
 
         public bool getSkillRequiments(int ID)
         {
             for (int i = 0; i < 4; i++)
             {
-                string ulskill = SkillStore.Instance.skill_list.Find(delegate(Skill skill) { return skill.SkillID == ID; }).UnlockSkill[i];
-                int ullevel = SkillStore.Instance.skill_list.Find(delegate(Skill skill) { return skill.SkillID == ID; }).UnlockLevel[i];
+                string ulskill = SkillStore.Instance.skill_list.Find(delegate(Skill skill) { return skill.ID == ID; }).UnlockSkill[i];
+                int ullevel = SkillStore.Instance.skill_list.Find(delegate(Skill skill) { return skill.ID == ID; }).UnlockLevel[i];
 
                 // check if all prerequisite skill levels are OK
                 if (ulskill != null)
