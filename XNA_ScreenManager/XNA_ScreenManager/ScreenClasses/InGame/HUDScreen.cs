@@ -151,14 +151,14 @@ namespace XNA_ScreenManager.ScreenClasses
 
             SkillBar skillbar = playerInfo.activePlayer.skillbar;
 
-            for (int i = 0; i < skillbar.skillslot.Length - 1; i++)
+            for (int i = 0; i < skillbar.skillslot.Length; i++)
             {
-                if (skillbar.skillslot[i + 1] != null)
+                if (skillbar.skillslot[i] != null)
                 {
-                    Texture2D sprite = Content.Load<Texture2D>(skillbar.skillslot[i + 1].IconSpritePath);
+                    Texture2D sprite = Content.Load<Texture2D>(skillbar.skillslot[i].IconSpritePath);
                     spriteBatch.Draw(
                         sprite,
-                        new Vector2(position.X + 200 + (sprite.Width * i), position.Y + 430),
+                        new Vector2(position.X + 206 + (sprite.Width * i + 6), position.Y + 443),
                         Color.White * 0.75f);
                 }
             }

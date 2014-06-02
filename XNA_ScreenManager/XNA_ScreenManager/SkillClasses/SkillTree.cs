@@ -9,22 +9,27 @@ namespace XNA_ScreenManager.SkillClasses
     {
         public List<Skill> skill_list { get; set; }
 
-        private static SkillTree instance;
-        private SkillTree()
+        //private static SkillTree instance;
+        //private SkillTree()
+        //{
+        //    skill_list = new List<Skill>();
+        //}
+
+        //public static SkillTree Instance
+        //{
+        //    get
+        //    {
+        //        if (instance == null)
+        //        {
+        //            instance = new SkillTree();
+        //        }
+        //        return instance;
+        //    }
+        //}
+
+        public SkillTree()
         {
             skill_list = new List<Skill>();
-        }
-
-        public static SkillTree Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new SkillTree();
-                }
-                return instance;
-            }
         }
 
         public void addSkill(Skill addSkill)

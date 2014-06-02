@@ -9,6 +9,7 @@ using XNA_ScreenManager.ScreenClasses.InGame;
 using XNA_ScreenManager.ScreenClasses.Menus;
 using XNA_ScreenManager.PlayerClasses;
 using XNA_ScreenManager.MapClasses;
+using XNA_ScreenManager.SkillClasses;
 
 namespace XNA_ScreenManager.ScreenClasses
 {
@@ -286,40 +287,114 @@ namespace XNA_ScreenManager.ScreenClasses
 
         private void HandleskillMenuScreen()
         {
-            if (CheckKey(Keys.Back) || CheckKey(Keys.Escape))
+            if (skillScreen.menuOptionsActive)
             {
-                skillScreen.OptionsActive = true;
-                skillScreen.SelectActive = false;
-                skillScreen.SelectedOption = 0;
-                activeScreen.Hide();
-                activeScreen = ingameMenuScreen;
-                activeScreen.Show();
-            }
-            if (skillScreen.OptionsActive)
-            {
-                if (CheckKey(Keys.Enter) || CheckKey(Keys.Space))
+                if (CheckKey(Keys.Back) || CheckKey(Keys.Escape))
+                {
+                    QuitskillMenuScreen();
+                }
+                else if (CheckKey(Keys.Enter) || CheckKey(Keys.Space))
                 {
                     switch (skillScreen.SelectedOption)
                     {
                         case 0:
-                            skillScreen.OptionsActive = false;
+                            skillScreen.menuOptionsActive = false;
+                            skillScreen.skillOptionsActive = false;
                             skillScreen.SelectActive = true;
                             break;
                         case 1:
-                            skillScreen.OptionsActive = false;
+                            skillScreen.menuOptionsActive = false;
+                            skillScreen.skillOptionsActive = false;
                             skillScreen.SelectActive = true;
                             break;
                         case 2:
-                            skillScreen.SelectedOption = 0;
-                            activeScreen.Hide();
-                            activeScreen = ingameMenuScreen;
-                            activeScreen.Show();
+                            QuitskillMenuScreen();
                             break;
                         default:
                             break;
                     }
                 }
             }
+            else if (skillScreen.SelectActive)
+            {
+                if (CheckKey(Keys.Enter))
+                {
+                    if (SkillStore.Instance.getSkill(skillScreen.record[skillScreen.selectedColumn, skillScreen.selectedRow]) != null)
+                    {
+                        skillScreen.skillOptionsActive = true;
+                        skillScreen.SelectActive = false;
+                        skillScreen.options.Style = OrderStyle.Central;
+                        skillScreen.options.SetMenuItems(
+                            new string[]{ SkillStore.Instance.getSkill(skillScreen.record[skillScreen.selectedColumn, skillScreen.selectedRow]).Name + " - Choose an Option.", "",
+                            "Add QuickSlot", "Level Up", "More Details", "Cancel"});
+                        skillScreen.options.StartIndex = 2;
+                        skillScreen.options.SelectedIndex = 2;
+                    }
+                }
+                else if (CheckKey(Keys.Back) || CheckKey(Keys.Escape))
+                {
+                    skillScreen.SelectActive = false;
+                    skillScreen.menuOptionsActive = true;
+                }
+            }
+            else if (skillScreen.skillOptionsActive)
+            {
+                // Check item options
+                if (CheckKey(Keys.Enter))
+                {
+                    switch (skillScreen.options.SelectedIndex)
+                    {
+                        case 0:
+                        case 1:
+                            break;
+                        case 2:
+                            skillScreen.skillOptionsActive = false;
+                            skillScreen.QuickSlotActive = true;
+                            skillScreen.options.Style = OrderStyle.Central;
+                            skillScreen.options.SetMenuItems(
+                                new string[]{ "Please choose a slot by pressing F1 to F12", "", "Cancel"});
+                            skillScreen.options.StartIndex = 2;
+                            skillScreen.options.SelectedIndex = 2;
+                            break;
+                        case 3:
+                            // do something
+                            break;
+                        case 4:
+                            // do something
+                            break;
+                        case 5:
+                            skillScreen.skillOptionsActive = false;
+                            skillScreen.SelectActive = true;
+                            break;
+                    }
+                }
+                else if (CheckKey(Keys.Back) || CheckKey(Keys.Escape))
+                {
+                    skillScreen.skillOptionsActive = false;
+                    skillScreen.SelectActive = true;
+                }
+            }
+            else if (skillScreen.QuickSlotActive)
+            {
+                // Check item options
+                if (CheckKey(Keys.Enter) || CheckKey(Keys.Back) || CheckKey(Keys.Escape))
+                {
+                    skillScreen.QuickSlotActive = false;
+                    skillScreen.SelectActive = true;
+                }
+            }
+        }
+
+        private void QuitskillMenuScreen()
+        {
+            skillScreen.menuOptionsActive = true;
+            skillScreen.SelectActive = false;
+            skillScreen.skillOptionsActive = false;
+            skillScreen.QuickSlotActive = false;
+            skillScreen.SelectedOption = 0;
+            activeScreen.Hide();
+            activeScreen = ingameMenuScreen;
+            activeScreen.Show();
         }
 
         private void HandlestatusMenuScreen()

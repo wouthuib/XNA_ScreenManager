@@ -40,6 +40,7 @@ namespace XNA_ScreenManager.PlayerClasses
         public Equipment equipment;   // Equipment
         public Inventory inventory;   // Inventory
         public SkillBar skillbar;     // Skillbar
+        public SkillTree skilltree;     // Skillbar
 
         #region texture properties
 
@@ -365,6 +366,7 @@ namespace XNA_ScreenManager.PlayerClasses
             this.equipment = new Equipment();
             this.inventory = new Inventory();
             this.skillbar = new SkillBar();
+            this.skilltree = new SkillTree();
         }
         #endregion
 

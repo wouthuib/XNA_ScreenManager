@@ -22228,68 +22228,68 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="gfx\skills\icons\HP Boost\1000006_0.png">
+    <Compile Include="gfx\skills\icons\HP-Boost\1000006_0.png">
       <Name>1000006_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\skills\icons\HP Boost\1000006_1.png">
+    <Compile Include="gfx\skills\icons\HP-Boost\1000006_1.png">
       <Name>1000006_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\skills\icons\HP Boost\1000006_2.png">
+    <Compile Include="gfx\skills\icons\HP-Boost\1000006_2.png">
       <Name>1000006_2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="gfx\skills\icons\Iron Body\1001003_0.png">
+    <Compile Include="gfx\skills\icons\Iron-Body\1001003_0.png">
       <Name>1001003_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\skills\icons\Iron Body\1001003_1.png">
+    <Compile Include="gfx\skills\icons\Iron-Body\1001003_1.png">
       <Name>1001003_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\skills\icons\Iron Body\1001003_2.png">
+    <Compile Include="gfx\skills\icons\Iron-Body\1001003_2.png">
       <Name>1001003_2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="gfx\skills\icons\Power Strike\1001004_0.png">
+    <Compile Include="gfx\skills\icons\Power-Strike\1001004_0.png">
       <Name>1001004_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\skills\icons\Power Strike\1001004_1.png">
+    <Compile Include="gfx\skills\icons\Power-Strike\1001004_1.png">
       <Name>1001004_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\skills\icons\Power Strike\1001004_2.png">
+    <Compile Include="gfx\skills\icons\Power-Strike\1001004_2.png">
       <Name>1001004_2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="gfx\skills\icons\Slash Blast\1001005_0.png">
+    <Compile Include="gfx\skills\icons\Slash-Blast\1001005_0.png">
       <Name>1001005_0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\skills\icons\Slash Blast\1001005_1.png">
+    <Compile Include="gfx\skills\icons\Slash-Blast\1001005_1.png">
       <Name>1001005_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\skills\icons\Slash Blast\1001005_2.png">
+    <Compile Include="gfx\skills\icons\Slash-Blast\1001005_2.png">
       <Name>1001005_2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>

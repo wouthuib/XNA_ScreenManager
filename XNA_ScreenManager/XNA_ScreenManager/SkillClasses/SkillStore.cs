@@ -76,7 +76,7 @@ namespace XNA_ScreenManager.SkillClasses
                         if (values[0] != "ID[0]")
                         {
                             // create new skill in skilllist
-                            this.addSkill(Skill.create(Convert.ToInt32(values[0]), TrimParameter(values[1]), (SkillType)Enum.Parse(typeof(SkillType), values[27])));
+                            this.addSkill(Skill.create(Convert.ToInt32(values[0]), TrimParameter(values[1]), (SkillType)Enum.Parse(typeof(SkillType), values[17])));
 
                             // Link new Skill object to Skill database
                             Skill skill = this.getSkill(Convert.ToInt32(values[0]));
@@ -109,9 +109,9 @@ namespace XNA_ScreenManager.SkillClasses
 
                         }
                     }
-                    catch (Exception ee)
+                    catch
                     {
-                        string exception = ee.ToString();
+                        throw new Exception("Error loading skilltable, please check the entries!");
                     }
                 }
             }

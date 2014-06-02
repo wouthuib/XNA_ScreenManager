@@ -25,6 +25,8 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
         GraphicsDevice graphics;
         ContentManager Content;
 
+        public MenuComponent options;
+
         Color normalColor = Color.Yellow;
         Color hiliteColor = Color.Red;
 
@@ -42,13 +44,14 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
             "Continue",
             "Back"};
 
-        public bool OptionsActive = true,
+        public bool menuOptionsActive = true,
                     SelectActive = false,
-                    QuickSlotActive = false;
+                    QuickSlotActive = false,
+                    skillOptionsActive = false;
         private int selectedOption = 0;
-        private int selectedColumn = 0, selectedRow = 0;
+        public int selectedColumn = 0, selectedRow = 0;
         private int width, height;
-        private string[,] record = new string[4, 5];
+        public string[,] record = new string[4, 5];
 
         #endregion
 
@@ -63,6 +66,7 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
             this.normalFont = Content.Load<SpriteFont>(@"font\Comic_Sans_18px");
 
             Components.Add(new BackgroundComponent(game, background));
+            options = new MenuComponent(game, smallFont);
         }
 
         public Color NormalColor
@@ -143,7 +147,7 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
             //record new keyboard state
             KeyboardState newState = Keyboard.GetState();
 
-            if (OptionsActive)
+            if (menuOptionsActive)
             {
                 if (CheckKey(Keys.Right))
                 {
@@ -171,6 +175,18 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
                 else if (CheckKey(Keys.Down))
                     SelectedRow++;
             }
+            else if (skillOptionsActive)
+            {
+                // update skill components
+                options.Update(gameTime);
+            }
+            else if (QuickSlotActive)
+            {
+                updateQuickSlot(gameTime);
+
+                // update skill components
+                options.Update(gameTime);
+            }
 
             // update 2d array records with skill items
             record = fetchSkills();  // <-- get skill data
@@ -181,13 +197,93 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
             // save keyboard state
             oldState = newState;
         }
+
+        private void updateQuickSlot(GameTime gameTime)
+        {
+            Skill selectedskill = SkillStore.Instance.getSkill(record[selectedColumn, selectedRow]);
+
+            // Check quickslot options
+            if (CheckKey(Keys.F1))
+            {
+                PlayerStore.Instance.activePlayer.skillbar.skillslot[0] = selectedskill;
+                QuickSlotActive = false;
+                SelectActive = true;
+            }
+            else if (CheckKey(Keys.F2))
+            {
+                PlayerStore.Instance.activePlayer.skillbar.skillslot[1] = selectedskill;
+                QuickSlotActive = false;
+                SelectActive = true;
+            }
+            else if (CheckKey(Keys.F3))
+            {
+                PlayerStore.Instance.activePlayer.skillbar.skillslot[2] = selectedskill;
+                QuickSlotActive = false;
+                SelectActive = true;
+            }
+            else if (CheckKey(Keys.F4))
+            {
+                PlayerStore.Instance.activePlayer.skillbar.skillslot[3] = selectedskill;
+                QuickSlotActive = false;
+                SelectActive = true;
+            }
+            else if (CheckKey(Keys.F5))
+            {
+                PlayerStore.Instance.activePlayer.skillbar.skillslot[4] = selectedskill;
+                QuickSlotActive = false;
+                SelectActive = true;
+            }
+            else if (CheckKey(Keys.F6))
+            {
+                PlayerStore.Instance.activePlayer.skillbar.skillslot[5] = selectedskill;
+                QuickSlotActive = false;
+                SelectActive = true;
+            }
+            else if (CheckKey(Keys.F7))
+            {
+                PlayerStore.Instance.activePlayer.skillbar.skillslot[6] = selectedskill;
+                QuickSlotActive = false;
+                SelectActive = true;
+            }
+            else if (CheckKey(Keys.F8))
+            {
+                PlayerStore.Instance.activePlayer.skillbar.skillslot[7] = selectedskill;
+                QuickSlotActive = false;
+                SelectActive = true;
+            }
+            else if (CheckKey(Keys.F9))
+            {
+                PlayerStore.Instance.activePlayer.skillbar.skillslot[8] = selectedskill;
+                QuickSlotActive = false;
+                SelectActive = true;
+            }
+            else if (CheckKey(Keys.F10))
+            {
+                PlayerStore.Instance.activePlayer.skillbar.skillslot[9] = selectedskill;
+                QuickSlotActive = false;
+                SelectActive = true;
+            }
+            else if (CheckKey(Keys.F11))
+            {
+                PlayerStore.Instance.activePlayer.skillbar.skillslot[10] = selectedskill;
+                QuickSlotActive = false;
+                SelectActive = true;
+            }
+            else if (CheckKey(Keys.F12))
+            {
+                PlayerStore.Instance.activePlayer.skillbar.skillslot[11] = selectedskill;
+                QuickSlotActive = false;
+                SelectActive = true;
+            }
+
+        }
         
         public override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
 
             Vector2 position = new Vector2();
-            Color myColor, adColor;
+            Color myColor, adColor, icColor;
 
             #region menu options
             // Draw Menu Option Types
@@ -195,7 +291,7 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
 
             for (int i = 0; i < menuOptions.Length; i++)
             {
-                if (OptionsActive)
+                if (menuOptionsActive)
                 {
                     if (i == SelectedOption)
                         myColor = HiliteColor;
@@ -229,50 +325,104 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
                         if (SelectActive && col == selectedColumn && row == selectedRow)
                         {
                             // check if the skill prerequisites are met
-                            if (SkillTree.Instance.getSkillRequiments(SkillStore.Instance.getSkill(record[col, row]).ID))
+                            if (PlayerStore.Instance.activePlayer.skilltree.getSkillRequiments(SkillStore.Instance.getSkill(record[col, row]).ID))
                             {
                                 myColor = Color.Red;
                                 adColor = new Color(255, 81, 81);
+                                icColor = Color.White;
                             }
                             else
                             {
                                 myColor = new Color(161, 41, 41);
                                 adColor = new Color(155, 102, 102);
+                                icColor = Color.Gray;
                             }
+
+                            // Draw Selected Skill Description
+                            spriteBatch.DrawString(smallFont,
+                                SkillStore.Instance.getSkill(record[col, row]).Description, 
+                                new Vector2(50, 450), Color.Yellow);
                         }
                         else
                         {
                             // check if the skill prerequisites are met
-                            if (SkillTree.Instance.getSkillRequiments(SkillStore.Instance.getSkill(record[col, row]).ID))
+                            if (PlayerStore.Instance.activePlayer.skilltree.getSkillRequiments(SkillStore.Instance.getSkill(record[col, row]).ID))
                             {
                                 myColor = Color.Yellow;
                                 adColor = Color.Yellow;
+                                icColor = Color.White;
                             }
                             else
                             {
                                 myColor = Color.Gray;
                                 adColor = Color.Gray;
+                                icColor = Color.Gray;
                             }
                         }
 
+                        // Draw Skill Name
                         spriteBatch.DrawString(smallFont, record[col, row], new Vector2(position.X + col * 180, position.Y + row * 40), myColor);
 
-                        if (SkillTree.Instance.getSkill(record[col, row]) != null)
-                        {
-                            if(SkillTree.Instance.getSkill(record[col, row]).IconSpritePath != null)
-                                spriteBatch.Draw(Content.Load<Texture2D>(SkillTree.Instance.getSkill(record[col, row]).IconSpritePath),
-                                    new Vector2(position.X + col * 180, position.Y + (row * 40) + 15), adColor);
+                        // Draw Skill Icon
+                        if (SkillStore.Instance.getSkill(record[col, row]).IconSpritePath != null)
+                            spriteBatch.Draw(Content.Load<Texture2D>(@"" + SkillStore.Instance.getSkill(record[col, row]).IconSpritePath),
+                                new Vector2(position.X + col * 180 - 45, position.Y + (row * 40)), icColor);
 
+                        // Draw Current skill Level
+                        if (PlayerStore.Instance.activePlayer.skilltree.getSkill(record[col, row]) != null)
                             spriteBatch.DrawString(smallFont,
-                                "Level - " + SkillTree.Instance.getSkill(record[col, row]).Level.ToString(),
+                                "Level - " + PlayerStore.Instance.activePlayer.skilltree.getSkill(record[col, row]).Level.ToString(),
                                 new Vector2(position.X + col * 180, position.Y + (row * 40) + 15), adColor);
-                        }
                         else
                             spriteBatch.DrawString(smallFont,
                                 "Level - 0",
                                 new Vector2(position.X + col * 180, position.Y + (row * 40) + 15), adColor);
                     }
 
+            #endregion
+
+            #region skilloption popup
+            // item options
+            if (skillOptionsActive || QuickSlotActive)
+            {
+                Texture2D rect = new Texture2D(graphics, (int)options.getBounds().X, options.MenuItems.Count * 20),
+                          rect2 = new Texture2D(graphics, (int)options.getBounds().X, options.MenuItems.Count * 20);
+
+                Color[] data = new Color[(int)options.getBounds().X * options.MenuItems.Count * 20];
+
+                Vector2 PopupPosition = new Vector2((graphics.Viewport.Width * 0.5f) - (options.getBounds().X * 0.5f),
+                                                    (graphics.Viewport.Height * 0.5f) - (options.MenuItems.Count * 10));
+
+                // set colors for menu borders and fill
+                for (int i = 0; i < data.Length; ++i) data[i] = Color.Black;
+                rect.SetData(data);
+                for (int i = 0; i < data.Length; ++i) data[i] = Color.White;
+                rect2.SetData(data);
+
+                // draw menu fill 20% transperancy
+                spriteBatch.Draw(rect,
+                    new Rectangle((int)(PopupPosition.X - 5), (int)(PopupPosition.Y - 5), rect.Width + 10, rect.Height + 10), Color.White * 0.8f);
+
+                // draw borders
+                spriteBatch.Draw(rect2,
+                    new Rectangle((int)(PopupPosition.X - 5), (int)(PopupPosition.Y - 5), 5, (int)options.MenuItems.Count * 20 + 10),
+                    new Rectangle(0, 0, 5, 5), Color.White);
+                spriteBatch.Draw(rect2,
+                    new Rectangle((int)(PopupPosition.X - 5), (int)(PopupPosition.Y - 5), (int)rect.Width + 10, 5),
+                    new Rectangle(0, 0, 5, 5), Color.White);
+                spriteBatch.Draw(rect2,
+                    new Rectangle((int)(PopupPosition.X - 5), (int)(PopupPosition.Y + (options.MenuItems.Count * 20) + 5), (int)rect.Width + 15, 5),
+                    new Rectangle(0, 0, 5, 5), Color.White);
+                spriteBatch.Draw(rect2,
+                    new Rectangle((int)(PopupPosition.X + rect.Width + 5), (int)(PopupPosition.Y - 5), 5, (int)options.MenuItems.Count * 20 + 15),
+                    new Rectangle(0, 0, 5, 5), Color.White);
+
+
+                Vector2 optionPos = new Vector2(PopupPosition.X, PopupPosition.Y);
+
+                options.Position = optionPos;
+                options.Draw(gameTime);
+            }
             #endregion
         }
 
