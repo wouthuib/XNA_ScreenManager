@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using XNA_ScreenManager.PlayerClasses;
 
 namespace XNA_ScreenManager
 {
@@ -15,8 +16,7 @@ namespace XNA_ScreenManager
             : base(game)
         {
             Components.Add(new BackgroundComponent(game, background));
-            string[] items = { "The Story Begins", "The Story Continues", 
-                        "Help", "Quit" };
+            string[] items = { "New Adventure", "Load Adventure", "Help", "Quit" };
             menu = new MenuComponent(game, spriteFont);
             menu.SetMenuItems(items);
             menu.StartIndex = 0;
@@ -26,6 +26,16 @@ namespace XNA_ScreenManager
         public int SelectedIndex
         {
             get { return menu.SelectedIndex; }
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            if (PlayerStore.Instance.Count > 0)
+                menu.MenuItems[0] = "Continue Adventure";
+            else
+                menu.MenuItems[0] = "New Adventure";
+
+            base.Update(gameTime);
         }
 
         public override void Show()

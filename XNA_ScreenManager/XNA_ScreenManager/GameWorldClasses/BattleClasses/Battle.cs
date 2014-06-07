@@ -27,7 +27,7 @@ namespace XNA_ScreenManager.MapClasses
             {
                 bDamage = (playerinfo.ATK * 2) - monsterinfo.DEF;
                 wDamage = playerinfo.WeaponATK - monsterinfo.DEF;
-                finalDamage = (int)((bDamage + wDamage) * percent * (WeaponPenalty(Weapon, monsterinfo) * 0.01f));
+                finalDamage = (int)((bDamage + wDamage) * (percent * 0.01f) * (WeaponPenalty(Weapon, monsterinfo) * 0.01f));
             }
             else
                 finalDamage = 0;

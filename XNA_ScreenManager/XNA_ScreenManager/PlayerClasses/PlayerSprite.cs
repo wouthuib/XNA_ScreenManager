@@ -40,6 +40,9 @@ namespace XNA_ScreenManager
         private float transperancy = 1;
         private bool debug = false;
 
+        // Temporary PlayerInfo Updates
+        float previousRecoveryTime;
+
         // Sprite Animation Properties
         public int effectCounter = 0;                                                               // for the warp effect
         Color color = Color.White;                                                                  // sprite color
@@ -113,6 +116,10 @@ namespace XNA_ScreenManager
 
                             // Move the Character
                             OldPosition = Position;
+
+                            // lock player at position
+                            this.Direction.X = 0;
+
                             // Walk speed
                             Position += Direction * Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
@@ -184,14 +191,14 @@ namespace XNA_ScreenManager
                                 {
                                     Vector2 pos = new Vector2(this.Position.X + this.SpriteFrame.Width * 1.6f, this.Position.Y + this.SpriteFrame.Height * 0.7f);
                                     world.newEffect.Add(new DamageArea(this, new Vector2(pos.X - 50, pos.Y), new Rectangle(0, 0, 80, 10), false,
-                                        (float)gameTime.ElapsedGameTime.TotalSeconds + 0.2f, 1));
+                                        (float)gameTime.ElapsedGameTime.TotalSeconds + 0.2f, 100));
                                     world.newEffect.Add(new WeaponSwing(pos, WeaponSwingType.Swing01, spriteEffect));
                                 }
                                 else
                                 {
                                     Vector2 pos = new Vector2(this.Position.X - this.SpriteFrame.Width * 0.6f, this.Position.Y + this.SpriteFrame.Height * 0.7f);
                                     world.newEffect.Add(new DamageArea(this, new Vector2(pos.X - 18, pos.Y), new Rectangle(0, 0, 80, 10), false,
-                                        (float)gameTime.ElapsedGameTime.TotalSeconds + 0.2f, 1));
+                                        (float)gameTime.ElapsedGameTime.TotalSeconds + 0.2f, 100));
                                     world.newEffect.Add(new WeaponSwing(pos, WeaponSwingType.Swing01, spriteEffect));
                                 }
 
@@ -250,14 +257,14 @@ namespace XNA_ScreenManager
                                 {
                                     Vector2 pos = new Vector2(this.Position.X + this.SpriteFrame.Width * 0.3f, this.Position.Y + this.SpriteFrame.Height * 0.7f);
                                     world.newEffect.Add(new DamageArea(this, new Vector2(pos.X + 15, pos.Y), new Rectangle(0, 0, 80, 10), false, 
-                                        (float)gameTime.ElapsedGameTime.TotalSeconds + 0.1f, 1));
+                                        (float)gameTime.ElapsedGameTime.TotalSeconds + 0.1f, 100));
                                     world.newEffect.Add(new WeaponSwing(pos, WeaponSwingType.Stab01, spriteEffect));
                                 }
                                 else
                                 {
                                     Vector2 pos = new Vector2(this.Position.X - this.SpriteFrame.Width * 0.7f, this.Position.Y + this.SpriteFrame.Height * 0.7f);
                                     world.newEffect.Add(new DamageArea(this, new Vector2(pos.X - 18, pos.Y), new Rectangle(0, 0, 80, 10), false,
-                                        (float)gameTime.ElapsedGameTime.TotalSeconds + 0.1f, 1));
+                                        (float)gameTime.ElapsedGameTime.TotalSeconds + 0.1f, 100));
                                     world.newEffect.Add(new WeaponSwing(pos, WeaponSwingType.Stab01, spriteEffect));
                                 }
 
@@ -438,7 +445,7 @@ namespace XNA_ScreenManager
                             prevspriteframe = spriteframe;
                             for (int i = 0; i < spritepath.Length; i++)
                             {
-                                spritename = "stand1_" + spriteframe.ToString();
+                                spritename = "rope_" + spriteframe.ToString();
                                 playerStore.activePlayer.spriteOfset[i] = getoffset(i);
                             }
                         }
@@ -631,6 +638,9 @@ namespace XNA_ScreenManager
                         // Apply Gravity 
                         Position += new Vector2(0, 1) * 250 * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
+                        // Recover Health PlayerInfo
+                        recoverHealth(gameTime);
+
                         break;
                     #endregion
                     #region state walk
@@ -702,6 +712,9 @@ namespace XNA_ScreenManager
 
                         // Apply Gravity 
                         Position += new Vector2(0,1) * 200 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                        // Recover Health PlayerInfo
+                        recoverHealth(gameTime);
 
                         break;
                     #endregion
@@ -934,35 +947,34 @@ namespace XNA_ScreenManager
             #region temporary quickbuttons
             // temporary global function buttons 
             // should be handles by singleton class keyboard manager
-            if (keyboardStateCurrent.IsKeyUp(Microsoft.Xna.Framework.Input.Keys.F1) == true &&
-                     keyboardStatePrevious.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.F1) == true)
-            {
+            if (CheckKey(Keys.Q))
                 getPlayer().inventory.addItem(itemStore.getItem(new Random().Next(1100, 1114)));
-            } 
-            else if (keyboardStateCurrent.IsKeyUp(Microsoft.Xna.Framework.Input.Keys.F2) == true &&
-                      keyboardStatePrevious.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.F2) == true)
-            {
-                getPlayer().inventory.addItem(itemStore.getItem(randomizer.Instance.generateRandom(2300, 2308)));
-            }
-            else if (keyboardStateCurrent.IsKeyUp(Microsoft.Xna.Framework.Input.Keys.F3) == true &&
-                      keyboardStatePrevious.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.F3) == true)
-            {
+            else if (CheckKey(Keys.W))
                 getPlayer().inventory.addItem(itemStore.getItem(randomizer.Instance.generateRandom(1300, 1303)));
-            }
-            else if (keyboardStateCurrent.IsKeyUp(Microsoft.Xna.Framework.Input.Keys.F4) == true &&
-                     keyboardStatePrevious.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.F4) == true)
-            {
-                getPlayer().inventory.saveItem("inventory.bin");
-            }
-            else if (keyboardStateCurrent.IsKeyUp(Microsoft.Xna.Framework.Input.Keys.F5) == true &&
-                     keyboardStatePrevious.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.F5) == true)
-            {
-                getPlayer().inventory.loadItems("inventory.bin");
-            }
+            else if (CheckKey(Keys.E))
+                getPlayer().inventory.addItem(itemStore.getItem(randomizer.Instance.generateRandom(2300, 2308)));
             // temporary
             #endregion
 
             keyboardStatePrevious = keyboardStateCurrent;
+        }
+
+        protected void recoverHealth(GameTime gameTime)
+        {
+            previousRecoveryTime -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            if (previousRecoveryTime <= 0)
+            {
+                previousRecoveryTime = (float)gameTime.ElapsedGameTime.TotalSeconds + 8;
+
+                getPlayer().HP += (int)(getPlayer().MAXHP * 0.05f);
+                getPlayer().SP += (int)(getPlayer().MAXSP * 0.05f);
+
+                if (getPlayer().HP >= getPlayer().MAXHP)
+                    getPlayer().HP = getPlayer().MAXHP;
+                if (getPlayer().SP >= getPlayer().MAXSP)
+                    getPlayer().SP = getPlayer().MAXSP;
+            }
         }
 
         public override void Draw(SpriteBatch spriteBatch)

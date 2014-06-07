@@ -5,27 +5,10 @@ using System.Text;
 
 namespace XNA_ScreenManager.SkillClasses
 {
+    [Serializable]
     public sealed class SkillTree
     {
         public List<Skill> skill_list { get; set; }
-
-        //private static SkillTree instance;
-        //private SkillTree()
-        //{
-        //    skill_list = new List<Skill>();
-        //}
-
-        //public static SkillTree Instance
-        //{
-        //    get
-        //    {
-        //        if (instance == null)
-        //        {
-        //            instance = new SkillTree();
-        //        }
-        //        return instance;
-        //    }
-        //}
 
         public SkillTree()
         {

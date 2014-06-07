@@ -165,12 +165,8 @@ namespace XNA_ScreenManager.ScreenClasses
                         activeScreen.Show();
                         break;
                     case 1:
-                        if (PlayerStore.Instance.Count > 0)
-                        {
-                            activeScreen.Hide();
-                            activeScreen = actionScreen;
-                            actionScreen.Show();
-                        }
+                        ingameMenuScreen.SelectedIndex = 0;
+                        PlayerStore.Instance.loadPlayerStore("savegame.bin");
                         break;
                     case 2:
                         activeScreen.Hide();

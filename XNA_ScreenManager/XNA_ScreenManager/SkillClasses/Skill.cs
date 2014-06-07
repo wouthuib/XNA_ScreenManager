@@ -8,7 +8,7 @@ namespace XNA_ScreenManager.SkillClasses
 {
     public enum SkillType
     {
-        Offensive, Devensive, Supportive,
+        Active, Passive,
     };
 
     public enum SkillClass

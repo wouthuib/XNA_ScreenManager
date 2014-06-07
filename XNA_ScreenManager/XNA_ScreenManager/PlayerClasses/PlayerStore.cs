@@ -124,6 +124,7 @@ namespace XNA_ScreenManager.PlayerClasses
             }
 
             activeSlot = 0;
+            this.count = playerlist.Length - 1;
         }
 
         public void savePlayerStore(string file)
