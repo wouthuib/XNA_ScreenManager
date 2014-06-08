@@ -9,6 +9,7 @@ using System.Reflection;
 using XNA_ScreenManager.MonsterClasses;
 using XNA_ScreenManager.GameWorldClasses.Entities;
 using XNA_ScreenManager.ScreenClasses.MainClasses;
+using System.Runtime.Serialization;
 
 namespace XNA_ScreenManager.CharacterClasses
 {
@@ -95,6 +96,7 @@ namespace XNA_ScreenManager.CharacterClasses
             ReadDrops(ID);
 
             // Local properties
+            instanceID = Guid.NewGuid();
             MonsterID = ID;
             Direction = new Vector2();                                                              // Move direction
             state = EntityState.Spawn;                                                              // Player state

@@ -198,7 +198,47 @@
    </properties>
    <ellipse/>
   </object>
-  <object name="mob02" x="3200" y="736">
+   <object name="mob02" x="1592" y="672">
+     <properties>
+       <property name="BorderL" value="40"/>
+       <property name="BorderR" value="60"/>
+       <property name="monsterID" value="1201"/>
+     </properties>
+     <ellipse/>
+   </object>
+   <object name="mob03" x="1592" y="672">
+     <properties>
+       <property name="BorderL" value="40"/>
+       <property name="BorderR" value="60"/>
+       <property name="monsterID" value="1201"/>
+     </properties>
+     <ellipse/>
+   </object>
+   <object name="mob04" x="1592" y="672">
+     <properties>
+       <property name="BorderL" value="40"/>
+       <property name="BorderR" value="60"/>
+       <property name="monsterID" value="1201"/>
+     </properties>
+     <ellipse/>
+   </object>
+   <object name="mob05" x="1592" y="672">
+     <properties>
+       <property name="BorderL" value="40"/>
+       <property name="BorderR" value="60"/>
+       <property name="monsterID" value="1201"/>
+     </properties>
+     <ellipse/>
+   </object>
+   <object name="mob06" x="1592" y="672">
+     <properties>
+       <property name="BorderL" value="40"/>
+       <property name="BorderR" value="60"/>
+       <property name="monsterID" value="1201"/>
+     </properties>
+     <ellipse/>
+   </object>
+  <object name="mob07" x="3200" y="736">
    <properties>
     <property name="BorderL" value="90"/>
     <property name="BorderR" value="110"/>
@@ -206,7 +246,7 @@
    </properties>
    <ellipse/>
   </object>
-  <object name="mob03" x="4480" y="784">
+  <object name="mob08" x="4480" y="784">
    <properties>
     <property name="BorderL" value="130"/>
     <property name="BorderR" value="150"/>
@@ -214,7 +254,7 @@
    </properties>
    <ellipse/>
   </object>
-  <object name="mob04" x="672" y="672">
+  <object name="mob09" x="672" y="672">
    <properties>
     <property name="BorderL" value="10"/>
     <property name="BorderR" value="30"/>
@@ -222,7 +262,7 @@
    </properties>
    <ellipse/>
   </object>
-  <object name="mob05" x="5120" y="784">
+  <object name="mob10" x="5120" y="784">
    <properties>
     <property name="BorderL" value="140"/>
     <property name="BorderR" value="170"/>
@@ -230,7 +270,7 @@
    </properties>
    <ellipse/>
   </object>
-  <object name="mob06" x="3360" y="464">
+  <object name="mob11" x="3360" y="464">
    <properties>
     <property name="BorderL" value="95"/>
     <property name="BorderR" value="115"/>

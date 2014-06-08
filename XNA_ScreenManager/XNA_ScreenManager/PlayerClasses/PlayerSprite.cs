@@ -59,8 +59,8 @@ namespace XNA_ScreenManager
         private bool landed;                                                                        // land switch, arrow switch
 
         // new Texture properties
-        protected int spriteframe = 0, prevspriteframe = 0;
-        protected string spritename = "stand1_0";
+        protected int spriteframe = 0, prevspriteframe = 0, maxspriteframe = 0;
+        protected string spritename = "stand1_0", attackSprite;
         protected string[] spritepath = new string[] 
         { 
             @"gfx\player\body\head\",                                                               // Head Sprite  (0)
@@ -165,7 +165,7 @@ namespace XNA_ScreenManager
                             prevspriteframe = spriteframe;
                             for (int i = 0; i < spritepath.Length; i++)
                             {
-                                spritename = "swingO1_" + spriteframe.ToString();
+                                spritename = attackSprite + spriteframe.ToString();
                                 playerStore.activePlayer.spriteOfset[i] = getoffset(i);
                             }
                         }
@@ -177,9 +177,9 @@ namespace XNA_ScreenManager
                             // set sprite frames
                             spriteframe++;
 
-                            if (spriteframe > 2)
+                            if (spriteframe > maxspriteframe)
                             {
-                                spriteframe = 2;
+                                spriteframe = maxspriteframe;
                                 previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.10f;
 
                                 // make sure the world is connected
@@ -190,14 +190,14 @@ namespace XNA_ScreenManager
                                 if (spriteEffect == SpriteEffects.FlipHorizontally)
                                 {
                                     Vector2 pos = new Vector2(this.Position.X + this.SpriteFrame.Width * 1.6f, this.Position.Y + this.SpriteFrame.Height * 0.7f);
-                                    world.newEffect.Add(new DamageArea(this, new Vector2(pos.X - 50, pos.Y), new Rectangle(0, 0, 80, 10), false,
+                                    world.newEffect.Add(new DamageArea(this, new Vector2(pos.X - 50, pos.Y), new Rectangle(0, 0, 80, 10), false, 1,
                                         (float)gameTime.ElapsedGameTime.TotalSeconds + 0.2f, 100));
                                     world.newEffect.Add(new WeaponSwing(pos, WeaponSwingType.Swing01, spriteEffect));
                                 }
                                 else
                                 {
                                     Vector2 pos = new Vector2(this.Position.X - this.SpriteFrame.Width * 0.6f, this.Position.Y + this.SpriteFrame.Height * 0.7f);
-                                    world.newEffect.Add(new DamageArea(this, new Vector2(pos.X - 18, pos.Y), new Rectangle(0, 0, 80, 10), false,
+                                    world.newEffect.Add(new DamageArea(this, new Vector2(pos.X - 18, pos.Y), new Rectangle(0, 0, 80, 10), false, 1,
                                         (float)gameTime.ElapsedGameTime.TotalSeconds + 0.2f, 100));
                                     world.newEffect.Add(new WeaponSwing(pos, WeaponSwingType.Swing01, spriteEffect));
                                 }
@@ -231,7 +231,7 @@ namespace XNA_ScreenManager
                             prevspriteframe = spriteframe;
                             for (int i = 0; i < spritepath.Length; i++)
                             {
-                                spritename = "stabO1_" + spriteframe.ToString();
+                                spritename = attackSprite + spriteframe.ToString();
                                 playerStore.activePlayer.spriteOfset[i] = getoffset(i);
                             }
                         }
@@ -243,9 +243,9 @@ namespace XNA_ScreenManager
                             // set sprite frames
                             spriteframe++;
 
-                            if (spriteframe > 1)
+                            if (spriteframe > maxspriteframe)
                             {
-                                spriteframe = 1;
+                                spriteframe = maxspriteframe;
                                 previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.10f;
 
                                 // make sure the world is connected
@@ -256,14 +256,14 @@ namespace XNA_ScreenManager
                                 if (spriteEffect == SpriteEffects.FlipHorizontally)
                                 {
                                     Vector2 pos = new Vector2(this.Position.X + this.SpriteFrame.Width * 0.3f, this.Position.Y + this.SpriteFrame.Height * 0.7f);
-                                    world.newEffect.Add(new DamageArea(this, new Vector2(pos.X + 15, pos.Y), new Rectangle(0, 0, 80, 10), false, 
+                                    world.newEffect.Add(new DamageArea(this, new Vector2(pos.X + 15, pos.Y), new Rectangle(0, 0, 80, 10), false, 1,
                                         (float)gameTime.ElapsedGameTime.TotalSeconds + 0.1f, 100));
                                     world.newEffect.Add(new WeaponSwing(pos, WeaponSwingType.Stab01, spriteEffect));
                                 }
                                 else
                                 {
                                     Vector2 pos = new Vector2(this.Position.X - this.SpriteFrame.Width * 0.7f, this.Position.Y + this.SpriteFrame.Height * 0.7f);
-                                    world.newEffect.Add(new DamageArea(this, new Vector2(pos.X - 18, pos.Y), new Rectangle(0, 0, 80, 10), false,
+                                    world.newEffect.Add(new DamageArea(this, new Vector2(pos.X - 18, pos.Y), new Rectangle(0, 0, 80, 10), false, 1,
                                         (float)gameTime.ElapsedGameTime.TotalSeconds + 0.1f, 100));
                                     world.newEffect.Add(new WeaponSwing(pos, WeaponSwingType.Stab01, spriteEffect));
                                 }
@@ -584,16 +584,12 @@ namespace XNA_ScreenManager
                                     spriteframe = 0;
                                     state = EntityState.Shoot;
                                 }
-                                else if (weapontype == WeaponType.Dagger || weapontype == WeaponType.One_handed_Sword)
+                                else
                                 {
                                     previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerStore.activePlayer.ASPD * 12) * 0.0006f) + 0.05f;
 
                                     spriteframe = 0;
-
-                                    if(randomizer.Instance.generateRandom(0,2) == 1)
-                                        state = EntityState.Stab;
-                                    else
-                                        state = EntityState.Swing;
+                                    GetattackSprite(weapontype);
                                 }
                             }
                         }
@@ -974,6 +970,82 @@ namespace XNA_ScreenManager
                     getPlayer().HP = getPlayer().MAXHP;
                 if (getPlayer().SP >= getPlayer().MAXSP)
                     getPlayer().SP = getPlayer().MAXSP;
+            }
+        }
+
+        private void GetattackSprite(WeaponType weapontype)
+        {
+            if (randomizer.Instance.generateRandom(0, 2) == 1)
+            {
+                state = EntityState.Stab;
+
+                switch (weapontype)
+                {
+                    case WeaponType.Dagger:
+                    case WeaponType.One_handed_Axe:
+                    case WeaponType.One_handed_Sword:
+                        attackSprite = "stabO";
+                        break;
+                    case WeaponType.Two_handed_Sword:
+                        attackSprite = "stabT";
+                        break;
+                    case WeaponType.Two_handed_Axe:
+                    case WeaponType.Two_handed_Spear:
+                        attackSprite = "stabP";
+                        break;
+                }
+
+                switch (randomizer.Instance.generateRandom(0, 3))
+                {
+                    case 0:
+                        attackSprite += "1_";
+                        maxspriteframe = 1;
+                        break;
+                    case 1:
+                        attackSprite += "2_";
+                        maxspriteframe = 1;
+                        break;
+                    case 2:
+                        attackSprite += "F_";
+                        maxspriteframe = 2;
+                        break;
+                }
+            }
+            else
+            {
+                state = EntityState.Swing;
+
+                switch (weapontype)
+                {
+                    case WeaponType.Dagger:
+                    case WeaponType.One_handed_Axe:
+                    case WeaponType.One_handed_Sword:
+                        attackSprite = "swingO";
+                        break;
+                    case WeaponType.Two_handed_Sword:
+                        attackSprite = "swingT";
+                        break;
+                    case WeaponType.Two_handed_Axe:
+                    case WeaponType.Two_handed_Spear:
+                        attackSprite = "swingP";
+                        break;
+                }
+
+                switch (randomizer.Instance.generateRandom(0, 3))
+                {
+                    case 0:
+                        attackSprite += "1_";
+                        maxspriteframe = 2;
+                        break;
+                    case 1:
+                        attackSprite += "2_";
+                        maxspriteframe = 2;
+                        break;
+                    case 2:
+                        attackSprite += "F_";
+                        maxspriteframe = 3;
+                        break;
+                }
             }
         }
 

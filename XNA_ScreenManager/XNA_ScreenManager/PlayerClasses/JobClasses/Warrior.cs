@@ -254,14 +254,14 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
                         if (spriteEffect == SpriteEffects.FlipHorizontally)
                         {
                             Vector2 pos = new Vector2(this.Position.X + this.SpriteFrame.Width, this.Position.Y);
-                            GameWorld.GetInstance.newEffect.Add(new DamageArea(this, new Vector2(pos.X - 10, pos.Y), new Rectangle(0, 0, 200, 80), false,
+                            GameWorld.GetInstance.newEffect.Add(new DamageArea(this, new Vector2(pos.X - 10, pos.Y), new Rectangle(0, 0, 200, 80), false, 6,
                                 (float)gameTime.ElapsedGameTime.TotalSeconds + 0.4f, damagePercent,
                                 true, @"gfx\skills\warrior\Slash Blast\hit.0_", 4));
                         }
                         else
                         {
                             Vector2 pos = new Vector2(this.Position.X, this.Position.Y);
-                            GameWorld.GetInstance.newEffect.Add(new DamageArea(this, new Vector2(pos.X - 180, pos.Y), new Rectangle(0, 0, 200, 80), false,
+                            GameWorld.GetInstance.newEffect.Add(new DamageArea(this, new Vector2(pos.X - 180, pos.Y), new Rectangle(0, 0, 200, 80), false, 6,
                                 (float)gameTime.ElapsedGameTime.TotalSeconds + 0.4f, damagePercent,
                                 true, @"gfx\skills\warrior\Slash Blast\hit.0_", 4));
                         }
@@ -333,14 +333,14 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
                         if (spriteEffect == SpriteEffects.FlipHorizontally)
                         {
                             Vector2 pos = new Vector2(this.Position.X + this.SpriteFrame.Width, this.Position.Y);
-                            GameWorld.GetInstance.newEffect.Add(new DamageArea(this, new Vector2(pos.X - 10, pos.Y), new Rectangle(0, 0, 100, 80), false,
+                            GameWorld.GetInstance.newEffect.Add(new DamageArea(this, new Vector2(pos.X - 10, pos.Y), new Rectangle(0, 0, 100, 80), false, 1,
                                 (float)gameTime.ElapsedGameTime.TotalSeconds + 0.4f, damagePercent,
                                 true, @"gfx\skills\warrior\Power Strike\hit.0_", 2));
                         }
                         else
                         {
                             Vector2 pos = new Vector2(this.Position.X, this.Position.Y);
-                            GameWorld.GetInstance.newEffect.Add(new DamageArea(this, new Vector2(pos.X - 80, pos.Y), new Rectangle(0, 0, 100, 80), false,
+                            GameWorld.GetInstance.newEffect.Add(new DamageArea(this, new Vector2(pos.X - 80, pos.Y), new Rectangle(0, 0, 100, 80), false, 1,
                                 (float)gameTime.ElapsedGameTime.TotalSeconds + 0.4f, damagePercent,
                                 true, @"gfx\skills\warrior\Power Strike\hit.0_", 2));
                         }
@@ -416,13 +416,13 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
                         if (spriteEffect == SpriteEffects.FlipHorizontally)
                         {
                             Vector2 pos = new Vector2(this.Position.X + this.SpriteFrame.Width * 1.4f, this.Position.Y);
-                            GameWorld.GetInstance.newEffect.Add(new DamageArea(this, new Vector2(pos.X - 40, pos.Y), new Rectangle(0, 0, 200, 80), true,
+                            GameWorld.GetInstance.newEffect.Add(new DamageArea(this, new Vector2(pos.X - 40, pos.Y), new Rectangle(0, 0, 200, 80), true, 6,
                                 (float)gameTime.ElapsedGameTime.TotalSeconds + 0.4f, 2));
                         }
                         else
                         {
                             Vector2 pos = new Vector2(this.Position.X, this.Position.Y);
-                            GameWorld.GetInstance.newEffect.Add(new DamageArea(this, new Vector2(pos.X - 180, pos.Y), new Rectangle(0, 0, 200, 80), true,
+                            GameWorld.GetInstance.newEffect.Add(new DamageArea(this, new Vector2(pos.X - 180, pos.Y), new Rectangle(0, 0, 200, 80), true, 6,
                                 (float)gameTime.ElapsedGameTime.TotalSeconds + 0.4f, 2));
                         }
                     }

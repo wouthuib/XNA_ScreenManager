@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace XNA_ScreenManager.CharacterClasses
 {
@@ -29,11 +30,17 @@ namespace XNA_ScreenManager.CharacterClasses
     {
         #region Vital Field and Property Region
 
+        protected Guid instanceID;
         protected EntityType entityType;
         protected Texture2D entityFace;
         protected string entityName;
         protected string entityScript;
         protected EntityState state;
+
+        public Guid InstanceID 
+        { 
+            get { return instanceID; } 
+        }
 
         public Texture2D EntityFace
         {

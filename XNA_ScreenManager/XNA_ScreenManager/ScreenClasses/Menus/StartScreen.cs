@@ -16,7 +16,7 @@ namespace XNA_ScreenManager
             : base(game)
         {
             Components.Add(new BackgroundComponent(game, background));
-            string[] items = { "New Adventure", "Load Adventure", "Help", "Quit" };
+            string[] items = { "New Adventure", "Load Game", "Help", "Quit" };
             menu = new MenuComponent(game, spriteFont);
             menu.SetMenuItems(items);
             menu.StartIndex = 0;
@@ -31,7 +31,7 @@ namespace XNA_ScreenManager
         public override void Update(GameTime gameTime)
         {
             if (PlayerStore.Instance.Count > 0)
-                menu.MenuItems[0] = "Continue Adventure";
+                menu.MenuItems[0] = "Continue Game";
             else
                 menu.MenuItems[0] = "New Adventure";
 
