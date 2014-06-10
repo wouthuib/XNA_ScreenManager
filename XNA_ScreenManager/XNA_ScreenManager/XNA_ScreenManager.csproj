@@ -144,6 +144,7 @@
     <Compile Include="GameWorldClasses\Entities\Warp.cs" />
     <Compile Include="MonsterClasses\MonsterStore.cs" />
     <Compile Include="GameWorldClasses\Entities\Arrow.cs" />
+    <Compile Include="PlayerClasses\PlayerRoutines.cs" />
     <Compile Include="PlayerClasses\PlayerSprite.cs" />
     <Compile Include="PlayerClasses\JobClasses\Bowman.cs" />
     <Compile Include="PlayerClasses\JobClasses\Magician.cs" />
@@ -153,6 +154,7 @@
     <Compile Include="PlayerClasses\PlayerInfo.cs" />
     <Compile Include="PlayerClasses\PlayerStore.cs" />
     <Compile Include="PlayerClasses\SkillSlots.cs" />
+    <Compile Include="PlayerClasses\StatusClasses\StatusUpdateClass.cs" />
     <Compile Include="ScreenClasses\InGame\ActionScreen.cs" />
     <Compile Include="ScreenClasses\InGame\EquipmentMenuScreen.cs" />
     <Compile Include="ScreenClasses\InGame\ShopMenuScreen.cs" />

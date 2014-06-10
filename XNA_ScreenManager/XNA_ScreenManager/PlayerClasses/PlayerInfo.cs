@@ -35,7 +35,7 @@ namespace XNA_ScreenManager.PlayerClasses
     }
 
     [Serializable]
-    public sealed class PlayerInfo
+    public class PlayerInfo
     {
         public Equipment equipment;   // Equipment
         public Inventory inventory;   // Inventory
@@ -156,24 +156,32 @@ namespace XNA_ScreenManager.PlayerClasses
         // for more info http://irowiki.org/wiki/ATK#Status_ATK
         public int ATK
         {
-            get { return (int)(StatusATK * 2 + WeaponATK + EquipATK + MasteryATK); }
+            get { return (int)(StatusATK * 2 + WeaponATK + EquipATK + MasteryATK) + b_atk; }
         }
+
         public int MATK
         {
-            get { return (int)(intel + (intel/2) + (dex/5) + (luk/3) + (lvl/4)); }
+            get { return (int)(intel + (intel/2) + (dex/5) + (luk/3) + (lvl/4)) + b_matk; }
         }
+
         public int DEF
         {
-            get { return (int)(HardDef + SoftDef); }
-        } // for equipment screen
+            get{ return (int)(HardDef + SoftDef) + b_def; }
+        } 
+
+        // for equipment screen
         public int BattleDEF
         {
             get { return (int)((4000 + HardDef) / (4000 + HardDef * 10)); }
-        } // for Battle calculation
+        } 
+
+        // for Battle calculation
         public int SoftDef
         {
             get { return (int)((lvl /2) + (vit / 2) + (agi /2)); }
-        } // for Battle calculation
+        } 
+
+        // for Battle calculation
         public int HardDef
         {
             get
@@ -207,15 +215,15 @@ namespace XNA_ScreenManager.PlayerClasses
         }
         public int MDEF
         {
-            get { return (int)(intel + vit / 5 + dex / 5 + lvl / 4); }
+            get { return (int)(intel + vit / 5 + dex / 5 + lvl / 4) + b_mdef; }
         }
         public int HIT
         {
-            get { return (int)(this.Level + this.dex + 175); }
+            get { return (int)(this.Level + this.dex + 175) + b_hit; }
         }
         public int FLEE
         {
-            get { return (int)((this.Level + this.agi + 100) / 5); }
+            get { return (int)((this.Level + this.agi + 100) / 5) + b_flee; }
         }
         public int HP
         {
@@ -299,8 +307,20 @@ namespace XNA_ScreenManager.PlayerClasses
         }
         public int ASPD
         {
-            get { return (int)((Math.Sqrt(Math.Pow(agi, 2) / 2) + Math.Sqrt(Math.Pow(dex, 2) / 5)) / 4); }
+            get { return (int)((Math.Sqrt(Math.Pow(agi, 2) / 2) + Math.Sqrt(Math.Pow(dex, 2) / 5)) / 4) + b_aspd; }
         }
+        #endregion
+
+        #region status updates (buffs)
+
+        protected int b_def { get; set; }
+        protected int b_atk { get; set; }
+        protected int b_matk { get; set; }
+        protected int b_mdef { get; set; }
+        protected int b_flee { get; set; }
+        protected int b_aspd { get; set; }
+        protected int b_hit { get; set; }
+
         #endregion
 
         #region player stats

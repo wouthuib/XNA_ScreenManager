@@ -16,7 +16,7 @@ using System.IO;
 
 namespace XNA_ScreenManager
 {
-    public class PlayerSprite : Entity
+    public class PlayerSprite : PlayerRoutines
     {
         #region properties
 
@@ -30,7 +30,6 @@ namespace XNA_ScreenManager
         // Player inventory
         protected ItemStore itemStore = ItemStore.Instance;
         protected ScriptInterpreter scriptManager = ScriptInterpreter.Instance;
-        protected PlayerStore playerStore = PlayerStore.Instance;
 
         // link to world content manager
         protected ContentManager Content;
@@ -39,9 +38,6 @@ namespace XNA_ScreenManager
         protected SpriteEffects spriteEffect = SpriteEffects.None;
         private float transperancy = 1;
         private bool debug = false;
-
-        // Temporary PlayerInfo Updates
-        float previousRecoveryTime;
 
         // Sprite Animation Properties
         public int effectCounter = 0;                                                               // for the warp effect
@@ -98,6 +94,8 @@ namespace XNA_ScreenManager
 
         public override void Update(GameTime gameTime)
         {
+            base.Update(gameTime); // Player Update Routines
+
             keyboardStateCurrent = Keyboard.GetState();
 
             // reset effect state
@@ -363,11 +361,11 @@ namespace XNA_ScreenManager
                         {
                             state = EntityState.Stand;
                         }
-                        else if (keyboardStateCurrent.IsKeyUp(Microsoft.Xna.Framework.Input.Keys.Insert) &&
-                                 keyboardStatePrevious.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Insert))
-                        {
-                            state = EntityState.Stand;
-                        }
+                        //else if (keyboardStateCurrent.IsKeyUp(Microsoft.Xna.Framework.Input.Keys.Insert) &&
+                        //         keyboardStatePrevious.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Insert))
+                        //{
+                        //    state = EntityState.Stand;
+                        //}
 
                         // Move the Character
                         OldPosition = Position;
@@ -634,9 +632,6 @@ namespace XNA_ScreenManager
                         // Apply Gravity 
                         Position += new Vector2(0, 1) * 250 * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-                        // Recover Health PlayerInfo
-                        recoverHealth(gameTime);
-
                         break;
                     #endregion
                     #region state walk
@@ -708,9 +703,6 @@ namespace XNA_ScreenManager
 
                         // Apply Gravity 
                         Position += new Vector2(0,1) * 200 * (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-                        // Recover Health PlayerInfo
-                        recoverHealth(gameTime);
 
                         break;
                     #endregion
@@ -953,24 +945,6 @@ namespace XNA_ScreenManager
             #endregion
 
             keyboardStatePrevious = keyboardStateCurrent;
-        }
-
-        protected void recoverHealth(GameTime gameTime)
-        {
-            previousRecoveryTime -= (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-            if (previousRecoveryTime <= 0)
-            {
-                previousRecoveryTime = (float)gameTime.ElapsedGameTime.TotalSeconds + 8;
-
-                getPlayer().HP += (int)(getPlayer().MAXHP * 0.05f);
-                getPlayer().SP += (int)(getPlayer().MAXSP * 0.05f);
-
-                if (getPlayer().HP >= getPlayer().MAXHP)
-                    getPlayer().HP = getPlayer().MAXHP;
-                if (getPlayer().SP >= getPlayer().MAXSP)
-                    getPlayer().SP = getPlayer().MAXSP;
-            }
         }
 
         private void GetattackSprite(WeaponType weapontype)
@@ -1334,22 +1308,6 @@ namespace XNA_ScreenManager
             }
             return null;
         }
-        #endregion
-
-        #region bound new player
-        protected PlayerInfo getPlayer()
-        {
-            // check which player is bound
-            if (this.Player == null)
-                if (playerStore.activePlayer != null)
-                    return playerStore.activePlayer;
-                else
-                    return new PlayerInfo();
-            else
-                return this.Player;
-        }
-
-        public PlayerInfo Player { get; set; }
         #endregion
     }
 

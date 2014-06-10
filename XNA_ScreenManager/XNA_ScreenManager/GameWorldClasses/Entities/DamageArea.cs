@@ -27,7 +27,7 @@ namespace XNA_ScreenManager.GameWorldClasses.Entities
         // skill hit sprite properties
         private bool hiteffect = false;
         private string hitsprpath = null;
-        private int hitsprframes = 0, MobHitCount = 0;
+        private int hitsprframes = 0, MobHitCount = 0, MaxMobHitCount = 0;
         private List<Guid> MobHitID = new List<Guid>();
 
         #endregion
@@ -37,7 +37,7 @@ namespace XNA_ScreenManager.GameWorldClasses.Entities
             Vector2 position, 
             Rectangle area,
             bool permanent,
-            int mobhitCount,
+            int maxMobHitCount,
             float timer, 
             float dmgpercent,
             bool gethiteffect = false,
@@ -50,7 +50,7 @@ namespace XNA_ScreenManager.GameWorldClasses.Entities
             this.SpriteFrame = new Rectangle(0, 0, area.Width, area.Height);
             this.DamagePercent = dmgpercent;
             this.Permanent = permanent;
-            this.MobHitCount = mobhitCount;
+            this.MaxMobHitCount = maxMobHitCount;
 
             transperant = 0.5f;
             keepAliveTimer = timer;
@@ -69,7 +69,8 @@ namespace XNA_ScreenManager.GameWorldClasses.Entities
             foreach (Entity entity in GameWorld.GetInstance.listEntity)
             {
                 if (entity.EntityType == EntityType.Monster &&
-                   ((MobHitID.FindAll(x=> x == entity.InstanceID).Count == 0) || this.Permanent == true)
+                    ((MobHitID.FindAll(x=> x == entity.InstanceID).Count == 0) || this.Permanent == true) &&
+                    (this.MobHitCount < this.MaxMobHitCount || this.Permanent == true)
                    )
                 {
                     MonsterSprite monster = (MonsterSprite)entity;
@@ -87,6 +88,7 @@ namespace XNA_ScreenManager.GameWorldClasses.Entities
                         {
                             // add monster to the hit list
                             MobHitID.Add(monster.InstanceID);
+                            MobHitCount++;
 
                             // remove effect if not permanent
                             if(Permanent == false)

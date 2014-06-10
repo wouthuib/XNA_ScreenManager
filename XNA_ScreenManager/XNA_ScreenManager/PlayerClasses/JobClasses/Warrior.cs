@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using XNA_ScreenManager.GameWorldClasses.Entities;
 using XNA_ScreenManager.SkillClasses;
+using XNA_ScreenManager.PlayerClasses.StatusClasses;
 
 namespace XNA_ScreenManager.PlayerClasses.JobClasses
 {
@@ -47,7 +48,7 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
                                 Skill_PowerStrike(gameTime);
                                 break;
                             case "Iron Body":
-                                Skill_AGIup(gameTime);
+                                Skill_HPBoost(gameTime);
                                 break;
                         }
                         break;
@@ -438,7 +439,7 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
                 CastAnimation(gameTime);
         }
 
-        private void Skill_AGIup(GameTime gameTime)
+        private void Skill_HPBoost(GameTime gameTime)
         {
             // cast should be completed
             if (SkillActive)
@@ -455,6 +456,8 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
                     if (ani_count >= 11)
                     {
                         // start buff with timer
+                        status_list.Add(new StatusUpdateClass((float)gameTime.ElapsedGameTime.TotalSeconds + 200f, 
+                            "b_def", 100, false));
 
                         // finish skill and reset state
                         state = EntityState.Cooldown;
