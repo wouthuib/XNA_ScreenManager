@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using XNA_ScreenManager.ScreenClasses.SubComponents;
 using Microsoft.Xna.Framework.Content;
 using XNA_ScreenManager.PlayerClasses;
+using System.Text.RegularExpressions;
 
 namespace XNA_ScreenManager.ScreenClasses
 {
@@ -379,7 +380,19 @@ namespace XNA_ScreenManager.ScreenClasses
 
         private void itemConsume()
         {
-            //filterItemList()[menu.SelectedIndex]
+            Item selectedItem = itemlist.menuItemsnoDupes[itemlist.SelectedIndex];
+
+            if (selectedItem.Type == ItemType.Consumable)
+            {
+                string script = selectedItem.Script;
+
+                script = Regex.Replace(script, "{", "");
+                script = Regex.Replace(script, "}", "");
+
+                // call static class that handles item scripts
+                // use the script interpretter to read the content
+            }
+
             itemOptions = false;
         }
 

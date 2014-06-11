@@ -347,19 +347,66 @@ namespace XNA_ScreenManager.ScreenClasses
                         case 1:
                             break;
                         case 2:
-                            skillScreen.skillOptionsActive = false;
-                            skillScreen.QuickSlotActive = true;
-                            skillScreen.options.Style = OrderStyle.Central;
-                            skillScreen.options.SetMenuItems(
-                                new string[]{ "Please choose a slot by pressing F1 to F12", "", "Cancel"});
-                            skillScreen.options.StartIndex = 2;
-                            skillScreen.options.SelectedIndex = 2;
+                            if (skillScreen.SelectedSkill.Level >= 1)
+                            {
+                                if (skillScreen.SelectedSkill.Type == SkillType.Active)
+                                {
+                                    skillScreen.skillOptionsActive = false;
+                                    skillScreen.QuickSlotActive = true;
+                                    skillScreen.options.Style = OrderStyle.Central;
+                                    skillScreen.options.SetMenuItems(
+                                        new string[] { "Please choose a slot by pressing F1 to F12", "", "Cancel" });
+                                    skillScreen.options.StartIndex = 2;
+                                    skillScreen.options.SelectedIndex = 2;
+                                }
+                                else
+                                {
+                                    skillScreen.skillOptionsActive = false;
+                                    skillScreen.InfoMessageActive = true;
+                                    skillScreen.options.Style = OrderStyle.Central;
+                                    skillScreen.options.SetMenuItems(
+                                        new string[] { "Passive Skills cannot be added to the Skillbar! Please return", "", "Cancel" });
+                                    skillScreen.options.StartIndex = 2;
+                                    skillScreen.options.SelectedIndex = 2;
+                                }
+                            }
+                            else
+                            {
+                                skillScreen.skillOptionsActive = false;
+                                skillScreen.InfoMessageActive = true;
+                                skillScreen.options.Style = OrderStyle.Central;
+                                skillScreen.options.SetMenuItems(
+                                    new string[] { "Skill should be at least level 1! Please return", "", "Cancel" });
+                                skillScreen.options.StartIndex = 2;
+                                skillScreen.options.SelectedIndex = 2;
+                            }
                             break;
                         case 3:
-                            // do something
+                            if (PlayerStore.Instance.activePlayer.Skillpoints >= 1)
+                            {
+                                // reduce skillpoints by one
+                                PlayerStore.Instance.activePlayer.Skillpoints--;
+
+                                // add skill to player skilltree, if not exist
+                                if (PlayerStore.Instance.activePlayer.skilltree.getSkill(skillScreen.SelectedSkill.Name) == null)
+                                    PlayerStore.Instance.activePlayer.skilltree.addSkill(skillScreen.SelectedSkill);
+
+                                // level up the skill by 1
+                                PlayerStore.Instance.activePlayer.skilltree.getSkill(skillScreen.SelectedSkill.Name).Level++;
+                            }
+                            else
+                            {
+                                skillScreen.skillOptionsActive = false;
+                                skillScreen.InfoMessageActive = true;
+                                skillScreen.options.Style = OrderStyle.Central;
+                                skillScreen.options.SetMenuItems(
+                                    new string[] { "No Skillpoints availaible! Please return", "", "Cancel" });
+                                skillScreen.options.StartIndex = 2;
+                                skillScreen.options.SelectedIndex = 2;
+                            }
                             break;
                         case 4:
-                            // do something
+                            // "more details" do something
                             break;
                         case 5:
                             skillScreen.skillOptionsActive = false;
@@ -379,6 +426,15 @@ namespace XNA_ScreenManager.ScreenClasses
                 if (CheckKey(Keys.Enter) || CheckKey(Keys.Back) || CheckKey(Keys.Escape))
                 {
                     skillScreen.QuickSlotActive = false;
+                    skillScreen.skillOptionsActive = true;
+                }
+            }
+            else if (skillScreen.InfoMessageActive)
+            {
+                // Display Info message
+                if (CheckKey(Keys.Enter) || CheckKey(Keys.Back) || CheckKey(Keys.Escape))
+                {
+                    skillScreen.InfoMessageActive = false;
                     skillScreen.SelectActive = true;
                 }
             }

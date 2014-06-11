@@ -172,6 +172,19 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
             }
             #endregion
 
+            #region player statuspoints
+            // Draw Player Skillpoints
+            spriteBatch.DrawString(spriteFont,
+                "Available Status points: ",
+                new Vector2(490, 60),
+                Color.Yellow);
+
+            spriteBatch.DrawString(spriteFont,
+                PlayerStore.Instance.activePlayer.Statpoints.ToString(),
+                new Vector2(675, 60),
+                Color.White);
+            #endregion
+
             #region player Battle Info
             // Draw Player Name
             spriteBatch.DrawString(spriteFont, "Battle information", new Vector2(500, 150), NormalColor);

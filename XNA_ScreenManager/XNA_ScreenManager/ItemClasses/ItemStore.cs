@@ -81,6 +81,7 @@ namespace XNA_ScreenManager.ItemClasses
                             item.Class = (ItemClass)Enum.Parse(typeof(ItemClass), values[15]);
                             item.Slot = (ItemSlot)Enum.Parse(typeof(ItemSlot), values[16]);
                             item.WeaponType = (WeaponType)Enum.Parse(typeof(WeaponType), values[17]);
+                            item.Script = Regex.Replace(values[18], "\"", "");
                             item.list_offsets = loadoffsetfromXML(item);                            
                         }
                     }

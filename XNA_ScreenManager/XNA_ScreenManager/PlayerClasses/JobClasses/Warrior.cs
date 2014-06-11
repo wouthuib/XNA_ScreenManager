@@ -191,16 +191,6 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
 
         private void Skill_SlashBlast(GameTime gameTime)
         {
-            // Check Correct WeaponType
-            if ((getWeaponType() != WeaponType.One_handed_Sword &&
-                getWeaponType() != WeaponType.Two_handed_Sword) ||
-                getPlayer().SP < skill.MagicCost)
-            {
-                // Incorrect weapon equiped, abort Skill
-                state = EntityState.Cooldown;
-                resetState(gameTime);
-            }
-
             // cast should be completed
             if (SkillActive)
             {
@@ -219,78 +209,88 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
 
                     ani_count++;
 
-                    if (ani_count >= 9)
-                    {
-                        // finish skill and reset state
-                        state = EntityState.Cooldown;
-                        resetState(gameTime);
-                    }
-
                     // player sprite animation and move
-                    if (ani_count == 3)
+                    switch (ani_count)
                     {
-                        spritename = "swingOF_0";
-                        for (int i = 0; i < spritepath.Length; i++)
-                            playerStore.activePlayer.spriteOfset[i] = getoffset(i);
-                    } 
-                    if (ani_count == 4)
-                    {
-                        spritename = "swingOF_1";
-                        for (int i = 0; i < spritepath.Length; i++)
-                            playerStore.activePlayer.spriteOfset[i] = getoffset(i);
-                    }
-                    else if (ani_count == 5)
-                    {
-                        spritename = "swingOF_2";
-                        for (int i = 0; i < spritepath.Length; i++)
-                            playerStore.activePlayer.spriteOfset[i] = getoffset(i);
+                        case 3:
+                            spritename = "swingOF_0";
+                            for (int i = 0; i < spritepath.Length; i++)
+                                playerStore.activePlayer.spriteOfset[i] = getoffset(i);
+                            break;
+                        case 4:
+                            spritename = "swingOF_1";
+                            for (int i = 0; i < spritepath.Length; i++)
+                                playerStore.activePlayer.spriteOfset[i] = getoffset(i);
+                            break;
+                        case 5:
+                            spritename = "swingOF_2";
+                            for (int i = 0; i < spritepath.Length; i++)
+                                playerStore.activePlayer.spriteOfset[i] = getoffset(i);
 
-                        // Reduce SP by skill
-                        getPlayer().SP -= skill.MagicCost;
+                            // Reduce SP by skill
+                            getPlayer().SP -= skill.MagicCost;
 
-                        // Calculate Skill damage modifier
-                        int damagePercent = 120 + (5 * skill.Level);
+                            // Calculate Skill damage modifier
+                            int damagePercent = 120 + (5 * skill.Level);
 
-                        // create skill swing effect
-                        if (spriteEffect == SpriteEffects.FlipHorizontally)
-                        {
-                            Vector2 pos = new Vector2(this.Position.X + this.SpriteFrame.Width, this.Position.Y);
-                            GameWorld.GetInstance.newEffect.Add(new DamageArea(this, new Vector2(pos.X - 10, pos.Y), new Rectangle(0, 0, 200, 80), false, 6,
-                                (float)gameTime.ElapsedGameTime.TotalSeconds + 0.4f, damagePercent,
-                                true, @"gfx\skills\warrior\Slash Blast\hit.0_", 4));
-                        }
-                        else
-                        {
-                            Vector2 pos = new Vector2(this.Position.X, this.Position.Y);
-                            GameWorld.GetInstance.newEffect.Add(new DamageArea(this, new Vector2(pos.X - 180, pos.Y), new Rectangle(0, 0, 200, 80), false, 6,
-                                (float)gameTime.ElapsedGameTime.TotalSeconds + 0.4f, damagePercent,
-                                true, @"gfx\skills\warrior\Slash Blast\hit.0_", 4));
-                        }
-                    }
-                    else if (ani_count >= 6)
-                    {
-                        spritename = "swingOF_3";
-                        for (int i = 0; i < spritepath.Length; i++)
-                            playerStore.activePlayer.spriteOfset[i] = getoffset(i);
+                            // create skill swing effect
+                            if (spriteEffect == SpriteEffects.FlipHorizontally)
+                            {
+                                Vector2 pos = new Vector2(this.Position.X + this.SpriteFrame.Width, this.Position.Y);
+                                GameWorld.GetInstance.newEffect.Add(new DamageArea(this, new Vector2(pos.X - 10, pos.Y), new Rectangle(0, 0, 200, 80), false, 6,
+                                    (float)gameTime.ElapsedGameTime.TotalSeconds + 0.4f, damagePercent,
+                                    true, @"gfx\skills\warrior\Slash Blast\hit.0_", 4));
+                            }
+                            else
+                            {
+                                Vector2 pos = new Vector2(this.Position.X, this.Position.Y);
+                                GameWorld.GetInstance.newEffect.Add(new DamageArea(this, new Vector2(pos.X - 180, pos.Y), new Rectangle(0, 0, 200, 80), false, 6,
+                                    (float)gameTime.ElapsedGameTime.TotalSeconds + 0.4f, damagePercent,
+                                    true, @"gfx\skills\warrior\Slash Blast\hit.0_", 4));
+                            }
+                            break;
+                        case 6:
+                        case 7:
+                        case 8:
+                            // Player animation
+                            if (prevspriteframe != spriteframe)
+                            {
+                                prevspriteframe = spriteframe;
+                                for (int i = 0; i < spritepath.Length; i++)
+                                {
+                                    spritename = "swingOF_3";
+                                    playerStore.activePlayer.spriteOfset[i] = getoffset(i);
+                                }
+                            }
+                            break;
+                        case 9:
+                            // finish skill and reset state
+                            state = EntityState.Cooldown;
+                            resetState(gameTime);
+                            break;
+                        default:
+                            break;
                     }
                 }
             }
             else
-                CastAnimation(gameTime);
+            {
+                // Check Correct WeaponType and current SP
+                if ((getWeaponType() != WeaponType.One_handed_Sword &&
+                    getWeaponType() != WeaponType.Two_handed_Sword) ||
+                    getPlayer().SP < skill.MagicCost)
+                {
+                    // abort Skill
+                    state = EntityState.Cooldown;
+                    resetState(gameTime);
+                }
+                else
+                    CastAnimation(gameTime);
+            }
         }
 
         private void Skill_PowerStrike(GameTime gameTime)
         {
-            // Check Correct WeaponType
-            if ((getWeaponType() != WeaponType.One_handed_Sword &&
-                getWeaponType() != WeaponType.Two_handed_Sword) ||
-                getPlayer().SP < skill.MagicCost)
-            {
-                // Incorrect weapon equiped, abort Skill
-                state = EntityState.Cooldown;
-                resetState(gameTime);
-            }
-
             // cast should be completed
             if (SkillActive)
             {
@@ -314,9 +314,17 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
                     if (ani_count <= 5)
                     {
                         skill_animation = Content.Load<Texture2D>(@"gfx\skills\warrior\Power Strike\effect_" + ani_count.ToString());
-                        spritename = "swingO1_0";
-                        for (int i = 0; i < spritepath.Length; i++)
-                            playerStore.activePlayer.spriteOfset[i] = getoffset(i);
+
+                        // Player animation
+                        if (prevspriteframe != spriteframe)
+                        {
+                            prevspriteframe = spriteframe;
+                            for (int i = 0; i < spritepath.Length; i++)
+                            {
+                                spritename = "swingO1_0";
+                                playerStore.activePlayer.spriteOfset[i] = getoffset(i);
+                            }
+                        }
                     }
                     else if (ani_count == 6)
                     {
@@ -361,20 +369,23 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
                 }
             }
             else
-                CastAnimation(gameTime);
+            {
+                // Check Correct WeaponType and current SP
+                if ((getWeaponType() != WeaponType.One_handed_Sword &&
+                    getWeaponType() != WeaponType.Two_handed_Sword) ||
+                    getPlayer().SP < skill.MagicCost)
+                {
+                    // abort Skill
+                    state = EntityState.Cooldown;
+                    resetState(gameTime);
+                }
+                else
+                    CastAnimation(gameTime);
+            }
         }
 
         private void Skill_Wave(GameTime gameTime)
         {
-            // Check Correct WeaponType
-            if (getWeaponType() != WeaponType.One_handed_Sword &&
-                getWeaponType() != WeaponType.Two_handed_Sword)
-            {
-                // Incorrect weapon equiped, abort Skill
-                state = EntityState.Cooldown;
-                resetState(gameTime);
-            }
-
             // cast should be completed
             if (SkillActive)
             {
@@ -436,7 +447,18 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
                 }
             }
             else
-                CastAnimation(gameTime);
+            {
+                // Check Correct WeaponType
+                if (getWeaponType() != WeaponType.One_handed_Sword &&
+                    getWeaponType() != WeaponType.Two_handed_Sword)
+                {
+                    // Incorrect weapon equiped, abort Skill
+                    state = EntityState.Cooldown;
+                    resetState(gameTime);
+                }
+                else
+                    CastAnimation(gameTime);
+            }
         }
 
         private void Skill_HPBoost(GameTime gameTime)
@@ -455,9 +477,12 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
 
                     if (ani_count >= 11)
                     {
+                        // get skill level
+                        int level = (int)MathHelper.Clamp(skill.Level, 1, 20);
+
                         // start buff with timer
-                        status_list.Add(new StatusUpdateClass((float)gameTime.ElapsedGameTime.TotalSeconds + 200f, 
-                            "b_def", 100, false));
+                        status_list.Add(new StatusUpdateClass(skill.Name, (float)gameTime.ElapsedGameTime.TotalSeconds + 10f,
+                            "b_def", level * 5, false));
 
                         // finish skill and reset state
                         state = EntityState.Cooldown;
@@ -466,7 +491,18 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
                 }
             }
             else
-                CastAnimation(gameTime);
+            {
+                // Check current SP and exsiting buffs
+                if (this.status_list.FindAll(x => x.SkillName == skill.Name).Count > 0 ||
+                    getPlayer().SP < skill.MagicCost)
+                {
+                    // abort Skill
+                    state = EntityState.Cooldown;
+                    resetState(gameTime);
+                }
+                else
+                    CastAnimation(gameTime);
+            }
         }
     }
 }

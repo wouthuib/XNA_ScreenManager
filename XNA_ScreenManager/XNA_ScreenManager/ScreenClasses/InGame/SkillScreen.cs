@@ -16,8 +16,7 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
     public class SkillScreen : GameScreen
     {
         #region properties
-        //Inventory inventory = Inventory.Instance;
-        //Equipment equipment = Equipment.Instance;
+
         ScreenManager manager = ScreenManager.Instance;
 
         SpriteFont smallFont, normalFont;
@@ -47,7 +46,8 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
         public bool menuOptionsActive = true,
                     SelectActive = false,
                     QuickSlotActive = false,
-                    skillOptionsActive = false;
+                    skillOptionsActive = false,
+                    InfoMessageActive = false;
         private int selectedOption = 0;
         public int selectedColumn = 0, selectedRow = 0;
         private int width, height;
@@ -142,6 +142,11 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
             }
         }
 
+        public Skill SelectedSkill
+        {
+            get { return SkillStore.Instance.getSkill(record[selectedColumn, selectedRow]); }
+        }
+
         public override void Update(GameTime gameTime)
         {
             //record new keyboard state
@@ -187,6 +192,11 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
                 // update skill components
                 options.Update(gameTime);
             }
+            else if (InfoMessageActive)
+            {
+                // update skill components
+                options.Update(gameTime);
+            }
 
             // update 2d array records with skill items
             record = fetchSkills();  // <-- get skill data
@@ -199,79 +209,77 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
         }
 
         private void updateQuickSlot(GameTime gameTime)
-        {
-            Skill selectedskill = SkillStore.Instance.getSkill(record[selectedColumn, selectedRow]);
-
+        {     
             // Check quickslot options
             if (CheckKey(Keys.F1))
             {
-                PlayerStore.Instance.activePlayer.skillbar.skillslot[0] = selectedskill;
+                PlayerStore.Instance.activePlayer.skillbar.skillslot[0] = SelectedSkill;
                 QuickSlotActive = false;
                 SelectActive = true;
             }
             else if (CheckKey(Keys.F2))
             {
-                PlayerStore.Instance.activePlayer.skillbar.skillslot[1] = selectedskill;
+                PlayerStore.Instance.activePlayer.skillbar.skillslot[1] = SelectedSkill;
                 QuickSlotActive = false;
                 SelectActive = true;
             }
             else if (CheckKey(Keys.F3))
             {
-                PlayerStore.Instance.activePlayer.skillbar.skillslot[2] = selectedskill;
+                PlayerStore.Instance.activePlayer.skillbar.skillslot[2] = SelectedSkill;
                 QuickSlotActive = false;
                 SelectActive = true;
             }
             else if (CheckKey(Keys.F4))
             {
-                PlayerStore.Instance.activePlayer.skillbar.skillslot[3] = selectedskill;
+                PlayerStore.Instance.activePlayer.skillbar.skillslot[3] = SelectedSkill;
                 QuickSlotActive = false;
                 SelectActive = true;
             }
             else if (CheckKey(Keys.F5))
             {
-                PlayerStore.Instance.activePlayer.skillbar.skillslot[4] = selectedskill;
+                PlayerStore.Instance.activePlayer.skillbar.skillslot[4] = SelectedSkill;
                 QuickSlotActive = false;
                 SelectActive = true;
             }
             else if (CheckKey(Keys.F6))
             {
-                PlayerStore.Instance.activePlayer.skillbar.skillslot[5] = selectedskill;
+                PlayerStore.Instance.activePlayer.skillbar.skillslot[5] = SelectedSkill;
                 QuickSlotActive = false;
                 SelectActive = true;
             }
             else if (CheckKey(Keys.F7))
             {
-                PlayerStore.Instance.activePlayer.skillbar.skillslot[6] = selectedskill;
+                PlayerStore.Instance.activePlayer.skillbar.skillslot[6] = SelectedSkill;
                 QuickSlotActive = false;
                 SelectActive = true;
             }
             else if (CheckKey(Keys.F8))
             {
-                PlayerStore.Instance.activePlayer.skillbar.skillslot[7] = selectedskill;
+                PlayerStore.Instance.activePlayer.skillbar.skillslot[7] = SelectedSkill;
                 QuickSlotActive = false;
                 SelectActive = true;
             }
             else if (CheckKey(Keys.F9))
             {
-                PlayerStore.Instance.activePlayer.skillbar.skillslot[8] = selectedskill;
+                PlayerStore.Instance.activePlayer.skillbar.skillslot[8] = SelectedSkill;
                 QuickSlotActive = false;
                 SelectActive = true;
             }
             else if (CheckKey(Keys.F10))
             {
-                PlayerStore.Instance.activePlayer.skillbar.skillslot[9] = selectedskill;
+                PlayerStore.Instance.activePlayer.skillbar.skillslot[9] = SelectedSkill;
                 QuickSlotActive = false;
                 SelectActive = true;
             }
             else if (CheckKey(Keys.F11))
             {
-                PlayerStore.Instance.activePlayer.skillbar.skillslot[10] = selectedskill;
+                PlayerStore.Instance.activePlayer.skillbar.skillslot[10] = SelectedSkill;
                 QuickSlotActive = false;
                 SelectActive = true;
             }
             else if (CheckKey(Keys.F12))
             {
-                PlayerStore.Instance.activePlayer.skillbar.skillslot[11] = selectedskill;
+                PlayerStore.Instance.activePlayer.skillbar.skillslot[11] = SelectedSkill;
                 QuickSlotActive = false;
                 SelectActive = true;
             }
@@ -309,6 +317,19 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
                 if (i < menuOptions.Length - 1)
                     position.X += 50 + (menuOptions[i].Length * 6);
             }
+            #endregion
+
+            #region player skillpoints
+            // Draw Player Skillpoints
+            spriteBatch.DrawString(normalFont,
+                "Available Skill points: ",
+                new Vector2(490, 60),
+                Color.Yellow);
+            
+            spriteBatch.DrawString(normalFont,
+                PlayerStore.Instance.activePlayer.Skillpoints.ToString(),
+                new Vector2(660, 60),
+                Color.White);
             #endregion
 
             #region skills
@@ -383,7 +404,7 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
 
             #region skilloption popup
             // item options
-            if (skillOptionsActive || QuickSlotActive)
+            if (skillOptionsActive || QuickSlotActive || InfoMessageActive)
             {
                 Texture2D rect = new Texture2D(graphics, (int)options.getBounds().X, options.MenuItems.Count * 20),
                           rect2 = new Texture2D(graphics, (int)options.getBounds().X, options.MenuItems.Count * 20);

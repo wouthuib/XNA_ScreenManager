@@ -17,9 +17,11 @@ namespace XNA_ScreenManager.PlayerClasses.StatusClasses
         private string Attribute;
 
         public bool Remove = false;
+        public string SkillName;
         
-        public StatusUpdateClass(float timer, string attr, int value, bool permanent)
+        public StatusUpdateClass(string skillname, float timer, string attr, int value, bool permanent)
         {
+            this.SkillName = skillname;
             this.Timer = timer;
             this.Permanent = permanent; // e.g. healing potions
             this.Attribute = attr;
@@ -28,13 +30,10 @@ namespace XNA_ScreenManager.PlayerClasses.StatusClasses
             try
             {
                 Object player = PlayerStore.Instance.activePlayer;
-                //PropertyInfo info = PropertyHelper<PlayerInfo>.GetProperty(x => x.GetType().GetProperties().);
-                PropertyInfo info = typeof(PlayerInfo).GetProperty(Attribute);
-
-                int getvalue = (int)info.GetValue(player, null);
-
+                Type type = typeof(PlayerInfo);
+                PropertyInfo info = type.GetProperty(Attribute);
+                getvalue = (int)info.GetValue(player, null);
                 player.GetType().GetProperty(Attribute).SetValue(player, getvalue + value, null);
-                
             }
             catch
             {
@@ -55,7 +54,8 @@ namespace XNA_ScreenManager.PlayerClasses.StatusClasses
                 {
                     // Get Stat Value
                     Object player = PlayerStore.Instance.activePlayer;
-                    getvalue = (int)player.GetType().GetProperty(Attribute).GetValue(player, null);
+                    Type type = typeof(PlayerInfo);
+                    PropertyInfo info = type.GetProperty(Attribute);
                     player.GetType().GetProperty(Attribute).SetValue(player, getvalue, null);
                 }
             }

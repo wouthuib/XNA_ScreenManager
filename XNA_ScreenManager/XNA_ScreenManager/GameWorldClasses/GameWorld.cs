@@ -442,9 +442,6 @@ namespace XNA_ScreenManager.MapClasses
             #endregion
 
             #region events
-            // read playerinfo exp for level up
-            if (playerStore.activePlayer.Exp >= playerStore.activePlayer.NextLevelExp)
-                PlayerLevelUp();
             
             // read playersprite warptimer to start new map
             if (newmap != null && playerSprite.Effect(gameTime))
@@ -739,14 +736,6 @@ namespace XNA_ScreenManager.MapClasses
             listEntity.Add(playerSprite);
 
             LoadEntities();
-        }
-
-        private void PlayerLevelUp()
-        {
-            playerStore.activePlayer.Level++;
-            playerStore.activePlayer.Exp -= playerStore.activePlayer.NextLevelExp;
-            playerStore.activePlayer.NextLevelExp = (int)(playerStore.activePlayer.Level ^ 4 + (1000 * playerStore.activePlayer.Level));
-            listEffect.Add(new LevelUpEffect());
         }
 
         public void ChangeJobClass(PlayerInfo activePlayer)

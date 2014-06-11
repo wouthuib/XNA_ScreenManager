@@ -313,13 +313,20 @@ namespace XNA_ScreenManager.PlayerClasses
 
         #region status updates (buffs)
 
-        protected int b_def { get; set; }
-        protected int b_atk { get; set; }
-        protected int b_matk { get; set; }
-        protected int b_mdef { get; set; }
-        protected int b_flee { get; set; }
-        protected int b_aspd { get; set; }
-        protected int b_hit { get; set; }
+        public int b_def { get; set; }
+        public int b_atk { get; set; }
+        public int b_matk { get; set; }
+        public int b_mdef { get; set; }
+        public int b_flee { get; set; }
+        public int b_aspd { get; set; }
+        public int b_hit { get; set; }
+
+        #endregion
+
+        #region levelup properties
+
+        public int Statpoints { get; set; }
+        public int Skillpoints { get; set; }
 
         #endregion
 
@@ -376,6 +383,9 @@ namespace XNA_ScreenManager.PlayerClasses
             this.Dexterity = 10;
             this.Luck = 1;
             this.Agility = 10;
+
+            this.Skillpoints = 20;
+            this.Statpoints = 20;
 
             this.body_sprite = @"gfx\player\body\torso\";
             this.head_sprite = @"gfx\player\body\head\";

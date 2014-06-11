@@ -5,6 +5,8 @@ using System.Text;
 using XNA_ScreenManager.CharacterClasses;
 using Microsoft.Xna.Framework;
 using XNA_ScreenManager.PlayerClasses.StatusClasses;
+using XNA_ScreenManager.MapClasses;
+using XNA_ScreenManager.GameWorldClasses.Effects;
 
 namespace XNA_ScreenManager.PlayerClasses
 {
@@ -25,16 +27,23 @@ namespace XNA_ScreenManager.PlayerClasses
         public override void Update(GameTime gameTime)
         {
             RecoverHealth(gameTime);
-            ClearStatusUpdates(gameTime);
+            StatusUpdates(gameTime);
+            
+            // read playerinfo exp for level up
+            if (getPlayer().Exp >= getPlayer().NextLevelExp)
+                PlayerLevelUp();
         }
 
-        private void ClearStatusUpdates(GameTime gameTime)
+        private void StatusUpdates(GameTime gameTime)
         {
+            // remove expired status updates
             for (int i = 0; i < status_list.Count; i++ )
-            {
                 if (status_list[i].Remove)
                     status_list.Remove(status_list[i]);
-            }
+
+            // update remaining status updates
+            foreach (var status in status_list)
+                status.Update(gameTime);
         }
 
         private void RecoverHealth(GameTime gameTime)
@@ -53,6 +62,16 @@ namespace XNA_ScreenManager.PlayerClasses
                 if (getPlayer().SP >= getPlayer().MAXSP)
                     getPlayer().SP = getPlayer().MAXSP;
             }
+        }
+
+        private void PlayerLevelUp()
+        {
+            getPlayer().Level++;
+            getPlayer().Skillpoints++;
+            getPlayer().Statpoints++;
+            getPlayer().Exp -= getPlayer().NextLevelExp;
+            getPlayer().NextLevelExp = (int)(getPlayer().Level ^ 4 + (1000 * getPlayer().Level));
+            GameWorld.GetInstance.listEffect.Add(new LevelUpEffect());
         }
 
         #region bound new player

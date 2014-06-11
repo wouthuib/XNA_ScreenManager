@@ -92,6 +92,8 @@ namespace XNA_ScreenManager.ItemClasses
         public ItemClass Class { get; set; }
         public ItemSlot Slot { get; set; }
         public WeaponType WeaponType { get; set; }
+
+        public string Script { get; set; }
                 
         public List<spriteOffset> list_offsets = new List<spriteOffset>();
 
