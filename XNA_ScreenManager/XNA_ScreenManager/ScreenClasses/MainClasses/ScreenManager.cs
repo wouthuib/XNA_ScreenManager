@@ -393,6 +393,12 @@ namespace XNA_ScreenManager.ScreenClasses
 
                                 // level up the skill by 1
                                 PlayerStore.Instance.activePlayer.skilltree.getSkill(skillScreen.SelectedSkill.Name).Level++;
+
+                                // increase level of existing skills in skillbar
+                                if (PlayerStore.Instance.activePlayer.skillbar.getSlot(skillScreen.SelectedSkill.Name) > 0)
+                                    PlayerStore.Instance.activePlayer.skillbar.
+                                        skillslot[PlayerStore.Instance.activePlayer.skillbar.getSlot(skillScreen.SelectedSkill.Name)].
+                                        Level = PlayerStore.Instance.activePlayer.skilltree.getSkill(skillScreen.SelectedSkill.Name).Level;
                             }
                             else
                             {

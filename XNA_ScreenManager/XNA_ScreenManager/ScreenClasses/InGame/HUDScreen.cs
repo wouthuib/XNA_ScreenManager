@@ -155,11 +155,20 @@ namespace XNA_ScreenManager.ScreenClasses
             {
                 if (skillbar.skillslot[i] != null)
                 {
+                    // icon
                     Texture2D sprite = Content.Load<Texture2D>(skillbar.skillslot[i].IconSpritePath);
                     spriteBatch.Draw(
                         sprite,
                         new Vector2(position.X + 206 + (sprite.Width * i + 6), position.Y + 443),
                         Color.White * 0.75f);
+                    
+                    // level
+                    spriteBatch.DrawString(spriteFont, skillbar.skillslot[i].Level.ToString(),
+                        new Vector2(position.X + 226 + (sprite.Width * i + 6), position.Y + 461),
+                        Color.Black);
+                    spriteBatch.DrawString(spriteFont, skillbar.skillslot[i].Level.ToString(),
+                        new Vector2(position.X + 225 + (sprite.Width * i + 6), position.Y + 460),
+                        Color.LightGreen);
                 }
             }
         }

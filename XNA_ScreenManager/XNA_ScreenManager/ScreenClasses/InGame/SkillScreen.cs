@@ -144,7 +144,13 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
 
         public Skill SelectedSkill
         {
-            get { return SkillStore.Instance.getSkill(record[selectedColumn, selectedRow]); }
+            get 
+            {
+                if (PlayerStore.Instance.activePlayer.skilltree.skill_list.FindAll(x => x.Name == record[selectedColumn, selectedRow]).Count > 0)
+                    return PlayerStore.Instance.activePlayer.skilltree.getSkill(record[selectedColumn, selectedRow]);
+                else
+                    return null;
+            }
         }
 
         public override void Update(GameTime gameTime)

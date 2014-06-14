@@ -10,6 +10,7 @@ using XNA_ScreenManager.ItemClasses;
 using XNA_ScreenManager.ScreenClasses.SubComponents;
 using XNA_ScreenManager.PlayerClasses;
 using Microsoft.Xna.Framework.Content;
+using System.Text.RegularExpressions;
 
 namespace XNA_ScreenManager.ScreenClasses.InGame
 {
@@ -18,8 +19,6 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
         #region properties
         ItemlistComponent itemlist;
         MenuComponent options;
-        //Inventory inventory = Inventory.Instance;
-        //Equipment equipment = Equipment.Instance;
         ScreenManager manager = ScreenManager.Instance;
         PlayerStore PlayerStore = PlayerStore.Instance;
 
@@ -41,7 +40,11 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
 
         int width, height;
         int selectedMenuOption = 0;
-        private bool itemSelection = false , itemOptions = false;
+
+        private bool ScreenMenuOptions = true,
+                     ScreenItemSelection = false,
+                     ScreenItemOptions = false,
+                     ScreenSellOptions = false;
 
         #endregion
 
@@ -153,7 +156,7 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
             //record new keyboard state
             KeyboardState newState = Keyboard.GetState();
 
-            if (!itemSelection) // --> Menu Option Selection
+            if (ScreenMenuOptions) // --> Menu Option Selection
             {
                 if (CheckKey(Keys.Down))
                 {
@@ -176,11 +179,17 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
                     {
                         case 0: // buy
                             if (shopobjects.Count > 0)
-                                itemSelection = true;
+                            {
+                                ScreenMenuOptions = false;
+                                ScreenItemSelection = true;
+                            }
                             break;
                         case 1: // sell
                             if (itemlist.menuItemsnoDupes.Count > 0)
-                                itemSelection = true;
+                            {
+                                ScreenMenuOptions = false;
+                                ScreenItemSelection = true;
+                            }
                             break;
                         case 2: // equip
                             break;
@@ -190,92 +199,96 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
                     }
                 }
             }
-            else
+
+            else if (ScreenItemSelection)
             {
-                if (!itemOptions) // --> Item Selection 
+                // Update item components
+                itemlist.Update(gameTime);
+                base.Update(gameTime);
+
+                // Check Item Count, if empty return to Menu Selection
+                if (selectedMenuOption == 0 && shopobjects.Count <= 0 ||
+                    selectedMenuOption == 1 && itemlist.menuItemsnoDupes.Count <= 0)
                 {
-                    // Update item components
-                    itemlist.Update(gameTime);
-                    base.Update(gameTime);
+                    ScreenItemOptions = false;
+                    ScreenItemSelection = false;
+                    ScreenMenuOptions = true;
+                }
 
-                    // Check Item Count, if empty return to Menu Selection
-                    if (selectedMenuOption == 0 && shopobjects.Count <= 0 ||
-                        selectedMenuOption == 1 && itemlist.menuItemsnoDupes.Count <= 0)
+                // Key Check 
+                if (CheckKey(Keys.Enter))
+                {
+                    string question = null;
+
+                    switch (selectedMenuOption)
                     {
-                        itemOptions = false;
-                        itemSelection = false;
+                        case 0:
+                            if (shopobjects.Count > 0)
+                                question = "Buy " + itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemName + " for " +
+                                itemlist.menuItemsnoDupes[itemlist.SelectedIndex].Price.ToString() + " $ ?";
+                            break;
+                        case 1:
+                            if (itemlist.menuItemsnoDupes.Count > 0)
+                                question = "Sell " + itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemName + " for " +
+                                ((int)(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].Price / 2)).ToString() + " $ ?";
+                            break;
                     }
-                    
-                    // Key Check 
-                    if (CheckKey(Keys.Enter))
-                    {
-                        string question = null;
 
+                    if (selectedMenuOption <= 1 && question != null) // buy and sell
+                    {
+                        ScreenItemSelection = false;
+                        ScreenItemOptions = true;
+
+                        options.Style = OrderStyle.Central;
+                        options.SetMenuItems(new string[] { question, "", "Confirm", "Cancel" });
+                        options.StartIndex = 2;
+                        options.SelectedIndex = 2;
+                    }
+                }
+                else if (CheckKey(Keys.Escape) || CheckKey(Keys.Back))
+                {
+                    ScreenItemSelection = false;
+                    ScreenMenuOptions = true;
+                }
+            }
+
+            else if (ScreenItemOptions) // --> Item Option Popup
+            {
+                // Check item options
+                if (CheckKey(Keys.Enter))
+                {
+                    if (options.MenuItems[options.SelectedIndex].ToString() == "Confirm")
+                    {
+                        // read the menu option: buy, sell, equip, cancel
                         switch (selectedMenuOption)
                         {
                             case 0:
-                                if (shopobjects.Count > 0)
-                                    question = "Buy " + itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemName + " for " +
-                                    itemlist.menuItemsnoDupes[itemlist.SelectedIndex].Price.ToString() + " $ ?";
+                                BuyShopItems();
                                 break;
                             case 1:
-                                if (itemlist.menuItemsnoDupes.Count > 0)
-                                    question = "Sell " + itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemName + " for " +
-                                    ((int)(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].Price / 2)).ToString() + " $ ?";
+                                SellShopItems();
+                                break;
+                            case 2:
+                                break;
+                            default:
                                 break;
                         }
-
-                        if (selectedMenuOption <= 1 && question != null) // buy and sell
-                        {
-                            itemOptions = true;
-                            options.Style = OrderStyle.Central;
-                            options.SetMenuItems(new string[] { question, "", "Confirm", "Cancel" });
-                            options.StartIndex = 2;
-                            options.SelectedIndex = 2;
-                        }
                     }
-                    else if (CheckKey(Keys.Escape) || CheckKey(Keys.Back))
+                    else if (options.MenuItems[options.SelectedIndex].ToString() == "Cancel")
                     {
-                        itemSelection = false;
+                        ScreenItemOptions = false;
+                        ScreenItemSelection = true;
                     }
                 }
-                else // --> Item Option Popup
+                else if (CheckKey(Keys.Escape) || CheckKey(Keys.Back))
                 {
-                    // Check item options
-                    if (CheckKey(Keys.Enter))
-                    {
-                        if (options.MenuItems[options.SelectedIndex].ToString() == "Confirm")
-                        {
-                            // read the menu option: buy, sell, equip, cancel
-                            switch (selectedMenuOption)
-                            {
-                                case 0:
-                                    BuyShopItems();
-                                    break;
-                                case 1:
-                                    SellShopItems();
-                                    break;
-                                case 2:
-                                    break;
-                                default:
-                                    break;
-                            }
-                        }
-                        else if (options.MenuItems[options.SelectedIndex].ToString() == "Cancel")
-                        {
-                            itemOptions = false;
-                            itemSelection = false;
-                        }
-                    }
-                    else if (CheckKey(Keys.Escape) || CheckKey(Keys.Back))
-                    {
-                        itemOptions = false;
-                    }
-
-                    // update item components
-                    options.Update(gameTime);
+                    ScreenItemOptions = false;
+                    ScreenItemSelection = true;
                 }
             }
+
+            // update item components
+            options.Update(gameTime);
 
             // update itemlist
             updateItemList();
@@ -302,17 +315,17 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
             #region item list
             // Draw the base first
             itemlist.Position = new Vector2(100, 280);
-            if (!itemSelection || itemOptions)
-            {
-                itemlist.NormalColor = Color.DarkGray;
-                itemlist.HiliteColor = Color.DarkGray;
-                itemlist.Transperancy = 0.60f;
-            }
-            else
+            if (ScreenItemSelection)
             {
                 itemlist.NormalColor = Color.Yellow;
                 itemlist.HiliteColor = Color.Red;
                 itemlist.Transperancy = 1f;
+            }
+            else
+            {
+                itemlist.NormalColor = Color.DarkGray;
+                itemlist.HiliteColor = Color.DarkGray;
+                itemlist.Transperancy = 0.60f;
             }
 
             base.Draw(gameTime);
@@ -330,7 +343,7 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
 
             for (int i = 0; i < menuOptions.Length; i++)
             {
-                if (!itemSelection)
+                if (ScreenMenuOptions)
                 {
                     if(i == SelectedMenuOption)
                         myColor = HiliteColor;
@@ -354,7 +367,7 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
 
             #region itemoption popup
             // item options
-            if (itemOptions)
+            if (ScreenItemOptions)
             {
                 Texture2D rect = new Texture2D(graphics, (int)options.getBounds().X, options.MenuItems.Count * 20),
                           rect2 = new Texture2D(graphics, (int)options.getBounds().X, options.MenuItems.Count * 20);
@@ -398,7 +411,7 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
 
             #region other shop info
             // item information
-            if (itemSelection)
+            if (ScreenItemSelection)
             {
                 if (SelectedMenuOption != 0 && itemlist.menuItemsnoDupes.Count > 0) // other than shop items  
                 {
@@ -433,20 +446,22 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
 
             // Both shop and inventory items
             ItemSlot slot = ItemSlot.Weapon;
-            Item shopItem = null, invenItem = null;
+            Item shopItem = null, invenItem = null, getItem = null;
             PropertyInfo propertyEquipment;
             int equipval = 0, shopval = 0, invenval = 0;
 
             // Get Slot Type of selected item
-            if (SelectedMenuOption == 0)
+            if (SelectedMenuOption == 0) // <- Buy
             {
                 slot = shopobjects[SelectedItem].Slot;
                 shopItem = shopobjects[SelectedItem];
+                getItem = shopItem;
             }
-            else if (SelectedMenuOption == 1)
+            else if (SelectedMenuOption == 1) // <- Sell
             {
                 slot = itemlist.menuItemsnoDupes[itemlist.SelectedIndex].Slot;
                 invenItem = itemlist.menuItemsnoDupes[itemlist.SelectedIndex];
+                getItem = invenItem;
             }
 
             // Get item details of equipment, shop and inventory lists based on selected index
@@ -458,84 +473,104 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
 
             for (int i = 7; i < equipItem.GetType().GetProperties().Length; i++)
             {
-                if (i == 11 || i == 13 || i == 14 || i == 16) // skip: value, refinement and type
-                    i++;
-
-                // Get Property Information
-                propertyEquipment = equipItem.GetType().GetProperties()[i];
-
-                // Draw the Property Names
-                spriteBatch.DrawString(spriteFont,
-                propertyEquipment.Name,
-                position,
-                Color.DarkGray);
-
-                // Draw the equiped values
-                spriteBatch.DrawString(spriteFont,
-                propertyEquipment.GetValue(equipItem, null).ToString(),
-                new Vector2(position.X + 80 + space, position.Y),
-                Color.LightBlue);
-
-                // Draw shop buy item comparison
-                if(i <= 10)
+                switch (i)
                 {
-                    Color myColor = Color.LightBlue;   
+                    case 7:
+                    case 8:
+                    case 9:
+                    case 10:
+                    case 12:
+                    case 13:
+                    case 15:
+                    case 16:
 
-                    // Get Property values
-                    equipval = (int)(propertyEquipment.GetValue(equipItem, null));
+                        // Comparison only for weapons and armor
+                        if (getItem.Type == ItemType.Weapon || getItem.Type == ItemType.Armor)
+                        {
+                            // Get Property Information
+                            propertyEquipment = getItem.GetType().GetProperties()[i];
 
-                    if (selectedMenuOption == 0)
-                        shopval = (int)(shopItem.GetType().GetProperties()[i].GetValue(shopItem, null));
-                    else if (selectedMenuOption == 1)
-                        invenval = (int)(invenItem.GetType().GetProperties()[i].GetValue(invenItem, null));
+                            // Draw the Property Names
+                            spriteBatch.DrawString(spriteFont,
+                            Regex.Replace(propertyEquipment.Name, "_", " "),
+                            position,
+                            Color.DarkGray);
 
-                    if ((SelectedMenuOption == 0 && equipval == shopval) ||
-                        (SelectedMenuOption == 1 && equipval == invenval))
-                    {
-                        myColor = Color.LightBlue;
+                            // Draw the equiped values
+                            spriteBatch.DrawString(spriteFont,
+                            Regex.Replace(propertyEquipment.GetValue(equipItem, null).ToString(), "_", " "),
+                            new Vector2(position.X + 80 + space, position.Y),
+                            Color.LightBlue);
 
-                        spriteBatch.DrawString(spriteFont,
-                            "=", new Vector2(position.X + 130, position.Y), myColor);
-                    }
-                    else if ((SelectedMenuOption == 0 && equipval > shopval) ||
-                             (SelectedMenuOption == 1 && equipval > invenval))
-                    {
-                        myColor = Color.IndianRed;
+                            // Draw shop buy item comparison
+                            if (i <= 10)
+                            {
+                                Color myColor = Color.LightBlue;
 
-                        spriteBatch.DrawString(spriteFont,
-                            "<", new Vector2(position.X + 130, position.Y), myColor);
-                    }
-                    else if ((SelectedMenuOption == 0 && equipval < shopval) ||
-                             (SelectedMenuOption == 1 && equipval < invenval))
-                    {
-                        myColor = Color.LightGreen;
+                                // Get Property Information
+                                propertyEquipment = equipItem.GetType().GetProperties()[i];
 
-                        spriteBatch.DrawString(spriteFont,
-                            ">", new Vector2(position.X + 130, position.Y), myColor);
-                    }
+                                // Get Property values
+                                equipval = (int)(propertyEquipment.GetValue(equipItem, null));
 
-                    if (SelectedMenuOption == 0)
-                        spriteBatch.DrawString(spriteFont,
-                        shopval.ToString(),
-                        new Vector2(position.X + 155, position.Y),
-                        myColor);
-                    else if (SelectedMenuOption == 1)
-                        spriteBatch.DrawString(spriteFont,
-                        invenval.ToString(),
-                        new Vector2(position.X + 155, position.Y),
-                        myColor);
-                }                
+                                if (selectedMenuOption == 0)
+                                    shopval = (int)(shopItem.GetType().GetProperties()[i].GetValue(shopItem, null));
+                                else if (selectedMenuOption == 1)
+                                    invenval = (int)(invenItem.GetType().GetProperties()[i].GetValue(invenItem, null));
 
-                row++;
+                                if ((SelectedMenuOption == 0 && equipval == shopval) ||
+                                    (SelectedMenuOption == 1 && equipval == invenval))
+                                {
+                                    myColor = Color.LightBlue;
 
-                if (row <= 4)
-                    position.Y += spriteFont.LineSpacing + 5;
-                else
-                {
-                    position.Y = 130;
-                    position.X += 220;
-                    row = 1;
-                    space = 70;
+                                    spriteBatch.DrawString(spriteFont,
+                                        "=", new Vector2(position.X + 130, position.Y), myColor);
+                                }
+                                else if ((SelectedMenuOption == 0 && equipval > shopval) ||
+                                         (SelectedMenuOption == 1 && equipval > invenval))
+                                {
+                                    myColor = Color.IndianRed;
+
+                                    spriteBatch.DrawString(spriteFont,
+                                        "<", new Vector2(position.X + 130, position.Y), myColor);
+                                }
+                                else if ((SelectedMenuOption == 0 && equipval < shopval) ||
+                                         (SelectedMenuOption == 1 && equipval < invenval))
+                                {
+                                    myColor = Color.LightGreen;
+
+                                    spriteBatch.DrawString(spriteFont,
+                                        ">", new Vector2(position.X + 130, position.Y), myColor);
+                                }
+
+                                if (SelectedMenuOption == 0)
+                                    spriteBatch.DrawString(spriteFont,
+                                    shopval.ToString(),
+                                    new Vector2(position.X + 155, position.Y),
+                                    myColor);
+                                else if (SelectedMenuOption == 1)
+                                    spriteBatch.DrawString(spriteFont,
+                                    invenval.ToString(),
+                                    new Vector2(position.X + 155, position.Y),
+                                    myColor);
+                            }
+
+                            row++;
+
+                            if (row <= 4)
+                                position.Y += spriteFont.LineSpacing + 5;
+                            else
+                            {
+                                position.Y = 130;
+                                position.X += 220;
+                                row = 1;
+                                space = 70;
+                            }
+                        }
+
+                        break;
+                    default:
+                        break;
                 }
             }
         }
@@ -575,12 +610,16 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
 
             PlayerStore.Instance.activePlayer.Gold += SellValue;
 
-            updateItemList();       // update item menu
-            itemOptions = false;    // close options
+            updateItemList();               // update item menu
+            ScreenItemOptions = false;      // close options
+            ScreenItemSelection = true;     // back to item selection
 
             // when inventory is empty return to menu
             if (itemlist.menuItemsnoDupes.Count <= 0)
-                itemSelection = false;
+            {
+                ScreenItemSelection = false;
+                ScreenMenuOptions = true;
+            }
         }
 
         private void BuyShopItems()
@@ -595,9 +634,9 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
 
                 PlayerStore.activePlayer.Gold -= BuyValue;
 
-                updateItemList();       // update item menu
-                itemOptions = false;    // close options
-                itemSelection = false;  // return to menu
+                updateItemList();                   // update item menu
+                ScreenItemOptions = false;          // close options
+                ScreenItemSelection = true;        // return to menu
             }
         }
         #endregion

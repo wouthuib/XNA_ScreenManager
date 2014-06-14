@@ -18,5 +18,17 @@ namespace XNA_ScreenManager.SkillClasses
         public SkillBar()
         {
         }
+
+        public int getSlot(string skillname)
+        {
+            for (int i = 0; i < skillslot.Length; i++)
+            {
+                if (skillslot[i] != null)
+                    if (skillslot[i].Name == skillname)
+                        return i;
+            }
+
+            return -1;
+        }
     }
 }
