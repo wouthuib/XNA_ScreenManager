@@ -184,6 +184,7 @@
     <Compile Include="ScreenClasses\MainClasses\ScreenManager.cs" />
     <Compile Include="ScreenClasses\Menus\StartScreen.cs" />
     <Compile Include="GameWorldClasses\Tiled.cs" />
+    <Compile Include="ScreenClasses\SubComponents\ScreenPopup.cs" />
     <Compile Include="ScreenClasses\SubComponents\TextBalloon.cs" />
     <Compile Include="ScriptClasses\QuestStore.cs" />
     <Compile Include="ScriptClasses\ScriptInterpreter.cs" />

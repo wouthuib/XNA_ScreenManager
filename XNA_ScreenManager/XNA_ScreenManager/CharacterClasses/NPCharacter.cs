@@ -17,7 +17,7 @@ namespace XNA_ScreenManager.CharacterClasses
         SpriteFont spriteFont;
 
         // Keyboard State
-        KeyboardState keyboardStateCurrent, keyboardStatePrevious;
+        KeyboardState oldState , newState;
 
         // Sprite properties
         public int spriteWidth = 32;
@@ -109,18 +109,16 @@ namespace XNA_ScreenManager.CharacterClasses
                 transperancy = 0.8f;
 
                 // Update keyboard states
-                keyboardStateCurrent = Keyboard.GetState();
+                newState = Keyboard.GetState();
 
                 // Check for Keyboard input
-                if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Space) == true &&
-                    keyboardStatePrevious.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Space) == true 
-                    )
+                if (CheckKey(Keys.Space) || CheckKey(Keys.Enter))
                 {
                     screenmanager.messageScreen(true, new Rectangle((int)Position.X, (int)Position.Y, SpriteFrame.Width, SpriteFrame.Height), this.entityName, this.entityScript);
                 }
 
                 // Save keyboard states
-                keyboardStatePrevious = keyboardStateCurrent;
+                oldState = newState;
             }
             else
             {
@@ -157,6 +155,11 @@ namespace XNA_ScreenManager.CharacterClasses
                     new Vector2((this.position.X + SpriteFrame.Width * 0.5f) - (spriteFont.MeasureString(this.entityName).X * 0.5f), this.position.Y - 10),
                     Color.White * transperancy);
             }
+        }
+
+        private bool CheckKey(Keys theKey)
+        {
+            return oldState.IsKeyDown(theKey) && newState.IsKeyUp(theKey);
         }
     }
 }

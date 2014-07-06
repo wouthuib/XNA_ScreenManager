@@ -16,17 +16,17 @@ namespace XNA_ScreenManager
     /// </summary>
     public class MenuComponent : DrawableGameComponent
     {
-        SpriteBatch spriteBatch = null;
-        SpriteFont spriteFont;
+        protected SpriteBatch spriteBatch = null;
+        protected SpriteFont spriteFont;
 
         Color normalColor = Color.Yellow;
         Color hiliteColor = Color.Red;
 
         KeyboardState oldState;
-        Vector2 position = new Vector2();
+        protected Vector2 position = new Vector2();
         public Vector2 selectPos = new Vector2();
         int selectedIndex = 0, startIndex = -1, endIndex = 4, menuItemSpace = 0;
-        bool show = true, active = true, displaySingle = false, listDown = true, shade = true;
+        protected bool show = true, active = true, displaySingle = false, listDown = true, shade = true;
         float[] rotation = new float[20];
         Vector2[] offset = new Vector2[20];
         OrderStyle style = OrderStyle.Left;

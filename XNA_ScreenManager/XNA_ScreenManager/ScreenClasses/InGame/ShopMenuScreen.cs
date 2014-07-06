@@ -40,6 +40,7 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
 
         int width, height;
         int selectedMenuOption = 0;
+        int itembuysellcount = 1;
 
         private bool ScreenMenuOptions = true,
                      ScreenItemSelection = false,
@@ -58,7 +59,7 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
             this.spriteFont = Content.Load<SpriteFont>(@"font\Comic_Sans_15px");
 
             itemlist = new ItemlistComponent(game);
-            options = new MenuComponent(game, Content.Load<SpriteFont>(@"font\Comic_Sans_18px"));
+            options = new ScreenPopup(game, Content.Load<SpriteFont>(@"font\Comic_Sans_18px"));
 
             updateItemList();
             SetShopItems(this.shopItems);
@@ -172,7 +173,7 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
                     if (selectedMenuOption == -1)
                         selectedMenuOption = menuOptions.Length - 1;
                 }
-                else if (CheckKey(Keys.Enter))
+                else if (CheckKey(Keys.Enter) || CheckKey(Keys.Space))
                 {
                     // Selected Menu Option Check
                     switch (selectedMenuOption)
@@ -216,7 +217,7 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
                 }
 
                 // Key Check 
-                if (CheckKey(Keys.Enter))
+                if (CheckKey(Keys.Enter) || CheckKey(Keys.Space))
                 {
                     string question = null;
 
@@ -255,7 +256,7 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
             else if (ScreenItemOptions) // --> Item Option Popup
             {
                 // Check item options
-                if (CheckKey(Keys.Enter))
+                if (CheckKey(Keys.Enter) || CheckKey(Keys.Space))
                 {
                     if (options.MenuItems[options.SelectedIndex].ToString() == "Confirm")
                     {
@@ -266,7 +267,30 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
                                 BuyShopItems();
                                 break;
                             case 1:
-                                SellShopItems();
+                                if (PlayerStore.activePlayer.inventory.item_list.
+                                    FindAll(x => x.itemName == itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemName)
+                                    .Count > 1)
+                                {
+                                    ScreenItemOptions = false;
+                                    ScreenSellOptions = true;
+                                    itembuysellcount = 1;
+
+                                    options.Style = OrderStyle.Central;
+                                    options.SetMenuItems(new string[] 
+                                    { 
+                                        "How many " + itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemName + "'s", 
+                                        "do you want to sell?", 
+                                        "",
+                                        "<- " + itembuysellcount.ToString() + " ->",
+                                        "Cancel" 
+                                    });
+                                    options.StartIndex = 3;
+                                    options.SelectedIndex = 3;
+                                }
+                                else
+                                {
+                                    SellShopItems();
+                                }
                                 break;
                             case 2:
                                 break;
@@ -287,6 +311,48 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
                 }
             }
 
+            else if (ScreenSellOptions) // --> Item Option Popup
+            {
+                // Check item options
+                if (CheckKey(Keys.Enter) || CheckKey(Keys.Space))
+                {
+                    if (options.SelectedIndex == 3) // itemcount
+                    {
+                        SellShopItems(itembuysellcount);
+                        ScreenSellOptions = false;
+                        ScreenItemSelection = true;
+                    }
+                    else if (options.MenuItems[options.SelectedIndex].ToString() == "Cancel")
+                    {
+                        ScreenSellOptions = false;
+                        ScreenItemSelection = true;
+                    }
+                }
+                else if (CheckKey(Keys.Right) && options.SelectedIndex == 3)
+                {
+                    itembuysellcount++;
+                    if (itembuysellcount > PlayerStore.activePlayer.inventory.item_list.
+                                    FindAll(x => x.itemName == itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemName)
+                                    .Count)
+                        itembuysellcount = 1;
+                    options.MenuItems[3] = "<- " + itembuysellcount.ToString() + " ->";
+                }
+                else if (CheckKey(Keys.Left) && options.SelectedIndex == 3)
+                {
+                    itembuysellcount--;
+                    if (itembuysellcount == 0)
+                        itembuysellcount = PlayerStore.activePlayer.inventory.item_list.
+                                    FindAll(x => x.itemName == itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemName)
+                                    .Count;
+                    options.MenuItems[3] = "<- " + itembuysellcount.ToString() + " ->";
+                }
+                else if (CheckKey(Keys.Escape) || CheckKey(Keys.Back))
+                {
+                    ScreenSellOptions = false;
+                    ScreenItemSelection = true;
+                }
+            }
+
             // update item components
             options.Update(gameTime);
 
@@ -302,7 +368,8 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
         #region draw methods
         public override void Show()
         {
-            itemlist.Position = new Vector2(100, 280);
+            itemlist.Position = new Vector2(100, 200);
+            options.Position = new Vector2(300, 200);
             base.Show();
         }
 
@@ -367,44 +434,44 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
 
             #region itemoption popup
             // item options
-            if (ScreenItemOptions)
+            if (ScreenItemOptions || ScreenSellOptions)
             {
-                Texture2D rect = new Texture2D(graphics, (int)options.getBounds().X, options.MenuItems.Count * 20),
-                          rect2 = new Texture2D(graphics, (int)options.getBounds().X, options.MenuItems.Count * 20);
+                //Texture2D rect = new Texture2D(graphics, (int)options.getBounds().X, options.MenuItems.Count * 20),
+                //          rect2 = new Texture2D(graphics, (int)options.getBounds().X, options.MenuItems.Count * 20);
   
-                Color[] data = new Color[(int)options.getBounds().X * options.MenuItems.Count * 20];
+                //Color[] data = new Color[(int)options.getBounds().X * options.MenuItems.Count * 20];
 
-                // set colors for menu borders and fill
-                for (int i = 0; i < data.Length; ++i) data[i] = Color.Black;
-                rect.SetData(data);
-                for (int i = 0; i < data.Length; ++i) data[i] = Color.White;
-                rect2.SetData(data);
+                //// set colors for menu borders and fill
+                //for (int i = 0; i < data.Length; ++i) data[i] = Color.Black;
+                //rect.SetData(data);
+                //for (int i = 0; i < data.Length; ++i) data[i] = Color.White;
+                //rect2.SetData(data);
 
-                // draw menu fill 10% transperancy
-                spriteBatch.Draw(rect, 
-                    new Rectangle((int)(itemlist.selectPos.X + 145), (int)(itemlist.selectPos.Y - (options.MenuItems.Count * 20) - 5), rect.Width + 10, rect.Height + 15),
-                    Color.White * 0.9f);                              
+                //// draw menu fill 10% transperancy
+                //spriteBatch.Draw(rect, 
+                //    new Rectangle((int)(itemlist.selectPos.X + 145), (int)(itemlist.selectPos.Y - (options.MenuItems.Count * 20) - 5), rect.Width + 10, rect.Height + 15),
+                //    Color.White * 0.9f);                              
 
-                // draw borders
-                spriteBatch.Draw(rect2, 
-                    new Rectangle((int)itemlist.selectPos.X + 140, (int)itemlist.selectPos.Y - (options.MenuItems.Count * 20) - 10, (int)5, (int)options.MenuItems.Count * 20 + 15),
-                    new Rectangle(0, 0, 5, 5), Color.White);
-                spriteBatch.Draw(rect2,
-                    new Rectangle((int)itemlist.selectPos.X + 140, (int)itemlist.selectPos.Y - (options.MenuItems.Count * 20) - 10, (int)rect.Width + 15, 5),
-                    new Rectangle(0, 0, 5, 5), Color.White);
-                spriteBatch.Draw(rect2,
-                    new Rectangle((int)itemlist.selectPos.X + 140, (int)itemlist.selectPos.Y + 5, (int)rect.Width + 15, 5),
-                    new Rectangle(0, 0, 5, 5), Color.White);
-                spriteBatch.Draw(rect2,
-                    new Rectangle((int)(itemlist.selectPos.X + 155 + rect.Width), (int)itemlist.selectPos.Y - (options.MenuItems.Count * 20) - 10, 5, (int)options.MenuItems.Count * 20 + 20),
-                    new Rectangle(0, 0, 5, 5), Color.White);
+                //// draw borders
+                //spriteBatch.Draw(rect2, 
+                //    new Rectangle((int)itemlist.selectPos.X + 140, (int)itemlist.selectPos.Y - (options.MenuItems.Count * 20) - 10, (int)5, (int)options.MenuItems.Count * 20 + 15),
+                //    new Rectangle(0, 0, 5, 5), Color.White);
+                //spriteBatch.Draw(rect2,
+                //    new Rectangle((int)itemlist.selectPos.X + 140, (int)itemlist.selectPos.Y - (options.MenuItems.Count * 20) - 10, (int)rect.Width + 15, 5),
+                //    new Rectangle(0, 0, 5, 5), Color.White);
+                //spriteBatch.Draw(rect2,
+                //    new Rectangle((int)itemlist.selectPos.X + 140, (int)itemlist.selectPos.Y + 5, (int)rect.Width + 15, 5),
+                //    new Rectangle(0, 0, 5, 5), Color.White);
+                //spriteBatch.Draw(rect2,
+                //    new Rectangle((int)(itemlist.selectPos.X + 155 + rect.Width), (int)itemlist.selectPos.Y - (options.MenuItems.Count * 20) - 10, 5, (int)options.MenuItems.Count * 20 + 20),
+                //    new Rectangle(0, 0, 5, 5), Color.White);
 
 
-                Vector2 optionPos = new Vector2();
-                optionPos.X = itemlist.selectPos.X + 150;
-                optionPos.Y = itemlist.selectPos.Y - (options.MenuItems.Count * 20);
+                //Vector2 optionPos = new Vector2();
+                //optionPos.X = itemlist.selectPos.X + 150;
+                //optionPos.Y = itemlist.selectPos.Y - (options.MenuItems.Count * 20);
 
-                options.Position = optionPos;
+                //options.Position = optionPos;
                 options.Draw(gameTime);
             }
             #endregion
@@ -441,6 +508,7 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
         private void DrawInventoryinfo(GameTime gameTime)
         {
             // item stat info + equipment comparison
+            Color myColor = Color.LightBlue;
             Vector2 position = new Vector2(270, 130);
             int row = 1, space = 0;
 
@@ -496,16 +564,14 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
                             position,
                             Color.DarkGray);
 
-                            // Draw the equiped values
-                            spriteBatch.DrawString(spriteFont,
-                            Regex.Replace(propertyEquipment.GetValue(equipItem, null).ToString(), "_", " "),
-                            new Vector2(position.X + 80 + space, position.Y),
-                            Color.LightBlue);
-
                             // Draw shop buy item comparison
                             if (i <= 10)
                             {
-                                Color myColor = Color.LightBlue;
+                                // Draw the equiped values
+                                spriteBatch.DrawString(spriteFont,
+                                Regex.Replace(propertyEquipment.GetValue(equipItem, null).ToString(), "_", " "),
+                                new Vector2(position.X + 80 + space, position.Y),
+                                Color.LightBlue);
 
                                 // Get Property Information
                                 propertyEquipment = equipItem.GetType().GetProperties()[i];
@@ -524,7 +590,7 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
                                     myColor = Color.LightBlue;
 
                                     spriteBatch.DrawString(spriteFont,
-                                        "=", new Vector2(position.X + 130, position.Y), myColor);
+                                        "=", new Vector2(position.X + 125, position.Y), myColor);
                                 }
                                 else if ((SelectedMenuOption == 0 && equipval > shopval) ||
                                          (SelectedMenuOption == 1 && equipval > invenval))
@@ -532,7 +598,7 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
                                     myColor = Color.IndianRed;
 
                                     spriteBatch.DrawString(spriteFont,
-                                        "<", new Vector2(position.X + 130, position.Y), myColor);
+                                        "<", new Vector2(position.X + 125, position.Y), myColor);
                                 }
                                 else if ((SelectedMenuOption == 0 && equipval < shopval) ||
                                          (SelectedMenuOption == 1 && equipval < invenval))
@@ -540,7 +606,7 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
                                     myColor = Color.LightGreen;
 
                                     spriteBatch.DrawString(spriteFont,
-                                        ">", new Vector2(position.X + 130, position.Y), myColor);
+                                        ">", new Vector2(position.X + 125, position.Y), myColor);
                                 }
 
                                 if (SelectedMenuOption == 0)
@@ -553,6 +619,24 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
                                     invenval.ToString(),
                                     new Vector2(position.X + 155, position.Y),
                                     myColor);
+                            }
+                            else
+                            {
+                                myColor = Color.LightBlue;
+
+                                if (propertyEquipment.Name.ToString() == "Class")
+                                {
+                                    if (getItem.Class.ToString() != PlayerStore.activePlayer.Jobclass && getItem.Class.ToString() != "All")
+                                        myColor = Color.IndianRed;
+                                    else
+                                        myColor = Color.LightGreen;
+                                }
+
+                                // Draw the selected item values for type, slot etc
+                                spriteBatch.DrawString(spriteFont,
+                                Regex.Replace(propertyEquipment.GetValue(getItem, null).ToString(), "_", " "),
+                                new Vector2(position.X + 80 + space, position.Y),
+                                myColor);
                             }
 
                             row++;
@@ -598,18 +682,20 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
             }
         }
 
-        private void SellShopItems()
+        private void SellShopItems(int count = 1)
         {
-            int SellValue = (int)(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].Price / 2);
+            for (int i = 0; i < count; i++)
+            {
+                int SellValue = (int)(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].Price / 2);
 
-            PlayerStore.activePlayer.inventory.removeItem(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemID);
+                PlayerStore.activePlayer.inventory.removeItem(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemID);
 
-            // Update selected index
-            if (itemlist.SelectedIndex > itemlist.menuItemsnoDupes.Count - 1)
-                itemlist.SelectedIndex = itemlist.menuItemsnoDupes.Count - 1;
+                // Update selected index
+                if (itemlist.SelectedIndex > itemlist.menuItemsnoDupes.Count - 1)
+                    itemlist.SelectedIndex = itemlist.menuItemsnoDupes.Count - 1;
 
-            PlayerStore.Instance.activePlayer.Gold += SellValue;
-
+                PlayerStore.Instance.activePlayer.Gold += SellValue;
+            }
             updateItemList();               // update item menu
             ScreenItemOptions = false;      // close options
             ScreenItemSelection = true;     // back to item selection

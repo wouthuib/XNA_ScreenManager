@@ -21,7 +21,8 @@ namespace XNA_ScreenManager.ScreenClasses
         ContentManager Content;
         GraphicsDevice gfxdevice;
 
-        KeyboardState keyboardStateCurrent, keyboardStatePrevious;
+        //KeyboardState keyboardStateCurrent, keyboardStatePrevious;
+        KeyboardState newState, oldState;
 
         MenuComponent menu;
         TextBalloon balloon;
@@ -193,7 +194,8 @@ namespace XNA_ScreenManager.ScreenClasses
 
         private void updateDialogue(GameTime gameTime)
         {
-            keyboardStateCurrent = Keyboard.GetState();
+            //keyboardStateCurrent = Keyboard.GetState();
+            newState = Keyboard.GetState();
 
             // Animated text
             if (previousGameTimeMsec <= (int)gameTime.TotalGameTime.Milliseconds
@@ -213,7 +215,7 @@ namespace XNA_ScreenManager.ScreenClasses
             }
 
             // Read keyboard
-            if (CheckKeySpace())
+            if (CheckKey(Keys.Space) || CheckKey(Keys.Enter))
             {
                 if (t_index == t_complete.Length) // Close
                 {
@@ -242,12 +244,13 @@ namespace XNA_ScreenManager.ScreenClasses
                     t_display.Capacity = 0;
                 }
             }
-            if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Right) == true)
+            if (newState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Right))
             {
                 previousGameTimeMsec = 20; // speed up the text
             }
 
-            keyboardStatePrevious = keyboardStateCurrent;
+            //keyboardStatePrevious = keyboardStateCurrent;
+            oldState = newState;
         }
         #endregion
 
@@ -338,13 +341,10 @@ namespace XNA_ScreenManager.ScreenClasses
 
         #region functions
         // Message Functions
-        private bool CheckKeySpace()
+
+        private bool CheckKey(Keys theKey)
         {
-            if (keyboardStateCurrent.IsKeyUp(Microsoft.Xna.Framework.Input.Keys.Space) == true &&
-                keyboardStatePrevious.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Space) == true)
-                return true;
-            else
-                return false;
+            return oldState.IsKeyDown(theKey) && newState.IsKeyUp(theKey);
         }
 
         private void clearStringBuilders()
