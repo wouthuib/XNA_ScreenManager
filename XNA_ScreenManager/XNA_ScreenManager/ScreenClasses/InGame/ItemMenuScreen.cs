@@ -9,6 +9,9 @@ using XNA_ScreenManager.ScreenClasses.SubComponents;
 using Microsoft.Xna.Framework.Content;
 using XNA_ScreenManager.PlayerClasses;
 using System.Text.RegularExpressions;
+using XNA_ScreenManager.ScriptClasses;
+using XNA_ScreenManager.CharacterClasses;
+using System;
 
 namespace XNA_ScreenManager.ScreenClasses
 {
@@ -46,8 +49,8 @@ namespace XNA_ScreenManager.ScreenClasses
                 "| KeyItem |" };
 
         int width, height;
-        int selectedCategory = 0;
-        bool itemOptions = false;
+        int selectedCategory = 0, SetItemSlot = 1;
+        bool itemOptions = false, itemSelection = true, itemQuickSlotOption = false;
 
         #endregion
 
@@ -169,7 +172,7 @@ namespace XNA_ScreenManager.ScreenClasses
         {
             KeyboardState newState = Keyboard.GetState();
 
-            if (itemOptions == false)
+            if (itemSelection)
             {
                 if (CheckKey(Keys.Right))
                 {
@@ -199,10 +202,11 @@ namespace XNA_ScreenManager.ScreenClasses
                 {
                     if (filterItemList().Count > 0)
                     {
+                        itemSelection = false;
                         itemOptions = true;
                         options.Style = OrderStyle.Central;
                         options.SetMenuItems(new string[]{ itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemName + " - Choose an Option.", "",
-                            "Equip", "Use", "Remove", "Cancel"});
+                            "Equip", "Use", "Add QuickSlot", "Remove", "Cancel"});
                         options.StartIndex = 2;
                         options.SelectedIndex = 2;
                     }
@@ -211,7 +215,7 @@ namespace XNA_ScreenManager.ScreenClasses
                 // update item components
                 base.Update(gameTime);
             }
-            else
+            else if (itemOptions)
             {
                 // Check item options
                 if (CheckKey(Keys.Enter))
@@ -225,23 +229,65 @@ namespace XNA_ScreenManager.ScreenClasses
                             itemEquip();
                             break;
                         case 3:
-                            itemConsume();
+                            itemConsume(playerStore.activePlayer);
                             break;
                         case 4:
-                            itemRemove();
+                            itemQuickSlot();
                             break;
                         case 5:
+                            itemRemove();
+                            break;
+                        case 6:
                             itemOptions = false;
+                            itemSelection = true;
                             break;
                     }
                 }
                 else if (CheckKey(Keys.Escape))
                 {
                     itemOptions = false;
+                    itemSelection = true;
                 }
 
                 // update item components
                 options.Update(gameTime);
+            }
+            else if (itemQuickSlotOption)
+            {
+                // Check item options
+                if (CheckKey(Keys.Enter) || CheckKey(Keys.Space))
+                {
+                    if (options.SelectedIndex == 3) // itemcount
+                    {
+                        //SellShopItems(SetItemSlot); // <-- place item in skillbar
+                        itemQuickSlotOption = false;
+                        itemSelection = true;
+                    }
+                    else if (options.MenuItems[options.SelectedIndex].ToString() == "Cancel")
+                    {
+                        itemQuickSlotOption = false;
+                        itemSelection = true;
+                    }
+                }
+                else if (CheckKey(Keys.Right) && options.SelectedIndex == 3)
+                {
+                    SetItemSlot++;
+                    if (SetItemSlot > playerStore.activePlayer.skillbar.skillslot.Length)
+                        SetItemSlot = 1;
+                    options.MenuItems[3] = "<- " + SetItemSlot.ToString() + " ->";
+                }
+                else if (CheckKey(Keys.Left) && options.SelectedIndex == 3)
+                {
+                    SetItemSlot--;
+                    if (SetItemSlot == 0)
+                        SetItemSlot = playerStore.activePlayer.skillbar.skillslot.Length;
+                    options.MenuItems[3] = "<- " + SetItemSlot.ToString() + " ->";
+                }
+                else if (CheckKey(Keys.Escape) || CheckKey(Keys.Back))
+                {
+                    itemQuickSlotOption = false;
+                    itemSelection = true;
+                }
             }
 
             // save keyboard state
@@ -298,7 +344,7 @@ namespace XNA_ScreenManager.ScreenClasses
                                 
                 #region itemoption popup
                 // item options
-                if (itemOptions)
+                if (itemOptions || itemQuickSlotOption)
                 {
                     Texture2D rect = new Texture2D(graphics, (int)options.getBounds().X, options.MenuItems.Count * 20),
                               rect2 = new Texture2D(graphics, (int)options.getBounds().X, options.MenuItems.Count * 20);
@@ -378,7 +424,7 @@ namespace XNA_ScreenManager.ScreenClasses
                 itemlist.SelectedIndex = itemlist.menuItemsnoDupes.Count - 1;
         }
 
-        private void itemConsume()
+        private void itemConsume(PlayerInfo Consumer)
         {
             Item selectedItem = itemlist.menuItemsnoDupes[itemlist.SelectedIndex];
 
@@ -386,13 +432,27 @@ namespace XNA_ScreenManager.ScreenClasses
             {
                 string script = selectedItem.Script;
 
+                // remove beginning and ending spaces
+
                 script = Regex.Replace(script, "{", "");
                 script = Regex.Replace(script, "}", "");
+                script = Regex.Replace(script, " ", "");
 
                 // call static class that handles item scripts
                 // use the script interpretter to read the content
+
+                ScriptInterpreter.Instance.loadScript(script);
+                ScriptInterpreter.Instance.StartReading = true;
+                ScriptInterpreter.Instance.Property = null;
+                ScriptInterpreter.Instance.Values.Clear();
+
+                ScriptInterpreter.Instance.readScript();
+
+                // clear script, reset to begin
+                ScriptInterpreter.Instance.clearInstance();
             }
 
+            itemRemove();
             itemOptions = false;
         }
 
@@ -406,6 +466,29 @@ namespace XNA_ScreenManager.ScreenClasses
 
             updateItemList();       // update item menu
             itemOptions = false;    // close options
+        }
+
+        private void itemQuickSlot()
+        {
+            Item selectedItem = itemlist.menuItemsnoDupes[itemlist.SelectedIndex];
+
+            if (selectedItem.Type == ItemType.Consumable)
+            {
+                itemOptions = false;
+                itemQuickSlotOption = true;
+
+                options.Style = OrderStyle.Central;
+                options.SetMenuItems(new string[] 
+                { 
+                    "In which Quickslot do you", 
+                    "want to place " + selectedItem.itemName +"?", 
+                    "",
+                    "<- " + SetItemSlot.ToString() + " ->",
+                    "Cancel" 
+                });
+                options.StartIndex = 3;
+                options.SelectedIndex = 3;
+            }
         }
 
         #endregion

@@ -4,6 +4,8 @@ using System.Text;
 using System.IO;
 using System.Text.RegularExpressions;
 using XNA_ScreenManager.PlayerClasses;
+using XNA_ScreenManager.MapClasses;
+using XNA_ScreenManager.GameWorldClasses.Effects;
 
 namespace XNA_ScreenManager.ScriptClasses
 {
@@ -47,6 +49,20 @@ namespace XNA_ScreenManager.ScriptClasses
                 {
                     string replacement = Regex.Replace(line, @"\t|\r", "");
                     lines.Add(replacement); // Add to list.
+                }
+            }
+        }
+
+        public void loadScript(string script)
+        {
+            for (int i = 0; i < script.Length; i++)
+            {
+                wrapper.Append(script[i]).ToString();
+
+                if (script[i].ToString() == ".")
+                {
+                    lines.Add(wrapper.ToString());
+                    wrapper.Clear();
                 }
             }
         }
@@ -189,9 +205,9 @@ namespace XNA_ScreenManager.ScriptClasses
 
                             }
                         }
+                        #endregion
                         else
                         {
-                        #endregion
                             #region default commands
                             // COMMANDS
                             if (wrapper.ToString().StartsWith("next"))
@@ -299,12 +315,17 @@ namespace XNA_ScreenManager.ScriptClasses
                                 {
                                     case " ":
                                         if (valueSB.Length > 1)
+                                        {
                                             setValue(valueSB.ToString());
-                                        valueSB.Clear();
+                                            valueSB.Clear();
+                                        }
                                         break;
                                     case ";":
-                                        setValue(valueSB.ToString());
-                                        valueSB.Clear();
+                                        if (valueSB.Length > 1)
+                                        {
+                                            setValue(valueSB.ToString());
+                                            valueSB.Clear();
+                                        }
 
                                         // value 0 = switchName (string), value 1= switchValue (string)
                                         if (Values.Count > 0)
@@ -314,11 +335,134 @@ namespace XNA_ScreenManager.ScriptClasses
                                                     Values[0].ToString(),
                                                     Values[1].ToString());
                                         }
-                                        Values.Clear();
+
+                                        this.Property = null;
+                                        this.clearValues();
                                         break;
                                     default:
                                         valueSB.Append(lines[activeLine][i]);
                                         break;
+                                }
+                            }
+                            else if (wrapper.ToString().StartsWith("heal"))
+                            {
+                                // Do not save the property. 
+                                // this class will handle the action and move on to the next.
+                                // Saving the property will stop the script and turn back to the caller.
+
+                                if (parenOpen > condParan || (parenOpen == condParan && getchar == ")"))
+                                {
+                                    switch (getchar)
+                                    {
+                                        case "(":
+                                            break;
+                                        case ",":
+                                            if (valueSB.Length > 1)
+                                            {
+                                                setValue(valueSB.ToString());
+                                                valueSB.Clear();
+                                            }
+                                            break;
+                                        case ")":
+                                            if (valueSB.Length > 1)
+                                            {
+                                                setValue(valueSB.ToString());
+                                                valueSB.Clear();
+                                            }
+
+                                            // value 0 = health-points (string), value 1 = skill-points (string)
+                                            if (Values.Count > 1)
+                                            {
+                                                PlayerStore.Instance.activePlayer.HP += Convert.ToInt32(Values[0]);
+                                                PlayerStore.Instance.activePlayer.SP += Convert.ToInt32(Values[1]);
+                                            }
+
+                                            this.Property = null;
+                                            this.clearValues();
+                                            break;
+                                        default:
+                                            valueSB.Append(lines[activeLine][i]);
+                                            break;
+                                    }
+                                }
+                            }
+                            else if (wrapper.ToString().StartsWith("healpercent"))
+                            {
+                                // Do not save the property. 
+                                // this class will handle the action and move on to the next.
+                                // Saving the property will stop the script and turn back to the caller.
+
+                                if (parenOpen > condParan || (parenOpen == condParan && getchar == ")"))
+                                {
+                                    switch (getchar)
+                                    {
+                                        case "(":
+                                            break;
+                                        case ",":
+                                            if (valueSB.Length > 1)
+                                            {
+                                                setValue(valueSB.ToString());
+                                                valueSB.Clear();
+                                            }
+                                            break;
+                                        case ")":
+                                            if (valueSB.Length > 1)
+                                            {
+                                                setValue(valueSB.ToString());
+                                                valueSB.Clear();
+                                            }
+
+                                            // value 0 = health-points (string), value 1 = skill-points (string)
+                                            if (Values.Count > 0)
+                                            {
+                                                PlayerStore.Instance.activePlayer.HP += (int)(PlayerStore.Instance.activePlayer.HP / 100) * Convert.ToInt32(Values[0]);
+                                                PlayerStore.Instance.activePlayer.SP += (int)(PlayerStore.Instance.activePlayer.SP / 100) * Convert.ToInt32(Values[1]);
+                                            }
+
+                                            this.Property = null;
+                                            this.clearValues();
+                                            break;
+                                        default:
+                                            valueSB.Append(lines[activeLine][i]);
+                                            break;
+                                    }
+                                }
+                            }
+                            else if (wrapper.ToString().StartsWith("effect"))
+                            {
+                                // Do not save the property. 
+                                // this class will handle the action and move on to the next.
+                                // Saving the property will stop the script and turn back to the caller.
+
+                                if (parenOpen > condParan || (parenOpen == condParan && getchar == ")"))
+                                {
+                                    switch (getchar)
+                                    {
+                                        case "(":
+                                            break;
+                                        case ",":
+                                            if (valueSB.Length > 1)
+                                                setValue(valueSB.ToString());
+                                            valueSB.Clear();
+                                            break;
+                                        case ")":
+                                            if (valueSB.Length > 1)
+                                                setValue(valueSB.ToString());
+
+                                            switch (Values[0].ToString())
+                                            {
+                                                case "heal":
+                                                    GameWorld.GetInstance.listEffect.Add(new LevelUpEffect());
+                                                    break;
+                                                default:
+                                                    break;
+                                            }
+                                            valueSB.Clear();
+                                            break;
+                                        default:
+                                            valueSB.Append(lines[activeLine][i]);
+                                            break;
+                                    }
                                 }
                             }
                             #endregion
