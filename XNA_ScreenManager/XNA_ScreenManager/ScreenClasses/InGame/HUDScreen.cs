@@ -10,6 +10,8 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using XNA_ScreenManager.PlayerClasses;
 using XNA_ScreenManager.SkillClasses;
+using XNA_ScreenManager.ItemClasses;
+using XNA_ScreenManager.MapClasses;
 
 
 namespace XNA_ScreenManager.ScreenClasses
@@ -149,26 +151,64 @@ namespace XNA_ScreenManager.ScreenClasses
         {
             spriteBatch.Draw(Skillbar, new Vector2(position.X + 200, position.Y + 430), Color.White * 0.75f);
 
-            SkillBar skillbar = playerInfo.activePlayer.skillbar;
+            QuickSlotBar quickslotbar = playerInfo.activePlayer.quickslotbar;
 
-            for (int i = 0; i < skillbar.skillslot.Length; i++)
+            for (int i = 0; i < quickslotbar.quickslot.Length; i++)
             {
-                if (skillbar.skillslot[i] != null)
+                if (quickslotbar.quickslot[i] != null)
                 {
-                    // icon
-                    Texture2D sprite = Content.Load<Texture2D>(skillbar.skillslot[i].IconSpritePath);
-                    spriteBatch.Draw(
-                        sprite,
-                        new Vector2(position.X + 206 + (sprite.Width * i + 6), position.Y + 443),
-                        Color.White * 0.75f);
-                    
-                    // level
-                    spriteBatch.DrawString(spriteFont, skillbar.skillslot[i].Level.ToString(),
-                        new Vector2(position.X + 226 + (sprite.Width * i + 6), position.Y + 461),
-                        Color.Black);
-                    spriteBatch.DrawString(spriteFont, skillbar.skillslot[i].Level.ToString(),
-                        new Vector2(position.X + 225 + (sprite.Width * i + 6), position.Y + 460),
-                        Color.LightGreen);
+                    if (quickslotbar.Quickslot(i) is Skill)
+                    {
+                        Skill skill = quickslotbar.Quickslot(i) as Skill;
+
+                        // icon
+                        Texture2D sprite = Content.Load<Texture2D>(skill.IconSpritePath);
+                        spriteBatch.Draw(
+                            sprite,
+                            new Vector2(position.X + 206 + (sprite.Width * i + 6), position.Y + 443),
+                            Color.White * 0.75f);
+
+                        // level
+                        spriteBatch.DrawString(spriteFont, skill.Level.ToString(),
+                            new Vector2(position.X + 226 + (sprite.Width * i + 6), position.Y + 461),
+                            Color.Black);
+                        spriteBatch.DrawString(spriteFont, skill.Level.ToString(),
+                            new Vector2(position.X + 225 + (sprite.Width * i + 6), position.Y + 460),
+                            Color.LightGreen);
+                    }
+                    else if (quickslotbar.Quickslot(i) is Item)
+                    {
+                        Item item = quickslotbar.Quickslot(i) as Item;
+                        int count = PlayerStore.Instance.activePlayer.inventory.item_list.FindAll(x =>x.itemName == item.itemName).Count;
+
+                        // icon
+                        Texture2D sprite = Content.Load<Texture2D>(item.itemSpritePath);
+                        Rectangle frame = new Rectangle(item.SpriteFrameX * 48, item.SpriteFrameY * 48, 48, 48);
+
+                        Color color = Color.White, textcolor = Color.Blue;
+                        float trans = 1.0f;
+
+                        if (GameWorld.GetInstance.playerSprite.ItemActive)
+                        {
+                            color = Color.LightGray;
+                            trans = 0.80f;
+                            textcolor = Color.Red;
+                        }
+
+                        spriteBatch.Draw(
+                            sprite,
+                            new Vector2(position.X + 206 + (32 * i), position.Y + 435),
+                            frame,
+                            color * trans);
+
+                        // count
+                        spriteBatch.DrawString(spriteFont, count.ToString(),
+                            new Vector2(position.X + 226 + (32 * i), position.Y + 461),
+                            Color.Black);
+                        spriteBatch.DrawString(spriteFont, count.ToString(),
+                            new Vector2(position.X + 225 + (32 * i), position.Y + 460),
+                            textcolor * trans);
+                    }
                 }
             }
         }

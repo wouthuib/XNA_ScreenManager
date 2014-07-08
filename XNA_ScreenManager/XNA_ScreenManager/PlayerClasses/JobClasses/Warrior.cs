@@ -11,6 +11,8 @@ using Microsoft.Xna.Framework.Input;
 using XNA_ScreenManager.GameWorldClasses.Entities;
 using XNA_ScreenManager.SkillClasses;
 using XNA_ScreenManager.PlayerClasses.StatusClasses;
+using System.Text.RegularExpressions;
+using XNA_ScreenManager.ScriptClasses;
 
 namespace XNA_ScreenManager.PlayerClasses.JobClasses
 {
@@ -20,7 +22,6 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
         Skill skill;
         Texture2D cast_animation, skill_animation;
         float previousGameTimeMsec, previousSkillTimeMsec, previousCastTimeMsec;
-        private bool SkillActive = false;
         private Vector2 animationOffset;
         private int ani_count;
 
@@ -53,7 +54,11 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
                         }
                         break;
                     case EntityState.Stand:
+                        
                         IdleState(gameTime);
+
+                        if(ItemActive)
+                            item_CoolDown(gameTime);
                         break;
                     case EntityState.Frozen:
                         resetState(gameTime);
@@ -132,6 +137,7 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
             spriteFrame.X = 0;
             ani_count = 0;
             SkillActive = false;
+            ItemActive = false;
             cast_animation = null;
             skill_animation = null;
             animationOffset = Vector2.Zero;
@@ -140,16 +146,16 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
 
         private void IdleState(GameTime gameTime)
         {
-            int skillslot = KeyToInt();
+            int slot = KeyToInt();
 
-            if (skillslot >= 0)
+            if (slot >= 0)
             {
                 if (!SkillSlots.Instance.active)
-                {
-                    // check if weapon is equiped
-                    if (getPlayer().equipment.item_list.FindAll(delegate(Item item) { return item.Type == ItemType.Weapon; }).Count > 0)
+                {                    
+                    if (getPlayer().quickslotbar.Quickslot(slot) is Skill)
                     {
-                        if (getPlayer().skillbar.skillslot[skillslot] != null)
+                        // check if weapon is equiped
+                        if (getPlayer().equipment.item_list.FindAll(delegate(Item item) { return item.Type == ItemType.Weapon; }).Count > 0)
                         {
                             SkillSlots.Instance.active = true;
                             spriteFrame.X = 0;
@@ -157,11 +163,80 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
                             state = EntityState.Skill;
 
                             // new skill 
-                            skill = playerStore.activePlayer.skillbar.skillslot[skillslot];
-                            previousCastTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + playerStore.activePlayer.skillbar.skillslot[skillslot].CastTime;
+                            skill = playerStore.activePlayer.quickslotbar.Quickslot(slot) as Skill;
+                            previousCastTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + skill.CastTime;
+                        }
+                    }
+                    else if (getPlayer().quickslotbar.Quickslot(slot) is Item)
+                    {
+                        Item selectedItem = getPlayer().quickslotbar.Quickslot(slot) as Item;
+
+                        if(playerStore.activePlayer.inventory.item_list.FindAll(x => x.itemID == selectedItem.itemID).Count > 0)
+                        {
+                            if (!ItemActive)
+                            {
+                                ItemActive = true;
+                                previousCastTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 1.2f;
+                                item_Consume(gameTime, selectedItem);
+                            }
                         }
                     }
                 }
+            }
+        }
+
+        private void item_Consume(GameTime gameTime, Item selectedItem)
+        {
+            if (selectedItem.Type == ItemType.Consumable)
+            {
+                string script = selectedItem.Script;
+
+                // remove beginning and ending spaces
+
+                script = Regex.Replace(script, "{", "");
+                script = Regex.Replace(script, "}", "");
+                script = Regex.Replace(script, " ", "");
+
+                // call static class that handles item scripts
+                // use the script interpretter to read the content
+
+                ScriptInterpreter.Instance.loadScript(script);
+                ScriptInterpreter.Instance.StartReading = true;
+                ScriptInterpreter.Instance.Property = null;
+                ScriptInterpreter.Instance.Values.Clear();
+
+                ScriptInterpreter.Instance.readScript();
+
+                // clear script, reset to begin
+                ScriptInterpreter.Instance.clearInstance();
+            }
+
+            // remove the item
+            playerStore.activePlayer.inventory.removeItem(selectedItem.itemID);
+
+            // cleanup quickslot if inventory is empty
+            if(playerStore.activePlayer.inventory.item_list.FindAll(x => x.itemID == selectedItem.itemID).Count == 0)
+            {
+                for(int i = 0; i < playerStore.activePlayer.quickslotbar.quickslot.Length; i++)
+                {
+                    if (playerStore.activePlayer.quickslotbar.quickslot[i] is Item)
+                    {
+                        Item quickslotitem = playerStore.activePlayer.quickslotbar.quickslot[i] as Item;
+
+                        if (quickslotitem.itemID == selectedItem.itemID)
+                            playerStore.activePlayer.quickslotbar.quickslot[i] = null;
+                    }
+                }
+            }
+        }
+
+        private void item_CoolDown(GameTime gameTime)
+        {
+            previousCastTimeMsec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            if (previousCastTimeMsec <= 0)
+            {
+                resetState(gameTime);
             }
         }
 

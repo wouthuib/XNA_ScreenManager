@@ -15,6 +15,7 @@ namespace XNA_ScreenManager.CharacterClasses
         Shoot,
         Cooldown,
         Skill,
+        Item,
         Sit,
         Rope,
         Ladder,

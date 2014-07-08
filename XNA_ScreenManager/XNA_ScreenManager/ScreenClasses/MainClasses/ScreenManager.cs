@@ -354,10 +354,17 @@ namespace XNA_ScreenManager.ScreenClasses
                                     skillScreen.skillOptionsActive = false;
                                     skillScreen.QuickSlotActive = true;
                                     skillScreen.options.Style = OrderStyle.Central;
-                                    skillScreen.options.SetMenuItems(
-                                        new string[] { "Please choose a slot by pressing F1 to F12", "", "Cancel" });
-                                    skillScreen.options.StartIndex = 2;
-                                    skillScreen.options.SelectedIndex = 2;
+                                    skillScreen.options.SetMenuItems(new string[] 
+                                    { 
+                                        "In which Quickslot do you", 
+                                        "want to place " + skillScreen.SelectedSkill.Name +"?", 
+                                        "",
+                                        "<- " + skillScreen.SetSkillSlot.ToString() + " ->",
+                                        "Cancel"  
+                                    });
+                                    skillScreen.options.StartIndex = 3;
+                                    skillScreen.options.SelectedIndex = 3;
+                                    skillScreen.SetSkillSlot = 1;
                                 }
                                 else
                                 {
@@ -388,16 +395,17 @@ namespace XNA_ScreenManager.ScreenClasses
                                 PlayerStore.Instance.activePlayer.Skillpoints--;
 
                                 // add skill to player skilltree, if not exist
-                                if (PlayerStore.Instance.activePlayer.skilltree.getSkill(skillScreen.SelectedSkill.Name) == null)
+                                string skillname = skillScreen.SelectedSkill.Name;
+                                if (PlayerStore.Instance.activePlayer.skilltree.skill_list.FindAll(x => x.Name == skillScreen.SelectedSkill.Name).Count == 0)
                                     PlayerStore.Instance.activePlayer.skilltree.addSkill(skillScreen.SelectedSkill);
 
                                 // level up the skill by 1
                                 PlayerStore.Instance.activePlayer.skilltree.getSkill(skillScreen.SelectedSkill.Name).Level++;
 
                                 // increase level of existing skills in skillbar
-                                if (PlayerStore.Instance.activePlayer.skillbar.getSlot(skillScreen.SelectedSkill.Name) > 0)
-                                    PlayerStore.Instance.activePlayer.skillbar.
-                                        skillslot[PlayerStore.Instance.activePlayer.skillbar.getSlot(skillScreen.SelectedSkill.Name)].
+                                if (PlayerStore.Instance.activePlayer.quickslotbar.getSlot(skillScreen.SelectedSkill.Name) > 0)
+                                     PlayerStore.Instance.activePlayer.quickslotbar.
+                                        QuickSlotSkill[PlayerStore.Instance.activePlayer.quickslotbar.getSlot(skillScreen.SelectedSkill.Name)].
                                         Level = PlayerStore.Instance.activePlayer.skilltree.getSkill(skillScreen.SelectedSkill.Name).Level;
                             }
                             else
@@ -429,10 +437,38 @@ namespace XNA_ScreenManager.ScreenClasses
             else if (skillScreen.QuickSlotActive)
             {
                 // Check item options
-                if (CheckKey(Keys.Enter) || CheckKey(Keys.Back) || CheckKey(Keys.Escape))
+                if (CheckKey(Keys.Enter) || CheckKey(Keys.Space))
+                {
+                    if (skillScreen.options.SelectedIndex == 3)
+                    {
+                        PlayerStore.Instance.activePlayer.quickslotbar.quickslot[skillScreen.SetSkillSlot - 1] = skillScreen.SelectedSkill;
+                        skillScreen.QuickSlotActive = false;
+                        skillScreen.SelectActive = true;
+                    }
+                    else if (skillScreen.options.SelectedIndex == 4)
+                    {
+                        skillScreen.QuickSlotActive = false;
+                        skillScreen.SelectActive = true;
+                    }
+                }
+                if (CheckKey(Keys.Back) || CheckKey(Keys.Escape))
                 {
                     skillScreen.QuickSlotActive = false;
                     skillScreen.skillOptionsActive = true;
+                }
+                else if (CheckKey(Keys.Right) && skillScreen.options.SelectedIndex == 3)
+                {
+                    skillScreen.SetSkillSlot++;
+                    if (skillScreen.SetSkillSlot > PlayerStore.Instance.activePlayer.quickslotbar.quickslot.Length)
+                        skillScreen.SetSkillSlot = 1;
+                    skillScreen.options.MenuItems[3] = "<- " + skillScreen.SetSkillSlot.ToString() + " ->";
+                }
+                else if (CheckKey(Keys.Left) && skillScreen.options.SelectedIndex == 3)
+                {
+                    skillScreen.SetSkillSlot--;
+                    if (skillScreen.SetSkillSlot == 0)
+                        skillScreen.SetSkillSlot = PlayerStore.Instance.activePlayer.quickslotbar.quickslot.Length;
+                    skillScreen.options.MenuItems[3] = "<- " + skillScreen.SetSkillSlot.ToString() + " ->";
                 }
             }
             else if (skillScreen.InfoMessageActive)

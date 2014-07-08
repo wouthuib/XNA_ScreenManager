@@ -49,7 +49,7 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
                     skillOptionsActive = false,
                     InfoMessageActive = false;
         private int selectedOption = 0;
-        public int selectedColumn = 0, selectedRow = 0;
+        public int selectedColumn = 0, selectedRow = 0, SetSkillSlot = 1;
         private int width, height;
         public string[,] record = new string[4, 5];
 
@@ -146,8 +146,8 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
         {
             get 
             {
-                if (PlayerStore.Instance.activePlayer.skilltree.skill_list.FindAll(x => x.Name == record[selectedColumn, selectedRow]).Count > 0)
-                    return PlayerStore.Instance.activePlayer.skilltree.getSkill(record[selectedColumn, selectedRow]);
+                if (SkillStore.Instance.skill_list.FindAll(x => x.Name == record[selectedColumn, selectedRow]).Count > 0)
+                    return SkillStore.Instance.skill_list.Find(x => x.Name == record[selectedColumn, selectedRow]);
                 else
                     return null;
             }
@@ -193,8 +193,6 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
             }
             else if (QuickSlotActive)
             {
-                updateQuickSlot(gameTime);
-
                 // update skill components
                 options.Update(gameTime);
             }
@@ -212,84 +210,6 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
 
             // save keyboard state
             oldState = newState;
-        }
-
-        private void updateQuickSlot(GameTime gameTime)
-        {     
-            // Check quickslot options
-            if (CheckKey(Keys.F1))
-            {
-                PlayerStore.Instance.activePlayer.skillbar.skillslot[0] = SelectedSkill;
-                QuickSlotActive = false;
-                SelectActive = true;
-            }
-            else if (CheckKey(Keys.F2))
-            {
-                PlayerStore.Instance.activePlayer.skillbar.skillslot[1] = SelectedSkill;
-                QuickSlotActive = false;
-                SelectActive = true;
-            }
-            else if (CheckKey(Keys.F3))
-            {
-                PlayerStore.Instance.activePlayer.skillbar.skillslot[2] = SelectedSkill;
-                QuickSlotActive = false;
-                SelectActive = true;
-            }
-            else if (CheckKey(Keys.F4))
-            {
-                PlayerStore.Instance.activePlayer.skillbar.skillslot[3] = SelectedSkill;
-                QuickSlotActive = false;
-                SelectActive = true;
-            }
-            else if (CheckKey(Keys.F5))
-            {
-                PlayerStore.Instance.activePlayer.skillbar.skillslot[4] = SelectedSkill;
-                QuickSlotActive = false;
-                SelectActive = true;
-            }
-            else if (CheckKey(Keys.F6))
-            {
-                PlayerStore.Instance.activePlayer.skillbar.skillslot[5] = SelectedSkill;
-                QuickSlotActive = false;
-                SelectActive = true;
-            }
-            else if (CheckKey(Keys.F7))
-            {
-                PlayerStore.Instance.activePlayer.skillbar.skillslot[6] = SelectedSkill;
-                QuickSlotActive = false;
-                SelectActive = true;
-            }
-            else if (CheckKey(Keys.F8))
-            {
-                PlayerStore.Instance.activePlayer.skillbar.skillslot[7] = SelectedSkill;
-                QuickSlotActive = false;
-                SelectActive = true;
-            }
-            else if (CheckKey(Keys.F9))
-            {
-                PlayerStore.Instance.activePlayer.skillbar.skillslot[8] = SelectedSkill;
-                QuickSlotActive = false;
-                SelectActive = true;
-            }
-            else if (CheckKey(Keys.F10))
-            {
-                PlayerStore.Instance.activePlayer.skillbar.skillslot[9] = SelectedSkill;
-                QuickSlotActive = false;
-                SelectActive = true;
-            }
-            else if (CheckKey(Keys.F11))
-            {
-                PlayerStore.Instance.activePlayer.skillbar.skillslot[10] = SelectedSkill;
-                QuickSlotActive = false;
-                SelectActive = true;
-            }
-            else if (CheckKey(Keys.F12))
-            {
-                PlayerStore.Instance.activePlayer.skillbar.skillslot[11] = SelectedSkill;
-                QuickSlotActive = false;
-                SelectActive = true;
-            }
-
         }
         
         public override void Draw(GameTime gameTime)

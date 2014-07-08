@@ -15,6 +15,7 @@ namespace XNA_ScreenManager.PlayerClasses
         // Static PlayerStore
         protected PlayerStore playerStore = PlayerStore.Instance;
         protected List<StatusUpdateClass> status_list = new List<StatusUpdateClass>();
+        public bool SkillActive = false, ItemActive = false;
 
         // Timers
         float previousRecoveryTime;

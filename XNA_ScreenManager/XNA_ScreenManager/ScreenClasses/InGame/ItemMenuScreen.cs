@@ -260,6 +260,7 @@ namespace XNA_ScreenManager.ScreenClasses
                     if (options.SelectedIndex == 3) // itemcount
                     {
                         //SellShopItems(SetItemSlot); // <-- place item in skillbar
+                        PlayerStore.Instance.activePlayer.quickslotbar.quickslot[SetItemSlot - 1] = itemlist.menuItemsnoDupes[itemlist.SelectedIndex];
                         itemQuickSlotOption = false;
                         itemSelection = true;
                     }
@@ -272,7 +273,7 @@ namespace XNA_ScreenManager.ScreenClasses
                 else if (CheckKey(Keys.Right) && options.SelectedIndex == 3)
                 {
                     SetItemSlot++;
-                    if (SetItemSlot > playerStore.activePlayer.skillbar.skillslot.Length)
+                    if (SetItemSlot > playerStore.activePlayer.quickslotbar.quickslot.Length)
                         SetItemSlot = 1;
                     options.MenuItems[3] = "<- " + SetItemSlot.ToString() + " ->";
                 }
@@ -280,7 +281,7 @@ namespace XNA_ScreenManager.ScreenClasses
                 {
                     SetItemSlot--;
                     if (SetItemSlot == 0)
-                        SetItemSlot = playerStore.activePlayer.skillbar.skillslot.Length;
+                        SetItemSlot = playerStore.activePlayer.quickslotbar.quickslot.Length;
                     options.MenuItems[3] = "<- " + SetItemSlot.ToString() + " ->";
                 }
                 else if (CheckKey(Keys.Escape) || CheckKey(Keys.Back))
@@ -417,7 +418,9 @@ namespace XNA_ScreenManager.ScreenClasses
             }
 
             updateItemList();       // update item menu
-            itemOptions = false;    // close options
+
+            itemOptions = false;
+            itemSelection = true;
 
             // Update selected index
             if (itemlist.SelectedIndex > itemlist.menuItemsnoDupes.Count - 1)
@@ -453,7 +456,9 @@ namespace XNA_ScreenManager.ScreenClasses
             }
 
             itemRemove();
+
             itemOptions = false;
+            itemSelection = true;
         }
 
         private void itemRemove()
@@ -465,7 +470,9 @@ namespace XNA_ScreenManager.ScreenClasses
                 itemlist.SelectedIndex = itemlist.menuItemsnoDupes.Count - 1;
 
             updateItemList();       // update item menu
-            itemOptions = false;    // close options
+
+            itemOptions = false;
+            itemSelection = true;
         }
 
         private void itemQuickSlot()

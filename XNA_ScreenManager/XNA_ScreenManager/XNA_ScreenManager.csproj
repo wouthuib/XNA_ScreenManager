@@ -190,7 +190,7 @@
     <Compile Include="ScriptClasses\ScriptInterpreter.cs" />
     <Compile Include="ScriptClasses\SwitchStore.cs" />
     <Compile Include="SkillClasses\Skill.cs" />
-    <Compile Include="SkillClasses\SkillBar.cs" />
+    <Compile Include="SkillClasses\QuickSlotBar.cs" />
     <Compile Include="SkillClasses\SkillStore.cs" />
     <Compile Include="SkillClasses\SkillTree.cs" />
   </ItemGroup>
