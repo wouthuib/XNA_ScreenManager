@@ -181,11 +181,11 @@ namespace XNA_ScreenManager.ScreenClasses
                         Item item = quickslotbar.Quickslot(i) as Item;
                         int count = PlayerStore.Instance.activePlayer.inventory.item_list.FindAll(x =>x.itemName == item.itemName).Count;
 
-                        // icon
+                        // initize sprite icon
                         Texture2D sprite = Content.Load<Texture2D>(item.itemSpritePath);
-                        Rectangle frame = new Rectangle(item.SpriteFrameX * 48, item.SpriteFrameY * 48, 48, 48);
+                        Rectangle frame = new Rectangle(item.SpriteFrameX * 48 + 6, item.SpriteFrameY * 48 + 12, 30, 28); // +6 +12 is the offset for red potion
 
-                        Color color = Color.White, textcolor = Color.Blue;
+                        Color color = Color.White, textcolor = Color.LightGreen;
                         float trans = 1.0f;
 
                         if (GameWorld.GetInstance.playerSprite.ItemActive)
@@ -195,13 +195,20 @@ namespace XNA_ScreenManager.ScreenClasses
                             textcolor = Color.Red;
                         }
 
-                        spriteBatch.Draw(
-                            sprite,
-                            new Vector2(position.X + 206 + (32 * i), position.Y + 435),
-                            frame,
-                            color * trans);
+                        // initize icon rectangle
+                        Texture2D rect = new Texture2D(gfxdevice, 20, 22);
 
-                        // count
+                        Color[] data = new Color[20 * 22];
+                        for (int ii = 0; ii < data.Length; ++ii) data[ii] = Color.Black;
+                        rect.SetData(data);
+
+                        // draw icon rectangle
+                        spriteBatch.Draw(rect, new Vector2(position.X + 216 + (32 * i), position.Y + 448), Color.White * 0.70f);
+
+                        // draw sprite icon
+                        spriteBatch.Draw(sprite, new Rectangle((int)position.X + 214 + (32 * i), (int)position.Y + 445, 26, 28), frame, color * trans);
+
+                        // draw item count
                         spriteBatch.DrawString(spriteFont, count.ToString(),
                             new Vector2(position.X + 226 + (32 * i), position.Y + 461),
                             Color.Black);

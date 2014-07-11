@@ -25,14 +25,14 @@ namespace XNA_ScreenManager.CharacterClasses
         Animate,
         Spawn
     };
-    public enum EntityType { Player, Friend, Monster, NPC, Warp, Wall, Slope, Bullet, Arrow };
+    //public enum EntityType { Player, Friend, Monster, NPC, Warp, Wall, Slope, Bullet, Arrow };
 
     public abstract class Entity
     {
         #region Vital Field and Property Region
 
         protected Guid instanceID;
-        protected EntityType entityType;
+        //protected EntityType entityType;
         protected Texture2D entityFace;
         protected string entityName;
         protected string entityScript;
@@ -67,11 +67,11 @@ namespace XNA_ScreenManager.CharacterClasses
             set { state = value; }
         }
 
-        public EntityType EntityType
-        {
-            get { return entityType; }
-            protected set { entityType = value; }
-        }
+        //public EntityType EntityType
+        //{
+        //    get { return entityType; }
+        //    protected set { entityType = value; }
+        //}
 
         #endregion
 

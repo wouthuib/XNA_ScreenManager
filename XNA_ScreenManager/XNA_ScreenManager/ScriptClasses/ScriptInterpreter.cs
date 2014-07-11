@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using XNA_ScreenManager.PlayerClasses;
 using XNA_ScreenManager.MapClasses;
 using XNA_ScreenManager.GameWorldClasses.Effects;
+using Microsoft.Xna.Framework;
 
 namespace XNA_ScreenManager.ScriptClasses
 {
@@ -452,7 +453,7 @@ namespace XNA_ScreenManager.ScriptClasses
                                             switch (Values[0].ToString())
                                             {
                                                 case "heal":
-                                                    GameWorld.GetInstance.listEffect.Add(new LevelUpEffect());
+                                                    GameWorld.GetInstance.listEffect.Add(new CastEffect(@"gfx\effects\heal\effect_", 7, new Vector2(0, -20)));
                                                     break;
                                                 default:
                                                     break;

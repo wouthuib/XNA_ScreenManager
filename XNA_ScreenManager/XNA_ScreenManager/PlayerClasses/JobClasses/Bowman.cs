@@ -25,7 +25,6 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
         Texture2D cast_animation, skill_animation;
         float previousGameTimeMsec, previousSkillTimeMsec, previousCastTimeMsec;
         private SkillStateBowman SkillState = SkillStateBowman.None;
-        private bool SkillActive = false;
         private Vector2 curving;
         private int arrow_count, ani_count;
 

@@ -37,7 +37,7 @@ namespace XNA_ScreenManager
         // Player properties
         protected SpriteEffects spriteEffect = SpriteEffects.None;
         private float transperancy = 1;
-        private bool debug = false;
+        private bool debug = true;
 
         // Sprite Animation Properties
         public int effectCounter = 0;                                                               // for the warp effect

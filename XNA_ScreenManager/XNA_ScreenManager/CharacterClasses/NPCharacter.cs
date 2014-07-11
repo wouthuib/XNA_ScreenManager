@@ -45,7 +45,7 @@ namespace XNA_ScreenManager.CharacterClasses
             SpriteSize = new Rectangle(0, 0, (int)_spriteSize.X, (int)_spriteSize.Y);
             Position = _position;
             frames = _frames;
-            entityType = EntityType.NPC;
+            //entityType = EntityType.NPC;
             entityFace = face;
             entityName = name;
             entityScript = script;

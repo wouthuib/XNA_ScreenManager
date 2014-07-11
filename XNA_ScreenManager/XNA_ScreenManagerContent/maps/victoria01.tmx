@@ -104,7 +104,7 @@
    </properties>
    <ellipse/>
   </object>
-  <object name="npc3" x="1408" y="691">
+  <object name="npc3" x="1408" y="685">
    <properties>
     <property name="Face" value="rang"/>
     <property name="Frames" value="7"/>
@@ -118,7 +118,7 @@
    </properties>
    <ellipse/>
   </object>
-  <object name="npc4" x="576" y="435">
+  <object name="npc4" x="576" y="430">
    <properties>
     <property name="Face" value="npc01"/>
     <property name="Frames" value="1"/>
@@ -194,7 +194,7 @@
    <properties>
     <property name="BorderL" value="40"/>
     <property name="BorderR" value="60"/>
-    <property name="monsterID" value="1201"/>
+    <property name="monsterID" value="1207"/>
    </properties>
    <ellipse/>
   </object>
@@ -202,15 +202,15 @@
      <properties>
        <property name="BorderL" value="40"/>
        <property name="BorderR" value="60"/>
-       <property name="monsterID" value="1201"/>
+       <property name="monsterID" value="1208"/>
      </properties>
      <ellipse/>
    </object>
-   <object name="mob03" x="1592" y="672">
+   <object name="mob03" x="1592" y="500">
      <properties>
        <property name="BorderL" value="40"/>
        <property name="BorderR" value="60"/>
-       <property name="monsterID" value="1201"/>
+       <property name="monsterID" value="1207"/>
      </properties>
      <ellipse/>
    </object>
@@ -218,7 +218,7 @@
      <properties>
        <property name="BorderL" value="40"/>
        <property name="BorderR" value="60"/>
-       <property name="monsterID" value="1201"/>
+       <property name="monsterID" value="1208"/>
      </properties>
      <ellipse/>
    </object>
@@ -226,7 +226,7 @@
      <properties>
        <property name="BorderL" value="40"/>
        <property name="BorderR" value="60"/>
-       <property name="monsterID" value="1201"/>
+       <property name="monsterID" value="1207"/>
      </properties>
      <ellipse/>
    </object>
@@ -234,7 +234,7 @@
      <properties>
        <property name="BorderL" value="40"/>
        <property name="BorderR" value="60"/>
-       <property name="monsterID" value="1201"/>
+       <property name="monsterID" value="1208"/>
      </properties>
      <ellipse/>
    </object>
@@ -242,7 +242,7 @@
    <properties>
     <property name="BorderL" value="90"/>
     <property name="BorderR" value="110"/>
-    <property name="monsterID" value="1202"/>
+    <property name="monsterID" value="1209"/>
    </properties>
    <ellipse/>
   </object>
@@ -250,7 +250,7 @@
    <properties>
     <property name="BorderL" value="130"/>
     <property name="BorderR" value="150"/>
-    <property name="monsterID" value="1203"/>
+    <property name="monsterID" value="1209"/>
    </properties>
    <ellipse/>
   </object>
@@ -258,7 +258,7 @@
    <properties>
     <property name="BorderL" value="10"/>
     <property name="BorderR" value="30"/>
-    <property name="monsterID" value="1204"/>
+    <property name="monsterID" value="1212"/>
    </properties>
    <ellipse/>
   </object>
@@ -266,7 +266,7 @@
    <properties>
     <property name="BorderL" value="140"/>
     <property name="BorderR" value="170"/>
-    <property name="monsterID" value="1205"/>
+    <property name="monsterID" value="1212"/>
    </properties>
    <ellipse/>
   </object>
@@ -274,7 +274,7 @@
    <properties>
     <property name="BorderL" value="95"/>
     <property name="BorderR" value="115"/>
-    <property name="monsterID" value="1206"/>
+    <property name="monsterID" value="1212"/>
    </properties>
    <ellipse/>
   </object>

@@ -57,12 +57,12 @@ namespace XNA_ScreenManager.PlayerClasses
 
                 getPlayer().HP += (int)(getPlayer().MAXHP * 0.05f);
                 getPlayer().SP += (int)(getPlayer().MAXSP * 0.05f);
-
-                if (getPlayer().HP >= getPlayer().MAXHP)
-                    getPlayer().HP = getPlayer().MAXHP;
-                if (getPlayer().SP >= getPlayer().MAXSP)
-                    getPlayer().SP = getPlayer().MAXSP;
             }
+
+            if (getPlayer().HP >= getPlayer().MAXHP)
+                getPlayer().HP = getPlayer().MAXHP;
+            if (getPlayer().SP >= getPlayer().MAXSP)
+                getPlayer().SP = getPlayer().MAXSP;
         }
 
         private void PlayerLevelUp()
@@ -72,7 +72,7 @@ namespace XNA_ScreenManager.PlayerClasses
             getPlayer().Statpoints++;
             getPlayer().Exp -= getPlayer().NextLevelExp;
             getPlayer().NextLevelExp = (int)(getPlayer().Level ^ 4 + (1000 * getPlayer().Level));
-            GameWorld.GetInstance.listEffect.Add(new LevelUpEffect());
+            GameWorld.GetInstance.listEffect.Add(new CastEffect(@"gfx\effects\LevelUp\LevelUp_", 20, new Vector2(-76, -170)));
         }
 
         #region bound new player

@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using XNA_ScreenManager.CharacterClasses;
 using XNA_ScreenManager.MapClasses;
 using XNA_ScreenManager.ScreenClasses.MainClasses;
+using XNA_ScreenManager.MonsterClasses;
 
 namespace XNA_ScreenManager.PlayerClasses
 {
@@ -49,12 +50,12 @@ namespace XNA_ScreenManager.PlayerClasses
         {
             foreach(var entity in GameWorld.GetInstance.listEntity)
             {
-                if (entity.EntityType == EntityType.Monster)
+                if (entity is MonsterSprite)
                 {
                     if (new Rectangle((int)entity.Position.X + (int)(entity.SpriteFrame.Width * 0.30f),
-                                          (int)entity.Position.Y + (int)(entity.SpriteFrame.Height * 0.45f),
+                                          (int)entity.Position.Y,
                                           (int)entity.SpriteFrame.Width - (int)(entity.SpriteFrame.Width * 0.30f),
-                                          (int)entity.SpriteFrame.Height - (int)(entity.SpriteFrame.Height * 0.45f)).
+                                          (int)entity.SpriteFrame.Height).
                             Intersects(
                                 new Rectangle((int)this.Position.X + (int)(this.SpriteFrame.Width * 0.45f),
                                     (int)this.Position.Y + (int)(this.SpriteFrame.Height * 0.45f),

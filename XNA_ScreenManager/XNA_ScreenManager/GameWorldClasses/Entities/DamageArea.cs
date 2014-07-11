@@ -68,19 +68,20 @@ namespace XNA_ScreenManager.GameWorldClasses.Entities
             // check for monster collisions
             foreach (Entity entity in GameWorld.GetInstance.listEntity)
             {
-                if (entity.EntityType == EntityType.Monster &&
+                if (entity is MonsterSprite &&
                     ((MobHitID.FindAll(x=> x == entity.InstanceID).Count == 0) || this.Permanent == true) &&
                     (this.MobHitCount < this.MaxMobHitCount || this.Permanent == true)
                    )
                 {
-                    MonsterSprite monster = (MonsterSprite)entity;
+                    MonsterSprite monster = entity as MonsterSprite;
 
-                    if (monster.SpriteBoundries.
-                    Intersects(new Rectangle(
-                        (int)Position.X, 
-                        (int)Position.Y,
-                        (int)SpriteFrame.Width, 
-                        (int)SpriteFrame.Height)) == true)
+                    if(monster != null)
+
+                    if (monster.SpriteBoundries.Intersects(
+                        new Rectangle(
+                            (int)Position.X, (int)Position.Y, 
+                            (int)SpriteFrame.Width, (int)SpriteFrame.Height))
+                        )
                     {
                         if (monster.State != EntityState.Hit && 
                             monster.State != EntityState.Died && 

@@ -10,6 +10,9 @@ using XNA_ScreenManager.MonsterClasses;
 using XNA_ScreenManager.GameWorldClasses.Entities;
 using XNA_ScreenManager.ScreenClasses.MainClasses;
 using System.Runtime.Serialization;
+using System.IO;
+using Microsoft.Xna.Framework.Content;
+using System.Text.RegularExpressions;
 
 namespace XNA_ScreenManager.CharacterClasses
 {
@@ -18,6 +21,7 @@ namespace XNA_ScreenManager.CharacterClasses
         #region properties
 
         // static randomizer
+        ContentManager Content = ResourceManager.GetInstance.Content;
         randomizer Randomizer = randomizer.Instance;                                                // generate unique random ID
         PlayerStore PlayerInfo = PlayerStore.Instance;                                              // get battle information of player
         GameWorld world;
@@ -27,9 +31,10 @@ namespace XNA_ScreenManager.CharacterClasses
         List<int[]> ItemDrop = new List<int[]>();
 
         // Drawing properties
-        private int spriteWidth = 90;
-        private int spriteHeight = 90;
-        private Vector2 spriteOfset = new Vector2(90, 0);
+        private int spriteframe, prevspriteframe;
+        private string spritepath, spritename;
+        public Vector2 spriteOfset;
+        public List<spriteOffset> list_offsets = new List<spriteOffset>();
         private SpriteEffects spriteEffect = SpriteEffects.None;
         private float transperancy = 0;
         private bool debug = false;
@@ -44,7 +49,6 @@ namespace XNA_ScreenManager.CharacterClasses
         Color color = Color.White;                                                                  // Sprite color
         private Vector2 Direction = Vector2.Zero;                                                   // Sprite Move direction
         private float Speed;                                                                        // Speed used in functions
-        private bool ani_forward = true;                                                            // if we play for or backward
 
         // Movement properties
         const int WALK_SPEED = 100;                                                                 // The actual speed of the entity
@@ -65,16 +69,21 @@ namespace XNA_ScreenManager.CharacterClasses
 
         #endregion
 
-        public MonsterSprite(int ID, Texture2D texture, Vector2 position, Vector2 borders)
+        public MonsterSprite(int ID, Vector2 position, Vector2 borders)
             : base()
         {
             // Derived properties
             Active = true;
-            sprite = texture;
-            SpriteFrame = new Rectangle((int)spriteOfset.X, (int)spriteOfset.Y, spriteWidth, spriteHeight);
             Position = position;
             OldPosition = position;
-            entityType = EntityType.Monster;
+
+            spriteframe = 0;
+            spritepath = MonsterStore.Instance.getMonster(ID).monsterSprite;
+            spritename = "stand_" + spriteframe.ToString();
+            sprite = Content.Load<Texture2D>(spritepath + spritename);
+            SpriteFrame = new Rectangle(0, 0, sprite.Width, sprite.Width);
+
+            loadoffsetfromXML();
 
             // Save for respawning
             resp_pos = position;
@@ -182,29 +191,22 @@ namespace XNA_ScreenManager.CharacterClasses
                     // reduce timer
                     previousAnimateTimeSec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-                    if (previousAnimateTimeSec <= 0)
+                    // set sprite frames
+                    if (previousAnimateTimeSec < 0)
                     {
                         previousAnimateTimeSec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.10f;
+                        spriteframe++;
+                    }
 
-                        if (ani_forward)
-                        {
-                            spriteFrame.X += spriteWidth;
-                            if (spriteFrame.X > spriteOfset.X + (spriteWidth * 2))
-                            {
-                                spriteFrame.X = (int)spriteOfset.X + (spriteWidth * 2);
-                                ani_forward = false;
-                            }
-                        }
-                        else
-                        {
-                            spriteFrame.X -= spriteWidth;
-                            if (spriteFrame.X < spriteOfset.X)
-                            {
-                                spriteFrame.X = (int)spriteOfset.X;
-                                ani_forward = true;
-                            }
-                        }
-                        
+                    if (spriteframe > list_offsets.FindAll(x => x.Name.StartsWith("stand_")).Count -1)
+                        spriteframe = 0;
+
+                    // Player animation
+                    if (prevspriteframe != spriteframe)
+                    {
+                        prevspriteframe = spriteframe;
+                        spritename = "stand_" + spriteframe.ToString();
+                        spriteOfset = getoffset();
                     }
 
                     // Apply Gravity 
@@ -231,35 +233,25 @@ namespace XNA_ScreenManager.CharacterClasses
                         this.Speed = WALK_SPEED;
                     }
 
-                    // monster animation
-                    spriteOfset = new Vector2(0, 90);
-                    spriteFrame.Y = Convert.ToInt32(spriteOfset.Y);
-
                     // reduce timer
                     previousAnimateTimeSec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-                    if (previousAnimateTimeSec <= 0)
+                    // set sprite frames
+                    if (previousAnimateTimeSec < 0)
                     {
                         previousAnimateTimeSec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.10f;
+                        spriteframe++;
+                    }
 
-                        if (ani_forward)
-                        {
-                            spriteFrame.X += spriteWidth;
-                            if (spriteFrame.X > spriteOfset.X + (spriteWidth * 3))
-                            {
-                                spriteFrame.X = (int)spriteOfset.X + (spriteWidth * 3);
-                                ani_forward = false;
-                            }
-                        }
-                        else
-                        {
-                            spriteFrame.X -= spriteWidth;
-                            if (spriteFrame.X < spriteOfset.X)
-                            {
-                                spriteFrame.X = (int)spriteOfset.X;
-                                ani_forward = true;
-                            }
-                        }
+                    if (spriteframe > list_offsets.FindAll(x => x.Name.StartsWith("move_")).Count -1)
+                        spriteframe = 0;
+
+                    // Player animation
+                    if (prevspriteframe != spriteframe)
+                    {
+                        prevspriteframe = spriteframe;
+                        spritename = "move_" + spriteframe.ToString();
+                        spriteOfset = getoffset();
                     }
 
                     // Check if monster is steady standing
@@ -335,11 +327,17 @@ namespace XNA_ScreenManager.CharacterClasses
                             // Give player EXP
                             PlayerStore.Instance.activePlayer.Exp += this.EXP;
 
+                            // reset spriteframe
+                            spriteframe = 0;
+
                             // Change state monster
                             state = EntityState.Died;
                         }
                         else
+                        {
+                            spriteframe = 0;
                             state = EntityState.Frozen;
+                        }
                     }
 
                     previousHitTimeSec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -353,9 +351,8 @@ namespace XNA_ScreenManager.CharacterClasses
                     Position += new Vector2(0, 1) * 250 * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                     // monster animation
-                    spriteOfset = new Vector2(0, 180);
-                    spriteFrame.X = Convert.ToInt32(spriteOfset.X);
-                    spriteFrame.Y = Convert.ToInt32(spriteOfset.Y);
+                    spritename = "hit1_0";
+                    spriteOfset = getoffset();
 
                     // reduce timer
                     previousFrozenTimeSec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -364,7 +361,7 @@ namespace XNA_ScreenManager.CharacterClasses
                     if (previousFrozenTimeSec <= 0)
                     {
                         // reset sprite frame
-                        spriteFrame.X = 0;
+                        spriteframe = 0;
                         state = EntityState.Stand;
                     }
                     break;
@@ -385,16 +382,22 @@ namespace XNA_ScreenManager.CharacterClasses
                     // reduce timer
                     previousAnimateTimeSec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-                    if (previousAnimateTimeSec <= 0)
+                    // set sprite frames
+                    if (previousAnimateTimeSec < 0)
                     {
-                        previousAnimateTimeSec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.15f;
+                        previousAnimateTimeSec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.10f;
+                        spriteframe++;
+                    }
 
-                        spriteFrame.X += spriteWidth;
+                    if (spriteframe > list_offsets.FindAll(x => x.Name.StartsWith("die1_")).Count -1)
+                        spriteframe = 0;
 
-                        if (spriteFrame.X > spriteOfset.X + (spriteWidth * 3))
-                        {
-                            spriteFrame.X = (int)spriteOfset.X + (spriteWidth * 3);
-                        }
+                    // Player animation
+                    if (prevspriteframe != spriteframe)
+                    {
+                        prevspriteframe = spriteframe;
+                        spritename = "die1_" + spriteframe.ToString();
+                        spriteOfset = getoffset();
                     }
 
                     // reduce timer
@@ -410,7 +413,6 @@ namespace XNA_ScreenManager.CharacterClasses
                         // respawn a new monster
                         world.newEntity.Add(new MonsterSprite(
                                     MonsterID,
-                                    sprite,
                                     resp_pos,
                                     new Vector2((int)resp_bord.X, (int)resp_bord.Y)
                                     ));
@@ -463,10 +465,9 @@ namespace XNA_ScreenManager.CharacterClasses
 
             previousAttackTimeSec = currentAttackTimeSec;
 
-
             Entity player = world.Player;
 
-                if (player.EntityType == EntityType.Player)
+                if (player is PlayerSprite)
                 {
                     if (player.SpriteFrame.Intersects(SpriteBoundries))
                     {
@@ -517,11 +518,35 @@ namespace XNA_ScreenManager.CharacterClasses
         #region draw
         public override void Draw(SpriteBatch spriteBatch)
         {
+            Texture2D drawsprite = null;
+            Vector2 drawPosition = Vector2.Zero;
+
             if (Active)
             {
-                DrawSpriteFrame(spriteBatch);
-                spriteBatch.Draw(sprite, new Rectangle((int)Position.X, (int)Position.Y, SpriteFrame.Width, SpriteFrame.Height),
-                    SpriteFrame, Color.White * transperancy, 0f, Vector2.Zero, spriteEffect, 0f);
+                DrawSpriteFrame(spriteBatch); // <-- debug option
+
+                // load texture into sprite from Content Manager
+                drawsprite = Content.Load<Texture2D>(spritepath + spritename);
+
+                // Calculate position based on spriteEffect
+                if (spriteEffect == SpriteEffects.None)
+                    drawPosition.X = (int)Position.X + (int)getoffset().X + (int)(sprite.Width * 0.25f);
+                else
+                    drawPosition.X = (int)Position.X + (int)Math.Abs(getoffset().X) - drawsprite.Width + (int)(sprite.Width * 0.5f);
+
+                // draw player sprite
+                spriteBatch.Draw(drawsprite,
+                    new Rectangle(
+                        (int)drawPosition.X, //+ (int)sprCorrect.X,
+                        (int)Position.Y + (int)getoffset().Y + (int)(sprite.Height * 0.85f),
+                        drawsprite.Width,
+                        drawsprite.Height),
+                    new Rectangle(
+                        0,
+                        0,
+                        drawsprite.Width,
+                        drawsprite.Height),
+                    Color.White * this.transperancy, 0f, Vector2.Zero, spriteEffect, 0f);
             }
         }
 
@@ -589,35 +614,90 @@ namespace XNA_ScreenManager.CharacterClasses
                             (int)Math.Abs(SpriteFrame.Height * 0.60f - MonsterStore.Instance.monster_list.Find(x => x.monsterID == this.MonsterID).sizeMod.Y));
             }
         }
-        #endregion
-    }
 
-    // Singleton randomizer to provide unique values
-    public class randomizer
-    {
-        private static randomizer instance;
-        private Random rand;
-
-        private randomizer()
+        public Vector2 getoffset()
         {
-            rand = new Random();
-        }
+            if (this.list_offsets.Count == 0)
+                loadoffsetfromXML(); // load from XML
 
-        public int generateRandom(int min, int max)
-        {
-            return rand.Next(min, max);
-        }
-
-        public static randomizer Instance
-        {
-            get
+            if (this.list_offsets.FindAll(x => x.Name == spritename + ".png").Count > 0)
             {
-                if (instance == null)
+                return new Vector2(this.list_offsets.Find(x => x.Name == spritename.ToString() + ".png" ).X,
+                                   this.list_offsets.Find(x => x.Name == spritename.ToString() + ".png" ).Y);
+            }
+            else
+                return Vector2.Zero; // the sprite simply does not exist (e.g. hands for ladder and rope are disabled)
+
+        }
+
+        public void loadoffsetfromXML()
+        {
+            List<string> attribute = new List<string>();
+
+            if (spritepath != null)
+            {
+                using (var reader = new StreamReader(Path.Combine(ResourceManager.GetInstance.Content.RootDirectory + "\\" + spritepath, "data.xml")))
                 {
-                    instance = new randomizer();
+                    while (!reader.EndOfStream)
+                    {
+                        var line = reader.ReadLine();
+                        var values = line.Split(' ');
+
+                        try
+                        {
+                            if (values[0] != "<i>")
+                            {
+                                for (int i = 0; i < values.Length; i++)
+                                {
+                                    if (values[i].StartsWith("image="))
+                                    {
+                                        char[] arrstart = new char[] { 'i', 'm', 'a', 'g', 'e', '=' };
+                                        string result = values[i].TrimStart(arrstart);
+                                        result = Regex.Replace(result, @"""", "");
+                                        attribute.Add(result);
+                                    }
+                                    else if (values[i].StartsWith("x="))
+                                    {
+                                        char[] arrstart = new char[] { 'x', '=', '"' };
+                                        char[] arrend = new char[] { '"' };
+                                        string result = values[i].TrimStart(arrstart);
+                                        result = result.TrimEnd(arrend);
+                                        attribute.Add(result);
+                                    }
+                                    else if (values[i].StartsWith("y="))
+                                    {
+                                        char[] arrstart = new char[] { 'y', '=', '"' };
+                                        char[] arrend = new char[] { '"', '\\', '"', '/', '>' };
+                                        string result = values[i].TrimStart(arrstart);
+                                        result = result.TrimEnd(arrend);
+                                        attribute.Add(result);
+                                    }
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            string ee = ex.ToString();
+                        }
+                    }
                 }
-                return instance;
+
+                // fill list with XML structures
+                this.list_offsets.Clear();
+
+                for (int i = 0; i < attribute.Count; i++)
+                {
+                    if (attribute[i].EndsWith(".png"))
+                    {
+                        this.list_offsets.Add(new spriteOffset(
+                                0,
+                                attribute[i].ToString(),
+                                Convert.ToInt32(attribute[i + 1]),
+                                Convert.ToInt32(attribute[i + 2])));
+                    }
+                }
             }
         }
+        #endregion
     }
 }

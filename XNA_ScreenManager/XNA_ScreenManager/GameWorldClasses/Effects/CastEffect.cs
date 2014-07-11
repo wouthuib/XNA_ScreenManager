@@ -9,14 +9,20 @@ using Microsoft.Xna.Framework;
 
 namespace XNA_ScreenManager.GameWorldClasses.Effects
 {
-    public class LevelUpEffect : XNA_ScreenManager.MapClasses.Effect
+    public class CastEffect : XNA_ScreenManager.MapClasses.Effect
     {
+        string Path;
+        int FrameCount;
         float previousGameTimeSec = 0, frame = 0;
+        Vector2 Offset;
 
-        public LevelUpEffect()
+        public CastEffect(string path, int framecount, Vector2 offset)
             : base()
         {
-            this.sprite = ResourceManager.GetInstance.Content.Load<Texture2D>(@"gfx\effects\LevelUp\LevelUp_" + frame.ToString());
+            this.Offset = offset;
+            this.Path = path;
+            this.FrameCount = framecount;
+            this.sprite = ResourceManager.GetInstance.Content.Load<Texture2D>(this.Path + frame.ToString());
             this.SpriteFrame = new Rectangle((int)0, (int)0, (int)sprite.Width, (int)sprite.Height);
             this.keepAliveTimer = 21 * 0.10f; // 21 frames
             this.size = new Vector2(0.75f, 0.75f);
@@ -26,8 +32,8 @@ namespace XNA_ScreenManager.GameWorldClasses.Effects
         {
             base.Update(gameTime);
 
-            this.Position = new Vector2(GameWorld.GetInstance.playerSprite.Position.X - 76,
-                                        GameWorld.GetInstance.playerSprite.Position.Y - 170);
+            this.Position = new Vector2(GameWorld.GetInstance.playerSprite.Position.X + Offset.X,
+                                        GameWorld.GetInstance.playerSprite.Position.Y + Offset.Y);
 
             // reduce timer
             previousGameTimeSec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -37,8 +43,8 @@ namespace XNA_ScreenManager.GameWorldClasses.Effects
                 previousGameTimeSec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.10f;
                 frame++;
 
-                if (frame < 21)
-                    this.sprite = ResourceManager.GetInstance.Content.Load<Texture2D>(@"gfx\effects\LevelUp\LevelUp_" + frame.ToString());
+                if (frame <= FrameCount)
+                    this.sprite = ResourceManager.GetInstance.Content.Load<Texture2D>(this.Path + frame.ToString());
             }
         }
     }

@@ -40,7 +40,7 @@ namespace XNA_ScreenManager.MapClasses
         }
 
         // monster hits player
-        public static int battle_calc_damage_mob(MonsterSprite monsterinfo, PlayerInfo playerinfo)
+        public static int battle_calc_damage_mob(Entity monsterinfo, PlayerInfo playerinfo)
         {
             randomizer Randomizer = randomizer.Instance;
 

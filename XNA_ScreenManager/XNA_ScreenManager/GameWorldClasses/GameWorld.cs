@@ -54,8 +54,8 @@ namespace XNA_ScreenManager.MapClasses
                 Entity return_player = null;
                 foreach (Entity player in listEntity)
                 {
-                    if(player.EntityType == EntityType.Player)
-                        return_player = player;
+                    if(player is PlayerSprite)
+                        return_player = player as PlayerSprite;
                 }
 
                 return return_player;
@@ -154,13 +154,19 @@ namespace XNA_ScreenManager.MapClasses
 
                 // Update non Player Entities (Monsters, NPC's)
                 foreach (Entity obj in listEntity)
-                    if(obj.EntityType != EntityType.Player)
+                    if (obj is PlayerSprite)
+                    { }
+                    else
+                    {
                         obj.Update(gameTime);
+                    }
 
                 // Update player Sprite
                 foreach (Entity obj in listEntity)
-                    if (obj.EntityType == EntityType.Player)
+                    if (obj is PlayerSprite)
+                    {
                         obj.Update(gameTime);
+                    }
                 
                 // Update Effect objects (Warps, items, damage)
                 foreach (Effect obj in listEffect)
@@ -212,11 +218,68 @@ namespace XNA_ScreenManager.MapClasses
                         entity.CollideSlope = false;
 
                         Rectangle EntityRec = new Rectangle(
-                            (int)entity.Position.X + (int)(playerSprite.SpriteSize.Width * 0.25f),
+                            (int)entity.Position.X + (int)(entity.SpriteSize.Width * 0.25f),
                             (int)entity.Position.Y,
-                            (int)entity.SpriteFrame.Width - (int)(playerSprite.SpriteSize.Width * 0.25f),
+                            (int)entity.SpriteFrame.Width - (int)(entity.SpriteSize.Width * 0.25f),
                             (int)entity.SpriteFrame.Height);
 
+                        #region slope collision
+                        // Check Slope collision (player and NPC!)
+                        foreach (var obj in map.ObjectGroups["Slopes"].Objects)
+                        {
+                            char[] chars = obj.Value.Name.ToCharArray();
+                            string objname = new string(chars).Substring(0, 5); // max 4 chars to skip numbers
+
+                            if (objname == "slope")
+                            {
+                                Rectangle Slope = new Rectangle((int)obj.Value.X, (int)obj.Value.Y, (int)obj.Value.Width, (int)obj.Value.Height);
+
+                                if (EntityRec.Intersects(Slope) &&
+                                    entity.Position.X + entity.SpriteFrame.Width * 0.70f > Slope.Left &&
+                                    entity.Position.X + entity.SpriteFrame.Width * 0.30f < Slope.Right &&
+                                    entity.Position.Y + entity.SpriteFrame.Height < Slope.Bottom + 2)
+                                {
+                                    // set collision slope
+                                    entity.CollideSlope = true;
+
+                                    // collision detection
+                                    Vector2 tileSlope = new Vector2(0, 0);
+
+                                    EntityRec = new Rectangle((int)entity.Position.X, (int)entity.Position.Y,
+                                        (int)entity.SpriteFrame.Width, (int)entity.SpriteFrame.Height);
+
+                                    // reading XML - wall properties
+                                    foreach (var property in obj.Value.Properties)
+                                    {
+                                        if (property.Key == "SlopeX")
+                                            tileSlope.X = Convert.ToInt32(property.Value);
+                                        if (property.Key == "SlopeY")
+                                            tileSlope.Y = Convert.ToInt32(property.Value);
+                                    }
+
+                                    float SlopeRad = (float)Slope.Height / (float)Slope.Width;
+
+                                    if (tileSlope.X < tileSlope.Y) // move down
+                                    {
+                                        //float inSlopePosition = (EntityRec.Center.X * SlopeRad) - Slope.Left;
+                                        float inSlopePosition = (EntityRec.Center.X - Slope.Left) * SlopeRad;
+                                        if (inSlopePosition > 0)
+                                            if (EntityRec.Bottom > Slope.Top + inSlopePosition)
+                                                entity.PositionY = (Slope.Top + inSlopePosition) - entity.SpriteFrame.Height;
+                                    }
+
+                                    if (tileSlope.X > tileSlope.Y) // move up
+                                    {
+                                        float inSlopePosition = (EntityRec.Center.X - Slope.Left) * SlopeRad;
+
+                                        if (inSlopePosition < Slope.Height)
+                                            if (EntityRec.Bottom > Slope.Bottom - inSlopePosition)
+                                                entity.PositionY = (Slope.Bottom - inSlopePosition) - entity.SpriteFrame.Height;
+                                    }
+                                }
+                            }
+                        }
+                        #endregion
                         #region walls collision
                         // Check wall collision (player and NPC!)
                         foreach (var obj in map.ObjectGroups["Walls"].Objects)
@@ -229,8 +292,8 @@ namespace XNA_ScreenManager.MapClasses
                                 Rectangle Wall = new Rectangle((int)obj.Value.X, (int)obj.Value.Y, (int)obj.Value.Width, (int)obj.Value.Height);
 
                                 if (EntityRec.Intersects(Wall) &&
-                                    entity.Position.X + entity.SpriteFrame.Width * 0.65f > Wall.Left &&
-                                    entity.Position.X + entity.SpriteFrame.Width * 0.45f < Wall.Right)
+                                    entity.Position.X + entity.SpriteFrame.Width * 0.50f > Wall.Left &&
+                                    entity.Position.X + entity.SpriteFrame.Width * 0.50f < Wall.Right)
                                 {
 
                                     // reading XML - wall properties
@@ -258,7 +321,7 @@ namespace XNA_ScreenManager.MapClasses
                                             case EntityState.Jump:
                                                 break;
                                             default:
-                                                if (entity.EntityType != EntityType.NPC)
+                                                if (entity is NPCharacter)
                                                 {
                                                     if (entity.PositionY > entity.OldPositionY &&
                                                         entity.PositionY + (entity.SpriteFrame.Height * 0.90f) < Wall.Top)
@@ -309,64 +372,7 @@ namespace XNA_ScreenManager.MapClasses
                                 }
                             }
                         }
-                        #endregion                        
-                        #region slope collision
-                        // Check Slope collision (player and NPC!)
-                        foreach (var obj in map.ObjectGroups["Slopes"].Objects)
-                        {
-                            char[] chars = obj.Value.Name.ToCharArray();
-                            string objname = new string(chars).Substring(0, 5); // max 4 chars to skip numbers
-
-                            if (objname == "slope")
-                            {
-                                Rectangle Slope = new Rectangle((int)obj.Value.X, (int)obj.Value.Y, (int)obj.Value.Width, (int)obj.Value.Height);
-
-                                if (EntityRec.Intersects(Slope) &&
-                                    entity.Position.X + entity.SpriteFrame.Width * 0.65f > Slope.Left &&
-                                    entity.Position.X + entity.SpriteFrame.Width * 0.45f < Slope.Right &&
-                                    entity.Position.Y + entity.SpriteFrame.Height < Slope.Bottom + 2)
-                                {
-                                    // set collision slope
-                                    entity.CollideSlope = true;
-
-                                    // collision detection
-                                    Vector2 tileSlope = new Vector2(0, 0);
-
-                                    EntityRec = new Rectangle((int)entity.Position.X, (int)entity.Position.Y,
-                                        (int)entity.SpriteFrame.Width, (int)entity.SpriteFrame.Height);
-
-                                    // reading XML - wall properties
-                                    foreach (var property in obj.Value.Properties)
-                                    {
-                                        if (property.Key == "SlopeX")
-                                            tileSlope.X = Convert.ToInt32(property.Value);
-                                        if (property.Key == "SlopeY")
-                                            tileSlope.Y = Convert.ToInt32(property.Value);
-                                    }
-
-                                    float SlopeRad = (float)Slope.Height / (float)Slope.Width;
-
-                                    if (tileSlope.X < tileSlope.Y) // move down
-                                    {
-                                        //float inSlopePosition = (EntityRec.Center.X * SlopeRad) - Slope.Left;
-                                        float inSlopePosition = (EntityRec.Center.X - Slope.Left) * SlopeRad;
-                                        if (inSlopePosition > 0)
-                                            if (EntityRec.Bottom > Slope.Top + inSlopePosition)
-                                                entity.PositionY = (Slope.Top + inSlopePosition) - entity.SpriteFrame.Height;
-                                    }
-
-                                    if (tileSlope.X > tileSlope.Y) // move up
-                                    {
-                                        float inSlopePosition = (EntityRec.Center.X - Slope.Left) * SlopeRad;
-
-                                        if (inSlopePosition < Slope.Height)
-                                            if (EntityRec.Bottom > Slope.Bottom - inSlopePosition)
-                                                entity.PositionY = (Slope.Bottom - inSlopePosition) - entity.SpriteFrame.Height;
-                                    }
-                                }
-                            }
-                        }
-                        #endregion
+                        #endregion                                                
                         #region warp collision
                         // Check for warp collision (player only!)
                         if (listEffect.FindAll(delegate(Effect obj) { return obj.GetType().IsSubclassOf(typeof(Effect)); }).Count > 0)
@@ -397,42 +403,11 @@ namespace XNA_ScreenManager.MapClasses
                             }
                         }
                         #endregion
-                        #region Arrow collision
-                        // Check for Arrow collision (monsters only!)
-                        if (entity.EntityType == EntityType.Monster)
-                        {
-                            foreach (Entity arrow in listEntity)
-                            {
-                                if (arrow.EntityType == EntityType.Arrow)
-                                {
-                                    if (new Rectangle((int)entity.Position.X + (int)(entity.SpriteFrame.Width * 0.30f),
-                                                      (int)entity.Position.Y + (int)(entity.SpriteFrame.Height * 0.40f),
-                                                      (int)entity.SpriteFrame.Width - (int)(entity.SpriteFrame.Width * 0.30f),
-                                                      (int)entity.SpriteFrame.Height).                                       
-                                        Intersects(
-                                            new Rectangle((int)arrow.Position.X + (int)(entity.SpriteFrame.Width * 0.30f), 
-                                                (int)arrow.Position.Y,
-                                                (int)arrow.SpriteFrame.Width - (int)(entity.SpriteFrame.Width * 0.30f), 
-                                                (int)arrow.SpriteFrame.Height)))
-                                    {
-                                        // make the monster suffer :-)
-                                        // and remove the arrow
-                                        if (entity.State != EntityState.Died &&
-                                            entity.State != EntityState.Spawn)
-                                        {
-                                            entity.State = EntityState.Hit;
-                                            arrow.KeepAliveTime = 0;   
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        #endregion
                         #region mapbound collision
                         // check maps bounds (player and NPC!)
                         if (EntityRec.Right > map.Width * map.TileWidth || EntityRec.Bottom > map.Height * map.TileHeight ||
                             EntityRec.Left < 0 || EntityRec.Top < 0)
-                            if (entity.EntityType != EntityType.Arrow)
+                            if (entity is PlayerSprite || entity is MonsterSprite)
                                 entity.Position = entity.OldPosition;
                         #endregion
 
@@ -639,15 +614,14 @@ namespace XNA_ScreenManager.MapClasses
                             }
                             try
                             {
-                                string spritePath = MonsterStore.Instance.getMonster(monsterID).monsterSprite.ToString();
-                                Texture2D monsterSprite = Content.Load<Texture2D>(spritePath);
-
-                                // properties are filled now check the state
-                                listEntity.Add(new MonsterSprite(
-                                            monsterID,
-                                            monsterSprite,
-                                            new Vector2(obj.Value.X, obj.Value.Y),
-                                            new Vector2(borderX, borderY)));
+                                if (monsterID >= 1207)
+                                {
+                                    // properties are filled now check the state
+                                    listEntity.Add(new MonsterSprite(
+                                                monsterID,
+                                                new Vector2(obj.Value.X, obj.Value.Y),
+                                                new Vector2(borderX, borderY)));
+                                }
                             }
                             catch (Exception ee)
                             {
@@ -742,7 +716,7 @@ namespace XNA_ScreenManager.MapClasses
         {
             // Remove Current Player
             for (int i = 0; i < listEntity.Count; i++)
-                if (listEntity[i].EntityType == EntityType.Player)
+                if (listEntity[i] is PlayerSprite)
                     listEntity.Remove(listEntity[i]);
 
             // Switch playerSprite
