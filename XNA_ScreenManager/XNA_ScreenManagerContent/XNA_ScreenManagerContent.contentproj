@@ -197,6 +197,9 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
+    <Compile Include="maps\henesys.tmx">
+      <Name>henesys</Name>
+    </Compile>
     <None Include="tables\itemtable.bin">
       <Name>itemtable</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -23337,6 +23340,108 @@
     </Compile>
     <Compile Include="gfx\Mobs\tigaru\stand_5.png">
       <Name>stand_5</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="maps\gfx\Henesys\Bowman Instructor School.png">
+      <Name>Bowman Instructor School</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="maps\gfx\Henesys\Chief Stan House.png">
+      <Name>Chief Stan House</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="maps\gfx\Henesys\Dreamy Forest Trail.png">
+      <Name>Dreamy Forest Trail</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="maps\gfx\Henesys\Henesys General Store.png">
+      <Name>Henesys General Store</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="maps\gfx\Henesys\Henesys Market.png">
+      <Name>Henesys Market</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="maps\gfx\Henesys\henesys market\henmark_01.png">
+      <Name>henmark_01</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="maps\gfx\Henesys\henesys market\henmark_02.png">
+      <Name>henmark_02</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="maps\gfx\Henesys\henesys market\henmark_03.png">
+      <Name>henmark_03</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="maps\gfx\Henesys\henesys market\henmark_04.png">
+      <Name>henmark_04</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="maps\gfx\Henesys\Henesys Park.png">
+      <Name>Henesys Park</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="maps\gfx\Henesys\Henesys Weapon Store.png">
+      <Name>Henesys Weapon Store</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="maps\gfx\Henesys\Henesys.png">
+      <Name>Henesys</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="maps\gfx\Henesys\henesys\henesys_01.png">
+      <Name>henesys_01</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="maps\gfx\Henesys\henesys\henesys_02.png">
+      <Name>henesys_02</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="maps\gfx\Henesys\henesys\henesys_03.png">
+      <Name>henesys_03</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="maps\gfx\Henesys\henesys\henesys_04.png">
+      <Name>henesys_04</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="maps\gfx\Henesys\henesys\henesys_05.png">
+      <Name>henesys_05</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="maps\gfx\Henesys\Hill North of Henesys.png">
+      <Name>Hill North of Henesys</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="maps\gfx\Henesys\Maya House.png">
+      <Name>Maya House</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="maps\gfx\Henesys\Rina House.png">
+      <Name>Rina House</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
