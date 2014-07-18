@@ -109,7 +109,8 @@ namespace XNA_ScreenManager.MapClasses
 
         protected void LoadObjects()
         {
-            map = Map.Load(Path.Combine(Content.RootDirectory, @"maps\victoria01.tmx"), Content);
+            //map = Map.Load(Path.Combine(Content.RootDirectory, @"maps\victoria01.tmx"), Content);
+            map = Map.Load(Path.Combine(Content.RootDirectory, @"maps\henesys.tmx"), Content);
 
             foreach (var property in map.Properties)
             {
@@ -292,8 +293,8 @@ namespace XNA_ScreenManager.MapClasses
                                 Rectangle Wall = new Rectangle((int)obj.Value.X, (int)obj.Value.Y, (int)obj.Value.Width, (int)obj.Value.Height);
 
                                 if (EntityRec.Intersects(Wall) &&
-                                    entity.Position.X + entity.SpriteFrame.Width * 0.50f > Wall.Left &&
-                                    entity.Position.X + entity.SpriteFrame.Width * 0.50f < Wall.Right)
+                                    entity.Position.X + entity.SpriteFrame.Width * 0.70f > Wall.Left &&
+                                    entity.Position.X + entity.SpriteFrame.Width * 0.30f < Wall.Right)
                                 {
 
                                     // reading XML - wall properties

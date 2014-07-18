@@ -197,9 +197,10 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="maps\henesys.tmx">
+    <None Include="maps\henesys.tmx">
       <Name>henesys</Name>
-    </Compile>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="tables\itemtable.bin">
       <Name>itemtable</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -23365,11 +23366,6 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="maps\gfx\Henesys\Henesys Market.png">
-      <Name>Henesys Market</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
     <Compile Include="maps\gfx\Henesys\henesys market\henmark_01.png">
       <Name>henmark_01</Name>
       <Importer>TextureImporter</Importer>
@@ -23390,18 +23386,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="maps\gfx\Henesys\Henesys Park.png">
-      <Name>Henesys Park</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
     <Compile Include="maps\gfx\Henesys\Henesys Weapon Store.png">
       <Name>Henesys Weapon Store</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="maps\gfx\Henesys\Henesys.png">
-      <Name>Henesys</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

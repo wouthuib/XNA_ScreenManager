@@ -29,43 +29,43 @@
   </object>
  </objectgroup>
  <objectgroup name="Walls" width="182" height="34">
-  <object name="wall1" x="0" y="698" width="544" height="6"/>
-  <object name="wall2" x="640" y="758" width="2336" height="6"/>
-  <object name="wall3" x="3072" y="816" width="96" height="6"/>
-  <object name="wall4" x="3245" y="877" width="2611" height="6"/>
-  <object name="wall5" x="4064" y="368" width="848" height="6"/>
-  <object name="wall6" x="2912" y="550" width="909" height="6"/>
-  <object name="wall7" x="3821" y="608" width="83" height="6"/>
-  <object name="wall8" x="3904" y="669" width="96" height="6"/>
-  <object name="wall9" x="4000" y="730" width="96" height="6"/>
-  <object name="wall10" x="4096" y="787" width="96" height="6"/>
-  <object name="wall11" x="4912" y="458" width="141" height="6"/>
-  <object name="wall12" x="4832" y="518" width="134" height="6"/>
-  <object name="wall13" x="4912" y="576" width="138" height="6"/>
-  <object name="wall14" x="525" y="518" width="134" height="6"/>
-  <object name="wall15" x="704" y="579" width="141" height="6"/>
-  <object name="wall16" x="883" y="518" width="141" height="6"/>
-  <object name="wall17" x="2278" y="611" width="134" height="6"/>
-  <object name="wall18" x="2726" y="611" width="134" height="6"/>
-  <object name="wall19" x="3789" y="486" width="134" height="6"/>
-  <object name="wall20" x="3885" y="429" width="128" height="6"/>
-  <object name="wall22" x="4832" y="400" width="125" height="6"/>
-  <object name="wall23" x="4160" y="848" width="118" height="6"/>
+   <object name="wall1" x="0" y="688" width="544" height="6"/>
+   <object name="wall2" x="640" y="748" width="2336" height="6"/>
+   <object name="wall3" x="3072" y="806" width="96" height="6"/>
+   <object name="wall4" x="3245" y="867" width="2611" height="6"/>
+   <object name="wall5" x="4064" y="358" width="848" height="6"/>
+   <object name="wall6" x="2912" y="540" width="909" height="6"/>
+   <object name="wall7" x="3821" y="598" width="83" height="6"/>
+   <object name="wall8" x="3904" y="659" width="96" height="6"/>
+   <object name="wall9" x="4000" y="720" width="96" height="6"/>
+   <object name="wall10" x="4096" y="777" width="96" height="6"/>
+   <object name="wall11" x="4912" y="448" width="141" height="6"/>
+   <object name="wall12" x="4832" y="508" width="134" height="6"/>
+   <object name="wall13" x="4912" y="566" width="138" height="6"/>
+   <object name="wall14" x="525" y="508" width="134" height="6"/>
+   <object name="wall15" x="704" y="569" width="141" height="6"/>
+   <object name="wall16" x="883" y="508" width="141" height="6"/>
+   <object name="wall17" x="2278" y="601" width="134" height="6"/>
+   <object name="wall18" x="2726" y="601" width="134" height="6"/>
+   <object name="wall19" x="3789" y="476" width="134" height="6"/>
+   <object name="wall20" x="3885" y="419" width="128" height="6"/>
+   <object name="wall22" x="4832" y="390" width="125" height="6"/>
+   <object name="wall23" x="4160" y="838" width="118" height="6"/>
  </objectgroup>
  <objectgroup name="Slopes" width="182" height="34">
-  <object name="slope1" x="544" y="694" width="96" height="64">
+  <object name="slope1" x="544" y="688" width="96" height="64">
    <properties>
     <property name="SlopeX" value="0"/>
     <property name="SlopeY" value="1"/>
    </properties>
   </object>
-  <object name="slope2" x="2976" y="758" width="96" height="64">
+  <object name="slope2" x="2976" y="748" width="96" height="64">
    <properties>
     <property name="SlopeX" value="0"/>
     <property name="SlopeY" value="1"/>
    </properties>
   </object>
-  <object name="slope3" x="3168" y="816" width="77" height="64">
+  <object name="slope3" x="3168" y="806" width="77" height="64">
    <properties>
     <property name="SlopeX" value="0"/>
     <property name="SlopeY" value="1"/>
@@ -73,8 +73,8 @@
   </object>
  </objectgroup>
  <objectgroup name="Climbing" width="182" height="34">
-  <object name="ladder1" x="4976" y="575" width="42" height="208"/>
-  <object name="ladder2" x="2944" y="550" width="38" height="192"/>
+  <object name="ladder1" x="4976" y="565" width="42" height="208"/>
+  <object name="ladder2" x="2944" y="540" width="38" height="192"/>
  </objectgroup>
  <objectgroup name="NPCS" width="182" height="34">
   <object name="npc1" x="2685" y="666">
@@ -105,7 +105,7 @@
    </properties>
    <ellipse/>
   </object>
-  <object name="npc3" x="1408" y="691">
+  <object name="npc3" x="1408" y="675">
    <properties>
     <property name="Face" value="rang"/>
     <property name="Frames" value="7"/>
@@ -119,7 +119,7 @@
    </properties>
    <ellipse/>
   </object>
-  <object name="npc4" x="576" y="435">
+  <object name="npc4" x="576" y="425">
    <properties>
     <property name="Face" value="npc01"/>
     <property name="Frames" value="1"/>
@@ -133,7 +133,7 @@
    </properties>
    <ellipse/>
   </object>
-  <object name="npc5" x="4352" y="288">
+  <object name="npc5" x="4352" y="278">
    <properties>
     <property name="Face" value="rang"/>
     <property name="Frames" value="10"/>
@@ -147,7 +147,7 @@
    </properties>
    <ellipse/>
   </object>
-  <object name="npc6" x="4640" y="813">
+  <object name="npc6" x="4640" y="803">
    <properties>
     <property name="Face" value="npc01"/>
     <property name="Frames" value="7"/>
@@ -161,7 +161,7 @@
    </properties>
    <ellipse/>
   </object>
-  <object name="npc7" x="5504" y="813">
+  <object name="npc7" x="5504" y="803">
    <properties>
     <property name="Face" value="rang"/>
     <property name="Frames" value="3"/>
@@ -175,7 +175,7 @@
    </properties>
    <ellipse/>
   </object>
-  <object name="npc8" x="4680" y="288">
+  <object name="npc8" x="4680" y="278">
    <properties>
     <property name="Face" value="rang"/>
     <property name="Frames" value="2"/>
@@ -191,7 +191,7 @@
   </object>
  </objectgroup>
  <objectgroup name="Monsters" width="182" height="34">
-  <object name="mob01" x="1592" y="672">
+  <object name="mob01" x="1592" y="662">
    <properties>
     <property name="BorderL" value="40"/>
     <property name="BorderR" value="60"/>
@@ -199,7 +199,7 @@
    </properties>
    <ellipse/>
   </object>
-  <object name="mob02" x="1592" y="672">
+  <object name="mob02" x="1592" y="662">
    <properties>
     <property name="BorderL" value="40"/>
     <property name="BorderR" value="60"/>
@@ -207,7 +207,7 @@
    </properties>
    <ellipse/>
   </object>
-  <object name="mob03" x="1592" y="672">
+  <object name="mob03" x="1592" y="662">
    <properties>
     <property name="BorderL" value="40"/>
     <property name="BorderR" value="60"/>
@@ -215,7 +215,7 @@
    </properties>
    <ellipse/>
   </object>
-  <object name="mob04" x="1592" y="672">
+  <object name="mob04" x="1592" y="662">
    <properties>
     <property name="BorderL" value="40"/>
     <property name="BorderR" value="60"/>
@@ -223,7 +223,7 @@
    </properties>
    <ellipse/>
   </object>
-  <object name="mob05" x="1592" y="672">
+  <object name="mob05" x="1592" y="662">
    <properties>
     <property name="BorderL" value="40"/>
     <property name="BorderR" value="60"/>
@@ -231,7 +231,7 @@
    </properties>
    <ellipse/>
   </object>
-  <object name="mob06" x="1592" y="672">
+  <object name="mob06" x="1592" y="662">
    <properties>
     <property name="BorderL" value="40"/>
     <property name="BorderR" value="60"/>
@@ -239,7 +239,7 @@
    </properties>
    <ellipse/>
   </object>
-  <object name="mob07" x="3200" y="736">
+  <object name="mob07" x="3200" y="726">
    <properties>
     <property name="BorderL" value="90"/>
     <property name="BorderR" value="110"/>
@@ -247,7 +247,7 @@
    </properties>
    <ellipse/>
   </object>
-  <object name="mob08" x="4480" y="784">
+  <object name="mob08" x="4480" y="774">
    <properties>
     <property name="BorderL" value="130"/>
     <property name="BorderR" value="150"/>
@@ -255,7 +255,7 @@
    </properties>
    <ellipse/>
   </object>
-  <object name="mob09" x="672" y="672">
+  <object name="mob09" x="672" y="662">
    <properties>
     <property name="BorderL" value="10"/>
     <property name="BorderR" value="30"/>
@@ -263,7 +263,7 @@
    </properties>
    <ellipse/>
   </object>
-  <object name="mob10" x="5120" y="784">
+  <object name="mob10" x="5120" y="774">
    <properties>
     <property name="BorderL" value="140"/>
     <property name="BorderR" value="170"/>
@@ -271,7 +271,7 @@
    </properties>
    <ellipse/>
   </object>
-  <object name="mob11" x="3360" y="464">
+  <object name="mob11" x="3360" y="454">
    <properties>
     <property name="BorderL" value="95"/>
     <property name="BorderR" value="115"/>
@@ -286,7 +286,7 @@
   </data>
  </layer>
  <objectgroup name="Warps" width="182" height="34">
-  <object name="warp1" x="72" y="672">
+  <object name="warp1" x="72" y="662">
    <properties>
     <property name="camposx" value="133"/>
     <property name="camposy" value="21"/>
