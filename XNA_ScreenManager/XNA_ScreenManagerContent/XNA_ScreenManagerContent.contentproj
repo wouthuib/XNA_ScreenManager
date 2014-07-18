@@ -169,6 +169,10 @@
       <Name>henesys</Name>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="playerstore\savegame.bin">
+      <Name>savegame</Name>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="tables\itemtable.bin">
       <Name>itemtable</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -1351,7 +1355,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="gfx\player\accessory\" />
-    <Folder Include="playerstore\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="gfx\screens\skilltree_menu2.png">
@@ -23433,10 +23436,6 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-<<<<<<< HEAD
-    <Compile Include="maps\gfx\Henesys\henesys market\henmark_01.png">
-      <Name>henmark_01</Name>
-=======
     <Compile Include="gfx\mobs\level_1_20\Crying Blue Mushroom\move_0.png">
       <Name>move_0</Name>
       <Importer>TextureImporter</Importer>
@@ -23444,7 +23443,6 @@
     </Compile>
     <Compile Include="gfx\mobs\level_1_20\Crying Blue Mushroom\move_1.png">
       <Name>move_1</Name>
->>>>>>> origin/master
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
@@ -23463,15 +23461,6 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-<<<<<<< HEAD
-    <Compile Include="maps\gfx\Henesys\Henesys Weapon Store.png">
-      <Name>Henesys Weapon Store</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="maps\gfx\Henesys\henesys\henesys_01.png">
-      <Name>henesys_01</Name>
-=======
     <Compile Include="gfx\mobs\level_1_20\Crying Blue Mushroom\stand_1.png">
       <Name>stand_1</Name>
       <Importer>TextureImporter</Importer>
@@ -23495,7 +23484,6 @@
     </Compile>
     <Compile Include="gfx\mobs\level_1_20\Dark Axe Stump\die1_2.png">
       <Name>die1_2</Name>
->>>>>>> origin/master
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
