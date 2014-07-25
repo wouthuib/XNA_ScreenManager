@@ -37,6 +37,7 @@ namespace XNA_ScreenManager.CharacterClasses
         protected string entityName;
         protected string entityScript;
         protected EntityState state;
+        protected EntityState previousState;
 
         public Guid InstanceID 
         { 

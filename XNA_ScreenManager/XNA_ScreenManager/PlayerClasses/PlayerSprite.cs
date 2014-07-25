@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using XNA_ScreenManager.GameWorldClasses.Entities;
 using System.Xml;
 using System.IO;
+using XNA_ScreenManager.Networking;
 
 namespace XNA_ScreenManager
 {
@@ -35,29 +36,30 @@ namespace XNA_ScreenManager
         protected ContentManager Content;
 
         // Player properties
-        protected SpriteEffects spriteEffect = SpriteEffects.None;
-        private float transperancy = 1;
-        private bool debug = true;
+        public SpriteEffects spriteEffect = SpriteEffects.None;
+        protected float transperancy = 1;
+        protected bool debug = false;
 
         // Sprite Animation Properties
-        public int effectCounter = 0;                                                               // for the warp effect
-        Color color = Color.White;                                                                  // sprite color
-        public Vector2 Direction = Vector2.Zero;                                                    // Sprite Move direction
-        public float Speed;                                                                         // Speed used in functions
-        public Vector2 Velocity = new Vector2(0,1);                                                 // speed used in jump
-        private const int PLAYER_SPEED = 200;                                                       // The actual speed of the player
-        const int ANIMATION_SPEED = 120;                                                            // Animation speed, 120 = default 
-        const int MOVE_UP = -1;                                                                     // player moving directions
-        const int MOVE_DOWN = 1;                                                                    // player moving directions
-        const int MOVE_LEFT = -1;                                                                   // player moving directions
-        const int MOVE_RIGHT = 1;                                                                   // player moving directions
-        float previousGameTimeMsec;                                                                 // GameTime in Miliseconds
-        private bool landed;                                                                        // land switch, arrow switch
+        protected int effectCounter = 0;                                                          // for the warp effect
+        protected Color color = Color.White;                                                      // sprite color
+        protected Vector2 Direction = Vector2.Zero;                                               // Sprite Move direction
+        protected float Speed;                                                                    // Speed used in functions
+        protected Vector2 Velocity = new Vector2(0,1);                                            // speed used in jump
+        private const int PLAYER_SPEED = 200;                                                     // The actual speed of the player
+        private const int ANIMATION_SPEED = 120;                                                  // Animation speed, 120 = default 
+        private const int MOVE_UP = -1;                                                           // player moving directions
+        private const int MOVE_DOWN = 1;                                                          // player moving directions
+        private const int MOVE_LEFT = -1;                                                         // player moving directions
+        private const int MOVE_RIGHT = 1;                                                         // player moving directions
+        private float previousGameTimeMsec;                                                       // GameTime in Miliseconds
+        protected float previousNetworkMsec;                                                      // Network update time
+        private bool landed;                                                                      // land switch, arrow switch
 
         // new Texture properties
-        protected int spriteframe = 0, prevspriteframe = 0, maxspriteframe = 0;
-        protected string spritename = "stand1_0", attackSprite;
-        protected string[] spritepath = new string[] 
+        public int spriteframe = 0, prevspriteframe = 0, maxspriteframe = 0;
+        public string spritename = "stand1_0", attackSprite;
+        public string[] spritepath = new string[] 
         { 
             @"gfx\player\body\head\",                                                               // Head Sprite  (0)
             @"gfx\player\body\torso\",                                                              // Body Sprite (1)
@@ -73,7 +75,7 @@ namespace XNA_ScreenManager
 
         #endregion
 
-        public PlayerSprite(int _X, int _Y, Vector2 _tileSize)
+        public PlayerSprite(int _X, int _Y)
             : base()
         {
             // Derived properties
@@ -97,6 +99,7 @@ namespace XNA_ScreenManager
             base.Update(gameTime); // Player Update Routines
 
             keyboardStateCurrent = Keyboard.GetState();
+            previousState = this.state;
 
             // reset effect state
             if (!collideWarp)
@@ -750,33 +753,33 @@ namespace XNA_ScreenManager
                                 state = EntityState.Rope;
                         }
 
-                            // Move the Character
-                            OldPosition = Position;
+                        // Move the Character
+                        OldPosition = Position;
 
-                            // Player animation
-                            for (int i = 0; i < spritepath.Length; i++)
-                            {
-                                spritename = "jump_0";
-                                playerStore.activePlayer.spriteOfset[i] = getoffset(i);
-                            }
+                        // Player animation
+                        for (int i = 0; i < spritepath.Length; i++)
+                        {
+                            spritename = "jump_0";
+                            playerStore.activePlayer.spriteOfset[i] = getoffset(i);
+                        }
         
-                            // Apply Gravity + jumping
-                            if (Velocity.Y < -1.2f)
-                            {
-                                // Apply jumping
-                                Position += Velocity * 350 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                        // Apply Gravity + jumping
+                        if (Velocity.Y < -1.2f)
+                        {
+                            // Apply jumping
+                            Position += Velocity * 350 * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-                                // Apply Gravity 
-                                Position += new Vector2(0, 1) * 250 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                            // Apply Gravity 
+                            Position += new Vector2(0, 1) * 250 * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-                                // Walk / Jump speed
-                                Position += Direction * (Speed / 2) * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                            }
-                            else
-                            {
-                                landed = false;
-                                state = EntityState.Falling;
-                            }
+                            // Walk / Jump speed
+                            Position += Direction * (Speed / 2) * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                        }
+                        else
+                        {
+                            landed = false;
+                            state = EntityState.Falling;
+                        }
 
                         break;
                     #endregion
@@ -826,7 +829,7 @@ namespace XNA_ScreenManager
 
                             if (previousGameTimeMsec < 0)
                             {
-                                previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.08f;
+                                previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.02f;
 
                                 if (landed == true)
                                     state = EntityState.Stand;
@@ -943,6 +946,22 @@ namespace XNA_ScreenManager
                 getPlayer().inventory.addItem(itemStore.getItem(randomizer.Instance.generateRandom(2300, 2308)));
             // temporary
             #endregion
+
+            // if the client is connected to a server
+            // these functions will trigger a player update
+            if (previousState != state)
+            {
+                NetworkGameData.Instance.sendPlayerData();
+            }
+            else if (keyboardStateCurrent != keyboardStatePrevious)
+            {
+                previousNetworkMsec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (previousNetworkMsec <= 0)
+                {
+                    //NetworkGameData.Instance.sendPlayerData();
+                    //previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 1.0f;
+                }
+            }
 
             keyboardStatePrevious = keyboardStateCurrent;
         }

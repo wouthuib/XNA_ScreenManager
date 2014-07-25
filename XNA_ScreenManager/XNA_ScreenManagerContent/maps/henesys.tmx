@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" width="182" height="34" tilewidth="32" tileheight="32">
  <properties>
+  <property name="Name" value="Henesys"/>
   <property name="Background" value="background1"/>
  </properties>
  <tileset firstgid="1" name="henesys_01" tilewidth="32" tileheight="32">

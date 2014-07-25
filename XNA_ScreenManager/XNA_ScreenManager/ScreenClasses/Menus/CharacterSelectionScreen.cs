@@ -76,7 +76,7 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
             menu.EndIndex = 3;
 
             // player sprite
-            playersprite = new PlayerSprite(100, 123, new Vector2(32, 32));
+            playersprite = new PlayerSprite(100, 123);
             player = new PlayerInfo();
             playersprite.Player = this.player;
 

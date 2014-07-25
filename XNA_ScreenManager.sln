@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual C# Express 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XNA_ScreenManager", "XNA_ScreenManager\XNA_ScreenManager\XNA_ScreenManager.csproj", "{DCB46CAF-4A67-4F5D-9E8C-900E77A80D49}"
 EndProject
-Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "XNA_ScreenManagerContent", "XNA_ScreenManager\XNA_ScreenManagerContent\XNA_ScreenManagerContent.contentproj", "{DFAC2D1A-EA02-4DEC-AA11-432ACA342507}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XNA_ScreenManagerContent", "XNA_ScreenManager\XNA_ScreenManagerContent\XNA_ScreenManagerContent.contentproj", "{DFAC2D1A-EA02-4DEC-AA11-432ACA342507}"
+EndProject
+Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "XNA_GameServerContent", "XNA_GameServer\XNA_GameServerContent\XNA_GameServerContent.contentproj", "{7B5FC3F4-153E-4405-B119-620D65E32E0D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,6 +19,8 @@ Global
 		{DCB46CAF-4A67-4F5D-9E8C-900E77A80D49}.Release|x86.Build.0 = Release|x86
 		{DFAC2D1A-EA02-4DEC-AA11-432ACA342507}.Debug|x86.ActiveCfg = Debug|x86
 		{DFAC2D1A-EA02-4DEC-AA11-432ACA342507}.Release|x86.ActiveCfg = Release|x86
+		{7B5FC3F4-153E-4405-B119-620D65E32E0D}.Debug|x86.ActiveCfg = Debug|x86
+		{7B5FC3F4-153E-4405-B119-620D65E32E0D}.Release|x86.ActiveCfg = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

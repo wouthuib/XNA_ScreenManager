@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
 using Squared.Tiled;
 using System.IO;
@@ -10,11 +9,10 @@ using XNA_ScreenManager.CharacterClasses;
 using XNA_ScreenManager.ItemClasses;
 using XNA_ScreenManager.PlayerClasses;
 using XNA_ScreenManager.ScreenClasses;
-using XNA_ScreenManager.GameWorldClasses.Entities;
 using XNA_ScreenManager.MonsterClasses;
-using XNA_ScreenManager.GameWorldClasses.Effects;
 using XNA_ScreenManager.PlayerClasses.JobClasses;
 using XNA_ScreenManager.SkillClasses;
+using XNA_ScreenManager.Networking;
 
 
 namespace XNA_ScreenManager.MapClasses
@@ -64,6 +62,7 @@ namespace XNA_ScreenManager.MapClasses
         
         public bool Active { get; set; }
         public bool Paused { get; set; }
+
         #endregion
 
         #region contructor
@@ -78,7 +77,7 @@ namespace XNA_ScreenManager.MapClasses
             gfxdevice = (GraphicsDevice)game.Services.GetService(typeof(GraphicsDevice));
 
             this.Active = false; // start disabled
-
+            
             cam = camref;
             LoadObjects();
         }
@@ -120,8 +119,9 @@ namespace XNA_ScreenManager.MapClasses
 
             playerSprite = new PlayerSprite(
                     (int)map.ObjectGroups["Hero"].Objects["hero"].X,
-                    (int)map.ObjectGroups["Hero"].Objects["hero"].Y,
-                    new Vector2(map.TileWidth, map.TileHeight));
+                    (int)map.ObjectGroups["Hero"].Objects["hero"].Y
+                    //new Vector2(map.TileWidth, map.TileHeight)
+                    );
 
             listEntity.Add(playerSprite);
 
@@ -161,6 +161,17 @@ namespace XNA_ScreenManager.MapClasses
                     {
                         obj.Update(gameTime);
                     }
+
+                // new Update network player Sprites
+                for (int i = 0; i < NetworkPlayerStore.Instance.playersprites.Length; i++)
+                {
+                    NetworkPlayerSprite player = NetworkPlayerStore.Instance.playersprites[i];
+                    if (player != null)
+                    {
+                        if (player.MapName == this.map.Properties.Values[1].ToString())
+                            player.Update(gameTime);
+                    }
+                }
 
                 // Update player Sprite
                 foreach (Entity obj in listEntity)
@@ -474,6 +485,18 @@ namespace XNA_ScreenManager.MapClasses
                     if(obj != playerSprite)
                         obj.Draw(spriteBatch);
                 }
+
+                // new Draw network players
+                for (int i = 0; i < NetworkPlayerStore.Instance.playersprites.Length; i++ )
+                {
+                    NetworkPlayerSprite player = NetworkPlayerStore.Instance.playersprites[i];
+                    if (player != null)
+                    {
+                        if (player.MapName == this.map.Properties.Values[1].ToString())
+                            player.Draw(spriteBatch);
+                    }
+                }
+
                 // Draw the player
                 playerSprite.Draw(spriteBatch);
 

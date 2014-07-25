@@ -9,7 +9,7 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
     public class Pirate : PlayerSprite
     {
         public Pirate(int _X, int _Y, Vector2 _tileSize) 
-            : base(_X, _Y, _tileSize)
+            : base(_X, _Y)
         {
         }
 

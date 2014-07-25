@@ -69,11 +69,23 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
             this.Active = true;
         }
 
+        public void Display(string mtext)
+        {
+            this.midstring = mtext;
+            previousTimeSec = (float)gameTime.ElapsedGameTime.TotalSeconds + 2.0f;
+            this.Active = true;
+        }
+
         public override void Draw(GameTime gameTime)
         {
             if (Active)
             {
-                string message = this.iteminfo.itemName + " has been " + midstring + " to your inventory.";
+                string message;
+
+                if(iteminfo != null)
+                    message = this.iteminfo.itemName + " has been " + midstring + " to your inventory.";
+                else
+                    message = midstring;
 
                 Vector2 size = spriteFont.MeasureString(message);
 

@@ -65,16 +65,22 @@
     </StartupObject>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>3AEA352A74CBF70249E1032BCDD5598340A58D24</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>1B52500F34503E78362FE62ADC3F3AEF23C56125</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>XNA_ScreenManager_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>XNA_ScreenManager_1_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
     <SignManifests>true</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>XNA_ScreenManager_1_TemporaryKey.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
@@ -145,6 +151,11 @@
     <Compile Include="GameWorldClasses\Entities\Warp.cs" />
     <Compile Include="MonsterClasses\MonsterStore.cs" />
     <Compile Include="GameWorldClasses\Entities\Arrow.cs" />
+    <Compile Include="Networking\NetworkGameData.cs" />
+    <Compile Include="Networking\TCPClient.cs" />
+    <Compile Include="Networking\ServerClasses\NetworkPlayerStore.cs" />
+    <Compile Include="Networking\ServerClasses\PlayerData.cs" />
+    <Compile Include="PlayerClasses\NetworkPlayerSprite.cs" />
     <Compile Include="PlayerClasses\PlayerRoutines.cs" />
     <Compile Include="PlayerClasses\PlayerSprite.cs" />
     <Compile Include="PlayerClasses\JobClasses\Bowman.cs" />
@@ -237,7 +248,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="XNA_ScreenManager_TemporaryKey.pfx" />
+    <None Include="XNA_ScreenManager_1_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

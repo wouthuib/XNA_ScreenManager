@@ -108,7 +108,7 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
             phase = Phase.Name;
 
             // player sprite
-            playersprite = new PlayerSprite(352, 188, new Vector2(32, 32));
+            playersprite = new PlayerSprite(352, 188);
         }
 
         public override void Update(GameTime gameTime)
