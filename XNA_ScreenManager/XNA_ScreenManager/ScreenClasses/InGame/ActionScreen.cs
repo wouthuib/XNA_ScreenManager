@@ -17,7 +17,7 @@ namespace XNA_ScreenManager
         SpriteBatch spriteBatch;
 
         ScreenManager screenManager = ScreenManager.Instance;
-        HUDScreen hud;
+        public HUDScreen hud;
         public TopMessageScreen topmessage;
         GameWorld world;
         public Camera2d cam;

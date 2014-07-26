@@ -403,7 +403,7 @@ namespace XNA_ScreenManager
                         if (this.collideRope == false)
                             this.state = EntityState.Falling;
 
-                        if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Down))
+                        if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Down) && !ChatboxActive)
                         {
                             // move player location (make ActiveMap tile check here in the future)
                             this.Direction.Y = MOVE_DOWN;
@@ -422,7 +422,7 @@ namespace XNA_ScreenManager
                             if (spriteframe > 1)
                                 spriteframe = 0;
                         }
-                        else if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Up))
+                        else if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Up) && !ChatboxActive)
                         {
                             // move player location (make ActiveMap tile check here in the future)
                             this.Direction.Y = MOVE_UP;
@@ -473,7 +473,7 @@ namespace XNA_ScreenManager
                         if (this.collideLadder == false)
                             this.state = EntityState.Falling;
 
-                        if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Down))
+                        if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Down) && !ChatboxActive)
                         {
                             // move player location (make ActiveMap tile check here in the future)
                             this.Direction.Y = MOVE_DOWN;
@@ -492,7 +492,7 @@ namespace XNA_ScreenManager
                             if (spriteframe > 1)
                                 spriteframe = 0;
                         }
-                        else if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Up))
+                        else if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Up) && !ChatboxActive)
                         {
                             // move player location (make ActiveMap tile check here in the future)
                             this.Direction.Y = MOVE_UP;
@@ -538,19 +538,19 @@ namespace XNA_ScreenManager
                         Direction = Vector2.Zero;
                         Velocity = Vector2.Zero;
 
-                        if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Right))
+                        if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Right) && !ChatboxActive)
                         {
                             spriteframe = 0;
                             state = EntityState.Walk;
                             spriteEffect = SpriteEffects.FlipHorizontally;
                         }
-                        else if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Left))
+                        else if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Left) && !ChatboxActive)
                         {
                             spriteframe = 0;
                             state = EntityState.Walk;
                             spriteEffect = SpriteEffects.None;
                         }
-                        else if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Space))
+                        else if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Space) && !ChatboxActive)
                         {
                             if (!collideNPC)
                             {
@@ -559,12 +559,12 @@ namespace XNA_ScreenManager
                                 state = EntityState.Jump;
                             }
                         }
-                        else if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Insert))
+                        else if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Insert) && !ChatboxActive)
                         {
                             spriteframe = 0;
                             state = EntityState.Sit;
                         }
-                        else if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Up))
+                        else if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Up) && !ChatboxActive)
                         {
                             spriteframe = 0;
                             if (this.collideLadder)
@@ -572,7 +572,7 @@ namespace XNA_ScreenManager
                             else if (this.collideRope)
                                 state = EntityState.Rope;
                         }
-                        else if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.LeftAlt))
+                        else if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.LeftAlt) && !ChatboxActive)
                         {
                             // check if weapon is equiped
                             if (getPlayer().equipment.item_list.FindAll(delegate(Item item) { return item.Type == ItemType.Weapon; }).Count > 0)
@@ -646,14 +646,14 @@ namespace XNA_ScreenManager
                         Direction = Vector2.Zero;
                         Velocity = Vector2.Zero;
 
-                        if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Right))
+                        if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Right) && !ChatboxActive)
                         {
                             // move player location (make ActiveMap tile check here in the future)
                             this.Direction.X = MOVE_RIGHT;
                             this.Speed = PLAYER_SPEED;
                             spriteEffect = SpriteEffects.FlipHorizontally;
                         }
-                        else if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Left))
+                        else if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Left) && !ChatboxActive)
                         {
                             // move player location (make ActiveMap tile check here in the future)
                             this.Direction.X = MOVE_LEFT;
@@ -664,7 +664,7 @@ namespace XNA_ScreenManager
                         {
                             state = EntityState.Stand;
                         }
-                        if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Space))
+                        if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Space) && !ChatboxActive)
                         {
                             if (!collideNPC)
                             {
@@ -940,11 +940,11 @@ namespace XNA_ScreenManager
             #region temporary quickbuttons
             // temporary global function buttons 
             // should be handles by singleton class keyboard manager
-            if (CheckKey(Keys.Q))
+            if (CheckKey(Keys.Q) && !ChatboxActive)
                 getPlayer().inventory.addItem(itemStore.getItem(new Random().Next(1100, 1114)));
-            else if (CheckKey(Keys.W))
+            else if (CheckKey(Keys.W) && !ChatboxActive)
                 getPlayer().inventory.addItem(itemStore.getItem(randomizer.Instance.generateRandom(1300, 1303)));
-            else if (CheckKey(Keys.E))
+            else if (CheckKey(Keys.E) && !ChatboxActive)
                 getPlayer().inventory.addItem(itemStore.getItem(randomizer.Instance.generateRandom(2300, 2308)));
             // temporary
             #endregion
@@ -1148,6 +1148,9 @@ namespace XNA_ScreenManager
             KeyboardState keyboardStateCurrent = Keyboard.GetState();
             return keyboardStatePrevious.IsKeyDown(theKey) && keyboardStateCurrent.IsKeyUp(theKey);
         }
+
+        protected bool ChatboxActive
+        { get { return XNA_ScreenManager.ScreenClasses.ScreenManager.Instance.actionScreen.hud.chatbarInput.Active; } }
 
         #region load spriteoffset
         protected Vector2 spriteCorrect(int spriteID, Texture2D spr)

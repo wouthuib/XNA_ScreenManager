@@ -11,15 +11,17 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
 {
     public class KeyboardInput : DrawableGameComponent
     {
-        SpriteBatch spriteBatch = null;
-        SpriteFont spriteFont;
-        ContentManager Content;
-        GraphicsDevice graphics;
+        protected SpriteBatch spriteBatch = null;
+        protected ContentManager Content;
+        protected GraphicsDevice graphics;
 
+        protected SpriteFont spriteFont;
         Keys[] keys;
         bool[] IskeyUp;
         string[] SC = { ")", "!", "@", "#", "$", "%", "^", "&", "*", "(" };//special characters
         string result = "";
+        protected string[] outlinings = new string[]{"left","central","right"};
+        public string outline;
         public bool Active = false;
         float transperancy = 1,
               previousTimeSec = 0;
@@ -35,6 +37,7 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
             graphics = (GraphicsDevice)Game.Services.GetService(typeof(GraphicsDevice));
 
             this.position = Position;
+            this.outline = outlinings[1];
 
             // new keyboard variables
             keys = new Keys[38];
@@ -145,26 +148,36 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
                 // Draw the NameTag
                 //Vector2 position = new Vector2(480, 75);
                 //spriteBatch.Draw(nametag, position, Color.White);
+                switch(outline)
+                {
+                    case "central":
+                    // Draw result
+                    spriteBatch.DrawString(spriteFont, result, new Vector2(position.X - (int)(GetLengthPxt() / 2), position.Y) + Vector2.One, Color.Black);
+                    spriteBatch.DrawString(spriteFont, result, new Vector2(position.X - (int)(GetLengthPxt() / 2), position.Y), Color.White);
 
-                // Draw result
-                spriteBatch.DrawString(spriteFont,
-                    result,
-                    new Vector2(position.X - (int)(GetLengthPxt() / 2), 
-                        position.Y) + Vector2.One,
-                    Color.Black);
+                    // Draw Pointer
+                    spriteBatch.DrawString(spriteFont, "|", new Vector2(position.X + (int)(GetLengthPxt() / 2), position.Y), Color.White * transperancy);
+                    break;
 
-                spriteBatch.DrawString(spriteFont,
-                    result,
-                    new Vector2(position.X - (int)(GetLengthPxt() / 2), 
-                        position.Y),
-                    Color.White);
+                    case "left":
+                    // Draw result
+                    spriteBatch.DrawString(spriteFont, result, new Vector2(position.X,position.Y) + Vector2.One, Color.Black);
+                    spriteBatch.DrawString(spriteFont, result, new Vector2(position.X,position.Y), Color.White);
 
-                // Draw Pointer
-                spriteBatch.DrawString(spriteFont,
-                    "|",
-                    new Vector2(position.X + (int)(GetLengthPxt() / 2), 
-                        position.Y),
-                    Color.White * transperancy);
+                    // Draw Pointer
+                    spriteBatch.DrawString(spriteFont, "|", new Vector2(position.X + (int)(GetLengthPxt()),position.Y), Color.White * transperancy);
+                    break;
+
+                    case "right":
+                    // Draw result
+                    spriteBatch.DrawString(spriteFont, result, new Vector2(position.X - (int)(GetLengthPxt()), position.Y) + Vector2.One, Color.Black);
+                    spriteBatch.DrawString(spriteFont, result, new Vector2(position.X - (int)(GetLengthPxt()), position.Y), Color.White);
+
+                    // Draw Pointer
+                    spriteBatch.DrawString(spriteFont, "|", new Vector2(position.X, position.Y), Color.White * transperancy);
+                    break;
+
+                }
             }
         }
 

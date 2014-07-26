@@ -12,6 +12,7 @@ using XNA_ScreenManager.PlayerClasses;
 using XNA_ScreenManager.SkillClasses;
 using XNA_ScreenManager.ItemClasses;
 using XNA_ScreenManager.MapClasses;
+using XNA_ScreenManager.ScreenClasses.SubComponents;
 
 
 namespace XNA_ScreenManager.ScreenClasses
@@ -27,9 +28,10 @@ namespace XNA_ScreenManager.ScreenClasses
         ContentManager Content;
         GraphicsDevice gfxdevice;
 
+        public ChatbarInput chatbarInput;
         PlayerStore playerInfo = PlayerStore.Instance;
-        Texture2D Border, HP, SP, EXP, Skillbar;
-        Vector2 position = new Vector2();
+        Texture2D Border, HP, SP, EXP, Skillbar, Chatbar, Chatbartop;
+        Vector2 position = new Vector2(), skillbar_pos, chatbar_pos;
         #endregion
 
         #region contructor
@@ -39,6 +41,8 @@ namespace XNA_ScreenManager.ScreenClasses
             spriteBatch = (SpriteBatch)Game.Services.GetService(typeof(SpriteBatch));
             Content = (ContentManager)Game.Services.GetService(typeof(ContentManager));
             gfxdevice = (GraphicsDevice)Game.Services.GetService(typeof(GraphicsDevice));
+
+            chatbarInput = new ChatbarInput(game, Content.Load<SpriteFont>(@"font\Arial_10px"));
 
             LoadContent();
         }
@@ -56,6 +60,8 @@ namespace XNA_ScreenManager.ScreenClasses
             EXP = Content.Load<Texture2D>(@"gfx\hud\EXP");
 
             Skillbar = Content.Load<Texture2D>(@"gfx\hud\skillbar");
+            Chatbar = Content.Load<Texture2D>(@"gfx\hud\chatbar");
+            Chatbartop = Content.Load<Texture2D>(@"gfx\hud\chatbar_top");
         }
         #endregion
 
@@ -74,6 +80,7 @@ namespace XNA_ScreenManager.ScreenClasses
 
         public override void Update(GameTime gameTime)
         {
+            chatbarInput.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -144,12 +151,18 @@ namespace XNA_ScreenManager.ScreenClasses
                 // spriteBatch.DrawString(spriteFont, message, new Vector2(Position.X + 5, Position.Y + 70), Color.White);
 
                 DrawSkillBar(gameTime);
+
+                DrawChatBar(gameTime);
             }
         }
 
         public void DrawSkillBar(GameTime gameTime)
         {
-            spriteBatch.Draw(Skillbar, new Vector2(position.X + 200, position.Y + 430), Color.White * 0.75f);
+            skillbar_pos = new Vector2(
+                position.X + (gfxdevice.Viewport.Width - Skillbar.Width) + 3,
+                position.Y + (gfxdevice.Viewport.Height - Skillbar.Height) + 3);
+
+            spriteBatch.Draw(Skillbar, skillbar_pos, Color.White * 0.75f);
 
             QuickSlotBar quickslotbar = playerInfo.activePlayer.quickslotbar;
 
@@ -165,15 +178,15 @@ namespace XNA_ScreenManager.ScreenClasses
                         Texture2D sprite = Content.Load<Texture2D>(skill.IconSpritePath);
                         spriteBatch.Draw(
                             sprite,
-                            new Vector2(position.X + 206 + (sprite.Width * i + 6), position.Y + 443),
+                            new Vector2(skillbar_pos.X + 6 + (sprite.Width * i + 6), skillbar_pos.Y + 13),
                             Color.White * 0.75f);
 
                         // level
                         spriteBatch.DrawString(spriteFont, skill.Level.ToString(),
-                            new Vector2(position.X + 226 + (sprite.Width * i + 6), position.Y + 461),
+                            new Vector2(skillbar_pos.X + 26 + (sprite.Width * i + 6), skillbar_pos.Y + 431),
                             Color.Black);
                         spriteBatch.DrawString(spriteFont, skill.Level.ToString(),
-                            new Vector2(position.X + 225 + (sprite.Width * i + 6), position.Y + 460),
+                            new Vector2(skillbar_pos.X + 25 + (sprite.Width * i + 6), skillbar_pos.Y + 430),
                             Color.LightGreen);
                     }
                     else if (quickslotbar.Quickslot(i) is Item)
@@ -203,21 +216,43 @@ namespace XNA_ScreenManager.ScreenClasses
                         rect.SetData(data);
 
                         // draw icon rectangle
-                        spriteBatch.Draw(rect, new Vector2(position.X + 216 + (32 * i), position.Y + 448), Color.White * 0.70f);
+                        spriteBatch.Draw(rect, new Vector2(skillbar_pos.X + 16 + (32 * i), skillbar_pos.Y + 16), Color.White * 0.70f);
 
                         // draw sprite icon
-                        spriteBatch.Draw(sprite, new Rectangle((int)position.X + 214 + (32 * i), (int)position.Y + 445, 26, 28), frame, color * trans);
+                        spriteBatch.Draw(sprite, new Rectangle((int)skillbar_pos.X + 14 + (32 * i), (int)skillbar_pos.Y + 15, 26, 28), frame, color * trans);
 
                         // draw item count
                         spriteBatch.DrawString(spriteFont, count.ToString(),
-                            new Vector2(position.X + 226 + (32 * i), position.Y + 461),
+                            new Vector2(skillbar_pos.X + 26 + (32 * i), skillbar_pos.Y + 31),
                             Color.Black);
                         spriteBatch.DrawString(spriteFont, count.ToString(),
-                            new Vector2(position.X + 225 + (32 * i), position.Y + 460),
+                            new Vector2(skillbar_pos.X + 25 + (32 * i), skillbar_pos.Y + 30),
                             textcolor * trans);
                     }
                 }
             }
+        }
+
+        public void DrawChatBar(GameTime gameTime)
+        {
+            chatbar_pos = new Vector2(position.X, position.Y + gfxdevice.Viewport.Height - Chatbar.Height);
+
+            spriteBatch.Draw(Chatbar, chatbar_pos, Color.White * 0.80f);
+
+            Texture2D rect = new Texture2D(gfxdevice, (int)(Chatbar.Width - 3), 75);
+
+            Color[] data = new Color[(int)(Chatbar.Width - 3) * 75];
+            for (int i = 0; i < data.Length; ++i) data[i] = Color.Black;
+            rect.SetData(data);
+
+            spriteBatch.Draw(rect, new Vector2(position.X, chatbar_pos.Y - 74), Color.White * 0.5f);
+
+            spriteBatch.Draw(Chatbartop, new Vector2(position.X, chatbar_pos.Y - 70 - Chatbartop.Height), Color.White * 0.80f);
+
+            // text input 
+
+            chatbarInput.Position = new Vector2(chatbar_pos.X + 80, chatbar_pos.Y + 10);
+            chatbarInput.Draw(gameTime);
         }
     }
 }

@@ -65,10 +65,10 @@
     </StartupObject>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>1B52500F34503E78362FE62ADC3F3AEF23C56125</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>0B533CD0ED21C4E039E39A5B2A7FB3BA8188672F</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>XNA_ScreenManager_1_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>XNA_ScreenManager_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
@@ -80,7 +80,8 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>XNA_ScreenManager_1_TemporaryKey.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
@@ -185,6 +186,7 @@
     <Compile Include="ScreenClasses\InGame\InGameMainMenuScreen.cs" />
     <Compile Include="ScreenClasses\InGame\ItemMenuScreen.cs" />
     <Compile Include="ScreenClasses\InGame\LoadingScreen.cs" />
+    <Compile Include="ScreenClasses\SubComponents\ChatbarInput.cs" />
     <Compile Include="ScreenClasses\SubComponents\ItemlistComponent.cs" />
     <Compile Include="ScreenClasses\SubComponents\KeyboardInput.cs" />
     <Compile Include="ScreenClasses\SubComponents\MenuComponent.cs" />
@@ -205,6 +207,7 @@
     <Compile Include="SkillClasses\QuickSlotBar.cs" />
     <Compile Include="SkillClasses\SkillStore.cs" />
     <Compile Include="SkillClasses\SkillTree.cs" />
+    <None Include="XNA_ScreenManager_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />
@@ -246,9 +249,6 @@
       <Name>XNA_ScreenManagerContent %28Content%29</Name>
       <XnaReferenceType>Content</XnaReferenceType>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="XNA_ScreenManager_1_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
