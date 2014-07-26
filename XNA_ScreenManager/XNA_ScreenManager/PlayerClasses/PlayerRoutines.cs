@@ -76,7 +76,7 @@ namespace XNA_ScreenManager.PlayerClasses
         }
 
         #region bound new player
-        protected PlayerInfo getPlayer()
+        protected virtual PlayerInfo getPlayer()
         {
             // check which player is bound
             if (this.Player == null)

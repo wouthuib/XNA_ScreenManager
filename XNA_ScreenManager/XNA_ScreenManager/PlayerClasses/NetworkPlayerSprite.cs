@@ -8,6 +8,8 @@ using XNA_ScreenManager.CharacterClasses;
 using XNA_ScreenManager.MapClasses;
 using XNA_ScreenManager.GameWorldClasses.Entities;
 using XNA_ScreenManager.ItemClasses;
+using System.IO;
+using System.Text.RegularExpressions;
 
 namespace XNA_ScreenManager.PlayerClasses
 {
@@ -25,6 +27,14 @@ namespace XNA_ScreenManager.PlayerClasses
         private const int MOVE_LEFT = -1;                                                         // player moving directions
         private const int MOVE_RIGHT = 1;                                                         // player moving directions
 
+        private string
+            armor_name,                 // Armor and Costume Sprite (4)
+            //accessorry_top_name,        // Accessory top Sprite (Sunglasses, Ear rings) (5)
+            //accessorry_bottom_name,     // Accessory bottom Sprite (mouth items, capes) (6)
+            headgear_name,              // Headgear Sprite (Hats, Helmets) (7)
+            weapon_name;                // Weapon Sprite (8)
+            //hands_name;                 // Hands Sprite (9)
+
         public NetworkPlayerSprite(
             string name,
             int positionX,
@@ -39,7 +49,10 @@ namespace XNA_ScreenManager.PlayerClasses
             string skincolor,
             string facesprite,
             string hairsprite,
-            string haircolor
+            string haircolor,
+            string armor,
+            string headgear,
+            string weapon
             ) 
             : base(positionX, positionX)
         {
@@ -53,20 +66,15 @@ namespace XNA_ScreenManager.PlayerClasses
             spriteEffect = (SpriteEffects)Enum.Parse(typeof(SpriteEffects), _spriteEffect);
             MapName = mapName;
             
-            this.Player = new PlayerInfo();
+            this.Player = new PlayerInfo(true); // make a networkplayer
 
-            try
-            {
-                //this.Player.skin_color = (Color)Enum.Parse(typeof(Color), skincolor);
-                this.Player.faceset_sprite = facesprite;
-                this.Player.hair_sprite = hairsprite;
-                //this.Player.hair_color = (Color)Enum.Parse(typeof(Color), facesprite);
-            }
-            catch
-            {
-                throw new Exception("something is wrong");
-            }
-
+            this.Player.skin_color = getColor(skincolor);
+            this.Player.faceset_sprite = facesprite;
+            this.Player.hair_sprite = hairsprite;
+            this.Player.hair_color = getColor(haircolor);
+            this.armor_name = armor;
+            this.headgear_name = headgear;
+            this.weapon_name = weapon;
         }
         #endregion
 
@@ -96,10 +104,14 @@ namespace XNA_ScreenManager.PlayerClasses
                             MapName = NetworkPlayerStore.Instance.playerlist[i].mapName;
                             state = (EntityState)Enum.Parse(typeof(EntityState), NetworkPlayerStore.Instance.playerlist[i].spritestate);
 
-                            //this.Player.skin_color = (Color)Enum.Parse(typeof(Color), NetworkPlayerStore.Instance.playerlist[i].skincol);
+                            this.Player.skin_color = getColor(NetworkPlayerStore.Instance.playerlist[i].skincol);
                             this.Player.faceset_sprite = NetworkPlayerStore.Instance.playerlist[i].facespr;
                             this.Player.hair_sprite = NetworkPlayerStore.Instance.playerlist[i].hairspr;
-                            //this.Player.hair_color = (Color)Enum.Parse(typeof(Color), NetworkPlayerStore.Instance.playerlist[i].hailcol);
+                            this.Player.hair_color = getColor(NetworkPlayerStore.Instance.playerlist[i].hailcol);
+                            
+                            this.armor_name = NetworkPlayerStore.Instance.playerlist[i].armor;
+                            this.headgear_name = NetworkPlayerStore.Instance.playerlist[i].headgear;
+                            this.weapon_name = NetworkPlayerStore.Instance.playerlist[i].weapon;
 
                             spriteframe = 0;
                         }
@@ -497,7 +509,10 @@ namespace XNA_ScreenManager.PlayerClasses
                         prevspriteframe = spriteframe;
                         for (int i = 0; i < spritepath.Length; i++)
                         {
-                            Item weapon = getPlayer().equipment.item_list.Find(x => x.Slot == ItemSlot.Weapon);
+                            Item weapon = null;
+
+                            if(weapon_name != null)
+                                weapon = itemStore.item_list.Find(x=>x.itemName == weapon_name);
 
                             if (weapon != null)
                             {
@@ -744,7 +759,173 @@ namespace XNA_ScreenManager.PlayerClasses
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            base.Draw(spriteBatch);
+            if (Active)
+            {
+                DrawSpriteFrame(spriteBatch); // display spriteframe
+
+                for (int i = 0; i < spritepath.Length; i++)
+                {
+                    Color drawcolor = Color.White;
+                    Texture2D drawsprite = null;
+                    Vector2 drawPosition = Vector2.Zero;
+                    Vector2 sprCorrect = Vector2.Zero;
+
+                    string headgear2 = this.Player.hair_sprite;
+
+                    try
+                    {
+                        if (getspritepath(i) != null &&
+                            getoffset(i) != Vector2.Zero && // getoffset(i) = (does sprite exist, if not then skip)
+                            (i != 3 || headgear_name == null)) // when headgear equiped, skip hairsprite
+                        {
+                            Vector2 debugvector = getoffset(i);
+
+                            // load texture into sprite from Content Manager
+                            drawsprite = Content.Load<Texture2D>(getspritepath(i) + spritename);
+
+                            // Calculate position based on spriteEffect
+                            if (spriteEffect == SpriteEffects.None)
+                                drawPosition.X = (int)Position.X + (int)getoffset(i).X + 35;
+                            else
+                                drawPosition.X = (int)Position.X + (int)Math.Abs(getoffset(i).X) - drawsprite.Width + 25;
+
+                            // give skin color to head, hands and torso sprite
+                            if (i == 0 || i == 1 || i == 9)
+                                drawcolor = this.Player.skin_color;
+
+                            // give hair color to hairset sprite
+                            if (i == 3)
+                                drawcolor = this.Player.hair_color;
+
+                            // draw player sprite
+                            spriteBatch.Draw(drawsprite,
+                                new Rectangle(
+                                    (int)drawPosition.X, //+ (int)sprCorrect.X,
+                                    (int)Position.Y + (int)getoffset(i).Y + 78, //+ (int)spriteCorrect(i, drawsprite).Y,
+                                    drawsprite.Width,
+                                    drawsprite.Height),
+                                new Rectangle(
+                                    0,
+                                    (int)spriteCorrect(i, drawsprite).Y,
+                                    drawsprite.Width,
+                                    drawsprite.Height),
+                                drawcolor * this.transperancy, 0f, Vector2.Zero, spriteEffect, 0f);
+                        }
+                    }
+                    catch (Exception ee)
+                    {
+                        string exception = ee.ToString();
+                        string error = "Cannot find " + getspritepath(i) + spritename + "!";
+                        throw new Exception(error);
+                    }
+                }
+            }
+        }
+
+        public override Vector2 getoffset(int spriteID)
+        {
+            if (spriteID < 4 || spriteID == 9)
+            {
+                if (this.Player.list_offsets.FindAll(x => x.ID == spriteID).Count == 0)
+                    loadoffsetfromXML(spriteID); // load from XML
+
+                if (this.Player.list_offsets.FindAll(x => x.ID == spriteID && x.Name == spritename + ".png").Count > 0)
+                {
+                    if (spriteID == 3)
+                    {
+                        int xx = this.Player.list_offsets.Find(x => x.ID == spriteID && x.Name == spritename + ".png").X;
+                        int yy = this.Player.list_offsets.Find(x => x.ID == spriteID && x.Name == spritename + ".png").Y;
+                    }
+
+                    return new Vector2(this.Player.list_offsets.Find(x => x.ID == spriteID && x.Name == spritename + ".png").X,
+                                       this.Player.list_offsets.Find(x => x.ID == spriteID && x.Name == spritename + ".png").Y);
+                }
+                else
+                    return Vector2.Zero; // the sprite simply does not exist (e.g. hands for ladder and rope are disabled)
+            }
+            else if (spriteID == 4) // get the Armor Sprite information
+            {
+                if (armor_name != null)
+                {
+                    Item item = itemStore.item_list.Find(x => x.itemName == armor_name);
+                    int X = item.list_offsets.Find(y => y.Name == spritename.ToString() + ".png").X;
+                    int Y = item.list_offsets.Find(y => y.Name == spritename.ToString() + ".png").Y;
+                    return new Vector2(X, Y);
+                }
+            }
+            else if (spriteID == 7) // get the Headgear Sprite information
+            {
+                if (headgear_name != null)
+                {
+                    Item item = itemStore.item_list.Find(x => x.itemName == headgear_name);
+                    int X = item.list_offsets.Find(y => y.Name == spritename.ToString() + ".png").X;
+                    int Y = item.list_offsets.Find(y => y.Name == spritename.ToString() + ".png").Y;
+                    return new Vector2(X, Y);
+                }
+            }
+            else if (spriteID == 8) // get the Weapon Sprite information
+            {
+                if (weapon_name != null)
+                {
+                    Item item = itemStore.item_list.Find(x => x.itemName == weapon_name);
+                    int X = item.list_offsets.Find(y => y.Name == spritename.ToString() + ".png").X;
+                    int Y = item.list_offsets.Find(y => y.Name == spritename.ToString() + ".png").Y;
+                    return new Vector2(X, Y);
+                }
+            }
+
+            return Vector2.Zero;
+        }
+
+        protected override string getspritepath(int spriteID)
+        {
+            PlayerInfo player = getPlayer();
+
+            switch (spriteID)
+            {
+                case 0:
+                    return player.head_sprite;
+                case 1:
+                    return player.body_sprite;
+                case 2:
+                    return player.faceset_sprite;
+                case 3:
+                    return player.hair_sprite;
+                case 4:
+                    if (armor_name != null)
+                        return itemStore.item_list.Find(x => x.itemName == armor_name).equipSpritePath;
+                    else
+                        return null;
+                // accessory 5 and 6 comes later...
+                case 7:
+                    if (headgear_name != null)
+                        return itemStore.item_list.Find(x => x.itemName == headgear_name).equipSpritePath;
+                    else
+                        return null;
+                case 8:
+                    if (weapon_name != null)
+                        return itemStore.item_list.Find(x => x.itemName == weapon_name).equipSpritePath;
+                    else
+                        return null;
+                case 9:
+                    return player.hands_sprite;
+            }
+            return null;
+        }
+
+        private Color getColor(string colorcode)
+        {
+            string[] values = colorcode.Split(':');
+
+            for (int i = 0; i < values.Length; i++)
+            {
+                values[i] = values[i].Trim(new char[]{' ','R','G','B','A','{','}'});
+            }
+
+            return new Color(
+                Convert.ToInt32(values[1]),
+                Convert.ToInt32(values[2]), 
+                Convert.ToInt32(values[3]));
         }
     }
 }

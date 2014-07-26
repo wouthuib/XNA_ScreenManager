@@ -6,6 +6,7 @@ using XNA_ScreenManager.PlayerClasses;
 using XNA_ScreenManager.MapClasses;
 using XNA_ScreenManager.Networking.ServerClasses;
 using Microsoft.Xna.Framework;
+using XNA_ScreenManager.ItemClasses;
 
 namespace XNA_ScreenManager.Networking
 {
@@ -45,13 +46,29 @@ namespace XNA_ScreenManager.Networking
                 attackSprite = (string)GameWorld.GetInstance.playerSprite.attackSprite,
                 spriteEffect = (string)GameWorld.GetInstance.playerSprite.spriteEffect.ToString(),
                 mapName = (string)GameWorld.GetInstance.map.Properties.Values[1].ToString(),
-                skincol = (string)PlayerClasses.PlayerStore.Instance.activePlayer.skin_color.ToString(),
-                facespr = (string)PlayerClasses.PlayerStore.Instance.activePlayer.faceset_sprite,
-                hairspr = (string)PlayerClasses.PlayerStore.Instance.activePlayer.hair_sprite,
-                hailcol = (string)PlayerClasses.PlayerStore.Instance.activePlayer.hair_color.ToString()
+                skincol = (string)getPlayer().skin_color.ToString(),
+                facespr = (string)getPlayer().faceset_sprite,
+                hairspr = (string)getPlayer().hair_sprite,
+                hailcol = (string)getPlayer().hair_color.ToString(),
+                armor = (string)getEquipment(ItemSlot.Bodygear),
+                headgear = (string)getEquipment(ItemSlot.Headgear),
+                weapon = (string)getEquipment(ItemSlot.Weapon)
             };
 
             tcpclient.SendData(p);
+        }
+
+        private PlayerInfo getPlayer()
+        {
+            return PlayerClasses.PlayerStore.Instance.activePlayer;
+        }
+
+        private string getEquipment(ItemSlot slot)
+        {
+            if (getPlayer().equipment.item_list.FindAll(x => x.Slot == slot).Count > 0)
+                return (string)getPlayer().equipment.item_list.Find(x => x.Slot == slot).itemName.ToString();
+            else
+                return null;
         }
     }
 }

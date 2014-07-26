@@ -52,7 +52,10 @@ namespace XNA_ScreenManager.PlayerClasses
                         player.skincol,
                         player.facespr,
                         player.hairspr,
-                        player.hailcol);
+                        player.hailcol,
+                        player.armor,
+                        player.headgear,
+                        player.weapon);
 
                 playercounter++;
             }

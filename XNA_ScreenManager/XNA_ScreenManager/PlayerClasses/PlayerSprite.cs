@@ -36,7 +36,8 @@ namespace XNA_ScreenManager
         protected ContentManager Content;
 
         // Player properties
-        public SpriteEffects spriteEffect = SpriteEffects.None;
+        public SpriteEffects spriteEffect = SpriteEffects.None, 
+                             previousSpriteEffect;
         protected float transperancy = 1;
         protected bool debug = false;
 
@@ -100,6 +101,7 @@ namespace XNA_ScreenManager
 
             keyboardStateCurrent = Keyboard.GetState();
             previousState = this.state;
+            previousSpriteEffect = this.spriteEffect;
 
             // reset effect state
             if (!collideWarp)
@@ -949,7 +951,7 @@ namespace XNA_ScreenManager
 
             // if the client is connected to a server
             // these functions will trigger a player update
-            if (previousState != state)
+            if (previousState != state || spriteEffect != previousSpriteEffect)
             {
                 NetworkGameData.Instance.sendPlayerData();
             }
@@ -1105,7 +1107,7 @@ namespace XNA_ScreenManager
             }
         }
 
-        private void DrawSpriteFrame(SpriteBatch spriteBatch)
+        protected void DrawSpriteFrame(SpriteBatch spriteBatch)
         {
             if (this.debug)
             {
@@ -1148,7 +1150,7 @@ namespace XNA_ScreenManager
         }
 
         #region load spriteoffset
-        private Vector2 spriteCorrect(int spriteID, Texture2D spr)
+        protected Vector2 spriteCorrect(int spriteID, Texture2D spr)
         {
             Vector2 sprCorrect = Vector2.Zero;
 
@@ -1164,7 +1166,7 @@ namespace XNA_ScreenManager
             return sprCorrect;
         }              
 
-        public Vector2 getoffset(int spriteID)
+        public virtual Vector2 getoffset(int spriteID)
         {
             PlayerInfo player = getPlayer();
             Equipment equipment = getPlayer().equipment;
@@ -1231,7 +1233,7 @@ namespace XNA_ScreenManager
             getPlayer().list_offsets.RemoveAll(x => x.ID == spriteID);
         }
 
-        public void loadoffsetfromXML(int spriteID)
+        protected void loadoffsetfromXML(int spriteID)
         {
             List<string> attribute = new List<string>();
 
@@ -1301,7 +1303,7 @@ namespace XNA_ScreenManager
             }
         }
 
-        public string getspritepath(int spriteID)
+        protected virtual string getspritepath(int spriteID)
         {
             PlayerInfo player = getPlayer();
 

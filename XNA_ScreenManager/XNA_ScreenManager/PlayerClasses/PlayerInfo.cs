@@ -37,10 +37,12 @@ namespace XNA_ScreenManager.PlayerClasses
     [Serializable]
     public class PlayerInfo
     {
-        public Equipment equipment;   // Equipment
-        public Inventory inventory;   // Inventory
-        public QuickSlotBar quickslotbar;     // QuickSlotBar
-        public SkillTree skilltree;     // Skillbar
+        public bool networkplayer;
+
+        public Equipment equipment;         // Equipment
+        public Inventory inventory;         // Inventory
+        public QuickSlotBar quickslotbar;   // QuickSlotBar
+        public SkillTree skilltree;         // Skillbar
 
         #region texture properties
 
@@ -366,8 +368,8 @@ namespace XNA_ScreenManager.PlayerClasses
 
         #region constructor
 
-        public PlayerInfo()
-        {
+        public PlayerInfo(bool networkplayer = false)
+        {            
             this.name = "New Player";
             this.jobclass = "Archer";
 
@@ -393,10 +395,15 @@ namespace XNA_ScreenManager.PlayerClasses
             this.hair_sprite = @"gfx\player\hairset\hair0\";
             this.hands_sprite = @"gfx\player\body\hands\";
 
-            this.equipment = new Equipment();
-            this.inventory = new Inventory();
-            this.quickslotbar = new QuickSlotBar();
-            this.skilltree = new SkillTree();
+            if (!networkplayer)
+            {
+                this.equipment = new Equipment();
+                this.inventory = new Inventory();
+                this.quickslotbar = new QuickSlotBar();
+                this.skilltree = new SkillTree();
+            }
+            else
+                this.networkplayer = true;
         }
         #endregion
 
