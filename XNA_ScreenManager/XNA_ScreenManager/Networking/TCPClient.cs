@@ -7,6 +7,10 @@ using XNA_ScreenManager.ScreenClasses;
 using System.Xml.Linq;
 using XNA_ScreenManager.Networking.ServerClasses;
 using System.IO;
+using XNA_ScreenManager.MapClasses;
+using XNA_ScreenManager.GameWorldClasses.Effects;
+using XNA_ScreenManager.ScreenClasses.MainClasses;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace XNA_ScreenManager.Networking
 {
@@ -45,11 +49,16 @@ namespace XNA_ScreenManager.Networking
 
         public void SendData(Object obj)
         {
-            var xmlSerializer2 = new XmlSerializer(typeof(playerData));
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(Object));
+
+            if(obj is playerData)
+                xmlSerializer = new XmlSerializer(typeof(playerData));
+            else if(obj is ChatData)
+                xmlSerializer = new XmlSerializer(typeof(ChatData));
 
             if (networkstream.CanWrite)
             {
-                xmlSerializer2.Serialize(networkstream, obj);
+                xmlSerializer.Serialize(networkstream, obj);
             }
             networkstream.Flush();
         }
@@ -226,30 +235,9 @@ namespace XNA_ScreenManager.Networking
                 Object obj = DeserializeFromXml<Object>(encoder.GetString(byteArray, 0, byteArray.Length), elementType);
 
                 if (obj is playerData)
-                {
-                    playerData player = (playerData)obj;
-                    bool found = false;
-
-                    if (player.Name != PlayerStore.Instance.activePlayer.Name)
-                    {
-                        for (int i = 0; i < NetworkPlayerStore.Instance.playerlist.Length; i++)
-                        {
-                            playerData entry = NetworkPlayerStore.Instance.playerlist[i];
-
-                            if (entry != null)
-                            {
-                                if (entry.Name == player.Name)
-                                {
-                                    found = true; // update existing player
-                                    NetworkPlayerStore.Instance.playerlist[i] = player;
-                                }
-                            }
-                        }
-
-                        if (!found) // add new player
-                            NetworkPlayerStore.Instance.addPlayer(player);
-                    }
-                }
+                    incomingPlayerData(obj as playerData);
+                else if (obj is ChatData)
+                    incomingChatData(obj as ChatData);
             }
             catch(Exception ee) 
             {
@@ -266,6 +254,37 @@ namespace XNA_ScreenManager.Networking
                 result = (T)ser.Deserialize(tr);
             }
             return result;
+        }
+
+        private void incomingPlayerData(playerData player)
+        {
+            bool found = false;
+
+            if (player.Name != PlayerStore.Instance.activePlayer.Name)
+            {
+                for (int i = 0; i < NetworkPlayerStore.Instance.playerlist.Length; i++)
+                {
+                    playerData entry = NetworkPlayerStore.Instance.playerlist[i];
+
+                    if (entry != null)
+                    {
+                        if (entry.Name == player.Name)
+                        {
+                            found = true; // update existing player
+                            NetworkPlayerStore.Instance.playerlist[i] = player;
+                        }
+                    }
+                }
+
+                if (!found) // add new player
+                    NetworkPlayerStore.Instance.addPlayer(player);
+            }
+        }
+
+        private void incomingChatData(ChatData chatdata)
+        {
+            GameWorld.GetInstance.newEffect.Add(new ChatBalloon(chatdata.Name, chatdata.Text, ResourceManager.GetInstance.Content.Load<SpriteFont>(@"font\Arial_12px")));
+            ScreenManager.Instance.actionScreen.hud.chatbarInput.updateTextlog(chatdata.Name, chatdata.Text);
         }
     }
 

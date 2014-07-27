@@ -3,13 +3,14 @@ using Microsoft.Xna.Framework.Graphics;
 using XNA_ScreenManager.CharacterClasses;
 using XNA_ScreenManager.MapClasses;
 using XNA_ScreenManager.ScreenClasses.MainClasses;
+using XNA_ScreenManager.GameWorldClasses.Effects;
 
 namespace XNA_ScreenManager.GameWorldClasses.Entities
 {
 
     public enum WeaponSwingType { Stab01, Swing01, Swing02, Swing03 };
 
-    class WeaponSwing : XNA_ScreenManager.MapClasses.Effect
+    class WeaponSwing : GameEffect
     {
         #region properties
         GameWorld world;

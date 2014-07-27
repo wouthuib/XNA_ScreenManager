@@ -19,7 +19,7 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
         Keys[] keys;
         bool[] IskeyUp;
         string[] SC = { ")", "!", "@", "#", "$", "%", "^", "&", "*", "(" };//special characters
-        string result = "";
+        private string result = "";
         protected string[] outlinings = new string[]{"left","central","right"};
         public string outline;
         public bool Active = false;

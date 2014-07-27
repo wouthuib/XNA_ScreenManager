@@ -1,18 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using XNA_ScreenManager.GameWorldClasses.Effects;
+using XNA_ScreenManager.MapClasses;
+using System.Text;
+using XNA_ScreenManager.PlayerClasses;
+using XNA_ScreenManager.Networking;
 
 namespace XNA_ScreenManager.ScreenClasses.SubComponents
 {
     public class ChatbarInput : KeyboardInput
     {
-
-        TextBalloon balloon;
+        GameWorld world = GameWorld.GetInstance;
         KeyboardState newState, oldState;
+        public string textlog = "";
 
         public ChatbarInput(Game game, SpriteFont spriteFont)
             : base(game, spriteFont, Vector2.Zero)
@@ -43,18 +44,32 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
 
         private void createBaloon()
         {
-            // draw the text balloon
-            balloon.Active = true;
-            balloon.Position = new Vector2();
-            balloon.Width = 200;
-            balloon.Height = (t_display.ToString().Split('\n').Length * spriteFont.LineSpacing);
-            balloon.ArrowPosition = new Vector2(NPCPostion.X + NPCPostion.Width * 0.5f, 0);
+            world.newEffect.Add(new ChatBalloon(world.playerSprite.PlayerName, Result, Content.Load<SpriteFont>(@"font\Arial_12px")));
+            updateTextlog(world.playerSprite.PlayerName, Result);
+            NetworkGameData.Instance.sendChatData(Result);
+            Activate("");            
+        }
+
+        public void updateTextlog(string name, string newtext)
+        {
+            textlog += "[Local] " + name + ": " + newtext + "\n";
+
+            if (textlog.ToString().Split('\n').Length > 8)
+            {
+                string newtextlog = "";
+                for (int i = textlog.ToString().Split('\n').Length - 8; i < textlog.ToString().Split('\n').Length -1; i++)
+                {
+                    string addstr = textlog.ToString().Split('\n')[i] + "\n";
+                    newtextlog += addstr;
+                }
+
+                textlog = newtextlog;
+            }
         }
 
         private bool CheckKey(Keys theKey)
         {
             return oldState.IsKeyDown(theKey) && newState.IsKeyUp(theKey);
         }
-
     }
 }

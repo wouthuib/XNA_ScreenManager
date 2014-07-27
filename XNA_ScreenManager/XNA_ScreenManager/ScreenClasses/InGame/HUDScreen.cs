@@ -253,6 +253,24 @@ namespace XNA_ScreenManager.ScreenClasses
 
             chatbarInput.Position = new Vector2(chatbar_pos.X + 80, chatbar_pos.Y + 10);
             chatbarInput.Draw(gameTime);
+
+            // draw textlog
+            spriteBatch.DrawString(
+                Content.Load<SpriteFont>(@"font\Arial_10px"),
+                chatbarInput.textlog,
+                new Vector2(
+                    chatbar_pos.X + 2,
+                    chatbar_pos.Y - chatbarInput.textlog.ToString().Split('\n').Length * (spriteFont.LineSpacing * 0.77f) + 10)
+                    + Vector2.One,
+                    Color.Black);
+
+            spriteBatch.DrawString(
+                Content.Load<SpriteFont>(@"font\Arial_10px"), 
+                chatbarInput.textlog,
+                new Vector2(
+                    chatbar_pos.X + 2, 
+                    chatbar_pos.Y - chatbarInput.textlog.ToString().Split('\n').Length * (spriteFont.LineSpacing * 0.77f) + 10), 
+                    Color.LightGreen);
         }
     }
 }

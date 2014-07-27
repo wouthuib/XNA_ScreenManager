@@ -132,6 +132,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GameWorldClasses\Effects\CastEffect.cs" />
+    <Compile Include="GameWorldClasses\Effects\ChatBalloon.cs" />
     <Compile Include="GameWorldClasses\Effects\WeaponHitEffect.cs" />
     <Compile Include="GameWorldClasses\Entities\DamageArea.cs" />
     <Compile Include="GameWorldClasses\Entities\Entity.cs" />
@@ -147,12 +148,13 @@
     <Compile Include="ItemClasses\ItemStore.cs" />
     <Compile Include="GameWorldClasses\BattleClasses\Battle.cs" />
     <Compile Include="GameWorldClasses\BattleClasses\DamageBaloon.cs" />
-    <Compile Include="GameWorldClasses\Effects\Effect.cs" />
+    <Compile Include="GameWorldClasses\Effects\GameEffect.cs" />
     <Compile Include="GameWorldClasses\GameWorld.cs" />
     <Compile Include="GameWorldClasses\Entities\Warp.cs" />
     <Compile Include="MonsterClasses\MonsterStore.cs" />
     <Compile Include="GameWorldClasses\Entities\Arrow.cs" />
     <Compile Include="Networking\NetworkGameData.cs" />
+    <Compile Include="Networking\ServerClasses\ChatData.cs" />
     <Compile Include="Networking\TCPClient.cs" />
     <Compile Include="Networking\ServerClasses\NetworkPlayerStore.cs" />
     <Compile Include="Networking\ServerClasses\PlayerData.cs" />

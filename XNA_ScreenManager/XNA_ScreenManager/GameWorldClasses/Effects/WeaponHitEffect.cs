@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework;
 
 namespace XNA_ScreenManager.GameWorldClasses.Effects
 {
-    class WeaponHitEffect : XNA_ScreenManager.MapClasses.Effect
+    class WeaponHitEffect : GameEffect
     {
         private string spritepath;
         private int frames = 0, frame = 0;

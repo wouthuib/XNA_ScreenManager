@@ -58,6 +58,19 @@ namespace XNA_ScreenManager.Networking
             tcpclient.SendData(p);
         }
 
+        public void sendChatData(string newtext)
+        {
+            ChatData c = new ChatData()
+            {
+                Name = PlayerClasses.PlayerStore.Instance.activePlayer.Name,
+                Text = newtext,
+                PositionX = (int)GameWorld.GetInstance.playerSprite.PositionX,
+                PositionY = (int)GameWorld.GetInstance.playerSprite.PositionY
+            };
+
+            tcpclient.SendData(c);
+        }
+
         private PlayerInfo getPlayer()
         {
             return PlayerClasses.PlayerStore.Instance.activePlayer;

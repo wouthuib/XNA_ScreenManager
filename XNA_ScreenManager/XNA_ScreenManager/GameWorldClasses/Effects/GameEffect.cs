@@ -5,11 +5,11 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace XNA_ScreenManager.MapClasses
+namespace XNA_ScreenManager.GameWorldClasses.Effects
 {
     public enum EffectType { DamageBaloon, ItemSprite, WeaponSwing };
 
-    public abstract class Effect
+    public abstract class GameEffect
     {
         #region Drawable properties
         protected Texture2D sprite;
@@ -40,7 +40,7 @@ namespace XNA_ScreenManager.MapClasses
             get { return spriteFrame; }
             set { spriteFrame = value; }
         }
-        public Vector2 Position
+        public virtual Vector2 Position
         {
             get { return position; }
             set { position = value; }
@@ -63,7 +63,7 @@ namespace XNA_ScreenManager.MapClasses
         #endregion
 
         #region Constructor Region
-        public Effect()
+        public GameEffect()
         {
         }
 

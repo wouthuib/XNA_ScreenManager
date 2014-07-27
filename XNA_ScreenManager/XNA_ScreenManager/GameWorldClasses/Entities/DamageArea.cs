@@ -13,7 +13,7 @@ using XNA_ScreenManager.GameWorldClasses.Effects;
 
 namespace XNA_ScreenManager.GameWorldClasses.Entities
 {
-    class DamageArea : XNA_ScreenManager.MapClasses.Effect
+    class DamageArea : GameEffect
     {
         #region properties
 

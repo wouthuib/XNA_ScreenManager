@@ -4,10 +4,11 @@ using XNA_ScreenManager.CharacterClasses;
 using XNA_ScreenManager.MapClasses;
 using XNA_ScreenManager.ScreenClasses.MainClasses;
 using XNA_ScreenManager.MonsterClasses;
+using XNA_ScreenManager.GameWorldClasses.Effects;
 
 namespace XNA_ScreenManager.PlayerClasses
 {
-    class Arrow : XNA_ScreenManager.MapClasses.Effect
+    class Arrow : GameEffect
     {
         // Drawing properties
         private Vector2 spriteOfset = new Vector2(90, 0);

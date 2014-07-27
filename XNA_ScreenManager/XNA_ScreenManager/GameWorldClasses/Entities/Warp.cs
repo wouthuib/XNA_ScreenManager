@@ -8,10 +8,11 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using XNA_ScreenManager.CharacterClasses;
+using XNA_ScreenManager.GameWorldClasses.Effects;
 
 namespace XNA_ScreenManager.MapClasses
 {
-    public class Warp : Effect
+    public class Warp : GameEffect
     {
         public bool active;
         public Vector2 newPosition;

@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using XNA_ScreenManager.GameWorldClasses.Effects;
 
 namespace XNA_ScreenManager.MapClasses
 {
-    public class DamageBaloon : Effect
+    public class DamageBaloon : GameEffect
     {
         int damage = 0;
         float transperancy = 1;

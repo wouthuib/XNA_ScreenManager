@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework;
 
 namespace XNA_ScreenManager.GameWorldClasses.Effects
 {
-    public class CastEffect : XNA_ScreenManager.MapClasses.Effect
+    public class CastEffect : GameEffect
     {
         string Path;
         int FrameCount;

@@ -13,6 +13,7 @@ using XNA_ScreenManager.MonsterClasses;
 using XNA_ScreenManager.PlayerClasses.JobClasses;
 using XNA_ScreenManager.SkillClasses;
 using XNA_ScreenManager.Networking;
+using XNA_ScreenManager.GameWorldClasses.Effects;
 
 
 namespace XNA_ScreenManager.MapClasses
@@ -40,10 +41,10 @@ namespace XNA_ScreenManager.MapClasses
         // Map entities
         Texture2D Background;
         public List<Entity> listEntity = new List<Entity>();
-        public List<Effect> listEffect = new List<Effect>();
+        public List<GameEffect> listEffect = new List<GameEffect>();
 
         public List<Entity> newEntity = new List<Entity>();
-        public List<Effect> newEffect = new List<Effect>();
+        public List<GameEffect> newEffect = new List<GameEffect>();
 
         public Entity Player 
         { 
@@ -181,7 +182,7 @@ namespace XNA_ScreenManager.MapClasses
                     }
                 
                 // Update Effect objects (Warps, items, damage)
-                foreach (Effect obj in listEffect)
+                foreach (GameEffect obj in listEffect)
                     obj.Update(gameTime);
 
                 // Update all enitities map collisions
@@ -387,9 +388,9 @@ namespace XNA_ScreenManager.MapClasses
                         #endregion                                                
                         #region warp collision
                         // Check for warp collision (player only!)
-                        if (listEffect.FindAll(delegate(Effect obj) { return obj.GetType().IsSubclassOf(typeof(Effect)); }).Count > 0)
+                        if (listEffect.FindAll(delegate(GameEffect obj) { return obj.GetType().IsSubclassOf(typeof(GameEffect)); }).Count > 0)
                         {
-                            foreach (Effect effect in listEffect)
+                            foreach (GameEffect effect in listEffect)
                             {
                                 if (effect is Warp)
                                 {
@@ -501,7 +502,7 @@ namespace XNA_ScreenManager.MapClasses
                 playerSprite.Draw(spriteBatch);
 
                 // Draw all Warp Effects
-                foreach (Effect obj in listEffect)
+                foreach (GameEffect obj in listEffect)
                 {
                     obj.Draw(spriteBatch);
                 }

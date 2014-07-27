@@ -88,6 +88,12 @@ namespace XNA_ScreenManager.PlayerClasses
                 return this.Player;
         }
 
+        // for chatlog
+        public virtual string PlayerName
+        {
+            get { return getPlayer().Name; }
+        }
+
         public PlayerInfo Player { get; set; }
         #endregion
     }

@@ -8,10 +8,11 @@ using Microsoft.Xna.Framework.Graphics;
 using XNA_ScreenManager.MapClasses;
 using Microsoft.Xna.Framework.Content;
 using XNA_ScreenManager.PlayerClasses;
+using XNA_ScreenManager.GameWorldClasses.Effects;
 
 namespace XNA_ScreenManager.ItemClasses
 {
-    class ItemSprite : XNA_ScreenManager.MapClasses.Effect
+    class ItemSprite : GameEffect
     {
         #region properties
         ItemStore itemDB;
