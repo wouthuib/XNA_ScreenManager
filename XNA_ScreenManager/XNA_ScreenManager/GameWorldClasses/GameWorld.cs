@@ -639,7 +639,7 @@ namespace XNA_ScreenManager.MapClasses
                             }
                             try
                             {
-                                if (monsterID >= 1207)
+                                if (monsterID >= 1200)
                                 {
                                     // properties are filled now check the state
                                     listEntity.Add(new MonsterSprite(

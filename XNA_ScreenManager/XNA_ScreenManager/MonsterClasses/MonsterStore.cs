@@ -63,7 +63,7 @@ namespace XNA_ScreenManager.MonsterClasses
 
                         // Trim and fix sprite path
                         monster.monsterSprite = @"" + Regex.Replace(values[2], "\"", "");
-                        monster.monsterSprite = Regex.Replace(monster.monsterSprite, " ", "");
+                        //monster.monsterSprite = Regex.Replace(monster.monsterSprite, " ", "");
 
                         // Monster battle inforation
                         monster.Level = Convert.ToInt32(values[3]);

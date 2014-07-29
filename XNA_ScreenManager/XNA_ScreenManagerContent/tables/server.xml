@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<connection>
+  <display>VORTEXRO</display>
+  <desc>Maplestory Online</desc>
+  <address>127.0.0.1</address>
+  <port>1490</port>
+  <version>20</version>
+  <langtype>1</langtype>
+  <registrationweb>http://www.vortexro.nl</registrationweb>
+</connection>

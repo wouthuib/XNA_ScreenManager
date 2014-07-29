@@ -11,6 +11,7 @@ using XNA_ScreenManager.MapClasses;
 using XNA_ScreenManager.GameWorldClasses.Effects;
 using XNA_ScreenManager.ScreenClasses.MainClasses;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
 
 namespace XNA_ScreenManager.Networking
 {
@@ -18,10 +19,9 @@ namespace XNA_ScreenManager.Networking
     {
         private NetworkStream networkstream;
         TcpClient server;
-        int port = 1490;
         private byte[] readBuffer;
-
         public static TCPClient instance;
+        public bool Connected = false;
 
         public TCPClient()
         {
@@ -29,17 +29,32 @@ namespace XNA_ScreenManager.Networking
 
             byte[] data = new byte[1024];
             readBuffer = new byte[1024];
-            server = new TcpClient("127.0.0.1", port);
-            networkstream = server.GetStream();
+            try
+            {
+                server = new TcpClient(ServerProperties.xmlgetvalue("address"), Convert.ToInt32(ServerProperties.xmlgetvalue("port")));
+                networkstream = server.GetStream();
 
-            StateObject state = new StateObject();
-            state.workSocket = server.Client;
+                StateObject state = new StateObject();
+                state.workSocket = server.Client;
+                Connected = true;
 
-            //server.Client.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
-            //            new AsyncCallback(this.OnReceive), state);
+                // Welcome message
+                ScreenManager.Instance.actionScreen.hud.chatbarInput.updateTextlog("[System]", "Successfully connected with server ");
+                ScreenManager.Instance.actionScreen.hud.chatbarInput.updateTextlog("[System]", ServerProperties.xmlgetvalue("display"));
+                ScreenManager.Instance.actionScreen.hud.chatbarInput.updateTextlog("[System]", ServerProperties.xmlgetvalue("desc"));
+                ScreenManager.Instance.actionScreen.hud.chatbarInput.updateTextlog("[System]", "For online registration goto our website:");
+                ScreenManager.Instance.actionScreen.hud.chatbarInput.updateTextlog("[System]", ServerProperties.xmlgetvalue("registrationweb"));
+            }
+            catch
+            {
+                ScreenManager.Instance.actionScreen.topmessage.Display("Cannot connect with server.", Color.PaleVioletRed, 5.0f);
+                ScreenManager.Instance.actionScreen.hud.chatbarInput.updateTextlog("[System]", "Cannot connect with server.");
+                Connected = false;
+            }
 
-            networkstream.BeginRead(readBuffer, 0, StateObject.BufferSize, StreamReceived, null);
-                        
+            // create new thread for incoming messages
+            if(Connected)
+                networkstream.BeginRead(readBuffer, 0, StateObject.BufferSize, StreamReceived, null);
         }
 
         private void Disconnect()
@@ -51,16 +66,19 @@ namespace XNA_ScreenManager.Networking
         {
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(Object));
 
-            if(obj is playerData)
-                xmlSerializer = new XmlSerializer(typeof(playerData));
-            else if(obj is ChatData)
-                xmlSerializer = new XmlSerializer(typeof(ChatData));
-
-            if (networkstream.CanWrite)
+            if (Connected)
             {
-                xmlSerializer.Serialize(networkstream, obj);
+                if (obj is playerData)
+                    xmlSerializer = new XmlSerializer(typeof(playerData));
+                else if (obj is ChatData)
+                    xmlSerializer = new XmlSerializer(typeof(ChatData));
+
+                if (networkstream.CanWrite)
+                {
+                    xmlSerializer.Serialize(networkstream, obj);
+                }
+                networkstream.Flush();
             }
-            networkstream.Flush();
         }
 
         public byte[] ReadToEnd(System.IO.Stream stream)
@@ -200,7 +218,9 @@ namespace XNA_ScreenManager.Networking
             if (bytesRead == 0)
             {
                 Disconnect();
-                ScreenManager.Instance.actionScreen.topmessage.Display("Disconnected from server.");
+                ScreenManager.Instance.actionScreen.topmessage.Display("Disconnected from server.", Color.PaleVioletRed, 5.0f);
+                ScreenManager.Instance.actionScreen.hud.chatbarInput.updateTextlog("[System]", "Disconnected from server.");
+                Connected = false;
                 return;
             }
 

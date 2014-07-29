@@ -22,6 +22,7 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
         float previousTimeSec, transperancy;
         Vector2 position = new Vector2();
         string midstring = null;
+        Color textcolor;
 
         public TopMessageScreen(Game game)
             : base(game)
@@ -64,15 +65,17 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
         public void Display(ItemClasses.Item item, string mtext)
         {
             this.iteminfo = item;
+            this.textcolor = Color.White;
             this.midstring = mtext;
             previousTimeSec = (float)gameTime.ElapsedGameTime.TotalSeconds + 2.0f;
             this.Active = true;
         }
 
-        public void Display(string mtext)
+        public void Display(string mtext, Color color, float timeout)
         {
+            this.textcolor = color;
             this.midstring = mtext;
-            previousTimeSec = (float)gameTime.ElapsedGameTime.TotalSeconds + 2.0f;
+            previousTimeSec = (float)gameTime.ElapsedGameTime.TotalSeconds + timeout;
             this.Active = true;
         }
 
@@ -97,7 +100,9 @@ namespace XNA_ScreenManager.ScreenClasses.InGame
 
                 spriteBatch.Draw(rect, new Vector2((position.X + gfxdevice.Viewport.Width * 0.5f) - size.X * 0.5f, position.Y), (Color.White * 0.5f) * transperancy);
 
-                spriteBatch.DrawString(spriteFont, message, new Vector2((position.X + gfxdevice.Viewport.Width * 0.5f) - size.X * 0.5f, position.Y), Color.White * transperancy);
+
+                spriteBatch.DrawString(spriteFont, message, new Vector2((position.X + gfxdevice.Viewport.Width * 0.5f) - size.X * 0.5f, position.Y) + Vector2.One, Color.Black * transperancy);
+                spriteBatch.DrawString(spriteFont, message, new Vector2((position.X + gfxdevice.Viewport.Width * 0.5f) - size.X * 0.5f, position.Y), textcolor * transperancy);
 
             }
         }

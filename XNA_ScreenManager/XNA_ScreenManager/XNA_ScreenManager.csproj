@@ -65,10 +65,11 @@
     </StartupObject>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>0B533CD0ED21C4E039E39A5B2A7FB3BA8188672F</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>3AEA352A74CBF70249E1032BCDD5598340A58D24</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>XNA_ScreenManager_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>
+    </ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
@@ -155,6 +156,7 @@
     <Compile Include="GameWorldClasses\Entities\Arrow.cs" />
     <Compile Include="Networking\NetworkGameData.cs" />
     <Compile Include="Networking\ServerClasses\ChatData.cs" />
+    <Compile Include="Networking\ServerProperties.cs" />
     <Compile Include="Networking\TCPClient.cs" />
     <Compile Include="Networking\ServerClasses\NetworkPlayerStore.cs" />
     <Compile Include="Networking\ServerClasses\PlayerData.cs" />
