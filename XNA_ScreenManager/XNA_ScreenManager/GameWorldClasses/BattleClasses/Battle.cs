@@ -5,6 +5,7 @@ using System.Text;
 using XNA_ScreenManager.CharacterClasses;
 using XNA_ScreenManager.PlayerClasses;
 using XNA_ScreenManager.ItemClasses;
+using XNA_ScreenManager.ScreenClasses.MainClasses;
 
 namespace XNA_ScreenManager.MapClasses
 {
@@ -14,7 +15,7 @@ namespace XNA_ScreenManager.MapClasses
         // player hits monster
         public static int battle_calc_damage(PlayerInfo playerinfo, MonsterSprite monsterinfo, float percent)
         {
-            randomizer Randomizer = randomizer.Instance;
+            ResourceManager.randomizer Randomizer = ResourceManager.randomizer.Instance;
             Item Weapon = playerinfo.equipment.getEquip(ItemSlot.Weapon);
 
             int finalDamage = 0, 
@@ -42,7 +43,7 @@ namespace XNA_ScreenManager.MapClasses
         // monster hits player
         public static int battle_calc_damage_mob(Entity monsterinfo, PlayerInfo playerinfo)
         {
-            randomizer Randomizer = randomizer.Instance;
+            ResourceManager.randomizer Randomizer = ResourceManager.randomizer.Instance;
 
             int finalDamage = 0;
 

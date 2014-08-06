@@ -29,7 +29,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationRevision>2</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -140,7 +140,6 @@
     <Compile Include="GameWorldClasses\Effects\WeaponSwing.cs" />
     <Compile Include="MonsterClasses\MonsterSprite.cs" />
     <Compile Include="MonsterClasses\Monster.cs" />
-    <Compile Include="MonsterClasses\MonsterSprite_old.cs" />
     <Compile Include="CharacterClasses\NPCharacter.cs" />
     <Compile Include="ItemClasses\Equipment.cs" />
     <Compile Include="ItemClasses\Inventory.cs" />
@@ -194,7 +193,6 @@
     <Compile Include="ScreenClasses\SubComponents\ItemlistComponent.cs" />
     <Compile Include="ScreenClasses\SubComponents\KeyboardInput.cs" />
     <Compile Include="ScreenClasses\SubComponents\MenuComponent.cs" />
-    <None Include="PlayerClasses\PlayerSprite_old.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />

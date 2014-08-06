@@ -10,6 +10,7 @@ using XNA_ScreenManager.GameWorldClasses.Entities;
 using XNA_ScreenManager.ItemClasses;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Globalization;
 
 namespace XNA_ScreenManager.PlayerClasses
 {
@@ -20,7 +21,7 @@ namespace XNA_ScreenManager.PlayerClasses
         private Vector2 previousPosition;
         private float previousGameTimeMsec;
 
-        private const int PLAYER_SPEED = 200;                                                     // The actual speed of the player
+        private const int PLAYER_SPEED = 190;                                                     // The network player is a bit slower
         private const int ANIMATION_SPEED = 120;                                                  // Animation speed, 120 = default 
         private const int MOVE_UP = -1;                                                           // player moving directions
         private const int MOVE_DOWN = 1;                                                          // player moving directions
@@ -82,18 +83,29 @@ namespace XNA_ScreenManager.PlayerClasses
         {
             previousPosition = this.position;   // save previous postion
             previousState = this.state;         // save previous state before
+            previousDirection = this.Direction; // save previous direction
 
             #region update from server
-            for (int i = 0; i < NetworkPlayerStore.Instance.playersprites.Length; i++)
+            foreach (var entity in GameWorld.GetInstance.listEntity)
             {
-                NetworkPlayerSprite entry = NetworkPlayerStore.Instance.playersprites[i];
-
-                if (entry != null)
+                if (entity is NetworkPlayerSprite)
                 {
-                    if (entry.Name == this.Name)
+                    NetworkPlayerSprite player = (NetworkPlayerSprite)entity;
+                    if (player.Name == this.Name)
                     {
+                        int i = 0; // reset index
+
+                        for (int ii = 0; ii < NetworkPlayerStore.Instance.playerlist.Length; ii++)
+	                            if (NetworkPlayerStore.Instance.playerlist[ii] != null)
+                                    if (NetworkPlayerStore.Instance.playerlist[ii].Name == this.Name)
+                                    {
+                                        i = ii;
+                                        break;
+                                    }
+
                         if (state != (EntityState)Enum.Parse(typeof(EntityState), NetworkPlayerStore.Instance.playerlist[i].spritestate) ||
-                            spriteEffect != (SpriteEffects)Enum.Parse(typeof(SpriteEffects), NetworkPlayerStore.Instance.playerlist[i].spriteEffect))
+                            spriteEffect != (SpriteEffects)Enum.Parse(typeof(SpriteEffects), NetworkPlayerStore.Instance.playerlist[i].spriteEffect) ||
+                            ((state == EntityState.Ladder || state == EntityState.Rope) && Direction != getVector(NetworkPlayerStore.Instance.playerlist[i].direction)))
                         {
                             Position = new Vector2(NetworkPlayerStore.Instance.playerlist[i].PositionX, NetworkPlayerStore.Instance.playerlist[i].PositionY);
                             spritename = NetworkPlayerStore.Instance.playerlist[i].spritename;                            
@@ -103,6 +115,7 @@ namespace XNA_ScreenManager.PlayerClasses
                             spriteEffect = (SpriteEffects)Enum.Parse(typeof(SpriteEffects), NetworkPlayerStore.Instance.playerlist[i].spriteEffect);
                             MapName = NetworkPlayerStore.Instance.playerlist[i].mapName;
                             state = (EntityState)Enum.Parse(typeof(EntityState), NetworkPlayerStore.Instance.playerlist[i].spritestate);
+                            Direction = getVector(NetworkPlayerStore.Instance.playerlist[i].direction);
 
                             this.Player.skin_color = getColor(NetworkPlayerStore.Instance.playerlist[i].skincol);
                             this.Player.faceset_sprite = NetworkPlayerStore.Instance.playerlist[i].facespr;
@@ -114,6 +127,12 @@ namespace XNA_ScreenManager.PlayerClasses
                             this.weapon_name = NetworkPlayerStore.Instance.playerlist[i].weapon;
 
                             spriteframe = 0;
+
+                            if(previousState == EntityState.Shoot && state != previousState)
+                            {
+                                state = EntityState.Shoot;
+                                spriteframe = 2;
+                            }
                         }
                     }
                 }
@@ -187,16 +206,16 @@ namespace XNA_ScreenManager.PlayerClasses
                             {
                                 Vector2 pos = new Vector2(this.Position.X + this.SpriteFrame.Width * 1.6f, this.Position.Y + this.SpriteFrame.Height * 0.7f);
                                 
-                                world.newEffect.Add(new WeaponSwing(pos, WeaponSwingType.Swing01, spriteEffect));
+                                //world.newEffect.Add(new WeaponSwing(pos, WeaponSwingType.Swing01, spriteEffect));
                             }
                             else
                             {
                                 Vector2 pos = new Vector2(this.Position.X - this.SpriteFrame.Width * 0.6f, this.Position.Y + this.SpriteFrame.Height * 0.7f);
                                 
-                                world.newEffect.Add(new WeaponSwing(pos, WeaponSwingType.Swing01, spriteEffect));
+                                //world.newEffect.Add(new WeaponSwing(pos, WeaponSwingType.Swing01, spriteEffect));
                             }
 
-                            state = EntityState.Cooldown;
+                            //state = EntityState.Cooldown;
                         }
                     }
 
@@ -245,18 +264,16 @@ namespace XNA_ScreenManager.PlayerClasses
                             // create stab effect
                             if (spriteEffect == SpriteEffects.FlipHorizontally)
                             {
-                                Vector2 pos = new Vector2(this.Position.X + this.SpriteFrame.Width * 0.3f, this.Position.Y + this.SpriteFrame.Height * 0.7f);
-                                
-                                world.newEffect.Add(new WeaponSwing(pos, WeaponSwingType.Stab01, spriteEffect));
+                                Vector2 pos = new Vector2(this.Position.X + this.SpriteFrame.Width * 0.3f, this.Position.Y + this.SpriteFrame.Height * 0.7f);                                
+                                //world.newEffect.Add(new WeaponSwing(pos, WeaponSwingType.Stab01, spriteEffect));
                             }
                             else
                             {
-                                Vector2 pos = new Vector2(this.Position.X - this.SpriteFrame.Width * 0.7f, this.Position.Y + this.SpriteFrame.Height * 0.7f);
-                                
-                                world.newEffect.Add(new WeaponSwing(pos, WeaponSwingType.Stab01, spriteEffect));
+                                Vector2 pos = new Vector2(this.Position.X - this.SpriteFrame.Width * 0.7f, this.Position.Y + this.SpriteFrame.Height * 0.7f);                                
+                                //world.newEffect.Add(new WeaponSwing(pos, WeaponSwingType.Stab01, spriteEffect));
                             }
 
-                            state = EntityState.Cooldown;
+                            //state = EntityState.Cooldown;
                         }
                     }
 
@@ -293,13 +310,16 @@ namespace XNA_ScreenManager.PlayerClasses
                     {
                         spriteframe++;
 
-                        if (spriteframe > 2)
+                        if (spriteframe > 1)
                         {
-                            // make sure the world is connected
-                            if (world == null)
-                                world = GameWorld.GetInstance;
+                            // Set the timer for cooldown
+                            previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.10f;
+                            spriteframe = 1;
 
-                            // create and release an arrow
+                            //// make sure the world is connected
+                            //if (world == null)
+                            //    world = GameWorld.GetInstance;
+                            //// create and release an arrow
                             //if (spriteEffect == SpriteEffects.FlipHorizontally)
                             //    world.newEffect.Add(new Arrow(Content.Load<Texture2D>(@"gfx\gameobjects\arrow"),
                             //        new Vector2(this.Position.X, this.Position.Y + this.SpriteFrame.Height * 0.6f),
@@ -307,17 +327,13 @@ namespace XNA_ScreenManager.PlayerClasses
                             //else
                             //    world.newEffect.Add(new Arrow(Content.Load<Texture2D>(@"gfx\gameobjects\arrow"),
                             //        new Vector2(this.Position.X, this.Position.Y + this.SpriteFrame.Height * 0.6f),
-                            //        800, new Vector2(-1, 0), Vector2.Zero));
-
-                            // Set the timer for cooldown
-                            previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.10f;
-
-                            // reset sprite frame and change state
-                            // start cooldown
-                            spriteFrame.X = 0;
-                            state = EntityState.Cooldown;
+                            //        800, new Vector2(-1, 0), Vector2.Zero));  
+                            //state = EntityState.Cooldown;
                         }
                     }
+
+                    if(spriteframe == 2) // set by server update, see above
+                        state = (EntityState)Enum.Parse(typeof(EntityState), Array.Find(NetworkPlayerStore.Instance.playerlist, p => p.Name == this.Name).spritestate);
 
                     // Apply Gravity 
                     // Position += new Vector2(0, 1) * 250 * (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -412,59 +428,28 @@ namespace XNA_ScreenManager.PlayerClasses
                     OldPosition = Position;
 
                     // Climb speed
-                    // Position += Direction * Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    Position += Direction * Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                     break;
                 #endregion
                 #region state Ladder
                 case EntityState.Ladder:
-
-                    Speed = 0;
-                    Direction = Vector2.Zero;
+                    
                     Velocity = Vector2.Zero;
                     spriteEffect = SpriteEffects.None;
 
-                    if (previousPosition.Y < position.Y)
+                    if (Position.Y != previousPosition.Y)
                     {
-                        // move player location (make ActiveMap tile check here in the future)
-                        this.Direction.Y = MOVE_DOWN;
-                        this.Speed = PLAYER_SPEED * 0.75f;
-
-                        // reduce timer
-                        previousGameTimeMsec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-                        if (previousGameTimeMsec < 0)
-                        {
-                            previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.10f;
-                            spriteframe++;
-                        }
+                        spriteframe++;
 
                         // double check frame if previous state has higher X
-                        if (spriteframe > 1)
-                            spriteframe = 0;
-                    }
-                    else if (previousPosition.Y > position.Y)
-                    {
-                        // move player location (make ActiveMap tile check here in the future)
-                        this.Direction.Y = MOVE_UP;
-                        this.Speed = PLAYER_SPEED * 0.75f;
 
-                        // reduce timer
-                        previousGameTimeMsec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-                        if (previousGameTimeMsec < 0)
-                        {
-                            previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.10f;
-                            spriteframe++;
-                        }
-
-                        // double check frame if previous state has higher X
                         if (spriteframe > 1)
                             spriteframe = 0;
                     }
 
                     // Player animation
-                    if (prevspriteframe != spriteframe)
+                    if (prevspriteframe != spriteframe || !spritename.StartsWith("ladder_"))
                     {
                         prevspriteframe = spriteframe;
                         for (int i = 0; i < spritepath.Length; i++)
@@ -478,7 +463,7 @@ namespace XNA_ScreenManager.PlayerClasses
                     OldPosition = Position;
 
                     // Climb speed
-                    // Position += Direction * Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    Position += Direction * (PLAYER_SPEED * 0.75f) * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                     break;
                 #endregion
@@ -628,7 +613,7 @@ namespace XNA_ScreenManager.PlayerClasses
                     Position += Velocity * 350 * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                     // Apply Gravity 
-                    Position += new Vector2(0, 1) * 250 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    // Position += new Vector2(0, 1) * 250 * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                     // Walk / Jump speed
                     Position += Direction * (Speed / 2) * (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -665,7 +650,7 @@ namespace XNA_ScreenManager.PlayerClasses
                     OldPosition = Position;
 
                     // Apply Gravity (slightly lower than usual due to server delay)
-                    Position += new Vector2(0, 1) * 200 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    // Position += new Vector2(0, 1) * 200 * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                     // Walk / Jump speed
                     Position += Direction * (Speed / 2) * (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -926,6 +911,23 @@ namespace XNA_ScreenManager.PlayerClasses
                 Convert.ToInt32(values[1]),
                 Convert.ToInt32(values[2]), 
                 Convert.ToInt32(values[3]));
+        }
+
+        private Vector2 getVector(string vectorstr)
+        {
+            string[] values = vectorstr.Split(':');
+
+            for (int i = 0; i < values.Length; i++)
+            {
+                values[i] = values[i].Trim(new char[] { ' ', 'X' , 'Y' ,'{', '}' });
+                values[i] = values[i].Replace('.', '&')
+                                     .Replace(',', '.')
+                                     .Replace('&', ',');
+            }
+
+            return new Vector2(
+                float.Parse(values[1]),
+                float.Parse(values[2]));
         }
     }
 }

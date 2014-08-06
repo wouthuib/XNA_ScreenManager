@@ -44,7 +44,7 @@ namespace XNA_ScreenManager
         // Sprite Animation Properties
         protected int effectCounter = 0;                                                          // for the warp effect
         protected Color color = Color.White;                                                      // sprite color
-        protected Vector2 Direction = Vector2.Zero;                                               // Sprite Move direction
+        public Vector2 Direction, previousDirection;                                              // Sprite Move direction
         protected float Speed;                                                                    // Speed used in functions
         protected Vector2 Velocity = new Vector2(0,1);                                            // speed used in jump
         private const int PLAYER_SPEED = 200;                                                     // The actual speed of the player
@@ -102,6 +102,7 @@ namespace XNA_ScreenManager
             keyboardStateCurrent = Keyboard.GetState();
             previousState = this.state;
             previousSpriteEffect = this.spriteEffect;
+            previousDirection = this.Direction;
 
             // reset effect state
             if (!collideWarp)
@@ -943,26 +944,32 @@ namespace XNA_ScreenManager
             if (CheckKey(Keys.Q) && !ChatboxActive)
                 getPlayer().inventory.addItem(itemStore.getItem(new Random().Next(1100, 1114)));
             else if (CheckKey(Keys.W) && !ChatboxActive)
-                getPlayer().inventory.addItem(itemStore.getItem(randomizer.Instance.generateRandom(1300, 1303)));
+                getPlayer().inventory.addItem(itemStore.getItem(XNA_ScreenManager.ScreenClasses.MainClasses.ResourceManager.randomizer.Instance.generateRandom(1300, 1303)));
             else if (CheckKey(Keys.E) && !ChatboxActive)
-                getPlayer().inventory.addItem(itemStore.getItem(randomizer.Instance.generateRandom(2300, 2308)));
+                getPlayer().inventory.addItem(itemStore.getItem(XNA_ScreenManager.ScreenClasses.MainClasses.ResourceManager.randomizer.Instance.generateRandom(2300, 2308)));
             // temporary
             #endregion
-
+                        
             // if the client is connected to a server
-            // these functions will trigger a player update
-            if (previousState != state || spriteEffect != previousSpriteEffect)
+            // these functions will trigger a player update            
+            if ((state == EntityState.Ladder || state == EntityState.Rope))
+            {
+                if (keyboardStateCurrent.IsKeyDown(Keys.Up) || keyboardStateCurrent.IsKeyDown(Keys.Down) ||
+                    keyboardStatePrevious.IsKeyDown(Keys.Up) || keyboardStatePrevious.IsKeyDown(Keys.Down))
+                {
+                    if (keyboardStateCurrent.IsKeyDown(Keys.Up))
+                        this.Direction.Y = MOVE_UP;
+                    else if (keyboardStateCurrent.IsKeyDown(Keys.Down))
+                        this.Direction.Y = MOVE_DOWN;
+                    else 
+                        this.Direction = Vector2.Zero;
+
+                    NetworkGameData.Instance.sendPlayerData();
+                }
+            } 
+            else if (previousState != state || spriteEffect != previousSpriteEffect)
             {
                 NetworkGameData.Instance.sendPlayerData();
-            }
-            else if (keyboardStateCurrent != keyboardStatePrevious)
-            {
-                previousNetworkMsec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
-                if (previousNetworkMsec <= 0)
-                {
-                    //NetworkGameData.Instance.sendPlayerData();
-                    //previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 1.0f;
-                }
             }
 
             keyboardStatePrevious = keyboardStateCurrent;
@@ -970,7 +977,7 @@ namespace XNA_ScreenManager
 
         private void GetattackSprite(WeaponType weapontype)
         {
-            if (randomizer.Instance.generateRandom(0, 2) == 1)
+            if (XNA_ScreenManager.ScreenClasses.MainClasses.ResourceManager.randomizer.Instance.generateRandom(0, 2) == 1)
             {
                 state = EntityState.Stab;
 
@@ -990,7 +997,7 @@ namespace XNA_ScreenManager
                         break;
                 }
 
-                switch (randomizer.Instance.generateRandom(0, 3))
+                switch (XNA_ScreenManager.ScreenClasses.MainClasses.ResourceManager.randomizer.Instance.generateRandom(0, 3))
                 {
                     case 0:
                         attackSprite += "1_";
@@ -1026,7 +1033,7 @@ namespace XNA_ScreenManager
                         break;
                 }
 
-                switch (randomizer.Instance.generateRandom(0, 3))
+                switch (XNA_ScreenManager.ScreenClasses.MainClasses.ResourceManager.randomizer.Instance.generateRandom(0, 3))
                 {
                     case 0:
                         attackSprite += "1_";

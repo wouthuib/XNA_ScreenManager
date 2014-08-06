@@ -50,5 +50,34 @@ namespace XNA_ScreenManager.ScreenClasses.MainClasses
                 return mInstance;
             }
         }
+
+        // Singleton randomizer to provide unique values
+        public class randomizer
+        {
+            private static randomizer instance;
+            private Random rand;
+
+            private randomizer()
+            {
+                rand = new Random();
+            }
+
+            public int generateRandom(int min, int max)
+            {
+                return rand.Next(min, max);
+            }
+
+            public static randomizer Instance
+            {
+                get
+                {
+                    if (instance == null)
+                    {
+                        instance = new randomizer();
+                    }
+                    return instance;
+                }
+            }
+        }
     }
 }

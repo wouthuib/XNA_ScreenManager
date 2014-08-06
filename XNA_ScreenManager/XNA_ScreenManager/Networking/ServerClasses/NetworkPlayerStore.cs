@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using XNA_ScreenManager.Networking.ServerClasses;
+using XNA_ScreenManager.MapClasses;
 
 namespace XNA_ScreenManager.PlayerClasses
 {
@@ -11,12 +12,12 @@ namespace XNA_ScreenManager.PlayerClasses
         private static NetworkPlayerStore instance;
         private int maxplayers = 10, playercounter;
         public playerData[] playerlist;
-        public NetworkPlayerSprite[] playersprites;
+        //public NetworkPlayerSprite[] playersprites;
 
         private NetworkPlayerStore()
         {
             playerlist = new playerData[maxplayers];
-            playersprites = new NetworkPlayerSprite[maxplayers];
+            //playersprites = new NetworkPlayerSprite[maxplayers];
         }
 
         public static NetworkPlayerStore Instance
@@ -37,7 +38,8 @@ namespace XNA_ScreenManager.PlayerClasses
             {
                 playerlist[playercounter] = player;
 
-                playersprites[playercounter] = 
+                // add network player to the world entities
+                GameWorld.GetInstance.newEntity.Add(
                     new NetworkPlayerSprite(
                         player.Name, 
                         player.PositionX, 
@@ -55,7 +57,7 @@ namespace XNA_ScreenManager.PlayerClasses
                         player.hailcol,
                         player.armor,
                         player.headgear,
-                        player.weapon);
+                        player.weapon));
 
                 playercounter++;
             }

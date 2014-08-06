@@ -74,12 +74,16 @@ namespace XNA_ScreenManager.GameWorldClasses.Effects
                         GameWorld.GetInstance.playerSprite.Position.Y - 50);
                 else
                 {
-                    foreach (var player in NetworkPlayerStore.Instance.playersprites)
+                    foreach (var obj in GameWorld.GetInstance.listEntity)
                     {
-                        if (player.Name == PlayerName)
-                            return new Vector2(
-                                (player.Position.X + 30) - (width * 0.50f),
-                                 player.Position.Y - 50);
+                        if (obj is NetworkPlayerSprite)
+                        {
+                            NetworkPlayerSprite player = (NetworkPlayerSprite)obj;
+                            if (player.Name == PlayerName)
+                                return new Vector2(
+                                    (player.Position.X + 30) - (width * 0.50f),
+                                     player.Position.Y - 50);
+                        }
                     }
 
                     return Vector2.Zero; // cannot find any players that match the name

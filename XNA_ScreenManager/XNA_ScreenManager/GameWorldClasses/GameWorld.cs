@@ -158,29 +158,39 @@ namespace XNA_ScreenManager.MapClasses
                 foreach (Entity obj in listEntity)
                     if (obj is PlayerSprite)
                     { }
+                    else if (obj is NetworkPlayerSprite)
+                    { }
                     else
                     {
                         obj.Update(gameTime);
                     }
 
-                // new Update network player Sprites
-                for (int i = 0; i < NetworkPlayerStore.Instance.playersprites.Length; i++)
-                {
-                    NetworkPlayerSprite player = NetworkPlayerStore.Instance.playersprites[i];
-                    if (player != null)
-                    {
-                        if (player.MapName == this.map.Properties.Values[1].ToString())
-                            player.Update(gameTime);
-                    }
-                }
-
                 // Update player Sprite
                 foreach (Entity obj in listEntity)
-                    if (obj is PlayerSprite)
+                    if (obj is NetworkPlayerSprite)
+                    { }
+                    else if (obj is PlayerSprite)
                     {
                         obj.Update(gameTime);
                     }
                 
+                // Update network player Sprites + Gravity
+                foreach (Entity obj in listEntity)
+                {
+                    if (obj is NetworkPlayerSprite)
+                    {
+                        NetworkPlayerSprite player = (NetworkPlayerSprite)obj;
+                        if (player.MapName == this.map.Properties.Values[1].ToString())
+                            player.Update(gameTime);
+
+                        if (player.State != EntityState.Ladder && player.State != EntityState.Rope)
+                        {
+                            player.OldPosition = player.Position;
+                            player.Position += new Vector2(0, 1) * 250 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                        }
+                    }
+                }
+
                 // Update Effect objects (Warps, items, damage)
                 foreach (GameEffect obj in listEffect)
                     obj.Update(gameTime);
@@ -308,7 +318,7 @@ namespace XNA_ScreenManager.MapClasses
                                     entity.Position.X + entity.SpriteFrame.Width * 0.70f > Wall.Left &&
                                     entity.Position.X + entity.SpriteFrame.Width * 0.30f < Wall.Right)
                                 {
-
+                                    
                                     // reading XML - wall properties
                                     int Block = 0;
                                     foreach (var property in obj.Value.Properties)
@@ -488,11 +498,11 @@ namespace XNA_ScreenManager.MapClasses
                 }
 
                 // new Draw network players
-                for (int i = 0; i < NetworkPlayerStore.Instance.playersprites.Length; i++ )
+                foreach (Entity obj in listEntity)
                 {
-                    NetworkPlayerSprite player = NetworkPlayerStore.Instance.playersprites[i];
-                    if (player != null)
+                    if (obj is NetworkPlayerSprite)
                     {
+                        NetworkPlayerSprite player = (NetworkPlayerSprite)obj;
                         if (player.MapName == this.map.Properties.Values[1].ToString())
                             player.Draw(spriteBatch);
                     }

@@ -22,7 +22,7 @@ namespace XNA_ScreenManager.CharacterClasses
 
         // static randomizer
         ContentManager Content = ResourceManager.GetInstance.Content;
-        randomizer Randomizer = randomizer.Instance;                                                // generate unique random ID
+        ResourceManager.randomizer Randomizer = ResourceManager.randomizer.Instance;                // generate unique random ID
         PlayerStore PlayerInfo = PlayerStore.Instance;                                              // get battle information of player
         GameWorld world;
 

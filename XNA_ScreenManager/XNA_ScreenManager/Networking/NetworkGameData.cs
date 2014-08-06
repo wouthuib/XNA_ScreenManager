@@ -41,6 +41,7 @@ namespace XNA_ScreenManager.Networking
                 PositionY = (int)GameWorld.GetInstance.playerSprite.PositionY,
                 spritename = (string)GameWorld.GetInstance.playerSprite.spritename,
                 spritestate = (string)GameWorld.GetInstance.playerSprite.State.ToString(),
+                direction = (string)GameWorld.GetInstance.playerSprite.Direction.ToString(),
                 prevspriteframe = (int)GameWorld.GetInstance.playerSprite.prevspriteframe,
                 maxspriteframe = (int)GameWorld.GetInstance.playerSprite.maxspriteframe,
                 attackSprite = (string)GameWorld.GetInstance.playerSprite.attackSprite,
