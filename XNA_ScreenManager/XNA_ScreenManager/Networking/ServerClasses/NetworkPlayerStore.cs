@@ -12,12 +12,10 @@ namespace XNA_ScreenManager.PlayerClasses
         private static NetworkPlayerStore instance;
         private int maxplayers = 10, playercounter;
         public playerData[] playerlist;
-        //public NetworkPlayerSprite[] playersprites;
 
         private NetworkPlayerStore()
         {
             playerlist = new playerData[maxplayers];
-            //playersprites = new NetworkPlayerSprite[maxplayers];
         }
 
         public static NetworkPlayerStore Instance

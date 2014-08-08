@@ -12,6 +12,8 @@ using XNA_ScreenManager.GameWorldClasses.Effects;
 using XNA_ScreenManager.ScreenClasses.MainClasses;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using XNA_ScreenManager.MonsterClasses;
+using XNA_ScreenManager.CharacterClasses;
 
 namespace XNA_ScreenManager.Networking
 {
@@ -258,6 +260,8 @@ namespace XNA_ScreenManager.Networking
                     incomingPlayerData(obj as playerData);
                 else if (obj is ChatData)
                     incomingChatData(obj as ChatData);
+                else if (obj is MonsterData)
+                    incomingMonsterData(obj as MonsterData);
             }
             catch(Exception ee) 
             {
@@ -305,6 +309,36 @@ namespace XNA_ScreenManager.Networking
         {
             GameWorld.GetInstance.newEffect.Add(new ChatBalloon(chatdata.Name, chatdata.Text, ResourceManager.GetInstance.Content.Load<SpriteFont>(@"font\Arial_12px")));
             ScreenManager.Instance.actionScreen.hud.chatbarInput.updateTextlog(chatdata.Name, chatdata.Text);
+        }
+
+        private void incomingMonsterData(MonsterData mobdata)
+        {
+            bool found = false;
+
+            foreach(var entity in GameWorld.GetInstance.listEntity)
+            {
+                if (entity is NetworkMonsterSprite)
+                {
+                    NetworkMonsterSprite monster = (NetworkMonsterSprite)entity;
+
+                    if (monster.InstanceID.ToString() == mobdata.InstanceID)
+                    {
+                        found = true; // update existing monster
+
+                        monster.update_server(
+                            new Vector2(mobdata.PositionX,mobdata.PositionY),
+                            (EntityState)Enum.Parse(typeof(EntityState), mobdata.spritestate),
+                            (SpriteEffects)Enum.Parse(typeof(SpriteEffects), mobdata.spriteEffect));
+
+                    }
+                }
+            }
+
+            if (!found) // add new monster
+                GameWorld.GetInstance.newEntity.Add(
+                    new NetworkMonsterSprite(mobdata.MonsterID, mobdata.InstanceID, 
+                        new Vector2(mobdata.PositionX, mobdata.PositionY), 
+                        new Vector2(mobdata.BorderMin, mobdata.BorderMax)));
         }
     }
 

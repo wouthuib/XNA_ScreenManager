@@ -56,7 +56,8 @@ namespace XNA_ScreenManager.MonsterClasses
 
                     try
                     {
-                        this.addMonster(Monster.create(Convert.ToInt32(values[0]), values[1], values[2]));
+                        string[] name_vals = values[1].Split('"');
+                        this.addMonster(Monster.create(Convert.ToInt32(values[0]), name_vals[1], values[2]));
 
                         // Link monster to monster database
                         Monster monster = this.getMonster(Convert.ToInt32(values[0]));

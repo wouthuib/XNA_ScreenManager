@@ -42,7 +42,6 @@ namespace XNA_ScreenManager.MapClasses
         Texture2D Background;
         public List<Entity> listEntity = new List<Entity>();
         public List<GameEffect> listEffect = new List<GameEffect>();
-
         public List<Entity> newEntity = new List<Entity>();
         public List<GameEffect> newEffect = new List<GameEffect>();
 
@@ -649,7 +648,7 @@ namespace XNA_ScreenManager.MapClasses
                             }
                             try
                             {
-                                if (monsterID >= 1200)
+                                if (monsterID >= 1400) // changed to 1400 to disable local Mobs
                                 {
                                     // properties are filled now check the state
                                     listEntity.Add(new MonsterSprite(

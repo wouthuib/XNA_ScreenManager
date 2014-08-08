@@ -153,8 +153,10 @@
     <Compile Include="GameWorldClasses\Entities\Warp.cs" />
     <Compile Include="MonsterClasses\MonsterStore.cs" />
     <Compile Include="GameWorldClasses\Entities\Arrow.cs" />
+    <Compile Include="MonsterClasses\NetworkMonsterSprite.cs" />
     <Compile Include="Networking\NetworkGameData.cs" />
     <Compile Include="Networking\ServerClasses\ChatData.cs" />
+    <Compile Include="Networking\ServerClasses\MonsterData.cs" />
     <Compile Include="Networking\ServerProperties.cs" />
     <Compile Include="Networking\TCPClient.cs" />
     <Compile Include="Networking\ServerClasses\NetworkPlayerStore.cs" />
