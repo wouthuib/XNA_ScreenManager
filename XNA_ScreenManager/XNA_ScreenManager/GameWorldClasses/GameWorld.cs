@@ -489,14 +489,14 @@ namespace XNA_ScreenManager.MapClasses
                     return xdiff;
                 });
 
-                // Draw all Entities (except for the Player)
+                // Draw all Entities (except for the Players & Monsters)
                 foreach (Entity obj in listEntity)
                 {
-                    if(obj != playerSprite)
+                    if(obj != playerSprite && !(obj is NetworkMonsterSprite))
                         obj.Draw(spriteBatch);
                 }
 
-                // new Draw network players
+                // Draw network players
                 foreach (Entity obj in listEntity)
                 {
                     if (obj is NetworkPlayerSprite)
@@ -505,6 +505,13 @@ namespace XNA_ScreenManager.MapClasses
                         if (player.MapName == this.map.Properties.Values[1].ToString())
                             player.Draw(spriteBatch);
                     }
+                }
+
+                // Draw all network Monsters
+                foreach (Entity obj in listEntity)
+                {
+                    if (obj is NetworkMonsterSprite)
+                        obj.Draw(spriteBatch);
                 }
 
                 // Draw the player

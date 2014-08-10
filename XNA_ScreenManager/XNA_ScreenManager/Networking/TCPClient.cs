@@ -14,6 +14,11 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using XNA_ScreenManager.MonsterClasses;
 using XNA_ScreenManager.CharacterClasses;
+using System.Xml;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.Serialization;
+using System.Reflection;
+using System.Threading;
 
 namespace XNA_ScreenManager.Networking
 {
@@ -29,8 +34,8 @@ namespace XNA_ScreenManager.Networking
         {
             TCPClient.instance = this;
 
-            byte[] data = new byte[1024];
-            readBuffer = new byte[1024];
+            byte[] data = new byte[10000];
+            readBuffer = new byte[10000];
             try
             {
                 server = new TcpClient(ServerProperties.xmlgetvalue("address"), Convert.ToInt32(ServerProperties.xmlgetvalue("port")));
@@ -80,6 +85,8 @@ namespace XNA_ScreenManager.Networking
                     xmlSerializer.Serialize(networkstream, obj);
                 }
                 networkstream.Flush();
+
+                Thread.Sleep(10);
             }
         }
 
@@ -134,63 +141,7 @@ namespace XNA_ScreenManager.Networking
                 }
             }
         }
-
-        public void OnReceive(IAsyncResult ar)
-        {
-            String content = String.Empty;
-
-            // Retrieve the state object and the handler socket
-            // from the asynchronous state object.
-            StateObject state = (StateObject)ar.AsyncState;
-            Socket handler = state.workSocket;
-            int bytesRead;
-
-            if (handler.Connected)
-            {
-
-                // Read data from the client socket. 
-                try
-                {
-                    bytesRead = handler.EndReceive(ar);
-                    if (bytesRead > 0)
-                    {
-                        // There  might be more data, so store the data received so far.
-                        state.sb.Remove(0, state.sb.Length);
-                        state.sb.Append(Encoding.ASCII.GetString(
-                                         state.buffer, 0, bytesRead));
-
-                        // Display Text in Rich Text Box
-                        content = state.sb.ToString();
-                        Console.WriteLine(content);
-
-                        handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
-                            new AsyncCallback(OnReceive), state);
-                    }
-                }
-
-                catch (SocketException socketException)
-                {
-                    //WSAECONNRESET, the other side closed impolitely
-                    if (socketException.ErrorCode == 10054 || ((socketException.ErrorCode != 10004) && (socketException.ErrorCode != 10053)))
-                    {
-                        handler.Close();
-                    }
-                }
-
-            // Eat up exception....Hmmmm I'm loving eat!!!
-                catch
-                {
-                    throw new Exception("Oops! Something went wrong");
-                    //MessageBox.Show(exception.Message + "\n" + exception.StackTrace);
-                }
-            }
-            else
-            {
-                handler.Close();
-                this.Disconnect();
-            }
-        }
-
+        
         /// <summary>
         /// Start listening for new data
         /// </summary>
@@ -235,6 +186,10 @@ namespace XNA_ScreenManager.Networking
 
             ReadUserData(data);
 
+            // clear readbuffer
+            Array.Clear(readBuffer, 0, readBuffer.Length);
+            server.GetStream().Flush();
+
             //Listen for new data
             StartListening();
         }
@@ -244,24 +199,52 @@ namespace XNA_ScreenManager.Networking
         private void ReadUserData(byte[] byteArray)
         {
             //message has successfully been received
-            ASCIIEncoding encoder = new ASCIIEncoding();
-            System.Diagnostics.Debug.WriteLine(encoder.GetString(byteArray, 0, byteArray.Length));
+            string bytestring = new ASCIIEncoding().GetString(byteArray, 0, byteArray.Length);
+            XDocument[] docs = new XDocument[20];
+            int count = 0;
+
+            // fetch all data within the incoming networkstream
+            for (int val = 0; val < bytestring.Split('?').Length -1; val++)
+            {
+                string content = "<?" + bytestring.Split('?')[val + 1].ToString() + "?" + bytestring.Split('?')[val + 2].ToString();
+
+                char last = content[content.Length - 1];
+                if (last == '<')
+                    content = content.Substring(0, content.Length - 1);
+
+                docs[count] = XDocument.Parse(content);
+                count++;
+
+                val++;
+            }
 
             try
             {
-                string xmlDoc = encoder.GetString(byteArray, 0, byteArray.Length).ToString();
-                XDocument doc = XDocument.Parse(xmlDoc);
-                string rootelement = doc.Root.Name.ToString();
-                Type elementType = Type.GetType("XNA_ScreenManager.Networking.ServerClasses." + rootelement);
+                foreach (var doc in docs)
+                {
+                    if (doc != null)
+                    {
+                        string rootelement = doc.Root.Name.ToString();
+                        Type elementType = Type.GetType("XNA_ScreenManager.Networking.ServerClasses." + rootelement);
 
-                Object obj = DeserializeFromXml<Object>(encoder.GetString(byteArray, 0, byteArray.Length), elementType);
+                        //Object obj = DeserializeFromXml<Object>(new ASCIIEncoding().GetString(byteArray, 0, byteArray.Length), elementType);
+                        
+                        StringBuilder builder = new StringBuilder();
+                        using (TextWriter writer = new StringWriter(builder))
+                        {
+                            doc.Save(writer);
+                        }
+                        
+                        Object obj = DeserializeFromXml<Object>(builder.ToString(), elementType);
 
-                if (obj is playerData)
-                    incomingPlayerData(obj as playerData);
-                else if (obj is ChatData)
-                    incomingChatData(obj as ChatData);
-                else if (obj is MonsterData)
-                    incomingMonsterData(obj as MonsterData);
+                        if (obj is playerData)
+                            incomingPlayerData(obj as playerData);
+                        else if (obj is ChatData)
+                            incomingChatData(obj as ChatData);
+                        else if (obj is MonsterData)
+                            incomingMonsterData(obj as MonsterData);
+                    }
+                }
             }
             catch(Exception ee) 
             {
@@ -326,7 +309,7 @@ namespace XNA_ScreenManager.Networking
                         found = true; // update existing monster
 
                         monster.update_server(
-                            new Vector2(mobdata.PositionX,mobdata.PositionY),
+                            new Vector2(mobdata.PositionX, mobdata.PositionY),
                             (EntityState)Enum.Parse(typeof(EntityState), mobdata.spritestate),
                             (SpriteEffects)Enum.Parse(typeof(SpriteEffects), mobdata.spriteEffect));
 
@@ -340,6 +323,7 @@ namespace XNA_ScreenManager.Networking
                         new Vector2(mobdata.PositionX, mobdata.PositionY), 
                         new Vector2(mobdata.BorderMin, mobdata.BorderMax)));
         }
+                
     }
 
     public class StateObject
@@ -347,10 +331,11 @@ namespace XNA_ScreenManager.Networking
         // Client  socket.
         public Socket workSocket = null;
         // Size of receive buffer.
-        public const int BufferSize = 1024;
+        public const int BufferSize = 10000;
         // Receive buffer.
         public byte[] buffer = new byte[BufferSize];
         // Received data string.
         public StringBuilder sb = new StringBuilder();
     }
+
 }

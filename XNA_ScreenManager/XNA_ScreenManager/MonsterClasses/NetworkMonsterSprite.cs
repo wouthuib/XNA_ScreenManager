@@ -35,7 +35,7 @@ namespace XNA_ScreenManager.MonsterClasses
         public Vector2 spriteOfset;
         public List<spriteOffset> list_offsets = new List<spriteOffset>();
         private SpriteEffects spriteEffect = SpriteEffects.None;
-        private float transperancy = 0;
+        private float transperancy = 1;
         private bool debug = false;
 
         // Respawn properties
@@ -169,7 +169,7 @@ namespace XNA_ScreenManager.MonsterClasses
                     }
 
                     // Apply Gravity 
-                    Position += new Vector2(0, 1) * 200 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    // Position += new Vector2(0, 1) * 200 * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                     break;
                 #endregion
@@ -224,7 +224,7 @@ namespace XNA_ScreenManager.MonsterClasses
                     Position += Direction * Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                     // Apply Gravity 
-                    // Position += new Vector2(0, 1) * 200 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    Position += new Vector2(0, 1) * 200 * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                     // Walking Border for monster
                     if (Position.X <= Borders.Min)
@@ -249,7 +249,7 @@ namespace XNA_ScreenManager.MonsterClasses
                         OldPosition = Position;
 
                         // Apply Gravity 
-                        // // Position += new Vector2(0, 1) * 250 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                        Position += new Vector2(0, 1) * 250 * (float)gameTime.ElapsedGameTime.TotalSeconds;
                     }
                     else
                         state = EntityState.Stand;
