@@ -200,7 +200,7 @@ namespace XNA_ScreenManager.Networking
         {
             //message has successfully been received
             string bytestring = new ASCIIEncoding().GetString(byteArray, 0, byteArray.Length);
-            XDocument[] docs = new XDocument[20];
+            XDocument[] docs = new XDocument[60];
             int count = 0;
 
             // fetch all data within the incoming networkstream
@@ -211,11 +211,19 @@ namespace XNA_ScreenManager.Networking
                 char last = content[content.Length - 1];
                 if (last == '<')
                     content = content.Substring(0, content.Length - 1);
-
-                docs[count] = XDocument.Parse(content);
-                count++;
-
-                val++;
+                try
+                {
+                    docs[count] = XDocument.Parse(content);
+                }
+                catch
+                {
+                    break;
+                }
+                finally
+                {
+                    count++;
+                    val++;
+                }
             }
 
             try
@@ -267,7 +275,12 @@ namespace XNA_ScreenManager.Networking
         {
             bool found = false;
 
-            if (player.Name != PlayerStore.Instance.activePlayer.Name)
+            if (player.Action == "Remove")
+            {
+                NetworkPlayerStore.Instance.playerlist[NetworkPlayerSprite.NetworkStoreID(player.Name)] = null;
+                GameWorld.GetInstance.listEntity.Find(p => p.EntityName == player.Name).KeepAliveTime = 0; // removed in next update
+            }
+            else if (player.Name != PlayerStore.Instance.activePlayer.Name)
             {
                 for (int i = 0; i < NetworkPlayerStore.Instance.playerlist.Length; i++)
                 {

@@ -21,7 +21,7 @@ namespace XNA_ScreenManager.PlayerClasses
         private Vector2 previousPosition;
         private float previousGameTimeMsec;
 
-        private const int PLAYER_SPEED = 190;                                                     // The network player is a bit slower
+        private const int PLAYER_SPEED = 195;                                                     // The network player is a bit slower
         private const int ANIMATION_SPEED = 120;                                                  // Animation speed, 120 = default 
         private const int MOVE_UP = -1;                                                           // player moving directions
         private const int MOVE_DOWN = 1;                                                          // player moving directions
@@ -38,6 +38,7 @@ namespace XNA_ScreenManager.PlayerClasses
 
         public NetworkPlayerSprite(
             string name,
+            string ip,
             int positionX,
             int positionY,
             string _spritename,
@@ -58,6 +59,7 @@ namespace XNA_ScreenManager.PlayerClasses
             : base(positionX, positionX)
         {
             Name = name;
+            entityName = name; // used by removing instance in worldmap!!
             Position = new Vector2(positionX, positionY);
             spritename = _spritename;
             state = (EntityState)Enum.Parse(typeof(EntityState), _spritestate);
@@ -93,19 +95,12 @@ namespace XNA_ScreenManager.PlayerClasses
                     NetworkPlayerSprite player = (NetworkPlayerSprite)entity;
                     if (player.Name == this.Name)
                     {
-                        int i = 0; // reset index
+                        int i = NetworkStoreID(this.Name); // get player index
 
-                        for (int ii = 0; ii < NetworkPlayerStore.Instance.playerlist.Length; ii++)
-	                            if (NetworkPlayerStore.Instance.playerlist[ii] != null)
-                                    if (NetworkPlayerStore.Instance.playerlist[ii].Name == this.Name)
-                                    {
-                                        i = ii;
-                                        break;
-                                    }
-
-                        if (state != (EntityState)Enum.Parse(typeof(EntityState), NetworkPlayerStore.Instance.playerlist[i].spritestate) ||
+                        if (i >= 0 && // player index found
+                            (state != (EntityState)Enum.Parse(typeof(EntityState), NetworkPlayerStore.Instance.playerlist[i].spritestate) ||
                             spriteEffect != (SpriteEffects)Enum.Parse(typeof(SpriteEffects), NetworkPlayerStore.Instance.playerlist[i].spriteEffect) ||
-                            ((state == EntityState.Ladder || state == EntityState.Rope) && Direction != getVector(NetworkPlayerStore.Instance.playerlist[i].direction)))
+                            ((state == EntityState.Ladder || state == EntityState.Rope) && Direction != getVector(NetworkPlayerStore.Instance.playerlist[i].direction))))
                         {
                             Position = new Vector2(NetworkPlayerStore.Instance.playerlist[i].PositionX, NetworkPlayerStore.Instance.playerlist[i].PositionY);
                             spritename = NetworkPlayerStore.Instance.playerlist[i].spritename;                            
@@ -646,6 +641,9 @@ namespace XNA_ScreenManager.PlayerClasses
                             this.Direction.X = 0;
                     }
 
+                    if (OldPosition.Y == Position.Y)
+                        state = EntityState.Stand;
+
                     // Move the Character
                     OldPosition = Position;
 
@@ -928,6 +926,21 @@ namespace XNA_ScreenManager.PlayerClasses
             return new Vector2(
                 float.Parse(values[1]),
                 float.Parse(values[2]));
+        }
+
+        public static int NetworkStoreID(string name)
+        {
+            for (int i = 0; i < NetworkPlayerStore.Instance.playerlist.Length; i++)
+            {
+                if (NetworkPlayerStore.Instance.playerlist[i] != null)
+                {
+                    if (NetworkPlayerStore.Instance.playerlist[i].Name == name)
+                    {
+                        return i;
+                    }
+                }
+            }
+            return -1;
         }
     }
 }

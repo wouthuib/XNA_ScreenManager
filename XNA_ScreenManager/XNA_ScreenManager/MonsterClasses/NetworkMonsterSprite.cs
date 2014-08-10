@@ -47,6 +47,7 @@ namespace XNA_ScreenManager.MonsterClasses
         // Sprite Animation Properties
         Color color = Color.White;                                                                  // Sprite color
         private Vector2 Direction = Vector2.Zero;                                                   // Sprite Move direction
+        private Vector2 previousPosition;
         private float Speed;                                                                        // Speed used in functions
 
         // Movement properties
@@ -63,6 +64,11 @@ namespace XNA_ScreenManager.MonsterClasses
               previousSpawnTimeSec,                                                                 // IdleTime in Seconds
               previousAttackTimeSec = 0,                                                            // IdleTime in Seconds
               currentAttackTimeSec = 0;                                                             // IdleTime in Seconds
+
+        // Server Updates        
+        EntityState ServerUpdate_state;
+        Vector2 ServerUpdate_position;
+        SpriteEffects ServerUpdate_spriteEffect;
 
         #endregion
 
@@ -112,18 +118,52 @@ namespace XNA_ScreenManager.MonsterClasses
         #region update
         public override void Update(GameTime gameTime)
         {
+
+            if (MonsterStore.Instance.getMonster(this.MonsterID).monsterName.StartsWith("Axe"))
+            {
+                if (state == EntityState.Walk)
+                {
+                    debug = true;
+                    previousPosition = Position;
+                }
+            }
+
             if (Active)
             {
+                get_server_update();
                 update_animation(gameTime);
                 update_collision(gameTime);
+            }
+
+            if (MonsterStore.Instance.getMonster(this.MonsterID).monsterName.StartsWith("Axe"))
+            {
+                if (debug)
+                {
+                    debug = false;
+                    previousPosition = Position;
+                }
             }
         }
 
         public void update_server(Vector2 newPosition, EntityState newState, SpriteEffects newEffect)
         {
-            this.state = newState;
-            this.position = newPosition;
-            this.spriteEffect = newEffect;
+            this.ServerUpdate_state = newState;
+            this.ServerUpdate_position = newPosition;
+            this.ServerUpdate_spriteEffect = newEffect;
+        }
+
+        private void get_server_update()
+        {
+            if (this.state != ServerUpdate_state)
+            {
+                bool debug;
+                if (MonsterStore.Instance.getMonster(this.MonsterID).monsterName.StartsWith("Axe"))
+                    debug = true;
+
+                this.state = ServerUpdate_state;
+                this.position = ServerUpdate_position;
+                this.spriteEffect = ServerUpdate_spriteEffect;
+            }
         }
 
         private void update_animation(GameTime gameTime)
@@ -137,8 +177,8 @@ namespace XNA_ScreenManager.MonsterClasses
                     Direction = Vector2.Zero;
 
                     // Check if Monster is steady standing
-                    if (Position.Y > OldPosition.Y)
-                        state = EntityState.Falling;
+                    //if (Position.Y > OldPosition.Y)
+                    //    state = EntityState.Falling;
 
                     // Move the Monster
                     OldPosition = Position;
@@ -169,7 +209,7 @@ namespace XNA_ScreenManager.MonsterClasses
                     }
 
                     // Apply Gravity 
-                    // Position += new Vector2(0, 1) * 200 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    Position += new Vector2(0, 1) * 200 * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                     break;
                 #endregion
@@ -214,8 +254,8 @@ namespace XNA_ScreenManager.MonsterClasses
                     }
 
                     // Check if monster is steady standing
-                    if (Position.Y > OldPosition.Y && collideSlope == false)
-                        state = EntityState.Falling;
+                    //if (Position.Y > OldPosition.Y && collideSlope == false)
+                    //    state = EntityState.Falling;
 
                     // Update the Position Monster
                     OldPosition = Position;
@@ -532,8 +572,8 @@ namespace XNA_ScreenManager.MonsterClasses
 
             public Border(float min, float max)
             {
-                Min = min * 32;
-                Max = max * 32;
+                Min = min;
+                Max = max;
             }
         }
 

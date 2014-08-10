@@ -10,6 +10,8 @@ namespace XNA_ScreenManager.Networking.ServerClasses
     public class playerData : ISerializable
     {
         public string Name { get; set; }
+        public string IP { get; set; }
+        public string Action { get; set; }
         public int PositionX { get; set; }
         public int PositionY { get; set; }
         public string spritename { get; set; }
@@ -35,6 +37,8 @@ namespace XNA_ScreenManager.Networking.ServerClasses
             if (info == null)
                 throw new System.ArgumentNullException("info");
             Name = (string)info.GetValue("Name", typeof(string));
+            IP = (string)info.GetValue("IP", typeof(string));
+            Action = (string)info.GetValue("Action", typeof(string));
             PositionX = (int)info.GetValue("PositionX", typeof(int));
             PositionX = (int)info.GetValue("PositionY", typeof(int));
             spritename = (string)info.GetValue("spritename", typeof(string));
@@ -62,9 +66,10 @@ namespace XNA_ScreenManager.Networking.ServerClasses
             if (info == null)
                 throw new System.ArgumentNullException("info");
             info.AddValue("Name", Name);
+            info.AddValue("IP", IP);
+            info.AddValue("Action", Action);
             info.AddValue("PositionX", PositionX);
             info.AddValue("PositionY", PositionY);
-            info.AddValue("PositionX", PositionX);
             info.AddValue("spritename", spritename);
             info.AddValue("spritestate", spritestate);
             info.AddValue("direction", direction);

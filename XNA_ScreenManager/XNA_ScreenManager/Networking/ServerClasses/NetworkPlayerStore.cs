@@ -39,7 +39,8 @@ namespace XNA_ScreenManager.PlayerClasses
                 // add network player to the world entities
                 GameWorld.GetInstance.newEntity.Add(
                     new NetworkPlayerSprite(
-                        player.Name, 
+                        player.Name,
+                        player.IP,
                         player.PositionX, 
                         player.PositionY, 
                         player.spritename,

@@ -496,6 +496,13 @@ namespace XNA_ScreenManager.MapClasses
                         obj.Draw(spriteBatch);
                 }
 
+                // Draw all network Monsters
+                foreach (Entity obj in listEntity)
+                {
+                    if (obj is NetworkMonsterSprite)
+                        obj.Draw(spriteBatch);
+                }
+
                 // Draw network players
                 foreach (Entity obj in listEntity)
                 {
@@ -507,14 +514,7 @@ namespace XNA_ScreenManager.MapClasses
                     }
                 }
 
-                // Draw all network Monsters
-                foreach (Entity obj in listEntity)
-                {
-                    if (obj is NetworkMonsterSprite)
-                        obj.Draw(spriteBatch);
-                }
-
-                // Draw the player
+                // Draw the Local player
                 playerSprite.Draw(spriteBatch);
 
                 // Draw all Warp Effects
