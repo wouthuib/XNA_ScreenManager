@@ -31,6 +31,7 @@ namespace XNA_ScreenManager
         ShopMenuScreen shopMenuScreen;
         MessagePopup MessagePopupScreen;
         LoadingScreen loadingScreen;
+        LoginScreen loginScreen; // new
 
         SpriteFont normalFont;
 
@@ -86,6 +87,10 @@ namespace XNA_ScreenManager
             helpScreen = new HelpScreen(this, Content.Load<Texture2D>(@"gfx\screens\system_menu2"));
             ScreenManager.Instance.helpScreen = helpScreen;
             Components.Add(helpScreen);
+
+            loginScreen = new LoginScreen(this, Content.Load<Texture2D>(@"gfx\screens\maplestory_loginscreen"));
+            ScreenManager.Instance.loginScreen = loginScreen;
+            Components.Add(loginScreen);
 
             actionScreen = new ActionScreen(this, normalFont);
             ScreenManager.Instance.actionScreen = actionScreen;

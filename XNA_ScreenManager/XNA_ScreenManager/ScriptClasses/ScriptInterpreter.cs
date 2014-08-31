@@ -453,7 +453,7 @@ namespace XNA_ScreenManager.ScriptClasses
                                             switch (Values[0].ToString())
                                             {
                                                 case "heal":
-                                                    GameWorld.GetInstance.listEffect.Add(new CastEffect(@"gfx\effects\heal\effect_", 7, new Vector2(0, -20)));
+                                                    GameWorld.GetInstance.newEffect.Add(new CastEffect(@"gfx\effects\heal\effect_", 7, new Vector2(0, -20), Vector2.Zero ,GameWorld.GetInstance.playerSprite.PlayerName, null));
                                                     break;
                                                 default:
                                                     break;

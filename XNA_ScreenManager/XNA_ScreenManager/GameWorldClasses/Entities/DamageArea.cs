@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 using XNA_ScreenManager.CharacterClasses;
 using XNA_ScreenManager.MapClasses;
 using Microsoft.Xna.Framework.Graphics;
 using XNA_ScreenManager.ScreenClasses.MainClasses;
 using XNA_ScreenManager.PlayerClasses;
-using XNA_ScreenManager.MonsterClasses;
 using XNA_ScreenManager.GameWorldClasses.Effects;
 
 namespace XNA_ScreenManager.GameWorldClasses.Entities
@@ -17,7 +14,7 @@ namespace XNA_ScreenManager.GameWorldClasses.Entities
     {
         #region properties
 
-        Entity Owner;
+        //Entity Owner;
         GraphicsDevice gfxdevice = ResourceManager.GetInstance.gfxdevice;
         Rectangle Area = Rectangle.Empty;
         float DamagePercent;
@@ -33,7 +30,7 @@ namespace XNA_ScreenManager.GameWorldClasses.Entities
         #endregion
 
         public DamageArea(
-            Entity owner, 
+            //Entity owner, 
             Vector2 position, 
             Rectangle area,
             bool permanent,
@@ -44,7 +41,7 @@ namespace XNA_ScreenManager.GameWorldClasses.Entities
             string gethitsprpath = null,
             int gethitsprframes = 0) : base()
         {
-            this.Owner = owner;
+            //this.Owner = owner;
             this.Area = area;
             this.Position = position;
             this.SpriteFrame = new Rectangle(0, 0, area.Width, area.Height);

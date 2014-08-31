@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using XNA_ScreenManager.ScreenClasses.MainClasses;
+﻿using XNA_ScreenManager.ScreenClasses.MainClasses;
 using Microsoft.Xna.Framework.Graphics;
-using XNA_ScreenManager.MapClasses;
 using Microsoft.Xna.Framework;
 
 namespace XNA_ScreenManager.GameWorldClasses.Effects

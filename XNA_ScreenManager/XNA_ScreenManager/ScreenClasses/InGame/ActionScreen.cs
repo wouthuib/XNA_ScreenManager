@@ -18,7 +18,7 @@ namespace XNA_ScreenManager
 
         ScreenManager screenManager = ScreenManager.Instance;
         public HUDScreen hud;
-        public TopMessageScreen topmessage;
+        //public TopMessageScreen topmessage;
         GameWorld world;
         public Camera2d cam;
 
@@ -41,9 +41,9 @@ namespace XNA_ScreenManager
             Components.Add(hud);
             hud.Active = true;
 
-            topmessage = new TopMessageScreen(game);
-            Components.Add(topmessage);
-            topmessage.Active = false;
+            //topmessage = new TopMessageScreen(game);
+            //Components.Add(topmessage);
+            //topmessage.Active = false;
         }
 
         public override void Update(GameTime gameTime)

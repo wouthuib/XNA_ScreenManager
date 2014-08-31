@@ -194,15 +194,21 @@ namespace XNA_ScreenManager
                                 if (spriteEffect == SpriteEffects.FlipHorizontally)
                                 {
                                     Vector2 pos = new Vector2(this.Position.X + this.SpriteFrame.Width * 1.6f, this.Position.Y + this.SpriteFrame.Height * 0.7f);
-                                    world.newEffect.Add(new DamageArea(this, new Vector2(pos.X - 50, pos.Y), new Rectangle(0, 0, 80, 10), false, 1,
+                                    
+                                    world.newEffect.Add(new DamageArea(new Vector2(pos.X - 50, pos.Y), new Rectangle(0, 0, 80, 10), false, 1,
                                         (float)gameTime.ElapsedGameTime.TotalSeconds + 0.2f, 100));
+                                    NetworkGameData.Instance.sendDmgArea(getPlayer().Name, new Vector2(pos.X - 50, pos.Y), new Vector2(80, 10), false.ToString(), 1, 0.20f, 100);
+
                                     world.newEffect.Add(new WeaponSwing(pos, WeaponSwingType.Swing01, spriteEffect));
                                 }
                                 else
                                 {
                                     Vector2 pos = new Vector2(this.Position.X - this.SpriteFrame.Width * 0.6f, this.Position.Y + this.SpriteFrame.Height * 0.7f);
-                                    world.newEffect.Add(new DamageArea(this, new Vector2(pos.X - 18, pos.Y), new Rectangle(0, 0, 80, 10), false, 1,
+                                    
+                                    world.newEffect.Add(new DamageArea(new Vector2(pos.X - 18, pos.Y), new Rectangle(0, 0, 80, 10), false, 1,
                                         (float)gameTime.ElapsedGameTime.TotalSeconds + 0.2f, 100));
+                                    NetworkGameData.Instance.sendDmgArea(getPlayer().Name, new Vector2(pos.X - 18, pos.Y), new Vector2(80, 10), false.ToString(), 1, 0.20f, 100);
+                                    
                                     world.newEffect.Add(new WeaponSwing(pos, WeaponSwingType.Swing01, spriteEffect));
                                 }
 
@@ -222,12 +228,17 @@ namespace XNA_ScreenManager
                         Speed = 0;
                         Direction = Vector2.Zero;
                         Velocity = Vector2.Zero;
+                        Vector2 extend_position = Vector2.Zero;
 
                         // Move the Character
                         OldPosition = Position;
 
                         // reduce timer
                         previousGameTimeMsec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                        // long stab, extend weaponswing and DMG-area position
+                        if (attackSprite.EndsWith("F_"))
+                            extend_position = new Vector2(22, 0);
 
                         // Player animation
                         if (prevspriteframe != spriteframe)
@@ -256,19 +267,28 @@ namespace XNA_ScreenManager
                                 if (world == null)
                                     world = GameWorld.GetInstance;
 
-                                // create stab effect
+                                // create stab effect and DMG-area
                                 if (spriteEffect == SpriteEffects.FlipHorizontally)
                                 {
-                                    Vector2 pos = new Vector2(this.Position.X + this.SpriteFrame.Width * 0.3f, this.Position.Y + this.SpriteFrame.Height * 0.7f);
-                                    world.newEffect.Add(new DamageArea(this, new Vector2(pos.X + 15, pos.Y), new Rectangle(0, 0, 80, 10), false, 1,
+                                    Vector2 pos = new Vector2(this.Position.X + this.SpriteFrame.Width * 0.3f, this.Position.Y + this.SpriteFrame.Height * 0.7f) + extend_position;
+                                    
+                                    world.newEffect.Add(new DamageArea(new Vector2(pos.X + 15, pos.Y), new Rectangle(0, 0, 80, 10), false, 1,
                                         (float)gameTime.ElapsedGameTime.TotalSeconds + 0.1f, 100));
+
+                                    NetworkGameData.Instance.sendDmgArea(getPlayer().Name, new Vector2(pos.X + 15, pos.Y), new Vector2(80, 10), false.ToString(), 1, 0.10f, 100);
+
                                     world.newEffect.Add(new WeaponSwing(pos, WeaponSwingType.Stab01, spriteEffect));
+
                                 }
                                 else
                                 {
-                                    Vector2 pos = new Vector2(this.Position.X - this.SpriteFrame.Width * 0.7f, this.Position.Y + this.SpriteFrame.Height * 0.7f);
-                                    world.newEffect.Add(new DamageArea(this, new Vector2(pos.X - 18, pos.Y), new Rectangle(0, 0, 80, 10), false, 1,
+                                    Vector2 pos = new Vector2(this.Position.X - this.SpriteFrame.Width * 0.7f, this.Position.Y + this.SpriteFrame.Height * 0.7f) - extend_position;
+                                    
+                                    world.newEffect.Add(new DamageArea(new Vector2(pos.X - 18, pos.Y), new Rectangle(0, 0, 80, 10), false, 1,
                                         (float)gameTime.ElapsedGameTime.TotalSeconds + 0.1f, 100));
+
+                                    NetworkGameData.Instance.sendDmgArea(getPlayer().Name, new Vector2(pos.X - 18, pos.Y), new Vector2(80, 10), false.ToString(), 1, 0.10f, 100);
+
                                     world.newEffect.Add(new WeaponSwing(pos, WeaponSwingType.Stab01, spriteEffect));
                                 }
 

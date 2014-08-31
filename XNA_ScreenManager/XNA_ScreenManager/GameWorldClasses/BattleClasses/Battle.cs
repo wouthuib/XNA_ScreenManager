@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using XNA_ScreenManager.CharacterClasses;
+﻿using XNA_ScreenManager.CharacterClasses;
 using XNA_ScreenManager.PlayerClasses;
 using XNA_ScreenManager.ItemClasses;
 using XNA_ScreenManager.ScreenClasses.MainClasses;

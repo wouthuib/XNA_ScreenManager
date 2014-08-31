@@ -14,10 +14,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using XNA_ScreenManager.MonsterClasses;
 using XNA_ScreenManager.CharacterClasses;
-using System.Xml;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Runtime.Serialization;
-using System.Reflection;
 using System.Threading;
 
 namespace XNA_ScreenManager.Networking
@@ -36,6 +32,16 @@ namespace XNA_ScreenManager.Networking
 
             byte[] data = new byte[10000];
             readBuffer = new byte[10000];
+            Connect();
+        }
+
+        private void Disconnect()
+        {
+            server.Close();
+        }
+
+        private void Connect()
+        {
             try
             {
                 server = new TcpClient(ServerProperties.xmlgetvalue("address"), Convert.ToInt32(ServerProperties.xmlgetvalue("port")));
@@ -46,32 +52,32 @@ namespace XNA_ScreenManager.Networking
                 Connected = true;
 
                 // Welcome message
-                ScreenManager.Instance.actionScreen.hud.chatbarInput.updateTextlog("[System]", "Successfully connected with server ");
-                ScreenManager.Instance.actionScreen.hud.chatbarInput.updateTextlog("[System]", ServerProperties.xmlgetvalue("display"));
-                ScreenManager.Instance.actionScreen.hud.chatbarInput.updateTextlog("[System]", ServerProperties.xmlgetvalue("desc"));
-                ScreenManager.Instance.actionScreen.hud.chatbarInput.updateTextlog("[System]", "For online registration goto our website:");
-                ScreenManager.Instance.actionScreen.hud.chatbarInput.updateTextlog("[System]", ServerProperties.xmlgetvalue("registrationweb"));
+                //ScreenManager.Instance.actionScreen.hud.chatbarInput.updateTextlog("[System]", "Successfully connected with server ");
+                //ScreenManager.Instance.actionScreen.hud.chatbarInput.updateTextlog("[System]", ServerProperties.xmlgetvalue("display"));
+                //ScreenManager.Instance.actionScreen.hud.chatbarInput.updateTextlog("[System]", ServerProperties.xmlgetvalue("desc"));
+                //ScreenManager.Instance.actionScreen.hud.chatbarInput.updateTextlog("[System]", "For online registration goto our website:");
+                //ScreenManager.Instance.actionScreen.hud.chatbarInput.updateTextlog("[System]", ServerProperties.xmlgetvalue("registrationweb"));
             }
             catch
             {
-                ScreenManager.Instance.actionScreen.topmessage.Display("Cannot connect with server.", Color.PaleVioletRed, 5.0f);
+                ScreenManager.Instance.activeScreen.topmessage.Display("Cannot connect with server.", Color.PaleVioletRed, 5.0f);
                 ScreenManager.Instance.actionScreen.hud.chatbarInput.updateTextlog("[System]", "Cannot connect with server.");
                 Connected = false;
             }
 
             // create new thread for incoming messages
-            if(Connected)
+            if (Connected)
+            {
                 networkstream.BeginRead(readBuffer, 0, StateObject.BufferSize, StreamReceived, null);
-        }
-
-        private void Disconnect()
-        {
-            server.Close();
+            }
         }
 
         public void SendData(Object obj)
         {
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(Object));
+
+            if (!Connected)
+                Connect();
 
             if (Connected)
             {
@@ -79,6 +85,10 @@ namespace XNA_ScreenManager.Networking
                     xmlSerializer = new XmlSerializer(typeof(playerData));
                 else if (obj is ChatData)
                     xmlSerializer = new XmlSerializer(typeof(ChatData));
+                else if (obj is DmgAreaData)
+                    xmlSerializer = new XmlSerializer(typeof(DmgAreaData));
+                else if (obj is AccountData)
+                    xmlSerializer = new XmlSerializer(typeof(AccountData));
 
                 if (networkstream.CanWrite)
                 {
@@ -88,6 +98,8 @@ namespace XNA_ScreenManager.Networking
 
                 Thread.Sleep(10);
             }
+            else
+                ScreenManager.Instance.activeScreen.topmessage.Display("Cannot connect with server.", Color.PaleVioletRed, 5.0f);
         }
 
         public byte[] ReadToEnd(System.IO.Stream stream)
@@ -157,6 +169,7 @@ namespace XNA_ScreenManager.Networking
         private void StreamReceived(IAsyncResult ar)
         {
             int bytesRead = 0;
+
             try
             {
                 lock (server.GetStream())
@@ -251,6 +264,8 @@ namespace XNA_ScreenManager.Networking
                             incomingChatData(obj as ChatData);
                         else if (obj is MonsterData)
                             incomingMonsterData(obj as MonsterData);
+                        else if (obj is AccountData)
+                            incomingAccountData(obj as AccountData);
                     }
                 }
             }
@@ -269,6 +284,17 @@ namespace XNA_ScreenManager.Networking
                 result = (T)ser.Deserialize(tr);
             }
             return result;
+        }
+
+        private void incomingAccountData(AccountData account)
+        {
+            if (Convert.ToBoolean(account.Connected))
+            {
+                if (ScreenManager.Instance.activeScreen == ScreenManager.Instance.loginScreen)
+                    ScreenManager.Instance.setScreen("selectCharScreen");
+            }
+            else
+                ScreenManager.Instance.activeScreen.topmessage.Display("Wrong Username and Password", Color.White, 5f);
         }
 
         private void incomingPlayerData(playerData player)

@@ -43,7 +43,7 @@ namespace XNA_ScreenManager.Networking.ServerClasses
             if (info == null)
                 throw new System.ArgumentNullException("info");
             info.AddValue("MonsterID", MonsterID);
-            info.AddValue("InstanceID", PositionX);
+            info.AddValue("InstanceID", InstanceID);
             info.AddValue("MapName", MapName);
             info.AddValue("PositionX", PositionX);
             info.AddValue("PositionY", PositionY);

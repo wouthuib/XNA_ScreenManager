@@ -1,13 +1,6 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.GamerServices;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
+using XNA_ScreenManager.ScreenClasses.InGame;
 
 
 namespace XNA_ScreenManager
@@ -18,6 +11,7 @@ namespace XNA_ScreenManager
     public class GameScreen : Microsoft.Xna.Framework.DrawableGameComponent
     {
         private List<GameComponent> childComponents;
+        public TopMessageScreen topmessage;
 
         public GameScreen(Game game)
             : base(game)
@@ -25,6 +19,10 @@ namespace XNA_ScreenManager
             childComponents = new List<GameComponent>();
             Visible = false;
             Enabled = false;
+
+            topmessage = new TopMessageScreen(game);
+            Components.Add(topmessage);
+            topmessage.Active = false;
         }
 
         public List<GameComponent> Components
@@ -46,6 +44,10 @@ namespace XNA_ScreenManager
                     child.Update(gameTime);
                 }
             }
+
+            if (topmessage.Active)
+                topmessage.Position = new Vector2(0, 0);
+
             base.Update(gameTime);
         }
 

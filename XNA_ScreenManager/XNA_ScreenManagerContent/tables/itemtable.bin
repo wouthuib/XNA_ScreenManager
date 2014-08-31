@@ -1,4 +1,4 @@
-atkModifier; defModifier; equipSpritePath; itemClass; itemDescription; itemID; itemName; itemSlot; itemSpritePath; itemType; magicModifier; RefinementBonus; speedModifier; SpriteFrameX; SpriteFrameY; Value; WeaponLevel
+﻿atkModifier; defModifier; equipSpritePath; itemClass; itemDescription; itemID; itemName; itemSlot; itemSpritePath; itemType; magicModifier; RefinementBonus; speedModifier; SpriteFrameX; SpriteFrameY; Value; WeaponLevel
 1000; None;"";"";""; 0; 0; 0; 0; 0; 0; 0; 0; 0; Weapon; All; Weapon; Dagger;
 800; Red Potion;"A potion made from ground Red Herbs that restores about 45 HP.";"gfx\effects\itemicons\items01";""; 0; 2; 0; 0; 0; 0; 10; 0; 0; Consumable; All; None; None;"{ heal(100,50). effect(heal).}";
 801; Orange Potion;"A potion made from ground Red and Yellow Herbs that restores about 105 HP.";"gfx\effects\itemicons\items01";""; 4; 0; 0; 0; 0; 0; 10; 0; 0; Consumable; All; None; None;"{}";

@@ -16,7 +16,7 @@ namespace XNA_ScreenManager
             : base(game)
         {
             Components.Add(new BackgroundComponent(game, background));
-            string[] items = { "New Adventure", "Load Game", "Help", "Quit" };
+            string[] items = { "New Adventure", "Load Game", "Login Server", "Quit" };
             menu = new MenuComponent(game, spriteFont);
             menu.SetMenuItems(items);
             menu.StartIndex = 0;

@@ -72,7 +72,7 @@ namespace XNA_ScreenManager.PlayerClasses
             getPlayer().Statpoints++;
             getPlayer().Exp -= getPlayer().NextLevelExp;
             getPlayer().NextLevelExp = (int)(getPlayer().Level ^ 4 + (1000 * getPlayer().Level));
-            GameWorld.GetInstance.listEffect.Add(new CastEffect(@"gfx\effects\LevelUp\LevelUp_", 20, new Vector2(-76, -170)));
+            GameWorld.GetInstance.listEffect.Add(new CastEffect(@"gfx\effects\LevelUp\LevelUp_", 20, new Vector2(-76, -170), Vector2.Zero, getPlayer().Name, null));
         }
 
         #region bound new player

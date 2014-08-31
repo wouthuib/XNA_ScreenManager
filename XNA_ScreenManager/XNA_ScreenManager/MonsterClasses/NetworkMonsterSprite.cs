@@ -156,10 +156,6 @@ namespace XNA_ScreenManager.MonsterClasses
         {
             if (this.state != ServerUpdate_state)
             {
-                bool debug;
-                if (MonsterStore.Instance.getMonster(this.MonsterID).monsterName.StartsWith("Axe"))
-                    debug = true;
-
                 this.state = ServerUpdate_state;
                 this.position = ServerUpdate_position;
                 this.spriteEffect = ServerUpdate_spriteEffect;

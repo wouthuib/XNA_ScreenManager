@@ -23,6 +23,7 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
         protected string[] outlinings = new string[]{"left","central","right"};
         public string outline;
         public bool Active = false;
+        public bool Password = false;
         float transperancy = 1,
               previousTimeSec = 0;
         Vector2 position;
@@ -107,8 +108,12 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
         {
             float width = 0;
 
-            foreach(char i in result)
-                width += spriteFont.MeasureString(i.ToString()).X;
+            if(!Password)
+                foreach (char i in result)
+                    width += spriteFont.MeasureString(i.ToString()).X;
+            else
+                foreach (char i in result)
+                    width += spriteFont.MeasureString("*").X;
 
             width -= 0.5f; // small correction
 
@@ -148,12 +153,22 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
                 // Draw the NameTag
                 //Vector2 position = new Vector2(480, 75);
                 //spriteBatch.Draw(nametag, position, Color.White);
+                string drawresult = result;
+
+                if (Password)
+                {
+                    drawresult = "";
+                    if (result != "")
+                        for (int c = 0; c < result.Length; c++)
+                            drawresult += "*";
+                }
+
                 switch(outline)
                 {
                     case "central":
                     // Draw result
-                    spriteBatch.DrawString(spriteFont, result, new Vector2(position.X - (int)(GetLengthPxt() / 2), position.Y) + Vector2.One, Color.Black);
-                    spriteBatch.DrawString(spriteFont, result, new Vector2(position.X - (int)(GetLengthPxt() / 2), position.Y), Color.White);
+                    spriteBatch.DrawString(spriteFont, drawresult, new Vector2(position.X - (int)(GetLengthPxt() / 2), position.Y) + Vector2.One, Color.Black);
+                    spriteBatch.DrawString(spriteFont, drawresult, new Vector2(position.X - (int)(GetLengthPxt() / 2), position.Y), Color.White);
 
                     // Draw Pointer
                     spriteBatch.DrawString(spriteFont, "|", new Vector2(position.X + (int)(GetLengthPxt() / 2), position.Y), Color.White * transperancy);
@@ -161,8 +176,8 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
 
                     case "left":
                     // Draw result
-                    spriteBatch.DrawString(spriteFont, result, new Vector2(position.X,position.Y) + Vector2.One, Color.Black);
-                    spriteBatch.DrawString(spriteFont, result, new Vector2(position.X,position.Y), Color.White);
+                    spriteBatch.DrawString(spriteFont, drawresult, new Vector2(position.X, position.Y) + Vector2.One, Color.Black);
+                    spriteBatch.DrawString(spriteFont, drawresult, new Vector2(position.X, position.Y), Color.White);
 
                     // Draw Pointer
                     spriteBatch.DrawString(spriteFont, "|", new Vector2(position.X + (int)(GetLengthPxt()),position.Y), Color.White * transperancy);
@@ -170,8 +185,8 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
 
                     case "right":
                     // Draw result
-                    spriteBatch.DrawString(spriteFont, result, new Vector2(position.X - (int)(GetLengthPxt()), position.Y) + Vector2.One, Color.Black);
-                    spriteBatch.DrawString(spriteFont, result, new Vector2(position.X - (int)(GetLengthPxt()), position.Y), Color.White);
+                    spriteBatch.DrawString(spriteFont, drawresult, new Vector2(position.X - (int)(GetLengthPxt()), position.Y) + Vector2.One, Color.Black);
+                    spriteBatch.DrawString(spriteFont, drawresult, new Vector2(position.X - (int)(GetLengthPxt()), position.Y), Color.White);
 
                     // Draw Pointer
                     spriteBatch.DrawString(spriteFont, "|", new Vector2(position.X, position.Y), Color.White * transperancy);

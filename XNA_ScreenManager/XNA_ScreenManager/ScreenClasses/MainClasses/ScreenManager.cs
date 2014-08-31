@@ -10,6 +10,7 @@ using XNA_ScreenManager.ScreenClasses.Menus;
 using XNA_ScreenManager.PlayerClasses;
 using XNA_ScreenManager.MapClasses;
 using XNA_ScreenManager.SkillClasses;
+using XNA_ScreenManager.Networking;
 
 namespace XNA_ScreenManager.ScreenClasses
 {
@@ -29,6 +30,7 @@ namespace XNA_ScreenManager.ScreenClasses
         public ShopMenuScreen shopMenuScreen;
         public MessagePopup MessagePopupScreen;
         public LoadingScreen loadingScreen;
+        public LoginScreen loginScreen;
 
         public GameScreen activeScreen;
         KeyboardState newState, oldState;
@@ -66,9 +68,12 @@ namespace XNA_ScreenManager.ScreenClasses
 
         // When the game begins
         public void StartManager()
-        {
+        {            
+            startScreen.Hide(); // new
+            helpScreen.Hide();
             actionScreen.Hide();
-            actionScreen.Hide();
+            createCharScreen.Hide();
+            selectCharScreen.Hide();
             ingameMenuScreen.Hide();
             itemMenuScreen.Hide();
             equipmentMenuScreen.Hide();
@@ -77,11 +82,12 @@ namespace XNA_ScreenManager.ScreenClasses
             shopMenuScreen.Hide();
             MessagePopupScreen.Hide();
             loadingScreen.Hide();
-            createCharScreen.Hide();
-            selectCharScreen.Hide();
+            loginScreen.Hide();
 
-            startScreen.Show();
-            activeScreen = startScreen;
+            //startScreen.Show();
+            //activeScreen = startScreen;
+            loginScreen.Show();
+            activeScreen = loginScreen;
         }
 
         public void Update(GameTime gameTime)
@@ -136,6 +142,10 @@ namespace XNA_ScreenManager.ScreenClasses
             {
                 HandleSelectCharScreen();
             }
+            else if (activeScreen == loginScreen)
+            {
+                HandleLoginScreenInput();
+            }
 
             oldState = newState;
         }
@@ -151,6 +161,11 @@ namespace XNA_ScreenManager.ScreenClasses
                 activeScreen = startScreen;
                 activeScreen.Show();
             }
+        }
+
+        private void HandleLoginScreenInput()
+        {
+            // do nothing all managed in screen
         }
 
         private void HandleStartScreenInput()
@@ -173,7 +188,8 @@ namespace XNA_ScreenManager.ScreenClasses
                         break;
                     case 2:
                         activeScreen.Hide();
-                        activeScreen = helpScreen;
+                        //activeScreen = helpScreen;
+                        activeScreen = loginScreen;
                         activeScreen.Show();
                         break;
                     case 3:
@@ -530,6 +546,7 @@ namespace XNA_ScreenManager.ScreenClasses
                 {
                     createCharScreen.phase = Phase.Name;
                     PlayerStore.Instance.addPlayer(createCharScreen.newPlayer);
+                    NetworkGameData.Instance.sendPlayerData("Create", createCharScreen.newPlayer); // new, send to server
                     activeScreen.Hide();
                     activeScreen = selectCharScreen;
                     activeScreen.Show();
@@ -654,6 +671,9 @@ namespace XNA_ScreenManager.ScreenClasses
                     break;
                 case "shopMenuScreen":
                     activeScreen = shopMenuScreen;
+                    break;
+                case "selectCharScreen":
+                    activeScreen = selectCharScreen;
                     break;
             }
 
