@@ -161,6 +161,7 @@
     <Compile Include="Networking\ServerClasses\DmgAreaData.cs" />
     <Compile Include="Networking\ServerClasses\EffectData.cs" />
     <Compile Include="Networking\ServerClasses\MonsterData.cs" />
+    <Compile Include="Networking\ServerClasses\ScreenData.cs" />
     <Compile Include="Networking\ServerProperties.cs" />
     <Compile Include="Networking\TCPClient.cs" />
     <Compile Include="Networking\ServerClasses\NetworkPlayerStore.cs" />

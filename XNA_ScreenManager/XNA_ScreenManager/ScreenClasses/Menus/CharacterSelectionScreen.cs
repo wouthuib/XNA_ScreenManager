@@ -155,11 +155,11 @@ namespace XNA_ScreenManager.ScreenClasses.Menus
                     playersprite.Position = new Vector2(Position.X, Position.Y - 10);
 
                     if (ID == playerStore.ActiveSlot)
-                        playersprite.SetState = CharacterClasses.EntityState.Stand;
+                        playersprite.spritename = "stand1_0";
                     else
                     {
                         transperancy = 0.5f;
-                        playersprite.SetState = CharacterClasses.EntityState.Sit;
+                        playersprite.spritename = "sit_0";
                         playersprite.Position = new Vector2(Position.X, Position.Y);
                     }
 

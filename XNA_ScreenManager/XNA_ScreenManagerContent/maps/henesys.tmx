@@ -25,7 +25,7 @@
   </data>
  </layer>
  <objectgroup name="Hero" width="182" height="34">
-  <object name="hero" x="1792" y="672">
+  <object name="hero" x="1750" y="672">
    <ellipse/>
   </object>
  </objectgroup>

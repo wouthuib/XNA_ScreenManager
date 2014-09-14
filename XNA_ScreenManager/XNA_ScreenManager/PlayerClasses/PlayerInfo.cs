@@ -34,6 +34,10 @@ namespace XNA_ScreenManager.PlayerClasses
     {
         public bool networkplayer;
 
+        public long AccountID;              // Account
+        public long CharacterID;            // Character
+        public bool Online;                 // Character
+
         public Equipment equipment;         // Equipment
         public Inventory inventory;         // Inventory
         public QuickSlotBar quickslotbar;   // QuickSlotBar

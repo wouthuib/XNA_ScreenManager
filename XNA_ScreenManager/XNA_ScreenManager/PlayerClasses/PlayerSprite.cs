@@ -47,7 +47,7 @@ namespace XNA_ScreenManager
         public Vector2 Direction, previousDirection;                                              // Sprite Move direction
         protected float Speed;                                                                    // Speed used in functions
         protected Vector2 Velocity = new Vector2(0,1);                                            // speed used in jump
-        private const int PLAYER_SPEED = 200;                                                     // The actual speed of the player
+        private const int PLAYER_SPEED = 190;                                                     // The actual speed of the player
         private const int ANIMATION_SPEED = 120;                                                  // Animation speed, 120 = default 
         private const int MOVE_UP = -1;                                                           // player moving directions
         private const int MOVE_DOWN = 1;                                                          // player moving directions
@@ -56,6 +56,7 @@ namespace XNA_ScreenManager
         private float previousGameTimeMsec;                                                       // GameTime in Miliseconds
         protected float previousNetworkMsec;                                                      // Network update time
         private bool landed;                                                                      // land switch, arrow switch
+        private bool holdPosition;                                                                // player hold still but animate
 
         // new Texture properties
         public int spriteframe = 0, prevspriteframe = 0, maxspriteframe = 0;
@@ -93,7 +94,11 @@ namespace XNA_ScreenManager
             spriteEffect = SpriteEffects.FlipHorizontally;
         }
 
-        public EntityState SetState { get; set; }
+        public EntityState SetState 
+        { 
+            get{return this.state;} 
+            set{this.state = value;} 
+        }
 
         public override void Update(GameTime gameTime)
         {
@@ -380,12 +385,16 @@ namespace XNA_ScreenManager
                         
                         if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Space))
                         {
-                            state = EntityState.Stand;
+                            //state = EntityState.Stand;
+
+                            NetworkGameData.Instance.sendPlayerData("Stand", getPlayer());
                         }
                         else if (keyboardStateCurrent.IsKeyUp(Microsoft.Xna.Framework.Input.Keys.Up) &&
                                  keyboardStatePrevious.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Up))
                         {
-                            state = EntityState.Stand;
+                            //state = EntityState.Stand;
+
+                            NetworkGameData.Instance.sendPlayerData("Stand", getPlayer());
                         }
                         //else if (keyboardStateCurrent.IsKeyUp(Microsoft.Xna.Framework.Input.Keys.Insert) &&
                         //         keyboardStatePrevious.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Insert))
@@ -424,7 +433,7 @@ namespace XNA_ScreenManager
                         if (this.collideRope == false)
                             this.state = EntityState.Falling;
 
-                        if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Down) && !ChatboxActive)
+                        if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Down) && !HoldPosition)
                         {
                             // move player location (make ActiveMap tile check here in the future)
                             this.Direction.Y = MOVE_DOWN;
@@ -443,7 +452,7 @@ namespace XNA_ScreenManager
                             if (spriteframe > 1)
                                 spriteframe = 0;
                         }
-                        else if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Up) && !ChatboxActive)
+                        else if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Up) && !HoldPosition)
                         {
                             // move player location (make ActiveMap tile check here in the future)
                             this.Direction.Y = MOVE_UP;
@@ -494,7 +503,7 @@ namespace XNA_ScreenManager
                         if (this.collideLadder == false)
                             this.state = EntityState.Falling;
 
-                        if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Down) && !ChatboxActive)
+                        if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Down) && !HoldPosition)
                         {
                             // move player location (make ActiveMap tile check here in the future)
                             this.Direction.Y = MOVE_DOWN;
@@ -513,7 +522,7 @@ namespace XNA_ScreenManager
                             if (spriteframe > 1)
                                 spriteframe = 0;
                         }
-                        else if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Up) && !ChatboxActive)
+                        else if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Up) && !HoldPosition)
                         {
                             // move player location (make ActiveMap tile check here in the future)
                             this.Direction.Y = MOVE_UP;
@@ -559,41 +568,51 @@ namespace XNA_ScreenManager
                         Direction = Vector2.Zero;
                         Velocity = Vector2.Zero;
 
-                        if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Right) && !ChatboxActive)
+                        if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Right) && !HoldPosition)
                         {
                             spriteframe = 0;
-                            state = EntityState.Walk;
+                            //state = EntityState.Walk;
                             spriteEffect = SpriteEffects.FlipHorizontally;
+
+                            NetworkGameData.Instance.sendPlayerData("Right", getPlayer());
                         }
-                        else if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Left) && !ChatboxActive)
+                        else if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Left) && !HoldPosition)
                         {
                             spriteframe = 0;
-                            state = EntityState.Walk;
+                            //state = EntityState.Walk;
                             spriteEffect = SpriteEffects.None;
+                            
+                            NetworkGameData.Instance.sendPlayerData("Left", getPlayer());
                         }
-                        else if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Space) && !ChatboxActive)
+                        else if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Space) && !HoldPosition)
                         {
                             if (!collideNPC)
                             {
                                 spriteframe = 0;
                                 Velocity += new Vector2(0, -1.6f); // Add an upward impulse
-                                state = EntityState.Jump;
+                                //state = EntityState.Jump;
+                                
+                                NetworkGameData.Instance.sendPlayerData("Jump", getPlayer());
                             }
                         }
-                        else if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Insert) && !ChatboxActive)
+                        else if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Insert) && !HoldPosition)
                         {
                             spriteframe = 0;
-                            state = EntityState.Sit;
+                            // state = EntityState.Sit;
+
+                            NetworkGameData.Instance.sendPlayerData("Sit", getPlayer());
                         }
-                        else if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Up) && !ChatboxActive)
+                        else if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Up) && !HoldPosition)
                         {
                             spriteframe = 0;
-                            if (this.collideLadder)
-                                state = EntityState.Ladder;
-                            else if (this.collideRope)
-                                state = EntityState.Rope;
+                            //if (this.collideLadder)
+                            //    state = EntityState.Ladder;
+                            //else if (this.collideRope)
+                            //    state = EntityState.Rope;
+
+                            NetworkGameData.Instance.sendPlayerData("Up", getPlayer());
                         }
-                        else if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.LeftAlt) && !ChatboxActive)
+                        else if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.LeftAlt) && !HoldPosition)
                         {
                             // check if weapon is equiped
                             if (getPlayer().equipment.item_list.FindAll(delegate(Item item) { return item.Type == ItemType.Weapon; }).Count > 0)
@@ -619,8 +638,8 @@ namespace XNA_ScreenManager
                         }
 
                         // Check if player is steady standing
-                        if (Position.Y > OldPosition.Y)
-                            state = EntityState.Falling;
+                        //if (Position.Y > OldPosition.Y)
+                        //    state = EntityState.Falling;
 
                         // Move the Character
                         OldPosition = Position;
@@ -667,14 +686,14 @@ namespace XNA_ScreenManager
                         Direction = Vector2.Zero;
                         Velocity = Vector2.Zero;
 
-                        if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Right) && !ChatboxActive)
+                        if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Right) && !HoldPosition)
                         {
                             // move player location (make ActiveMap tile check here in the future)
                             this.Direction.X = MOVE_RIGHT;
                             this.Speed = PLAYER_SPEED;
                             spriteEffect = SpriteEffects.FlipHorizontally;
                         }
-                        else if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Left) && !ChatboxActive)
+                        else if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Left) && !HoldPosition)
                         {
                             // move player location (make ActiveMap tile check here in the future)
                             this.Direction.X = MOVE_LEFT;
@@ -683,14 +702,17 @@ namespace XNA_ScreenManager
                         }
                         else
                         {
-                            state = EntityState.Stand;
+                            //state = EntityState.Stand;
+                            NetworkGameData.Instance.sendPlayerData("Stop", getPlayer());
                         }
-                        if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Space) && !ChatboxActive)
+                        if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Space) && !HoldPosition)
                         {
                             if (!collideNPC)
                             {
                                 Velocity += new Vector2(0, -1.6f); // Add an upward impulse
-                                state = EntityState.Jump;
+                                //state = EntityState.Jump;
+
+                                NetworkGameData.Instance.sendPlayerData("Jump", getPlayer());
                             }
                         }
 
@@ -718,8 +740,8 @@ namespace XNA_ScreenManager
                         }
 
                         // Check if player is steady standing
-                        if (Position.Y > OldPosition.Y && collideSlope == false)
-                            state = EntityState.Falling;
+                        //if (Position.Y > OldPosition.Y && collideSlope == false)
+                        //    state = EntityState.Falling;
                                                 
                         // Move the Character
                         OldPosition = Position;
@@ -728,7 +750,7 @@ namespace XNA_ScreenManager
                         Position += Direction * Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                         // Apply Gravity 
-                        Position += new Vector2(0,1) * 200 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                        Position += new Vector2(0,1) * PLAYER_SPEED * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                         break;
                     #endregion
@@ -747,6 +769,9 @@ namespace XNA_ScreenManager
                                 this.Direction.X = -1;
                             else if (this.Direction.X < 0)
                                 this.Direction.X = 0;
+
+                            NetworkGameData.Instance.sendPlayerData("Left", getPlayer());
+
                         }
                         else if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Right))
                         {
@@ -758,22 +783,28 @@ namespace XNA_ScreenManager
                                 this.Direction.X = 1;
                             else if (this.Direction.X > 0)
                                 this.Direction.X = 0;
+
+                            NetworkGameData.Instance.sendPlayerData("Right", getPlayer());
                         }
                         else if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Down))
                         {
-                            if (this.collideLadder)
-                                state = EntityState.Ladder;
-                            else if (this.collideRope)
-                                state = EntityState.Rope;
-                            else
-                                state = EntityState.Sit;
+                            //if (this.collideLadder)
+                            //    state = EntityState.Ladder;
+                            //else if (this.collideRope)
+                            //    state = EntityState.Rope;
+                            //else
+                            //    state = EntityState.Sit;
+
+                            NetworkGameData.Instance.sendPlayerData("Down", getPlayer());
                         }
                         else if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Up))
                         {
-                            if (this.collideLadder)
-                                state = EntityState.Ladder;
-                            else if (this.collideRope)
-                                state = EntityState.Rope;
+                            //if (this.collideLadder)
+                            //    state = EntityState.Ladder;
+                            //else if (this.collideRope)
+                            //    state = EntityState.Rope;
+
+                            NetworkGameData.Instance.sendPlayerData("Up", getPlayer());
                         }
 
                         // Move the Character
@@ -800,8 +831,8 @@ namespace XNA_ScreenManager
                         }
                         else
                         {
-                            landed = false;
-                            state = EntityState.Falling;
+                            // landed = false;
+                            // state = EntityState.Falling;
                         }
 
                         break;
@@ -819,6 +850,8 @@ namespace XNA_ScreenManager
                                 this.Direction.X = -1;
                             else if (this.Direction.X < 0)
                                 this.Direction.X = 0;
+
+                            NetworkGameData.Instance.sendPlayerData("Left", getPlayer());
                         }
                         else if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Right))
                         {
@@ -830,6 +863,8 @@ namespace XNA_ScreenManager
                                 this.Direction.X = 1;
                             else if (this.Direction.X > 0)
                                 this.Direction.X = 0;
+
+                            NetworkGameData.Instance.sendPlayerData("Right", getPlayer());
                         }
 
                         if (OldPosition.Y < position.Y)
@@ -854,10 +889,10 @@ namespace XNA_ScreenManager
                             {
                                 previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.02f;
 
-                                if (landed == true)
-                                    state = EntityState.Stand;
-                                else
-                                    landed = true;
+                                //if (landed == true)
+                                //    state = EntityState.Stand;
+                                //else
+                                //    landed = true;
                             }
 
                             // Move the Character
@@ -904,7 +939,7 @@ namespace XNA_ScreenManager
                         }
 
                         // Set new state
-                        state = EntityState.Frozen;
+                        // state = EntityState.Frozen;
 
                         break;
                     #endregion
@@ -932,7 +967,7 @@ namespace XNA_ScreenManager
                         }
 
                         // Apply Gravity + jumping
-                        if (Velocity.Y < -1.2f)
+                        if (Velocity.Y < -1.2f && OldPosition.Y != Position.Y)
                         {
                             // Apply jumping
                             Position += Velocity * 350 * (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -946,7 +981,7 @@ namespace XNA_ScreenManager
                         else
                         {
                             landed = false;
-                            state = EntityState.Falling;
+                            // state = EntityState.Falling;
                             Direction = Vector2.Zero;
                             Velocity = Vector2.Zero;
                             //this.color = Color.White;
@@ -961,11 +996,11 @@ namespace XNA_ScreenManager
             #region temporary quickbuttons
             // temporary global function buttons 
             // should be handles by singleton class keyboard manager
-            if (CheckKey(Keys.Q) && !ChatboxActive)
+            if (CheckKey(Keys.Q) && !HoldPosition)
                 getPlayer().inventory.addItem(itemStore.getItem(new Random().Next(1100, 1114)));
-            else if (CheckKey(Keys.W) && !ChatboxActive)
+            else if (CheckKey(Keys.W) && !HoldPosition)
                 getPlayer().inventory.addItem(itemStore.getItem(XNA_ScreenManager.ScreenClasses.MainClasses.ResourceManager.randomizer.Instance.generateRandom(1300, 1303)));
-            else if (CheckKey(Keys.E) && !ChatboxActive)
+            else if (CheckKey(Keys.E) && !HoldPosition)
                 getPlayer().inventory.addItem(itemStore.getItem(XNA_ScreenManager.ScreenClasses.MainClasses.ResourceManager.randomizer.Instance.generateRandom(2300, 2308)));
             // temporary
             #endregion
@@ -1176,8 +1211,19 @@ namespace XNA_ScreenManager
             return keyboardStatePrevious.IsKeyDown(theKey) && keyboardStateCurrent.IsKeyUp(theKey);
         }
 
-        protected bool ChatboxActive
-        { get { return XNA_ScreenManager.ScreenClasses.ScreenManager.Instance.actionScreen.hud.chatbarInput.Active; } }
+        public bool HoldPosition
+        { 
+            get 
+            {
+                if (XNA_ScreenManager.ScreenClasses.ScreenManager.Instance.actionScreen.hud.chatbarInput.Active)
+                    return true;
+                if (holdPosition)
+                    return true;
+                else
+                    return false;
+            }
+            set { holdPosition = value; }
+        }
 
         #region load spriteoffset
         protected Vector2 spriteCorrect(int spriteID, Texture2D spr)

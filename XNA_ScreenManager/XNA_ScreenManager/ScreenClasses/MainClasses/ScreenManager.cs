@@ -545,7 +545,7 @@ namespace XNA_ScreenManager.ScreenClasses
                 if (createCharScreen.phase == Phase.Properties)
                 {
                     createCharScreen.phase = Phase.Name;
-                    PlayerStore.Instance.addPlayer(createCharScreen.newPlayer);
+                    // PlayerStore.Instance.addPlayer(createCharScreen.newPlayer);
                     NetworkGameData.Instance.sendPlayerData("Create", createCharScreen.newPlayer); // new, send to server
                     activeScreen.Hide();
                     activeScreen = selectCharScreen;
@@ -614,6 +614,8 @@ namespace XNA_ScreenManager.ScreenClasses
                         selectCharScreen.menu.StartIndex = 0;
                         selectCharScreen.menu.EndIndex = 3;
                         GameWorld.GetInstance.ChangeJobClass(PlayerStore.Instance.activePlayer);
+                        NetworkGameData.Instance.sendScreenData("worldmap"); // inform server
+                        NetworkGameData.Instance.sendPlayerData("Online", PlayerStore.Instance.activePlayer);
                         activeScreen.Hide();
                         activeScreen = actionScreen;
                         activeScreen.Show();

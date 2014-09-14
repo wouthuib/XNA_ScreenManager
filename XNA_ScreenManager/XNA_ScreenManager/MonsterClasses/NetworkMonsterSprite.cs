@@ -76,9 +76,14 @@ namespace XNA_ScreenManager.MonsterClasses
             : base()
         {
             // Derived properties
-            Active = true;
             Position = position;
             OldPosition = position;
+            EntityType = "monster";
+
+            // Set first server update values
+            ServerUpdate_position = position;
+            ServerUpdate_state = EntityState.Stand;
+            ServerUpdate_spriteEffect = SpriteEffects.None;
 
             spriteframe = 0;
             spritepath = MonsterStore.Instance.getMonster(ID).monsterSprite;
@@ -113,6 +118,7 @@ namespace XNA_ScreenManager.MonsterClasses
             Direction = new Vector2();                                                              // Move direction
             state = EntityState.Spawn;                                                              // Player state
             Borders = new Border(borders.X, borders.Y);                                             // Max Tiles from center
+            Active = true;
         }
 
         #region update
@@ -132,7 +138,7 @@ namespace XNA_ScreenManager.MonsterClasses
             {
                 get_server_update();
                 update_animation(gameTime);
-                update_collision(gameTime);
+                // update_collision(gameTime);
             }
 
             if (MonsterStore.Instance.getMonster(this.MonsterID).monsterName.StartsWith("Axe"))
@@ -147,9 +153,12 @@ namespace XNA_ScreenManager.MonsterClasses
 
         public void update_server(Vector2 newPosition, EntityState newState, SpriteEffects newEffect)
         {
-            this.ServerUpdate_state = newState;
-            this.ServerUpdate_position = newPosition;
-            this.ServerUpdate_spriteEffect = newEffect;
+            if(Active)
+            {
+                this.ServerUpdate_state = newState;
+                this.ServerUpdate_position = newPosition;
+                this.ServerUpdate_spriteEffect = newEffect;
+            }
         }
 
         private void get_server_update()
@@ -175,6 +184,10 @@ namespace XNA_ScreenManager.MonsterClasses
                     // Check if Monster is steady standing
                     //if (Position.Y > OldPosition.Y)
                     //    state = EntityState.Falling;
+
+
+                    if (OldPosition.X > 10 && Position.X < 10)
+                        OldPositionX = 10;
 
                     // Move the Monster
                     OldPosition = Position;

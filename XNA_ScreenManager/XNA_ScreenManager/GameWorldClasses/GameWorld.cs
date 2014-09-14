@@ -1,10 +1,10 @@
 using System;
+using System.IO;
 using System.Collections.Generic;
+using Squared.Tiled;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
-using Squared.Tiled;
-using System.IO;
 using XNA_ScreenManager.CharacterClasses;
 using XNA_ScreenManager.ItemClasses;
 using XNA_ScreenManager.PlayerClasses;
@@ -12,7 +12,6 @@ using XNA_ScreenManager.ScreenClasses;
 using XNA_ScreenManager.MonsterClasses;
 using XNA_ScreenManager.PlayerClasses.JobClasses;
 using XNA_ScreenManager.SkillClasses;
-using XNA_ScreenManager.Networking;
 using XNA_ScreenManager.GameWorldClasses.Effects;
 
 

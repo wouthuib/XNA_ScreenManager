@@ -36,38 +36,40 @@ namespace XNA_ScreenManager.Networking
         {
             playerData p = new playerData();
 
-            if (action == "Create")
+            switch(action)
             {
-                p.Name = player.Name;
-                p.skincol = (string)player.skin_color.ToString();
-                p.facespr = (string)player.faceset_sprite;
-                p.hairspr = (string)player.hair_sprite;
-                p.hailcol = (string)player.hair_color.ToString();
-                p.armor = (string)getEquipment(ItemSlot.Bodygear);
-                p.headgear = (string)getEquipment(ItemSlot.Headgear);
-                p.weapon = (string)getEquipment(ItemSlot.Weapon);
-            }
-            else
-            {
-                p.Name = PlayerClasses.PlayerStore.Instance.activePlayer.Name;
-                p.PositionX = (int)GameWorld.GetInstance.playerSprite.PositionX;
-                p.PositionY = (int)GameWorld.GetInstance.playerSprite.PositionY;
-                p.spritename = (string)GameWorld.GetInstance.playerSprite.spritename;
-                p.spritestate = (string)GameWorld.GetInstance.playerSprite.State.ToString();
-                p.direction = (string)GameWorld.GetInstance.playerSprite.Direction.ToString();
-                p.prevspriteframe = (int)GameWorld.GetInstance.playerSprite.prevspriteframe;
-                p.maxspriteframe = (int)GameWorld.GetInstance.playerSprite.maxspriteframe;
-                p.attackSprite = (string)GameWorld.GetInstance.playerSprite.attackSprite;
-                p.spriteEffect = (string)GameWorld.GetInstance.playerSprite.spriteEffect.ToString();
-                p.mapName = (string)GameWorld.GetInstance.map.Properties.Values[1].ToString();
-                p.skincol = (string)getPlayer().skin_color.ToString();
-                p.facespr = (string)getPlayer().faceset_sprite;
-                p.hairspr = (string)getPlayer().hair_sprite;
-                p.hailcol = (string)getPlayer().hair_color.ToString();
-                p.armor = (string)getEquipment(ItemSlot.Bodygear);
-                p.headgear = (string)getEquipment(ItemSlot.Headgear);
-                p.weapon = (string)getEquipment(ItemSlot.Weapon);
-            }
+                case "create":
+                    p.Name = player.Name;
+                    p.skincol = (string)player.skin_color.ToString();
+                    p.facespr = (string)player.faceset_sprite;
+                    p.hairspr = (string)player.hair_sprite;
+                    p.hailcol = (string)player.hair_color.ToString();
+                    p.armor = (string)player.equipment.item_list.Find(x => x.Slot == ItemSlot.Bodygear).itemName.ToString();
+                    //p.headgear = (string)player.equipment.item_list.Find(x => x.Slot == ItemSlot.Headgear).itemName.ToString();
+                    p.weapon = (string)player.equipment.item_list.Find(x => x.Slot == ItemSlot.Weapon).itemName.ToString();
+                    break;
+                default:
+                    p.Name = PlayerClasses.PlayerStore.Instance.activePlayer.Name;
+                    p.Action = (string)action.ToString();
+                    p.PositionX = (int)GameWorld.GetInstance.playerSprite.PositionX;
+                    p.PositionY = (int)GameWorld.GetInstance.playerSprite.PositionY;
+                    p.spritename = (string)GameWorld.GetInstance.playerSprite.spritename;
+                    p.spritestate = (string)GameWorld.GetInstance.playerSprite.State.ToString();
+                    p.direction = (string)GameWorld.GetInstance.playerSprite.Direction.ToString();
+                    p.prevspriteframe = (int)GameWorld.GetInstance.playerSprite.prevspriteframe;
+                    p.maxspriteframe = (int)GameWorld.GetInstance.playerSprite.maxspriteframe;
+                    p.attackSprite = (string)GameWorld.GetInstance.playerSprite.attackSprite;
+                    p.spriteEffect = (string)GameWorld.GetInstance.playerSprite.spriteEffect.ToString();
+                    p.mapName = (string)GameWorld.GetInstance.map.Properties.Values[1].ToString();
+                    p.skincol = (string)getPlayer().skin_color.ToString();
+                    p.facespr = (string)getPlayer().faceset_sprite;
+                    p.hairspr = (string)getPlayer().hair_sprite;
+                    p.hailcol = (string)getPlayer().hair_color.ToString();
+                    p.armor = (string)getEquipment(ItemSlot.Bodygear);
+                    p.headgear = (string)getEquipment(ItemSlot.Headgear);
+                    p.weapon = (string)getEquipment(ItemSlot.Weapon);
+                    break;
+             }
 
             tcpclient.SendData(p);
         }
@@ -80,6 +82,21 @@ namespace XNA_ScreenManager.Networking
                 Text = newtext,
                 PositionX = (int)GameWorld.GetInstance.playerSprite.PositionX,
                 PositionY = (int)GameWorld.GetInstance.playerSprite.PositionY
+            };
+
+            tcpclient.SendData(c);
+        }
+
+        public void sendScreenData(string newscreen)
+        {
+            ScreenData c = new ScreenData()
+            {
+                MainScreenName = newscreen,
+                MainScreenPhase = "",
+                MainScreenMenu = "",
+                SubScreenName = "",
+                SubScreenPhase = "",
+                SubScreenMenu = ""
             };
 
             tcpclient.SendData(c);

@@ -117,7 +117,7 @@ namespace XNA_ScreenManager.CharacterClasses
             {
                 update_movement(gameTime);
                 update_animation(gameTime);
-                update_collision(gameTime);
+                //update_collision(gameTime);
             }
         }
 

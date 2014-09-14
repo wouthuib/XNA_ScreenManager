@@ -2,19 +2,20 @@
 using System.Net.Sockets;
 using System.Text;
 using System.Xml.Serialization;
-using XNA_ScreenManager.PlayerClasses;
-using XNA_ScreenManager.ScreenClasses;
 using System.Xml.Linq;
-using XNA_ScreenManager.Networking.ServerClasses;
 using System.IO;
+using System.Threading;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using XNA_ScreenManager.Networking.ServerClasses;
 using XNA_ScreenManager.MapClasses;
 using XNA_ScreenManager.GameWorldClasses.Effects;
 using XNA_ScreenManager.ScreenClasses.MainClasses;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
 using XNA_ScreenManager.MonsterClasses;
 using XNA_ScreenManager.CharacterClasses;
-using System.Threading;
+using XNA_ScreenManager.ItemClasses;
+using XNA_ScreenManager.PlayerClasses;
+using XNA_ScreenManager.ScreenClasses;
 
 namespace XNA_ScreenManager.Networking
 {
@@ -89,6 +90,8 @@ namespace XNA_ScreenManager.Networking
                     xmlSerializer = new XmlSerializer(typeof(DmgAreaData));
                 else if (obj is AccountData)
                     xmlSerializer = new XmlSerializer(typeof(AccountData));
+                else if (obj is ScreenData)
+                    xmlSerializer = new XmlSerializer(typeof(ScreenData));
 
                 if (networkstream.CanWrite)
                 {
@@ -211,32 +214,41 @@ namespace XNA_ScreenManager.Networking
 
         private void ReadUserData(byte[] byteArray)
         {
+            string s = System.Text.Encoding.UTF8.GetString(byteArray);
+
             //message has successfully been received
             string bytestring = new ASCIIEncoding().GetString(byteArray, 0, byteArray.Length);
             XDocument[] docs = new XDocument[60];
             int count = 0;
 
-            // fetch all data within the incoming networkstream
-            for (int val = 0; val < bytestring.Split('?').Length -1; val++)
+            try
             {
-                string content = "<?" + bytestring.Split('?')[val + 1].ToString() + "?" + bytestring.Split('?')[val + 2].ToString();
+                // fetch all data within the incoming networkstream
+                for (int val = 0; val < bytestring.Split('?').Length - 1; val++)
+                {
+                    string content = "<?" + bytestring.Split('?')[val + 1].ToString() + "?" + bytestring.Split('?')[val + 2].ToString();
 
-                char last = content[content.Length - 1];
-                if (last == '<')
-                    content = content.Substring(0, content.Length - 1);
-                try
-                {
-                    docs[count] = XDocument.Parse(content);
+                    char last = content[content.Length - 1];
+                    if (last == '<')
+                        content = content.Substring(0, content.Length - 1);
+                    try
+                    {
+                        docs[count] = XDocument.Parse(content);
+                    }
+                    catch
+                    {
+                        break;
+                    }
+                    finally
+                    {
+                        count++;
+                        val++;
+                    }
                 }
-                catch
-                {
-                    break;
-                }
-                finally
-                {
-                    count++;
-                    val++;
-                }
+            }
+            catch (Exception ee)
+            {
+                string error = ee.ToString();
             }
 
             try
@@ -259,13 +271,20 @@ namespace XNA_ScreenManager.Networking
                         Object obj = DeserializeFromXml<Object>(builder.ToString(), elementType);
 
                         if (obj is playerData)
-                            incomingPlayerData(obj as playerData);
+                        {
+                            if (ScreenManager.Instance.activeScreen == ScreenManager.Instance.actionScreen)
+                                incomingPlayerData(obj as playerData);
+                            else if (ScreenManager.Instance.activeScreen == ScreenManager.Instance.selectCharScreen)
+                                incomingCharSelect(obj as playerData);
+                        }
                         else if (obj is ChatData)
                             incomingChatData(obj as ChatData);
                         else if (obj is MonsterData)
                             incomingMonsterData(obj as MonsterData);
                         else if (obj is AccountData)
                             incomingAccountData(obj as AccountData);
+                        else
+                            break;
                     }
                 }
             }
@@ -291,10 +310,15 @@ namespace XNA_ScreenManager.Networking
             if (Convert.ToBoolean(account.Connected))
             {
                 if (ScreenManager.Instance.activeScreen == ScreenManager.Instance.loginScreen)
-                    ScreenManager.Instance.setScreen("selectCharScreen");
+                {
+                    ScreenManager.Instance.setScreen("selectCharScreen"); // change screen
+                    NetworkGameData.Instance.sendScreenData("charselect"); // inform server
+                }
             }
             else
+            {
                 ScreenManager.Instance.activeScreen.topmessage.Display("Wrong Username and Password", Color.White, 5f);
+            }
         }
 
         private void incomingPlayerData(playerData player)
@@ -305,6 +329,18 @@ namespace XNA_ScreenManager.Networking
             {
                 NetworkPlayerStore.Instance.playerlist[NetworkPlayerSprite.NetworkStoreID(player.Name)] = null;
                 GameWorld.GetInstance.listEntity.Find(p => p.EntityName == player.Name).KeepAliveTime = 0; // removed in next update
+            }
+            else if (player.Action == "Online")
+            { }
+            else if (player.Action == "Sprite_Update" && player.Name == PlayerStore.Instance.activePlayer.Name)
+            {
+                PlayerSprite sprite = GameWorld.GetInstance.playerSprite;
+
+                if (sprite.State.ToString() != player.spritestate)
+                {
+                    sprite.State = (EntityState)Enum.Parse(typeof(EntityState), player.spritestate);
+                    sprite.Position = new Vector2(player.PositionX, player.PositionY);
+                }
             }
             else if (player.Name != PlayerStore.Instance.activePlayer.Name)
             {
@@ -318,6 +354,13 @@ namespace XNA_ScreenManager.Networking
                         {
                             found = true; // update existing player
                             NetworkPlayerStore.Instance.playerlist[i] = player;
+
+                            // update mapname
+                            if (GameWorld.GetInstance.listEntity.FindAll(x => x.EntityName == player.Name).Count > 0)
+                            {
+                                NetworkPlayerSprite NWplayer = (NetworkPlayerSprite)GameWorld.GetInstance.listEntity.Find(x => x.EntityName == player.Name);
+                                NWplayer.MapName = player.mapName;
+                            }
                         }
                     }
                 }
@@ -362,7 +405,56 @@ namespace XNA_ScreenManager.Networking
                         new Vector2(mobdata.PositionX, mobdata.PositionY), 
                         new Vector2(mobdata.BorderMin, mobdata.BorderMax)));
         }
-                
+
+        private void incomingCharSelect(playerData playerdata)
+        {
+            bool found = false;
+            for(int i = 0; i < PlayerStore.Instance.playerlist.Length; i++)
+            {
+                if (PlayerStore.Instance.playerlist[i] != null)
+                {
+                    if (PlayerStore.Instance.playerlist[i].Name == playerdata.Name) // avoid duplicates
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!found)
+            {
+                PlayerInfo player = new PlayerInfo();
+
+                player.AccountID = playerdata.AccountID;
+                player.CharacterID = playerdata.CharacterID;
+
+                player.Name = playerdata.Name;
+                player.skin_color = getColor(playerdata.skincol);
+                player.faceset_sprite = playerdata.facespr;
+                player.hair_sprite = playerdata.hairspr;
+                player.hair_color = getColor(playerdata.hailcol);
+
+                player.equipment.addItem(ItemStore.Instance.item_list.Find(x => x.itemName == playerdata.armor));
+                player.equipment.addItem(ItemStore.Instance.item_list.Find(x => x.itemName == playerdata.weapon));
+
+                PlayerStore.Instance.addPlayer(player);
+            }
+        }
+
+        private Color getColor(string colorcode)
+        {
+            string[] values = colorcode.Split(':');
+
+            for (int i = 0; i < values.Length; i++)
+            {
+                values[i] = values[i].Trim(new char[] { ' ', 'R', 'G', 'B', 'A', '{', '}' });
+            }
+
+            return new Color(
+                Convert.ToInt32(values[1]),
+                Convert.ToInt32(values[2]),
+                Convert.ToInt32(values[3]));
+        }
     }
 
     public class StateObject

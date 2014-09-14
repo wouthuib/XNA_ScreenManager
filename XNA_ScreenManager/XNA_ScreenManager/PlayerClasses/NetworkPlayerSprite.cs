@@ -1,16 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using XNA_ScreenManager.CharacterClasses;
 using XNA_ScreenManager.MapClasses;
-using XNA_ScreenManager.GameWorldClasses.Entities;
 using XNA_ScreenManager.ItemClasses;
-using System.IO;
-using System.Text.RegularExpressions;
-using System.Globalization;
 
 namespace XNA_ScreenManager.PlayerClasses
 {
@@ -61,12 +54,17 @@ namespace XNA_ScreenManager.PlayerClasses
             Name = name;
             entityName = name; // used by removing instance in worldmap!!
             Position = new Vector2(positionX, positionY);
-            spritename = _spritename;
-            state = (EntityState)Enum.Parse(typeof(EntityState), _spritestate);
+            if (_spritename != null)
+                spritename = _spritename;
+            if (_spritestate != null)
+                state = (EntityState)Enum.Parse(typeof(EntityState), _spritestate);
             prevspriteframe = _prevspriteframe;
             maxspriteframe = _maxspriteframe;
             attackSprite = _attackSprite;
-            spriteEffect = (SpriteEffects)Enum.Parse(typeof(SpriteEffects), _spriteEffect);
+            if (_spriteEffect != null)
+                spriteEffect = (SpriteEffects)Enum.Parse(typeof(SpriteEffects), _spriteEffect);
+            else
+                spriteEffect = SpriteEffects.FlipHorizontally;
             MapName = mapName;
             
             this.Player = new PlayerInfo(true); // make a networkplayer
