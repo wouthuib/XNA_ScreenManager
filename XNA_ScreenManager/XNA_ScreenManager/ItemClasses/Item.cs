@@ -57,7 +57,7 @@ namespace XNA_ScreenManager.ItemClasses
         public string Name;
         public int ID, X, Y;
 
-        public spriteOffset(int id, string name, int x, int y)
+        public spriteOffset(int id, string name = "", int x = 0, int y = 0)
         {
             this.ID = id;
             this.Name = name;

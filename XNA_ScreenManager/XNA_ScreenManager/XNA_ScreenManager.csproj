@@ -164,7 +164,6 @@
     <Compile Include="Networking\ServerClasses\ScreenData.cs" />
     <Compile Include="Networking\ServerProperties.cs" />
     <Compile Include="Networking\TCPClient.cs" />
-    <Compile Include="Networking\ServerClasses\NetworkPlayerStore.cs" />
     <Compile Include="Networking\ServerClasses\PlayerData.cs" />
     <Compile Include="PlayerClasses\NetworkPlayerSprite.cs" />
     <Compile Include="PlayerClasses\PlayerRoutines.cs" />

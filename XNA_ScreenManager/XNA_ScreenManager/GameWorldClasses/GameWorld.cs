@@ -178,14 +178,9 @@ namespace XNA_ScreenManager.MapClasses
                     if (obj is NetworkPlayerSprite)
                     {
                         NetworkPlayerSprite player = (NetworkPlayerSprite)obj;
+
                         if (player.MapName == this.map.Properties.Values[1].ToString())
                             player.Update(gameTime);
-
-                        if (player.State != EntityState.Ladder && player.State != EntityState.Rope)
-                        {
-                            player.OldPosition = player.Position;
-                            player.Position += new Vector2(0, 1) * 250 * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                        }
                     }
                 }
 
@@ -490,37 +485,25 @@ namespace XNA_ScreenManager.MapClasses
 
                 // Draw all Entities (except for the Players & Monsters)
                 foreach (Entity obj in listEntity)
-                {
                     if(obj != playerSprite && !(obj is NetworkMonsterSprite))
                         obj.Draw(spriteBatch);
-                }
 
                 // Draw all network Monsters
                 foreach (Entity obj in listEntity)
-                {
                     if (obj is NetworkMonsterSprite)
                         obj.Draw(spriteBatch);
-                }
 
                 // Draw network players
                 foreach (Entity obj in listEntity)
-                {
                     if (obj is NetworkPlayerSprite)
-                    {
-                        NetworkPlayerSprite player = (NetworkPlayerSprite)obj;
-                        if (player.MapName == this.map.Properties.Values[1].ToString())
-                            player.Draw(spriteBatch);
-                    }
-                }
+                        obj.Draw(spriteBatch);
 
                 // Draw the Local player
                 playerSprite.Draw(spriteBatch);
 
                 // Draw all Warp Effects
                 foreach (GameEffect obj in listEffect)
-                {
                     obj.Draw(spriteBatch);
-                }
 
                 //Draw map Layer 2
                 map.Draw(spriteBatch, new Rectangle((int)cam._pos.X - (gfxdevice.Viewport.Width / 2),

@@ -11,11 +11,9 @@ namespace XNA_ScreenManager.PlayerClasses
     {
         #region properties and constructor
         public string Name, MapName;
-        private Vector2 previousPosition;
+        public Vector2 previousPosition;
         private float previousGameTimeMsec;
 
-        private const int PLAYER_SPEED = 195;                                                     // The network player is a bit slower
-        private const int ANIMATION_SPEED = 120;                                                  // Animation speed, 120 = default 
         private const int MOVE_UP = -1;                                                           // player moving directions
         private const int MOVE_DOWN = 1;                                                          // player moving directions
         private const int MOVE_LEFT = -1;                                                         // player moving directions
@@ -32,8 +30,8 @@ namespace XNA_ScreenManager.PlayerClasses
         public NetworkPlayerSprite(
             string name,
             string ip,
-            int positionX,
-            int positionY,
+            float positionX,
+            float positionY,
             string _spritename,
             string _spritestate,
             int _prevspriteframe,
@@ -81,56 +79,52 @@ namespace XNA_ScreenManager.PlayerClasses
 
         public override void Update(GameTime gameTime)
         {
-            previousPosition = this.position;   // save previous postion
-            previousState = this.state;         // save previous state before
-            previousDirection = this.Direction; // save previous direction
+            //#region update from server
+            //foreach (var entity in GameWorld.GetInstance.listEntity)
+            //{
+            //    if (entity is NetworkPlayerSprite)
+            //    {
+            //        NetworkPlayerSprite player = (NetworkPlayerSprite)entity;
+            //        if (player.Name == this.Name)
+            //        {
+            //            int i = NetworkStoreID(this.Name); // get player index
 
-            #region update from server
-            foreach (var entity in GameWorld.GetInstance.listEntity)
-            {
-                if (entity is NetworkPlayerSprite)
-                {
-                    NetworkPlayerSprite player = (NetworkPlayerSprite)entity;
-                    if (player.Name == this.Name)
-                    {
-                        int i = NetworkStoreID(this.Name); // get player index
+            //            if (i >= 0 && // player index found
+            //                (state != (EntityState)Enum.Parse(typeof(EntityState), NetworkPlayerStore.Instance.playerlist[i].spritestate) ||
+            //                spriteEffect != (SpriteEffects)Enum.Parse(typeof(SpriteEffects), NetworkPlayerStore.Instance.playerlist[i].spriteEffect) ||
+            //                ((state == EntityState.Ladder || state == EntityState.Rope) && Direction != getVector(NetworkPlayerStore.Instance.playerlist[i].direction))))
+            //            {
+            //                Position = new Vector2(NetworkPlayerStore.Instance.playerlist[i].PositionX, NetworkPlayerStore.Instance.playerlist[i].PositionY);
+            //                //spritename = NetworkPlayerStore.Instance.playerlist[i].spritename;                            
+            //                //prevspriteframe = NetworkPlayerStore.Instance.playerlist[i].prevspriteframe;
+            //                //maxspriteframe = NetworkPlayerStore.Instance.playerlist[i].maxspriteframe;
+            //                //attackSprite = NetworkPlayerStore.Instance.playerlist[i].attackSprite;
+            //                //spriteEffect = (SpriteEffects)Enum.Parse(typeof(SpriteEffects), NetworkPlayerStore.Instance.playerlist[i].spriteEffect);
+            //                //MapName = NetworkPlayerStore.Instance.playerlist[i].mapName;
+            //                state = (EntityState)Enum.Parse(typeof(EntityState), NetworkPlayerStore.Instance.playerlist[i].spritestate);
+            //                //Direction = getVector(NetworkPlayerStore.Instance.playerlist[i].direction);
 
-                        if (i >= 0 && // player index found
-                            (state != (EntityState)Enum.Parse(typeof(EntityState), NetworkPlayerStore.Instance.playerlist[i].spritestate) ||
-                            spriteEffect != (SpriteEffects)Enum.Parse(typeof(SpriteEffects), NetworkPlayerStore.Instance.playerlist[i].spriteEffect) ||
-                            ((state == EntityState.Ladder || state == EntityState.Rope) && Direction != getVector(NetworkPlayerStore.Instance.playerlist[i].direction))))
-                        {
-                            Position = new Vector2(NetworkPlayerStore.Instance.playerlist[i].PositionX, NetworkPlayerStore.Instance.playerlist[i].PositionY);
-                            spritename = NetworkPlayerStore.Instance.playerlist[i].spritename;                            
-                            prevspriteframe = NetworkPlayerStore.Instance.playerlist[i].prevspriteframe;
-                            maxspriteframe = NetworkPlayerStore.Instance.playerlist[i].maxspriteframe;
-                            attackSprite = NetworkPlayerStore.Instance.playerlist[i].attackSprite;
-                            spriteEffect = (SpriteEffects)Enum.Parse(typeof(SpriteEffects), NetworkPlayerStore.Instance.playerlist[i].spriteEffect);
-                            MapName = NetworkPlayerStore.Instance.playerlist[i].mapName;
-                            state = (EntityState)Enum.Parse(typeof(EntityState), NetworkPlayerStore.Instance.playerlist[i].spritestate);
-                            Direction = getVector(NetworkPlayerStore.Instance.playerlist[i].direction);
-
-                            this.Player.skin_color = getColor(NetworkPlayerStore.Instance.playerlist[i].skincol);
-                            this.Player.faceset_sprite = NetworkPlayerStore.Instance.playerlist[i].facespr;
-                            this.Player.hair_sprite = NetworkPlayerStore.Instance.playerlist[i].hairspr;
-                            this.Player.hair_color = getColor(NetworkPlayerStore.Instance.playerlist[i].hailcol);
+            //                //this.Player.skin_color = getColor(NetworkPlayerStore.Instance.playerlist[i].skincol);
+            //                //this.Player.faceset_sprite = NetworkPlayerStore.Instance.playerlist[i].facespr;
+            //                //this.Player.hair_sprite = NetworkPlayerStore.Instance.playerlist[i].hairspr;
+            //                //this.Player.hair_color = getColor(NetworkPlayerStore.Instance.playerlist[i].hailcol);
                             
-                            this.armor_name = NetworkPlayerStore.Instance.playerlist[i].armor;
-                            this.headgear_name = NetworkPlayerStore.Instance.playerlist[i].headgear;
-                            this.weapon_name = NetworkPlayerStore.Instance.playerlist[i].weapon;
+            //                //this.armor_name = NetworkPlayerStore.Instance.playerlist[i].armor;
+            //                //this.headgear_name = NetworkPlayerStore.Instance.playerlist[i].headgear;
+            //                //this.weapon_name = NetworkPlayerStore.Instance.playerlist[i].weapon;
 
-                            spriteframe = 0;
+            //                //spriteframe = 0;
 
-                            if(previousState == EntityState.Shoot && state != previousState)
-                            {
-                                state = EntityState.Shoot;
-                                spriteframe = 2;
-                            }
-                        }
-                    }
-                }
-            }
-            #endregion
+            //                //if(previousState == EntityState.Shoot && state != previousState)
+            //                //{
+            //                //    state = EntityState.Shoot;
+            //                //    spriteframe = 2;
+            //                //}
+            //            }
+            //        }
+            //    }
+            //}
+            //#endregion
 
             switch (state)
             {
@@ -325,8 +319,8 @@ namespace XNA_ScreenManager.PlayerClasses
                         }
                     }
 
-                    if(spriteframe == 2) // set by server update, see above
-                        state = (EntityState)Enum.Parse(typeof(EntityState), Array.Find(NetworkPlayerStore.Instance.playerlist, p => p.Name == this.Name).spritestate);
+                    //if(spriteframe == 2) // set by server update, see above
+                    //    state = (EntityState)Enum.Parse(typeof(EntityState), Array.Find(NetworkPlayerStore.Instance.playerlist, p => p.Name == this.Name).spritestate);
 
                     // Apply Gravity 
                     // Position += new Vector2(0, 1) * 250 * (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -508,6 +502,9 @@ namespace XNA_ScreenManager.PlayerClasses
                         }
                     }
 
+                    // Apply Gravity 
+                    Position += new Vector2(0, 1) * 250 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
                     break;
                 #endregion
                 #region state walk
@@ -559,6 +556,9 @@ namespace XNA_ScreenManager.PlayerClasses
                     // Walk speed
                     Position += Direction * Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
+                    // Apply Gravity 
+                    Position += new Vector2(0, 1) * 250 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
                     break;
                 #endregion
                 #region state jump
@@ -602,14 +602,23 @@ namespace XNA_ScreenManager.PlayerClasses
                         playerStore.activePlayer.spriteOfset[i] = getoffset(i);
                     }
 
-                    // Apply jumping
-                    Position += Velocity * 350 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    // Apply Gravity + jumping
+                    if (Velocity.Y < -1.2f)
+                    {
+                        // Apply jumping
+                        Position += Velocity * 350 * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-                    // Apply Gravity 
-                    // Position += new Vector2(0, 1) * 250 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                        // Apply Gravity 
+                        Position += new Vector2(0, 1) * 250 * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-                    // Walk / Jump speed
-                    Position += Direction * (Speed / 2) * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                        // Walk / Jump speed
+                        Position += Direction * (Speed / 2) * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    }
+                    else
+                    {
+                        // landed = false;
+                        // state = EntityState.Falling;
+                    }
 
                     break;
                 #endregion
@@ -639,17 +648,33 @@ namespace XNA_ScreenManager.PlayerClasses
                             this.Direction.X = 0;
                     }
 
-                    if (OldPosition.Y == Position.Y)
-                        state = EntityState.Stand;
+                    if (OldPosition.Y < position.Y)
+                    {
+                        // Move the Character
+                        OldPosition = Position;
 
-                    // Move the Character
-                    OldPosition = Position;
+                        Velocity.Y += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-                    // Apply Gravity (slightly lower than usual due to server delay)
-                    // Position += new Vector2(0, 1) * 200 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                        // Apply Gravity 
+                        Position += new Vector2(0, 1) * 250 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                            
+                        // Walk / Jump speed
+                        Position += Direction * (Speed / 2) * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    }
+                    else
+                    {
+                        // reduce timer
+                        previousGameTimeMsec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-                    // Walk / Jump speed
-                    Position += Direction * (Speed / 2) * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                        // Move the Character
+                        OldPosition = Position;
+
+                        // Apply Gravity 
+                        Position += new Vector2(0, 1) * 250 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                        // Walk / Jump speed
+                        Position += Direction * (Speed / 2) * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    }
 
                     // Player animation
                     for (int i = 0; i < spritepath.Length; i++)
@@ -827,32 +852,17 @@ namespace XNA_ScreenManager.PlayerClasses
             else if (spriteID == 4) // get the Armor Sprite information
             {
                 if (armor_name != null)
-                {
-                    Item item = itemStore.item_list.Find(x => x.itemName == armor_name);
-                    int X = item.list_offsets.Find(y => y.Name == spritename.ToString() + ".png").X;
-                    int Y = item.list_offsets.Find(y => y.Name == spritename.ToString() + ".png").Y;
-                    return new Vector2(X, Y);
-                }
+                    return getOffsetbyItemName(armor_name);
             }
             else if (spriteID == 7) // get the Headgear Sprite information
             {
                 if (headgear_name != null)
-                {
-                    Item item = itemStore.item_list.Find(x => x.itemName == headgear_name);
-                    int X = item.list_offsets.Find(y => y.Name == spritename.ToString() + ".png").X;
-                    int Y = item.list_offsets.Find(y => y.Name == spritename.ToString() + ".png").Y;
-                    return new Vector2(X, Y);
-                }
+                    return getOffsetbyItemName(headgear_name);
             }
             else if (spriteID == 8) // get the Weapon Sprite information
             {
                 if (weapon_name != null)
-                {
-                    Item item = itemStore.item_list.Find(x => x.itemName == weapon_name);
-                    int X = item.list_offsets.Find(y => y.Name == spritename.ToString() + ".png").X;
-                    int Y = item.list_offsets.Find(y => y.Name == spritename.ToString() + ".png").Y;
-                    return new Vector2(X, Y);
-                }
+                    return getOffsetbyItemName(weapon_name);
             }
 
             return Vector2.Zero;
@@ -894,7 +904,39 @@ namespace XNA_ScreenManager.PlayerClasses
             return null;
         }
 
-        private Color getColor(string colorcode)
+        private Vector2 getOffsetbyItemName(string name)
+        {
+            Item item = null;
+
+            for (int i = 0; i < itemStore.item_list.Count; i++)
+            {
+                if (itemStore.item_list[i] != null)
+                {
+                    if (itemStore.item_list[i].itemName == name)
+                    {
+                        item = itemStore.item_list[i];
+                        break;
+                    }
+                }
+            }
+
+            if (item != null && spritename != null)
+            {
+                for (int i = 0; i < item.list_offsets.Count; i++)
+                {
+                    if (item.list_offsets[i].Name == spritename.ToString() + ".png")
+                        return new Vector2(item.list_offsets[i].X, item.list_offsets[i].Y);
+                }
+            }
+            else
+            {
+                throw new Exception("item without name!!!");
+            }
+
+            return Vector2.Zero;
+        }
+
+        public static Color getColor(string colorcode)
         {
             string[] values = colorcode.Split(':');
 
@@ -909,7 +951,7 @@ namespace XNA_ScreenManager.PlayerClasses
                 Convert.ToInt32(values[3]));
         }
 
-        private Vector2 getVector(string vectorstr)
+        public static Vector2 getVector(string vectorstr)
         {
             string[] values = vectorstr.Split(':');
 
@@ -924,21 +966,6 @@ namespace XNA_ScreenManager.PlayerClasses
             return new Vector2(
                 float.Parse(values[1]),
                 float.Parse(values[2]));
-        }
-
-        public static int NetworkStoreID(string name)
-        {
-            for (int i = 0; i < NetworkPlayerStore.Instance.playerlist.Length; i++)
-            {
-                if (NetworkPlayerStore.Instance.playerlist[i] != null)
-                {
-                    if (NetworkPlayerStore.Instance.playerlist[i].Name == name)
-                    {
-                        return i;
-                    }
-                }
-            }
-            return -1;
-        }
+        }                
     }
 }

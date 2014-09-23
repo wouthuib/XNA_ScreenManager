@@ -283,6 +283,8 @@ namespace XNA_ScreenManager.Networking
                             incomingMonsterData(obj as MonsterData);
                         else if (obj is AccountData)
                             incomingAccountData(obj as AccountData);
+                        else if (obj is EffectData)
+                            incomingEffectData(obj as EffectData);
                         else
                             break;
                     }
@@ -323,13 +325,8 @@ namespace XNA_ScreenManager.Networking
 
         private void incomingPlayerData(playerData player)
         {
-            bool found = false;
-
             if (player.Action == "Remove")
-            {
-                NetworkPlayerStore.Instance.playerlist[NetworkPlayerSprite.NetworkStoreID(player.Name)] = null;
                 GameWorld.GetInstance.listEntity.Find(p => p.EntityName == player.Name).KeepAliveTime = 0; // removed in next update
-            }
             else if (player.Action == "Online")
             { }
             else if (player.Action == "Sprite_Update" && player.Name == PlayerStore.Instance.activePlayer.Name)
@@ -340,33 +337,66 @@ namespace XNA_ScreenManager.Networking
                 {
                     sprite.State = (EntityState)Enum.Parse(typeof(EntityState), player.spritestate);
                     sprite.Position = new Vector2(player.PositionX, player.PositionY);
+                    sprite.PLAYER_SPEED = 190;
                 }
-            }
-            else if (player.Name != PlayerStore.Instance.activePlayer.Name)
-            {
-                for (int i = 0; i < NetworkPlayerStore.Instance.playerlist.Length; i++)
+                else if (Math.Abs(sprite.Position.X - player.PositionX) >= 2) // avoid lag
                 {
-                    playerData entry = NetworkPlayerStore.Instance.playerlist[i];
-
-                    if (entry != null)
-                    {
-                        if (entry.Name == player.Name)
-                        {
-                            found = true; // update existing player
-                            NetworkPlayerStore.Instance.playerlist[i] = player;
-
-                            // update mapname
-                            if (GameWorld.GetInstance.listEntity.FindAll(x => x.EntityName == player.Name).Count > 0)
-                            {
-                                NetworkPlayerSprite NWplayer = (NetworkPlayerSprite)GameWorld.GetInstance.listEntity.Find(x => x.EntityName == player.Name);
-                                NWplayer.MapName = player.mapName;
-                            }
-                        }
-                    }
+                    if(sprite.spriteEffect == SpriteEffects.None)
+                        sprite.PLAYER_SPEED += (int)(sprite.Position.X - player.PositionX) * 2;
+                    else
+                        sprite.PLAYER_SPEED -= (int)(sprite.Position.X - player.PositionX) * 2;
                 }
+                else if (Math.Abs(sprite.Position.X - player.PositionX) <= 2)
+                    sprite.PLAYER_SPEED = 190;
+            }
+            else if (player.Name != PlayerStore.Instance.activePlayer.Name) // Networkplayer
+            {
+                if (GameWorld.GetInstance.listEntity.FindAll(x => x.EntityName == player.Name).Count > 0)
+                {
+                    NetworkPlayerSprite sprite = (NetworkPlayerSprite)GameWorld.GetInstance.listEntity.Find(x => x.EntityName == player.Name);
+                    sprite.MapName = player.mapName;
 
-                if (!found) // add new player
-                    NetworkPlayerStore.Instance.addPlayer(player);
+                    if (sprite.State.ToString() != player.spritestate ||
+                        sprite.spriteEffect.ToString() != player.spriteEffect ||
+                        ((sprite.State == EntityState.Ladder || sprite.State == EntityState.Rope) && 
+                        sprite.Direction != NetworkPlayerSprite.getVector(player.direction)))
+                    {
+
+                        sprite.previousPosition = sprite.Position;   // save previous postion
+                        sprite.PreviousState = sprite.State;         // save previous state before
+                        sprite.previousDirection = sprite.Direction; // save previous direction
+
+                        sprite.State = (EntityState)Enum.Parse(typeof(EntityState), player.spritestate);
+                        sprite.Position = new Vector2(player.PositionX, player.PositionY);
+                        sprite.spriteEffect = (SpriteEffects)Enum.Parse(typeof(SpriteEffects), player.spriteEffect);
+                        sprite.Direction = NetworkPlayerSprite.getVector(player.direction);
+                        sprite.PLAYER_SPEED = 190;
+                    }
+                    else if (Math.Abs(sprite.Position.X - player.PositionX) >= 2) // avoid lag
+                    {
+                        if (sprite.spriteEffect == SpriteEffects.None)
+                            sprite.PLAYER_SPEED += (int)(sprite.Position.X - player.PositionX) * 2;
+                        else
+                            sprite.PLAYER_SPEED -= (int)(sprite.Position.X - player.PositionX) * 2;
+                    }
+                    else if (Math.Abs(sprite.Position.X - player.PositionX) <= 2)
+                        sprite.PLAYER_SPEED = 190;
+                }
+                else
+                {
+                    if (GameWorld.GetInstance.newEntity.FindAll(x => x.EntityName == player.Name).Count == 0)
+                        GameWorld.GetInstance.newEntity.Add(
+                            new NetworkPlayerSprite(
+                                player.Name, player.IP,
+                                player.PositionX, player.PositionY,
+                                player.spritename, player.spritestate,
+                                player.prevspriteframe, player.maxspriteframe,
+                                player.attackSprite, player.spriteEffect,
+                                player.mapName, player.skincol,
+                                player.facespr, player.hairspr,
+                                player.hailcol, player.armor,
+                                player.headgear, player.weapon));
+                }
             }
         }
 
@@ -438,6 +468,17 @@ namespace XNA_ScreenManager.Networking
                 player.equipment.addItem(ItemStore.Instance.item_list.Find(x => x.itemName == playerdata.weapon));
 
                 PlayerStore.Instance.addPlayer(player);
+            }
+        }
+
+        private void incomingEffectData(EffectData effectdata)
+        {
+            if (effectdata.Name == "DamageBaloon")
+            {
+                GameWorld.GetInstance.newEffect.Add(new DamageBaloon(
+                    ResourceManager.GetInstance.Content.Load<Texture2D>(@effectdata.Path),
+                    new Vector2(effectdata.PositionX, effectdata.PositionY),
+                        effectdata.Value_01));
             }
         }
 

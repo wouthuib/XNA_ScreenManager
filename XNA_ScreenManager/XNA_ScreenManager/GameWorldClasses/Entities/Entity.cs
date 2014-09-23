@@ -62,6 +62,12 @@ namespace XNA_ScreenManager.CharacterClasses
             set { entityName = value; }
         }
 
+        public EntityState PreviousState
+        {
+            get { return previousState; }
+            set { previousState = value; }
+        }
+
         public EntityState State
         {
             get { return state; }

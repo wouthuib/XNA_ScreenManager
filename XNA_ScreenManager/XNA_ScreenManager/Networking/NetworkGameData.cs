@@ -51,8 +51,8 @@ namespace XNA_ScreenManager.Networking
                 default:
                     p.Name = PlayerClasses.PlayerStore.Instance.activePlayer.Name;
                     p.Action = (string)action.ToString();
-                    p.PositionX = (int)GameWorld.GetInstance.playerSprite.PositionX;
-                    p.PositionY = (int)GameWorld.GetInstance.playerSprite.PositionY;
+                    p.PositionX = (float)GameWorld.GetInstance.playerSprite.PositionX;
+                    p.PositionY = (float)GameWorld.GetInstance.playerSprite.PositionY;
                     p.spritename = (string)GameWorld.GetInstance.playerSprite.spritename;
                     p.spritestate = (string)GameWorld.GetInstance.playerSprite.State.ToString();
                     p.direction = (string)GameWorld.GetInstance.playerSprite.Direction.ToString();

@@ -51,7 +51,7 @@ namespace XNA_ScreenManager.MonsterClasses
         private float Speed;                                                                        // Speed used in functions
 
         // Movement properties
-        const int WALK_SPEED = 100;                                                                 // The actual speed of the entity
+        const int WALK_SPEED = 97;                                                                  // The actual speed of the entity
         const int ANIMATION_SPEED = 120;                                                            // Animation speed, 120 = default
         const int IDLE_TIME = 10;                                                                   // idle time until next movement
         Border Borders = new Border(0, 0);                                                          // max tiles to walk from center (avoid falling)

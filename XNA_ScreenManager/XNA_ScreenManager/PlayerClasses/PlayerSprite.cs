@@ -47,7 +47,7 @@ namespace XNA_ScreenManager
         public Vector2 Direction, previousDirection;                                              // Sprite Move direction
         protected float Speed;                                                                    // Speed used in functions
         protected Vector2 Velocity = new Vector2(0,1);                                            // speed used in jump
-        private const int PLAYER_SPEED = 190;                                                     // The actual speed of the player
+        public int PLAYER_SPEED = 200;                                                            // The actual speed of the player
         private const int ANIMATION_SPEED = 120;                                                  // Animation speed, 120 = default 
         private const int MOVE_UP = -1;                                                           // player moving directions
         private const int MOVE_DOWN = 1;                                                          // player moving directions
@@ -55,7 +55,6 @@ namespace XNA_ScreenManager
         private const int MOVE_RIGHT = 1;                                                         // player moving directions
         private float previousGameTimeMsec;                                                       // GameTime in Miliseconds
         protected float previousNetworkMsec;                                                      // Network update time
-        private bool landed;                                                                      // land switch, arrow switch
         private bool holdPosition;                                                                // player hold still but animate
 
         // new Texture properties
@@ -77,7 +76,7 @@ namespace XNA_ScreenManager
 
         #endregion
 
-        public PlayerSprite(int _X, int _Y)
+        public PlayerSprite(float _X, float _Y)
             : base()
         {
             // Derived properties
@@ -430,14 +429,15 @@ namespace XNA_ScreenManager
                         spriteEffect = SpriteEffects.None;
 
                         // double check collision
-                        if (this.collideRope == false)
-                            this.state = EntityState.Falling;
+                        //if (this.collideRope == false)
+                        //    this.state = EntityState.Falling;
 
                         if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Down) && !HoldPosition)
                         {
                             // move player location (make ActiveMap tile check here in the future)
                             this.Direction.Y = MOVE_DOWN;
                             this.Speed = PLAYER_SPEED * 0.75f;
+                            NetworkGameData.Instance.sendPlayerData("Down", getPlayer());
 
                             // reduce timer
                             previousGameTimeMsec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -457,6 +457,7 @@ namespace XNA_ScreenManager
                             // move player location (make ActiveMap tile check here in the future)
                             this.Direction.Y = MOVE_UP;
                             this.Speed = PLAYER_SPEED * 0.75f;
+                            NetworkGameData.Instance.sendPlayerData("Up", getPlayer());
 
                             // reduce timer
                             previousGameTimeMsec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -500,14 +501,15 @@ namespace XNA_ScreenManager
                         spriteEffect = SpriteEffects.None;
 
                         // double check collision
-                        if (this.collideLadder == false)
-                            this.state = EntityState.Falling;
+                        // if (this.collideLadder == false)
+                        //    this.state = EntityState.Falling;
 
                         if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Down) && !HoldPosition)
                         {
                             // move player location (make ActiveMap tile check here in the future)
                             this.Direction.Y = MOVE_DOWN;
                             this.Speed = PLAYER_SPEED * 0.75f;
+                            NetworkGameData.Instance.sendPlayerData("Down", getPlayer());
 
                             // reduce timer
                             previousGameTimeMsec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -527,6 +529,7 @@ namespace XNA_ScreenManager
                             // move player location (make ActiveMap tile check here in the future)
                             this.Direction.Y = MOVE_UP;
                             this.Speed = PLAYER_SPEED * 0.75f;
+                            NetworkGameData.Instance.sendPlayerData("Up", getPlayer());
 
                             // reduce timer
                             previousGameTimeMsec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -543,15 +546,15 @@ namespace XNA_ScreenManager
                         }
 
                         // Player animation
-                        if (prevspriteframe != spriteframe)
-                        {
-                            prevspriteframe = spriteframe;
-                            for (int i = 0; i < spritepath.Length; i++)
-                            {
-                                spritename = "ladder_" + spriteframe.ToString();
-                                playerStore.activePlayer.spriteOfset[i] = getoffset(i);
-                            }
-                        }
+                        //if (prevspriteframe != spriteframe)
+                        //{
+                        //    prevspriteframe = spriteframe;
+                        //    for (int i = 0; i < spritepath.Length; i++)
+                        //    {
+                        //        spritename = "ladder_" + spriteframe.ToString();
+                        //        playerStore.activePlayer.spriteOfset[i] = getoffset(i);
+                        //    }
+                        //}
 
                         // Move the Character
                         OldPosition = Position;
@@ -686,14 +689,18 @@ namespace XNA_ScreenManager
                         Direction = Vector2.Zero;
                         Velocity = Vector2.Zero;
 
-                        if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Right) && !HoldPosition)
+                        if (!keyboardStatePrevious.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Left) &&
+                            keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Right) && 
+                            !HoldPosition)
                         {
                             // move player location (make ActiveMap tile check here in the future)
                             this.Direction.X = MOVE_RIGHT;
                             this.Speed = PLAYER_SPEED;
                             spriteEffect = SpriteEffects.FlipHorizontally;
                         }
-                        else if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Left) && !HoldPosition)
+                        else if (!keyboardStatePrevious.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Right) &&
+                                 keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Left) && 
+                                 !HoldPosition)
                         {
                             // move player location (make ActiveMap tile check here in the future)
                             this.Direction.X = MOVE_LEFT;
@@ -750,7 +757,7 @@ namespace XNA_ScreenManager
                         Position += Direction * Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                         // Apply Gravity 
-                        Position += new Vector2(0,1) * PLAYER_SPEED * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                        Position += new Vector2(0,1) * 250 * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                         break;
                     #endregion
@@ -885,16 +892,6 @@ namespace XNA_ScreenManager
                             // reduce timer
                             previousGameTimeMsec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-                            if (previousGameTimeMsec < 0)
-                            {
-                                previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.02f;
-
-                                //if (landed == true)
-                                //    state = EntityState.Stand;
-                                //else
-                                //    landed = true;
-                            }
-
                             // Move the Character
                             OldPosition = Position;
 
@@ -980,7 +977,7 @@ namespace XNA_ScreenManager
                         }
                         else
                         {
-                            landed = false;
+                            // landed = false;
                             // state = EntityState.Falling;
                             Direction = Vector2.Zero;
                             Velocity = Vector2.Zero;
@@ -1005,6 +1002,7 @@ namespace XNA_ScreenManager
             // temporary
             #endregion
                         
+            
             // if the client is connected to a server
             // these functions will trigger a player update            
             if ((state == EntityState.Ladder || state == EntityState.Rope))
