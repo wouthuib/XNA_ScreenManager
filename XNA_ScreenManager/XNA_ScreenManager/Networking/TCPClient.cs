@@ -16,6 +16,7 @@ using XNA_ScreenManager.CharacterClasses;
 using XNA_ScreenManager.ItemClasses;
 using XNA_ScreenManager.PlayerClasses;
 using XNA_ScreenManager.ScreenClasses;
+using System.Security.Cryptography;
 
 namespace XNA_ScreenManager.Networking
 {
@@ -26,6 +27,7 @@ namespace XNA_ScreenManager.Networking
         private byte[] readBuffer;
         public static TCPClient instance;
         public bool Connected = false;
+        public bool encryption = false;
 
         public TCPClient()
         {
@@ -218,6 +220,12 @@ namespace XNA_ScreenManager.Networking
 
             //message has successfully been received
             string bytestring = new ASCIIEncoding().GetString(byteArray, 0, byteArray.Length);
+
+            if (encryption)
+            {
+                bytestring = decryptString(bytestring.ToString(), "Assesjode");
+            }
+
             XDocument[] docs = new XDocument[60];
             int count = 0;
 
@@ -333,7 +341,9 @@ namespace XNA_ScreenManager.Networking
             {
                 PlayerSprite sprite = GameWorld.GetInstance.playerSprite;
 
-                if (sprite.State.ToString() != player.spritestate)
+                if (sprite.State.ToString() != player.spritestate ||
+                    sprite.State == EntityState.Ladder || 
+                    sprite.State == EntityState.Rope)
                 {
                     sprite.State = (EntityState)Enum.Parse(typeof(EntityState), player.spritestate);
                     sprite.Position = new Vector2(player.PositionX, player.PositionY);
@@ -341,7 +351,7 @@ namespace XNA_ScreenManager.Networking
                 }
                 else if (Math.Abs(sprite.Position.X - player.PositionX) >= 2) // avoid lag
                 {
-                    if(sprite.spriteEffect == SpriteEffects.None)
+                    if (sprite.spriteEffect == SpriteEffects.None)
                         sprite.PLAYER_SPEED += (int)(sprite.Position.X - player.PositionX) * 2;
                     else
                         sprite.PLAYER_SPEED -= (int)(sprite.Position.X - player.PositionX) * 2;
@@ -420,20 +430,41 @@ namespace XNA_ScreenManager.Networking
                     {
                         found = true; // update existing monster
 
-                        monster.update_server(
-                            new Vector2(mobdata.PositionX, mobdata.PositionY),
-                            (EntityState)Enum.Parse(typeof(EntityState), mobdata.spritestate),
-                            (SpriteEffects)Enum.Parse(typeof(SpriteEffects), mobdata.spriteEffect));
+                        if (mobdata.Action == "Sprite_Update")
+                        {
+                            if (Math.Abs(monster.Position.X - mobdata.PositionX) >= 2) // avoid lag
+                            {
+                                if (monster.spriteEffect == SpriteEffects.None)
+                                    monster.WALK_SPEED += (int)(monster.Position.X - mobdata.PositionX) * 2;
+                                else
+                                    monster.WALK_SPEED -= (int)(monster.Position.X - mobdata.PositionX) * 2;
+                            }
+                            else
+                                monster.WALK_SPEED = 97;
+                        }
+                        else if (mobdata.Action == "Died")
+                        {
+                            monster.KeepAliveTime = 0; // remove at next update round
+                        }
+                        else
+                        {
+                            monster.WALK_SPEED = 97;
+                            monster.update_server(
+                                new Vector2(mobdata.PositionX, mobdata.PositionY),
+                                (EntityState)Enum.Parse(typeof(EntityState), mobdata.spritestate),
+                                (SpriteEffects)Enum.Parse(typeof(SpriteEffects), mobdata.spriteEffect));
+                        }
 
                     }
                 }
             }
 
             if (!found) // add new monster
-                GameWorld.GetInstance.newEntity.Add(
-                    new NetworkMonsterSprite(mobdata.MonsterID, mobdata.InstanceID, 
-                        new Vector2(mobdata.PositionX, mobdata.PositionY), 
-                        new Vector2(mobdata.BorderMin, mobdata.BorderMax)));
+                if (GameWorld.GetInstance.newEntity.FindAll(x => x.InstanceID.ToString() == mobdata.InstanceID).Count == 0)
+                    GameWorld.GetInstance.newEntity.Add(
+                        new NetworkMonsterSprite(mobdata.MonsterID, mobdata.InstanceID, 
+                            new Vector2(mobdata.PositionX, mobdata.PositionY), 
+                            new Vector2(mobdata.BorderMin, mobdata.BorderMax)));
         }
 
         private void incomingCharSelect(playerData playerdata)
@@ -495,6 +526,44 @@ namespace XNA_ScreenManager.Networking
                 Convert.ToInt32(values[1]),
                 Convert.ToInt32(values[2]),
                 Convert.ToInt32(values[3]));
+        }
+
+        // create and initialize a crypto algorithm
+        private static SymmetricAlgorithm getAlgorithm(string password)
+        {
+            SymmetricAlgorithm algorithm = Rijndael.Create();
+            Rfc2898DeriveBytes rdb = new Rfc2898DeriveBytes(
+                password, new byte[] {
+            0x53,0x6f,0x64,0x69,0x75,0x6d,0x20,             // salty goodness
+            0x43,0x68,0x6c,0x6f,0x72,0x69,0x64,0x65
+        }
+            );
+            algorithm.Padding = PaddingMode.ISO10126;
+            algorithm.Key = rdb.GetBytes(32);
+            algorithm.IV = rdb.GetBytes(16);
+            return algorithm;
+        }
+
+        public static string encryptString(string clearText, string password)
+        {
+            SymmetricAlgorithm algorithm = getAlgorithm(password);
+            byte[] clearBytes = System.Text.Encoding.Unicode.GetBytes(clearText);
+            MemoryStream ms = new MemoryStream();
+            CryptoStream cs = new CryptoStream(ms, algorithm.CreateEncryptor(), CryptoStreamMode.Write);
+            cs.Write(clearBytes, 0, clearBytes.Length);
+            cs.Close();
+            return Convert.ToBase64String(ms.ToArray());
+        }
+
+        public static string decryptString(string cipherText, string password)
+        {
+            SymmetricAlgorithm algorithm = getAlgorithm(password);
+            byte[] cipherBytes = Convert.FromBase64String(cipherText);
+            MemoryStream ms = new MemoryStream();
+            CryptoStream cs = new CryptoStream(ms, algorithm.CreateDecryptor(), CryptoStreamMode.Write);
+            cs.Write(cipherBytes, 0, cipherBytes.Length);
+            cs.Close();
+            return System.Text.Encoding.Unicode.GetString(ms.ToArray());
         }
     }
 

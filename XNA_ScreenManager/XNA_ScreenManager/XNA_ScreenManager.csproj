@@ -19,7 +19,7 @@
     <ApplicationIcon>Game.ico</ApplicationIcon>
     <Thumbnail>GameThumbnail.png</Thumbnail>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>C:\Users\cnlwhuib\Desktop\projects\</PublishUrl>
+    <PublishUrl>C:\Users\cnlwhuib\Desktop\projects\server\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
@@ -29,7 +29,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>2</ApplicationRevision>
+    <ApplicationRevision>4</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -139,7 +139,7 @@
     <Compile Include="GameWorldClasses\Entities\DamageArea.cs" />
     <Compile Include="GameWorldClasses\Entities\Entity.cs" />
     <Compile Include="GameWorldClasses\Effects\WeaponSwing.cs" />
-    <Compile Include="MonsterClasses\MonsterSprite.cs" />
+    <Compile Include="MonsterClasses\MonsterSprite_old.cs" />
     <Compile Include="MonsterClasses\Monster.cs" />
     <Compile Include="CharacterClasses\NPCharacter.cs" />
     <Compile Include="ItemClasses\Equipment.cs" />
@@ -147,7 +147,6 @@
     <Compile Include="ItemClasses\Item.cs" />
     <Compile Include="ItemClasses\ItemSprite.cs" />
     <Compile Include="ItemClasses\ItemStore.cs" />
-    <Compile Include="GameWorldClasses\BattleClasses\Battle.cs" />
     <Compile Include="GameWorldClasses\BattleClasses\DamageBaloon.cs" />
     <Compile Include="GameWorldClasses\Effects\GameEffect.cs" />
     <Compile Include="GameWorldClasses\GameWorld.cs" />
@@ -156,6 +155,7 @@
     <Compile Include="GameWorldClasses\Entities\Arrow.cs" />
     <Compile Include="MonsterClasses\NetworkMonsterSprite.cs" />
     <Compile Include="Networking\NetworkGameData.cs" />
+    <Compile Include="Networking\RijndaelSimple.cs" />
     <Compile Include="Networking\ServerClasses\AccountData.cs" />
     <Compile Include="Networking\ServerClasses\ChatData.cs" />
     <Compile Include="Networking\ServerClasses\DmgAreaData.cs" />

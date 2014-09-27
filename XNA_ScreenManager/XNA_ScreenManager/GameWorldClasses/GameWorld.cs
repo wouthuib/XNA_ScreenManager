@@ -331,7 +331,7 @@ namespace XNA_ScreenManager.MapClasses
                                                 if(entity.Position.Y + EntityRec.Height * 0.75f < Wall.Top)
                                                 {
                                                     entity.PositionY -= 10;
-                                                    entity.State = EntityState.Stand;
+                                                    //entity.State = EntityState.Stand;
                                                 }
                                                 break;
                                             case EntityState.Jump:
@@ -423,7 +423,7 @@ namespace XNA_ScreenManager.MapClasses
                         // check maps bounds (player and NPC!)
                         if (EntityRec.Right > map.Width * map.TileWidth || EntityRec.Bottom > map.Height * map.TileHeight ||
                             EntityRec.Left < 0 || EntityRec.Top < 0)
-                            if (entity is PlayerSprite || entity is MonsterSprite)
+                            if (entity is PlayerSprite || entity is MonsterSprite_old)
                                 entity.Position = entity.OldPosition;
                         #endregion
 
@@ -640,7 +640,7 @@ namespace XNA_ScreenManager.MapClasses
                                 if (monsterID >= 1400) // changed to 1400 to disable local Mobs
                                 {
                                     // properties are filled now check the state
-                                    listEntity.Add(new MonsterSprite(
+                                    listEntity.Add(new MonsterSprite_old(
                                                 monsterID,
                                                 new Vector2(obj.Value.X, obj.Value.Y),
                                                 new Vector2(borderX, borderY)));

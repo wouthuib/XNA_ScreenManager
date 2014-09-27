@@ -428,16 +428,14 @@ namespace XNA_ScreenManager
                         Velocity = Vector2.Zero;
                         spriteEffect = SpriteEffects.None;
 
-                        // double check collision
-                        //if (this.collideRope == false)
-                        //    this.state = EntityState.Falling;
-
                         if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Down) && !HoldPosition)
                         {
                             // move player location (make ActiveMap tile check here in the future)
                             this.Direction.Y = MOVE_DOWN;
                             this.Speed = PLAYER_SPEED * 0.75f;
-                            NetworkGameData.Instance.sendPlayerData("Down", getPlayer());
+
+                            if (!keyboardStatePrevious.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Down))
+                                NetworkGameData.Instance.sendPlayerData("Down", getPlayer());
 
                             // reduce timer
                             previousGameTimeMsec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -457,7 +455,9 @@ namespace XNA_ScreenManager
                             // move player location (make ActiveMap tile check here in the future)
                             this.Direction.Y = MOVE_UP;
                             this.Speed = PLAYER_SPEED * 0.75f;
-                            NetworkGameData.Instance.sendPlayerData("Up", getPlayer());
+
+                            if(!keyboardStatePrevious.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Up))
+                                NetworkGameData.Instance.sendPlayerData("Up", getPlayer());
 
                             // reduce timer
                             previousGameTimeMsec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -472,8 +472,17 @@ namespace XNA_ScreenManager
                             if (spriteframe > 1)
                                 spriteframe = 0;
                         }
+                        else
+                        {
+                            this.Direction = Vector2.Zero;
+                            this.Speed = 0;
 
-                        // Player animation
+                            if(keyboardStatePrevious.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Up) ||
+                               keyboardStatePrevious.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Down))
+                                NetworkGameData.Instance.sendPlayerData("Stop", getPlayer());
+                        }
+
+                        //Player animation
                         if (prevspriteframe != spriteframe)
                         {
                             prevspriteframe = spriteframe;
@@ -486,6 +495,10 @@ namespace XNA_ScreenManager
 
                         // Move the Character
                         OldPosition = Position;
+
+                        // avoid climbing air
+                        if (!collideRope)
+                            Direction = Vector2.Zero;
 
                         // Climb speed
                         Position += Direction * Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -500,16 +513,14 @@ namespace XNA_ScreenManager
                         Velocity = Vector2.Zero;
                         spriteEffect = SpriteEffects.None;
 
-                        // double check collision
-                        // if (this.collideLadder == false)
-                        //    this.state = EntityState.Falling;
-
                         if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Down) && !HoldPosition)
                         {
                             // move player location (make ActiveMap tile check here in the future)
                             this.Direction.Y = MOVE_DOWN;
                             this.Speed = PLAYER_SPEED * 0.75f;
-                            NetworkGameData.Instance.sendPlayerData("Down", getPlayer());
+
+                            if (!keyboardStatePrevious.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Down))
+                                NetworkGameData.Instance.sendPlayerData("Down", getPlayer());
 
                             // reduce timer
                             previousGameTimeMsec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -529,7 +540,9 @@ namespace XNA_ScreenManager
                             // move player location (make ActiveMap tile check here in the future)
                             this.Direction.Y = MOVE_UP;
                             this.Speed = PLAYER_SPEED * 0.75f;
-                            NetworkGameData.Instance.sendPlayerData("Up", getPlayer());
+
+                            if(!keyboardStatePrevious.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Up))
+                                NetworkGameData.Instance.sendPlayerData("Up", getPlayer());
 
                             // reduce timer
                             previousGameTimeMsec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -544,20 +557,33 @@ namespace XNA_ScreenManager
                             if (spriteframe > 1)
                                 spriteframe = 0;
                         }
+                        else
+                        {
+                            this.Direction = Vector2.Zero;
+                            this.Speed = 0;
 
-                        // Player animation
-                        //if (prevspriteframe != spriteframe)
-                        //{
-                        //    prevspriteframe = spriteframe;
-                        //    for (int i = 0; i < spritepath.Length; i++)
-                        //    {
-                        //        spritename = "ladder_" + spriteframe.ToString();
-                        //        playerStore.activePlayer.spriteOfset[i] = getoffset(i);
-                        //    }
-                        //}
+                            if(keyboardStatePrevious.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Up) ||
+                               keyboardStatePrevious.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Down))
+                                NetworkGameData.Instance.sendPlayerData("Stop", getPlayer());
+                        }
+
+                        //Player animation
+                        if (prevspriteframe != spriteframe)
+                        {
+                            prevspriteframe = spriteframe;
+                            for (int i = 0; i < spritepath.Length; i++)
+                            {
+                                spritename = "ladder_" + spriteframe.ToString();
+                                playerStore.activePlayer.spriteOfset[i] = getoffset(i);
+                            }
+                        }
 
                         // Move the Character
                         OldPosition = Position;
+
+                        // avoid climbing air
+                        if (!collideLadder)
+                            Direction = Vector2.Zero;
 
                         // Climb speed
                         Position += Direction * Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -574,17 +600,13 @@ namespace XNA_ScreenManager
                         if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Right) && !HoldPosition)
                         {
                             spriteframe = 0;
-                            //state = EntityState.Walk;
                             spriteEffect = SpriteEffects.FlipHorizontally;
-
                             NetworkGameData.Instance.sendPlayerData("Right", getPlayer());
                         }
                         else if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Left) && !HoldPosition)
                         {
                             spriteframe = 0;
-                            //state = EntityState.Walk;
                             spriteEffect = SpriteEffects.None;
-                            
                             NetworkGameData.Instance.sendPlayerData("Left", getPlayer());
                         }
                         else if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Space) && !HoldPosition)
@@ -593,26 +615,17 @@ namespace XNA_ScreenManager
                             {
                                 spriteframe = 0;
                                 Velocity += new Vector2(0, -1.6f); // Add an upward impulse
-                                //state = EntityState.Jump;
-                                
                                 NetworkGameData.Instance.sendPlayerData("Jump", getPlayer());
                             }
                         }
                         else if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Insert) && !HoldPosition)
                         {
                             spriteframe = 0;
-                            // state = EntityState.Sit;
-
                             NetworkGameData.Instance.sendPlayerData("Sit", getPlayer());
                         }
                         else if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Up) && !HoldPosition)
                         {
                             spriteframe = 0;
-                            //if (this.collideLadder)
-                            //    state = EntityState.Ladder;
-                            //else if (this.collideRope)
-                            //    state = EntityState.Rope;
-
                             NetworkGameData.Instance.sendPlayerData("Up", getPlayer());
                         }
                         else if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.LeftAlt) && !HoldPosition)
@@ -639,10 +652,6 @@ namespace XNA_ScreenManager
                                 }
                             }
                         }
-
-                        // Check if player is steady standing
-                        //if (Position.Y > OldPosition.Y)
-                        //    state = EntityState.Falling;
 
                         // Move the Character
                         OldPosition = Position;
@@ -1005,25 +1014,8 @@ namespace XNA_ScreenManager
             
             // if the client is connected to a server
             // these functions will trigger a player update            
-            if ((state == EntityState.Ladder || state == EntityState.Rope))
-            {
-                if (keyboardStateCurrent.IsKeyDown(Keys.Up) || keyboardStateCurrent.IsKeyDown(Keys.Down) ||
-                    keyboardStatePrevious.IsKeyDown(Keys.Up) || keyboardStatePrevious.IsKeyDown(Keys.Down))
-                {
-                    if (keyboardStateCurrent.IsKeyDown(Keys.Up))
-                        this.Direction.Y = MOVE_UP;
-                    else if (keyboardStateCurrent.IsKeyDown(Keys.Down))
-                        this.Direction.Y = MOVE_DOWN;
-                    else 
-                        this.Direction = Vector2.Zero;
-
-                    NetworkGameData.Instance.sendPlayerData();
-                }
-            } 
-            else if (previousState != state || spriteEffect != previousSpriteEffect)
-            {
+            if (spriteEffect != previousSpriteEffect)
                 NetworkGameData.Instance.sendPlayerData();
-            }
 
             keyboardStatePrevious = keyboardStateCurrent;
         }

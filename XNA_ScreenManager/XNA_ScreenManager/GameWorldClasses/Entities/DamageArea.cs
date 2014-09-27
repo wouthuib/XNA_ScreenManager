@@ -22,7 +22,7 @@ namespace XNA_ScreenManager.GameWorldClasses.Entities
         private bool debug = false;
 
         // skill hit sprite properties
-        private bool hiteffect = false;
+        //private bool hiteffect = false;
         private string hitsprpath = null;
         private int hitsprframes = 0, MobHitCount = 0, MaxMobHitCount = 0;
         private List<Guid> MobHitID = new List<Guid>();
@@ -54,7 +54,7 @@ namespace XNA_ScreenManager.GameWorldClasses.Entities
 
             if (gethiteffect)
             {
-                this.hiteffect = true;
+                //this.hiteffect = true;
                 this.hitsprpath = gethitsprpath;
                 this.hitsprframes = gethitsprframes;
             }
@@ -65,12 +65,12 @@ namespace XNA_ScreenManager.GameWorldClasses.Entities
             // check for monster collisions
             foreach (Entity entity in GameWorld.GetInstance.listEntity)
             {
-                if (entity is MonsterSprite &&
+                if (entity is MonsterSprite_old &&
                     ((MobHitID.FindAll(x=> x == entity.InstanceID).Count == 0) || this.Permanent == true) &&
                     (this.MobHitCount < this.MaxMobHitCount || this.Permanent == true)
                    )
                 {
-                    MonsterSprite monster = entity as MonsterSprite;
+                    MonsterSprite_old monster = entity as MonsterSprite_old;
 
                     if(monster != null)
 
@@ -93,18 +93,18 @@ namespace XNA_ScreenManager.GameWorldClasses.Entities
                                 KeepAliveTimer = 0;
 
                             // Start damage controll
-                            int damage = (int)Battle.battle_calc_damage(PlayerStore.Instance.activePlayer, (MonsterSprite)monster, DamagePercent);
-                            monster.HP -= damage;
+                            //int damage = (int)Battle.battle_calc_damage(PlayerStore.Instance.activePlayer, (MonsterSprite)monster, DamagePercent);
+                            //monster.HP -= damage;
 
-                            // start skill hit effect
-                            if (this.hiteffect)
-                                 GameWorld.GetInstance.newEffect.Add(new WeaponHitEffect(this.hitsprpath, monster.Position, this.hitsprframes));
+                            //// start skill hit effect
+                            //if (this.hiteffect)
+                            //     GameWorld.GetInstance.newEffect.Add(new WeaponHitEffect(this.hitsprpath, monster.Position, this.hitsprframes));
 
-                            // create damage balloon
-                            GameWorld.GetInstance.newEffect.Add(new DamageBaloon(
-                                    ResourceManager.GetInstance.Content.Load<Texture2D>(@"gfx\effects\damage_counter1"),
-                                    new Vector2((monster.Position.X + monster.SpriteFrame.Width * 0.45f) - damage.ToString().Length * 5,
-                                    monster.Position.Y + monster.SpriteFrame.Height * 0.20f), damage));
+                            //// create damage balloon
+                            //GameWorld.GetInstance.newEffect.Add(new DamageBaloon(
+                            //        ResourceManager.GetInstance.Content.Load<Texture2D>(@"gfx\effects\damage_counter1"),
+                            //        new Vector2((monster.Position.X + monster.SpriteFrame.Width * 0.45f) - damage.ToString().Length * 5,
+                            //        monster.Position.Y + monster.SpriteFrame.Height * 0.20f), damage));
 
                             monster.State = EntityState.Hit;
                         }

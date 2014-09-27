@@ -14,7 +14,7 @@ using System.Text.RegularExpressions;
 
 namespace XNA_ScreenManager.CharacterClasses
 {
-    public class MonsterSprite : Entity
+    public class MonsterSprite_old : Entity
     {
         #region properties
 
@@ -67,7 +67,7 @@ namespace XNA_ScreenManager.CharacterClasses
 
         #endregion
 
-        public MonsterSprite(int ID, Vector2 position, Vector2 borders)
+        public MonsterSprite_old(int ID, Vector2 position, Vector2 borders)
             : base()
         {
             // Derived properties
@@ -409,7 +409,7 @@ namespace XNA_ScreenManager.CharacterClasses
                             world = GameWorld.GetInstance;
 
                         // respawn a new monster
-                        world.newEntity.Add(new MonsterSprite(
+                        world.newEntity.Add(new MonsterSprite_old(
                                     MonsterID,
                                     resp_pos,
                                     new Vector2((int)resp_bord.X, (int)resp_bord.Y)
@@ -486,18 +486,18 @@ namespace XNA_ScreenManager.CharacterClasses
                                 currentAttackTimeSec = 0;
 
                                 // Start damage controll
-                                int damage = (int)Battle.battle_calc_damage_mob(this, PlayerStore.Instance.activePlayer);
-                                PlayerStore.Instance.activePlayer.HP -= damage;
+                                //int damage = (int)Battle.battle_calc_damage_mob(this, PlayerStore.Instance.activePlayer);
+                                //PlayerStore.Instance.activePlayer.HP -= damage;
 
                                 // Hit the player
-                                if (damage > 0)
-                                    player.State = EntityState.Hit;
+                                //if (damage > 0)
+                                //    player.State = EntityState.Hit;
 
-                                world.newEffect.Add(new DamageBaloon(
-                                    ResourceManager.GetInstance.Content.Load<Texture2D>(@"gfx\effects\damage_counter2"),
-                                    new Vector2((player.Position.X + player.SpriteFrame.Width * 0.45f) - damage.ToString().Length * 5,
-                                                 player.Position.Y + player.SpriteFrame.Height * 0.20f),
-                                        damage));
+                                //world.newEffect.Add(new DamageBaloon(
+                                //    ResourceManager.GetInstance.Content.Load<Texture2D>(@"gfx\effects\damage_counter2"),
+                                //    new Vector2((player.Position.X + player.SpriteFrame.Width * 0.45f) - damage.ToString().Length * 5,
+                                //                 player.Position.Y + player.SpriteFrame.Height * 0.20f),
+                                //        damage));
                             }
                         }
                     }

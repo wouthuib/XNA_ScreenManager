@@ -23,7 +23,6 @@ namespace XNA_ScreenManager.MonsterClasses
         ContentManager Content = ResourceManager.GetInstance.Content;
         ResourceManager.randomizer Randomizer = ResourceManager.randomizer.Instance;                // generate unique random ID
         PlayerStore PlayerInfo = PlayerStore.Instance;                                              // get battle information of player
-        GameWorld world;
 
         // Monster Store ID
         public int MonsterID = 0;
@@ -34,36 +33,24 @@ namespace XNA_ScreenManager.MonsterClasses
         private string spritepath, spritename;
         public Vector2 spriteOfset;
         public List<spriteOffset> list_offsets = new List<spriteOffset>();
-        private SpriteEffects spriteEffect = SpriteEffects.None;
-        private float transperancy = 1;
-        private bool debug = false;
+        public SpriteEffects spriteEffect = SpriteEffects.None;
+        private float transperancy = 0;
+        private bool debug = true;
 
         // Respawn properties
         private Vector2 resp_pos = Vector2.Zero,                                                    // Respawn Position
                         resp_bord = Vector2.Zero;                                                   // Walking Border
-        private bool spawn = false;                                                                 // Spawn Activator
-        private int RESPAWN_TIME = 8;                                                               // 8 seconds respawn
 
         // Sprite Animation Properties
         Color color = Color.White;                                                                  // Sprite color
         private Vector2 Direction = Vector2.Zero;                                                   // Sprite Move direction
-        private Vector2 previousPosition;
         private float Speed;                                                                        // Speed used in functions
+        float previousAnimateTimeSec;                                                               // Animation in Miliseconds
 
         // Movement properties
-        const int WALK_SPEED = 97;                                                                  // The actual speed of the entity
+        public int WALK_SPEED = 97;                                                                 // The actual speed of the entity
         const int ANIMATION_SPEED = 120;                                                            // Animation speed, 120 = default
-        const int IDLE_TIME = 10;                                                                   // idle time until next movement
         Border Borders = new Border(0, 0);                                                          // max tiles to walk from center (avoid falling)
-
-        // Clocks and Timers
-        float previousAnimateTimeSec,                                                               // Animation in Miliseconds
-              previousHitTimeSec,                                                                   // IdleTime in Seconds
-              previousFrozenTimeSec,                                                                // IdleTime in Seconds
-              previousDiedTimeSec,                                                                  // IdleTime in Seconds
-              previousSpawnTimeSec,                                                                 // IdleTime in Seconds
-              previousAttackTimeSec = 0,                                                            // IdleTime in Seconds
-              currentAttackTimeSec = 0;                                                             // IdleTime in Seconds
 
         // Server Updates        
         EntityState ServerUpdate_state;
@@ -82,7 +69,7 @@ namespace XNA_ScreenManager.MonsterClasses
 
             // Set first server update values
             ServerUpdate_position = position;
-            ServerUpdate_state = EntityState.Stand;
+            ServerUpdate_state = EntityState.Spawn;
             ServerUpdate_spriteEffect = SpriteEffects.None;
 
             spriteframe = 0;
@@ -124,31 +111,14 @@ namespace XNA_ScreenManager.MonsterClasses
         #region update
         public override void Update(GameTime gameTime)
         {
-
-            if (MonsterStore.Instance.getMonster(this.MonsterID).monsterName.StartsWith("Axe"))
-            {
-                if (state == EntityState.Walk)
-                {
-                    debug = true;
-                    previousPosition = Position;
-                }
-            }
-
             if (Active)
             {
                 get_server_update();
                 update_animation(gameTime);
-                // update_collision(gameTime);
             }
 
-            if (MonsterStore.Instance.getMonster(this.MonsterID).monsterName.StartsWith("Axe"))
-            {
-                if (debug)
-                {
-                    debug = false;
-                    previousPosition = Position;
-                }
-            }
+            if (state != EntityState.Spawn && state != EntityState.Died)
+                transperancy = 1;
         }
 
         public void update_server(Vector2 newPosition, EntityState newState, SpriteEffects newEffect)
@@ -184,10 +154,6 @@ namespace XNA_ScreenManager.MonsterClasses
                     // Check if Monster is steady standing
                     //if (Position.Y > OldPosition.Y)
                     //    state = EntityState.Falling;
-
-
-                    if (OldPosition.X > 10 && Position.X < 10)
-                        OldPositionX = 10;
 
                     // Move the Monster
                     OldPosition = Position;
@@ -307,48 +273,7 @@ namespace XNA_ScreenManager.MonsterClasses
                 #endregion
                 #region hit
                 case EntityState.Hit:
-
-                    if (previousHitTimeSec <= 0)
-                    {
-                        // Start Hit timer (Avoid rapid hit)
-                        previousHitTimeSec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.1f;
-
-                        // Start freeze timer 
-                        previousFrozenTimeSec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.7f;
-
-                        // change state (freeze or kill)
-                        if (this.HP <= 0)
-                        {
-                            // Monster respawn timer
-                            previousDiedTimeSec = (int)gameTime.ElapsedGameTime.TotalSeconds + RESPAWN_TIME;
-
-                            // Monster Item Drops
-                            foreach (var drop in ItemDrop)
-                            {
-                                // drop[0] = item, drop[1] = chance in %
-                                if (Randomizer.generateRandom(0, 100) <= drop[1])
-                                    GameWorld.GetInstance.newEffect.Add(new ItemSprite(
-                                        new Vector2(Randomizer.generateRandom((int)this.position.X + 20, (int)this.position.X + this.spriteFrame.Width - 20),
-                                            (int)(this.position.Y + this.spriteFrame.Height * 0.70f)), drop[0]));
-                            }
-
-                            // Give player EXP
-                            PlayerStore.Instance.activePlayer.Exp += this.EXP;
-
-                            // reset spriteframe
-                            spriteframe = 0;
-
-                            // Change state monster
-                            state = EntityState.Died;
-                        }
-                        else
-                        {
-                            spriteframe = 0;
-                            state = EntityState.Frozen;
-                        }
-                    }
-
-                    previousHitTimeSec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    spriteframe = 0;
 
                     break;
                 #endregion
@@ -361,17 +286,8 @@ namespace XNA_ScreenManager.MonsterClasses
                     // monster animation
                     spritename = "hit1_0";
                     spriteOfset = getoffset();
+                    spriteframe = 0;
 
-                    // reduce timer
-                    previousFrozenTimeSec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
-                    previousHitTimeSec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-                    if (previousFrozenTimeSec <= 0)
-                    {
-                        // reset sprite frame
-                        spriteframe = 0;
-                        state = EntityState.Stand;
-                    }
                     break;
                 #endregion
                 #region died
@@ -397,36 +313,15 @@ namespace XNA_ScreenManager.MonsterClasses
                         spriteframe++;
                     }
 
-                    if (spriteframe > list_offsets.FindAll(x => x.Name.StartsWith("die1_")).Count - 1)
-                        spriteframe = 0;
-
                     // Player animation
+                    if (spriteframe > list_offsets.FindAll(x => x.Name.StartsWith("die1_")).Count - 1)
+                        spriteframe = list_offsets.FindAll(x => x.Name.StartsWith("die1_")).Count - 1;
+
                     if (prevspriteframe != spriteframe)
                     {
                         prevspriteframe = spriteframe;
                         spritename = "die1_" + spriteframe.ToString();
                         spriteOfset = getoffset();
-                    }
-
-                    // reduce timer
-                    previousDiedTimeSec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-                    // removing counter
-                    if (previousDiedTimeSec <= 0)
-                    {
-                        // link to world
-                        if (world == null)
-                            world = GameWorld.GetInstance;
-
-                        // respawn a new monster
-                        //world.newEntity.Add(new MonsterSprite(
-                        //            MonsterID,
-                        //            resp_pos,
-                        //            new Vector2((int)resp_bord.X, (int)resp_bord.Y)
-                        //            ));
-
-                        // remove monster from map
-                        this.keepAliveTime = 0;
                     }
                     break;
                 #endregion
@@ -440,85 +335,8 @@ namespace XNA_ScreenManager.MonsterClasses
                     if (transperancy < 1)
                         transperancy += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-                    // reduce timer
-                    previousSpawnTimeSec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-                    // Monster Spawn Timer
-                    if (previousSpawnTimeSec <= 0)
-                    {
-                        if (spawn)
-                        {
-                            transperancy = 1;
-                            state = EntityState.Stand;
-                        }
-                        else
-                        {
-                            spawn = true;
-                            previousSpawnTimeSec = (float)gameTime.ElapsedGameTime.TotalSeconds + 1.1f;
-                        }
-                    }
-
                     break;
                 #endregion
-            }
-        }
-
-        private void update_collision(GameTime gameTime)
-        {
-            // Monster attacks the player method
-
-            // Check of world instance is created
-            if (world == null)
-                world = GameWorld.GetInstance;
-
-            previousAttackTimeSec = currentAttackTimeSec;
-
-            Entity player = world.Player;
-
-            if (player is PlayerSprite)
-            {
-                if (player.SpriteFrame.Intersects(SpriteBoundries))
-                {
-                    // player + monster state not equal to hit or frozen
-                    if (this.State != EntityState.Hit &&
-                        this.State != EntityState.Died &&
-                        this.State != EntityState.Spawn &&
-                        player.State != EntityState.Hit &&
-                        player.State != EntityState.Frozen)
-                    {
-                        // activate timer
-                        currentAttackTimeSec += (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-                        // we now use 500 msec, but this should get a ASPD timer
-                        if (currentAttackTimeSec >= 0.5f)
-                        {
-                            // reset the attach timer
-                            currentAttackTimeSec = 0;
-
-                            // Start damage controll
-                            int damage = (int)Battle.battle_calc_damage_mob(this, PlayerStore.Instance.activePlayer);
-                            PlayerStore.Instance.activePlayer.HP -= damage;
-
-                            // Hit the player
-                            if (damage > 0)
-                                player.State = EntityState.Hit;
-
-                            world.newEffect.Add(new DamageBaloon(
-                                ResourceManager.GetInstance.Content.Load<Texture2D>(@"gfx\effects\damage_counter2"),
-                                new Vector2((player.Position.X + player.SpriteFrame.Width * 0.45f) - damage.ToString().Length * 5,
-                                             player.Position.Y + player.SpriteFrame.Height * 0.20f),
-                                    damage));
-                        }
-                    }
-                }
-            }
-
-            // reset timer when no player collision
-            if (currentAttackTimeSec == previousAttackTimeSec)
-            {
-                // monster gets hit will not reset the timer
-                if (this.state != EntityState.Hit)
-                    currentAttackTimeSec = 0;
             }
         }
         #endregion
@@ -538,9 +356,9 @@ namespace XNA_ScreenManager.MonsterClasses
 
                 // Calculate position based on spriteEffect
                 if (spriteEffect == SpriteEffects.None)
-                    drawPosition.X = (int)Position.X + (int)getoffset().X + (int)(sprite.Width * 0.25f);
+                    drawPosition.X = (int)Position.X + (int)getoffset().X + (int)(sprite.Width * 0.55f);
                 else
-                    drawPosition.X = (int)Position.X + (int)Math.Abs(getoffset().X) - drawsprite.Width + (int)(sprite.Width * 0.5f);
+                    drawPosition.X = (int)Position.X + (int)Math.Abs(getoffset().X) - drawsprite.Width + (int)(sprite.Width * 0.55f);
 
                 // draw player sprite
                 spriteBatch.Draw(drawsprite,
