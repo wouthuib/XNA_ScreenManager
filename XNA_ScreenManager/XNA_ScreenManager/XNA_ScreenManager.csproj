@@ -156,15 +156,8 @@
     <Compile Include="MonsterClasses\NetworkMonsterSprite.cs" />
     <Compile Include="Networking\NetworkGameData.cs" />
     <Compile Include="Networking\RijndaelSimple.cs" />
-    <Compile Include="Networking\ServerClasses\AccountData.cs" />
-    <Compile Include="Networking\ServerClasses\ChatData.cs" />
-    <Compile Include="Networking\ServerClasses\DmgAreaData.cs" />
-    <Compile Include="Networking\ServerClasses\EffectData.cs" />
-    <Compile Include="Networking\ServerClasses\MonsterData.cs" />
-    <Compile Include="Networking\ServerClasses\ScreenData.cs" />
     <Compile Include="Networking\ServerProperties.cs" />
     <Compile Include="Networking\TCPClient.cs" />
-    <Compile Include="Networking\ServerClasses\PlayerData.cs" />
     <Compile Include="PlayerClasses\NetworkPlayerSprite.cs" />
     <Compile Include="PlayerClasses\PlayerRoutines.cs" />
     <Compile Include="PlayerClasses\PlayerSprite.cs" />
@@ -253,6 +246,10 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\MapleLibrary\MapleLibrary\MapleLibrary.csproj">
+      <Project>{1578F9AD-06D1-4012-9A8E-D537D254C5D3}</Project>
+      <Name>MapleLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\XNA_ScreenManagerContent\XNA_ScreenManagerContent.contentproj">
       <Project>{DFAC2D1A-EA02-4DEC-AA11-432ACA342507}</Project>
       <Name>XNA_ScreenManagerContent %28Content%29</Name>

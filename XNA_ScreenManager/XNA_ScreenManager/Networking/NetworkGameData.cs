@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using XNA_ScreenManager.PlayerClasses;
 using XNA_ScreenManager.MapClasses;
-using XNA_ScreenManager.Networking.ServerClasses;
 using Microsoft.Xna.Framework;
 using XNA_ScreenManager.ItemClasses;
+using MapleLibrary;
 
 namespace XNA_ScreenManager.Networking
 {

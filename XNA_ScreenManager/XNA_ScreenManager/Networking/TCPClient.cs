@@ -7,7 +7,6 @@ using System.IO;
 using System.Threading;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using XNA_ScreenManager.Networking.ServerClasses;
 using XNA_ScreenManager.MapClasses;
 using XNA_ScreenManager.GameWorldClasses.Effects;
 using XNA_ScreenManager.ScreenClasses.MainClasses;
@@ -17,15 +16,24 @@ using XNA_ScreenManager.ItemClasses;
 using XNA_ScreenManager.PlayerClasses;
 using XNA_ScreenManager.ScreenClasses;
 using System.Security.Cryptography;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
+using MapleLibrary;
+using System.Net;
 
 namespace XNA_ScreenManager.Networking
 {
     public class TCPClient
     {
-        private NetworkStream networkstream;
-        TcpClient server;
-        private byte[] readBuffer;
+        //private NetworkStream networkstream;
+        //TcpClient server;
+
+        Socket sender;
+        StateObject so2 = new StateObject();
+        private Object lockstream = new Object();
+
         public static TCPClient instance;
+
         public bool Connected = false;
         public bool encryption = false;
 
@@ -33,33 +41,38 @@ namespace XNA_ScreenManager.Networking
         {
             TCPClient.instance = this;
 
-            byte[] data = new byte[10000];
-            readBuffer = new byte[10000];
+            // Create a TCP/IP  socket.
+            sender = new Socket(AddressFamily.InterNetwork,
+                SocketType.Stream, ProtocolType.Tcp);
+
             Connect();
         }
 
         private void Disconnect()
         {
-            server.Close();
+            sender.Close();
         }
 
         private void Connect()
         {
             try
             {
-                server = new TcpClient(ServerProperties.xmlgetvalue("address"), Convert.ToInt32(ServerProperties.xmlgetvalue("port")));
-                networkstream = server.GetStream();
+                // Establish the remote endpoint for the socket.
+                // This example uses port 11000 on the local computer.
+                IPHostEntry ipHostInfo = Dns.GetHostEntry(ServerProperties.xmlgetvalue("address").ToString());
+                IPAddress ipAddress = ipHostInfo.AddressList[1];
+                IPEndPoint remoteEP = new IPEndPoint(ipAddress, Convert.ToInt32(ServerProperties.xmlgetvalue("port")));
 
-                StateObject state = new StateObject();
-                state.workSocket = server.Client;
+                sender.Connect(remoteEP);
                 Connected = true;
+                StateObject so2 = new StateObject();
+                so2.workSocket = sender;
 
-                // Welcome message
-                //ScreenManager.Instance.actionScreen.hud.chatbarInput.updateTextlog("[System]", "Successfully connected with server ");
-                //ScreenManager.Instance.actionScreen.hud.chatbarInput.updateTextlog("[System]", ServerProperties.xmlgetvalue("display"));
-                //ScreenManager.Instance.actionScreen.hud.chatbarInput.updateTextlog("[System]", ServerProperties.xmlgetvalue("desc"));
-                //ScreenManager.Instance.actionScreen.hud.chatbarInput.updateTextlog("[System]", "For online registration goto our website:");
-                //ScreenManager.Instance.actionScreen.hud.chatbarInput.updateTextlog("[System]", ServerProperties.xmlgetvalue("registrationweb"));
+                //server = new TcpClient(ServerProperties.xmlgetvalue("address"), Convert.ToInt32(ServerProperties.xmlgetvalue("port")));
+                //networkstream = server.GetStream();
+
+                //StateObject state = new StateObject();
+                //state.workSocket = server.Client;
             }
             catch
             {
@@ -70,38 +83,47 @@ namespace XNA_ScreenManager.Networking
 
             // create new thread for incoming messages
             if (Connected)
-            {
-                networkstream.BeginRead(readBuffer, 0, StateObject.BufferSize, StreamReceived, null);
+            {    
+                //networkstream.BeginRead(readBuffer, 0, StateObject.BufferSize, StreamReceived, null);
+                sender.BeginReceive(so2.buffer, 0, StateObject.BufferSize, 0,
+                           new AsyncCallback(Read_Callback), so2);
             }
         }
 
         public void SendData(Object obj)
         {
-            XmlSerializer xmlSerializer = new XmlSerializer(typeof(Object));
-
+            //XmlSerializer xmlSerializer = new XmlSerializer(typeof(Object));
+            //IFormatter formatter = new BinaryFormatter();
+            
             if (!Connected)
                 Connect();
 
             if (Connected)
             {
-                if (obj is playerData)
-                    xmlSerializer = new XmlSerializer(typeof(playerData));
-                else if (obj is ChatData)
-                    xmlSerializer = new XmlSerializer(typeof(ChatData));
-                else if (obj is DmgAreaData)
-                    xmlSerializer = new XmlSerializer(typeof(DmgAreaData));
-                else if (obj is AccountData)
-                    xmlSerializer = new XmlSerializer(typeof(AccountData));
-                else if (obj is ScreenData)
-                    xmlSerializer = new XmlSerializer(typeof(ScreenData));
+                //if (obj is playerData)
+                //    xmlSerializer = new XmlSerializer(typeof(playerData));
+                //else if (obj is ChatData)
+                //    xmlSerializer = new XmlSerializer(typeof(ChatData));
+                //else if (obj is DmgAreaData)
+                //    xmlSerializer = new XmlSerializer(typeof(DmgAreaData));
+                //else if (obj is AccountData)
+                //    xmlSerializer = new XmlSerializer(typeof(AccountData));
+                //else if (obj is ScreenData)
+                //    xmlSerializer = new XmlSerializer(typeof(ScreenData));
 
-                if (networkstream.CanWrite)
+                lock (lockstream)
                 {
-                    xmlSerializer.Serialize(networkstream, obj);
-                }
-                networkstream.Flush();
+                    //if (networkstream.CanWrite)
+                    //{
+                    //    //xmlSerializer.Serialize(networkstream, obj);
+                    //    formatter.Serialize(networkstream, obj);
+                    //}
 
-                Thread.Sleep(10);
+                    //networkstream.Flush();
+
+                    sender.Send(SerializeToStream(obj).ToArray());
+                    Thread.Sleep(10);
+                }
             }
             else
                 ScreenManager.Instance.activeScreen.topmessage.Display("Cannot connect with server.", Color.PaleVioletRed, 5.0f);
@@ -159,62 +181,49 @@ namespace XNA_ScreenManager.Networking
             }
         }
         
-        /// <summary>
-        /// Start listening for new data
-        /// </summary>
-        private void StartListening()
+        public static void Listen_Callback(IAsyncResult ar)
         {
-            server.GetStream().BeginRead(readBuffer, 0, StateObject.BufferSize, StreamReceived, null);
+            Socket s = (Socket)ar.AsyncState;
+            Socket s2 = s.EndAccept(ar);
+            StateObject so2 = new StateObject();
+            so2.workSocket = s2;
+            s2.BeginReceive(so2.buffer, 0, StateObject.BufferSize, 0,
+                                  new AsyncCallback(Read_Callback), so2);
         }
-
-        /// <summary>
-        /// Data was received
-        /// </summary>
-        /// <param name="ar">Async status</param>
-        private void StreamReceived(IAsyncResult ar)
+        
+        public static void Read_Callback(IAsyncResult ar)
         {
-            int bytesRead = 0;
+            StateObject so = (StateObject)ar.AsyncState;
+            Socket s = so.workSocket;
 
-            try
+            int read = s.EndReceive(ar);
+
+            if (read > 0)
             {
-                lock (server.GetStream())
+                so.sb.Append(Encoding.ASCII.GetString(so.buffer, 0, read));
+                s.BeginReceive(so.buffer, 0, StateObject.BufferSize, 0,
+                                         new AsyncCallback(Read_Callback), so);
+            }
+            else
+            {
+                if (so.sb.Length > 1)
                 {
-                    bytesRead = server.GetStream().EndRead(ar);
+                    //All of the data has been read, so displays it to the console 
+                    string strContent;
+                    strContent = so.sb.ToString();
+                    Console.WriteLine(String.Format("Read {0} byte from socket" +
+                                     "data = {1} ", strContent.Length, strContent));
+
+                    //ReadUserDataStream(so);
                 }
+                s.Close();
             }
-
-            catch (Exception e) { string error = e.ToString(); }
-
-            //An error happened that created bad data
-            if (bytesRead == 0)
-            {
-                Disconnect();
-                ScreenManager.Instance.actionScreen.topmessage.Display("Disconnected from server.", Color.PaleVioletRed, 5.0f);
-                ScreenManager.Instance.actionScreen.hud.chatbarInput.updateTextlog("[System]", "Disconnected from server.");
-                Connected = false;
-                return;
-            }
-
-            //Create the byte array with the number of bytes read
-            byte[] data = new byte[bytesRead];
-
-            //Populate the array
-            for (int i = 0; i < bytesRead; i++)
-                data[i] = readBuffer[i];
-
-            ReadUserData(data);
-
-            // clear readbuffer
-            Array.Clear(readBuffer, 0, readBuffer.Length);
-            server.GetStream().Flush();
-
-            //Listen for new data
-            StartListening();
         }
 
         // Wouter's methods
 
-        private void ReadUserData(byte[] byteArray)
+        //reading network data
+        private void ReadUserDataXml(byte[] byteArray)
         {
             string s = System.Text.Encoding.UTF8.GetString(byteArray);
 
@@ -303,7 +312,34 @@ namespace XNA_ScreenManager.Networking
                 string error = ee.ToString();
             }
         }
+        private void ReadUserDataStream(byte[] byteArray)
+        {
+            try
+            {
+                MemoryStream ms = new MemoryStream(byteArray);
+                object obj = DeserializeFromStream(ms);
 
+                if (obj is playerData)
+                {
+                    if (ScreenManager.Instance.activeScreen == ScreenManager.Instance.actionScreen)
+                        incomingPlayerData(obj as playerData);
+                    else if (ScreenManager.Instance.activeScreen == ScreenManager.Instance.selectCharScreen)
+                        incomingCharSelect(obj as playerData);
+                }
+                else if (obj is ChatData)
+                    incomingChatData(obj as ChatData);
+                else if (obj is MonsterData)
+                    incomingMonsterData(obj as MonsterData);
+                else if (obj is AccountData)
+                    incomingAccountData(obj as AccountData);
+                else if (obj is EffectData)
+                    incomingEffectData(obj as EffectData);
+            }
+            catch (Exception ee)
+            {
+                string error = ee.ToString();
+            }
+        }
         public static T DeserializeFromXml<T>(string xml, Type type)
         {
             T result;
@@ -315,6 +351,7 @@ namespace XNA_ScreenManager.Networking
             return result;
         }
 
+        // reading object data
         private void incomingAccountData(AccountData account)
         {
             if (Convert.ToBoolean(account.Connected))
@@ -330,7 +367,6 @@ namespace XNA_ScreenManager.Networking
                 ScreenManager.Instance.activeScreen.topmessage.Display("Wrong Username and Password", Color.White, 5f);
             }
         }
-
         private void incomingPlayerData(playerData player)
         {
             if (player.Action == "Remove")
@@ -409,13 +445,11 @@ namespace XNA_ScreenManager.Networking
                 }
             }
         }
-
         private void incomingChatData(ChatData chatdata)
         {
             GameWorld.GetInstance.newEffect.Add(new ChatBalloon(chatdata.Name, chatdata.Text, ResourceManager.GetInstance.Content.Load<SpriteFont>(@"font\Arial_12px")));
             ScreenManager.Instance.actionScreen.hud.chatbarInput.updateTextlog(chatdata.Name, chatdata.Text);
         }
-
         private void incomingMonsterData(MonsterData mobdata)
         {
             bool found = false;
@@ -466,7 +500,6 @@ namespace XNA_ScreenManager.Networking
                             new Vector2(mobdata.PositionX, mobdata.PositionY), 
                             new Vector2(mobdata.BorderMin, mobdata.BorderMax)));
         }
-
         private void incomingCharSelect(playerData playerdata)
         {
             bool found = false;
@@ -501,7 +534,6 @@ namespace XNA_ScreenManager.Networking
                 PlayerStore.Instance.addPlayer(player);
             }
         }
-
         private void incomingEffectData(EffectData effectdata)
         {
             if (effectdata.Name == "DamageBaloon")
@@ -513,6 +545,7 @@ namespace XNA_ScreenManager.Networking
             }
         }
 
+        // conversions
         private Color getColor(string colorcode)
         {
             string[] values = colorcode.Split(':');
@@ -543,7 +576,6 @@ namespace XNA_ScreenManager.Networking
             algorithm.IV = rdb.GetBytes(16);
             return algorithm;
         }
-
         public static string encryptString(string clearText, string password)
         {
             SymmetricAlgorithm algorithm = getAlgorithm(password);
@@ -554,7 +586,6 @@ namespace XNA_ScreenManager.Networking
             cs.Close();
             return Convert.ToBase64String(ms.ToArray());
         }
-
         public static string decryptString(string cipherText, string password)
         {
             SymmetricAlgorithm algorithm = getAlgorithm(password);
@@ -565,17 +596,92 @@ namespace XNA_ScreenManager.Networking
             cs.Close();
             return System.Text.Encoding.Unicode.GetString(ms.ToArray());
         }
+
+        // memory stream serializations
+        public static MemoryStream SerializeToStream(object o)
+        {
+            MemoryStream stream = new MemoryStream();
+            IFormatter formatter = new BinaryFormatter();
+            formatter.Serialize(stream, o);
+            return stream;
+        }
+        public static object DeserializeFromStream(MemoryStream stream)
+        {
+            IFormatter formatter = new BinaryFormatter();
+            stream.Seek(0, SeekOrigin.Begin);
+
+            // Allows us to manually control type-casting based on assembly/version and type name
+            // formatter.Binder = new OverrideBinder();
+
+            stream.Seek(0, SeekOrigin.Begin);
+            object o = formatter.Deserialize(stream); // Unable to find assembly
+
+            return o;
+        }
+
+        // obsolete methods
+        /// <summary>
+        /// Start listening for new data
+        /// </summary>
+        //private void StartListening()
+        //{
+        //    //server.GetStream().BeginRead(readBuffer, 0, StateObject.BufferSize, StreamReceived, null);
+        //    sender.BeginReceive(readBuffer, 0, StateObject.BufferSize, 0,
+        //                   new AsyncCallback(Read_Callback), so2);
+        //}
+
+        /// <summary>
+        /// Data was received
+        /// </summary>
+        /// <param name="ar">Async status</param>
+        //private void StreamReceived(IAsyncResult ar)
+        //{
+        //    int bytesRead = 0;
+
+        //    try
+        //    {
+        //        lock (server.GetStream())
+        //        {
+        //            bytesRead = server.GetStream().EndRead(ar);
+        //        }
+        //    }
+
+        //    catch (Exception e) { string error = e.ToString(); }
+
+        //    //An error happened that created bad data
+        //    if (bytesRead == 0)
+        //    {
+        //        Disconnect();
+        //        ScreenManager.Instance.actionScreen.topmessage.Display("Disconnected from server.", Color.PaleVioletRed, 5.0f);
+        //        ScreenManager.Instance.actionScreen.hud.chatbarInput.updateTextlog("[System]", "Disconnected from server.");
+        //        Connected = false;
+        //        return;
+        //    }
+
+        //    //Create the byte array with the number of bytes read
+        //    byte[] data = new byte[bytesRead];
+
+        //    //Populate the array
+        //    for (int i = 0; i < bytesRead; i++)
+        //        data[i] = readBuffer[i];
+
+        //    //ReadUserDataXml(data);
+        //    ReadUserDataStream(data);
+
+        //    // clear readbuffer
+        //    Array.Clear(readBuffer, 0, readBuffer.Length);
+        //    server.GetStream().Flush();
+
+        //    //Listen for new data
+        //    StartListening();
+        //}
     }
 
     public class StateObject
     {
-        // Client  socket.
         public Socket workSocket = null;
-        // Size of receive buffer.
-        public const int BufferSize = 10000;
-        // Receive buffer.
+        public const int BufferSize = 1024;
         public byte[] buffer = new byte[BufferSize];
-        // Received data string.
         public StringBuilder sb = new StringBuilder();
     }
 
