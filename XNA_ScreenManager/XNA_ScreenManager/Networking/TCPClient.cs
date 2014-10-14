@@ -23,16 +23,27 @@ using System.Net;
 
 namespace XNA_ScreenManager.Networking
 {
+    /// <summary>
+    /// Client socket Example, The listener process
+    /// </summary>
+    /// <param name="portNr">http://msdn.microsoft.com/en-us/library/bew39x2a(v=vs.110).aspx</param>
     public class TCPClient
     {
-        //private NetworkStream networkstream;
-        //TcpClient server;
-
         Socket sender;
-        StateObject so2 = new StateObject();
-        private Object lockstream = new Object();
+
+        // ManualResetEvent instances signal completion.
+        private static ManualResetEvent connectDone =
+            new ManualResetEvent(false);
+        private static ManualResetEvent sendDone =
+            new ManualResetEvent(false);
+        private static ManualResetEvent receiveDone =
+            new ManualResetEvent(false);
+
+        //Byte array that is populated when a user receives data
+        private byte[] readBuffer = new byte[StateObject.BufferSize];
 
         public static TCPClient instance;
+        private object lockstream = new Object();
 
         public bool Connected = false;
         public bool encryption = false;
@@ -40,20 +51,15 @@ namespace XNA_ScreenManager.Networking
         public TCPClient()
         {
             TCPClient.instance = this;
-
-            // Create a TCP/IP  socket.
-            sender = new Socket(AddressFamily.InterNetwork,
-                SocketType.Stream, ProtocolType.Tcp);
-
-            Connect();
+            StartInstance();
         }
 
         private void Disconnect()
         {
             sender.Close();
+            Connected = false;
         }
-
-        private void Connect()
+        private void StartInstance()
         {
             try
             {
@@ -63,16 +69,19 @@ namespace XNA_ScreenManager.Networking
                 IPAddress ipAddress = ipHostInfo.AddressList[1];
                 IPEndPoint remoteEP = new IPEndPoint(ipAddress, Convert.ToInt32(ServerProperties.xmlgetvalue("port")));
 
-                sender.Connect(remoteEP);
+                // Create a TCP/IP  socket.
+                sender = new Socket(AddressFamily.InterNetwork,
+                    SocketType.Stream, ProtocolType.Tcp);
+
+                // Connect to the remote endpoint.
+                sender.BeginConnect(remoteEP,
+                    new AsyncCallback(ConnectCallback), sender);
+                connectDone.WaitOne();
+
+                // setup client listener
+                StartListening();
+
                 Connected = true;
-                StateObject so2 = new StateObject();
-                so2.workSocket = sender;
-
-                //server = new TcpClient(ServerProperties.xmlgetvalue("address"), Convert.ToInt32(ServerProperties.xmlgetvalue("port")));
-                //networkstream = server.GetStream();
-
-                //StateObject state = new StateObject();
-                //state.workSocket = server.Client;
             }
             catch
             {
@@ -80,146 +89,140 @@ namespace XNA_ScreenManager.Networking
                 ScreenManager.Instance.actionScreen.hud.chatbarInput.updateTextlog("[System]", "Cannot connect with server.");
                 Connected = false;
             }
-
-            // create new thread for incoming messages
-            if (Connected)
-            {    
-                //networkstream.BeginRead(readBuffer, 0, StateObject.BufferSize, StreamReceived, null);
-                sender.BeginReceive(so2.buffer, 0, StateObject.BufferSize, 0,
-                           new AsyncCallback(Read_Callback), so2);
-            }
         }
-
         public void SendData(Object obj)
         {
-            //XmlSerializer xmlSerializer = new XmlSerializer(typeof(Object));
-            //IFormatter formatter = new BinaryFormatter();
-            
-            if (!Connected)
-                Connect();
-
             if (Connected)
             {
-                //if (obj is playerData)
-                //    xmlSerializer = new XmlSerializer(typeof(playerData));
-                //else if (obj is ChatData)
-                //    xmlSerializer = new XmlSerializer(typeof(ChatData));
-                //else if (obj is DmgAreaData)
-                //    xmlSerializer = new XmlSerializer(typeof(DmgAreaData));
-                //else if (obj is AccountData)
-                //    xmlSerializer = new XmlSerializer(typeof(AccountData));
-                //else if (obj is ScreenData)
-                //    xmlSerializer = new XmlSerializer(typeof(ScreenData));
 
                 lock (lockstream)
                 {
-                    //if (networkstream.CanWrite)
-                    //{
-                    //    //xmlSerializer.Serialize(networkstream, obj);
-                    //    formatter.Serialize(networkstream, obj);
-                    //}
-
-                    //networkstream.Flush();
-
-                    sender.Send(SerializeToStream(obj).ToArray());
-                    Thread.Sleep(10);
+                    Send(sender, SerializeToStream(obj).ToArray());
                 }
             }
             else
                 ScreenManager.Instance.activeScreen.topmessage.Display("Cannot connect with server.", Color.PaleVioletRed, 5.0f);
         }
 
-        public byte[] ReadToEnd(System.IO.Stream stream)
+        private void ConnectCallback(IAsyncResult ar)
         {
-            long originalPosition = 0;
-
-            if (stream.CanSeek)
-            {
-                originalPosition = stream.Position;
-                stream.Position = 0;
-            }
-
             try
             {
-                byte[] readBuffer = new byte[4096];
+                // Retrieve the socket from the state object.
+                Socket client = (Socket)ar.AsyncState;
 
-                int totalBytesRead = 0;
-                int bytesRead;
+                // Complete the connection.
+                client.EndConnect(ar);
 
-                while ((bytesRead = stream.Read(readBuffer, totalBytesRead, readBuffer.Length - totalBytesRead)) > 0)
-                {
-                    totalBytesRead += bytesRead;
+                Console.WriteLine("Socket connected to {0}",
+                    client.RemoteEndPoint.ToString());
 
-                    if (totalBytesRead == readBuffer.Length)
-                    {
-                        int nextByte = stream.ReadByte();
-                        if (nextByte != -1)
-                        {
-                            byte[] temp = new byte[readBuffer.Length * 2];
-                            Buffer.BlockCopy(readBuffer, 0, temp, 0, readBuffer.Length);
-                            Buffer.SetByte(temp, totalBytesRead, (byte)nextByte);
-                            readBuffer = temp;
-                            totalBytesRead++;
-                        }
-                    }
-                }
-
-                byte[] buffer = readBuffer;
-                if (readBuffer.Length != totalBytesRead)
-                {
-                    buffer = new byte[totalBytesRead];
-                    Buffer.BlockCopy(readBuffer, 0, buffer, 0, totalBytesRead);
-                }
-                return buffer;
+                // Signal that the connection has been made.
+                connectDone.Set();
             }
-            finally
+            catch (Exception e)
             {
-                if (stream.CanSeek)
+                Console.WriteLine(e.ToString());
+            }
+        }
+        private void StartListening()
+        {
+            // Create the state object.
+            StateObject state = new StateObject();
+            state.workSocket = sender;
+
+            // Begin receiving the data from the remote device.
+            sender.BeginReceive(readBuffer, 0, StateObject.BufferSize, 0,
+                new AsyncCallback(ReceiveCallback), state);
+        }
+        private void ReceiveCallback(IAsyncResult ar)
+        {
+            try
+            {
+                // Retrieve the state object and the client socket 
+                // from the asynchronous state object.
+                StateObject state = (StateObject)ar.AsyncState;
+                Socket client = state.workSocket;
+
+                // Read data from the remote device.
+                int bytesRead = client.EndReceive(ar);
+
+                //An error happened that created bad data
+                if (bytesRead == 0)
                 {
-                    stream.Position = originalPosition;
+                    receiveDone.Set();
+                    Console.WriteLine("Server suddenly disconnected!");
+                    return;
                 }
+
+                //Create the byte array with the number of bytes read
+                byte[] data = new byte[bytesRead];
+
+                //Populate the array
+                for (int i = 0; i < bytesRead; i++)
+                    data[i] = readBuffer[i];
+
+                // start new listener
+                StartListening();
+
+                // read incoming data
+                ReadUserDataStream(data);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+        }
+        private void Send(Socket client, byte[] byteData)
+        {
+            // Begin sending the data to the remote device.
+            client.BeginSend(byteData, 0, byteData.Length, 0,
+                new AsyncCallback(SendCallback), client);
+        }
+        private void SendCallback(IAsyncResult ar)
+        {
+            try
+            {
+                // Retrieve the socket from the state object.
+                Socket client = (Socket)ar.AsyncState;
+
+                // Complete sending the data to the remote device.
+                int bytesSent = client.EndSend(ar);
+                Console.WriteLine("Sent {0} bytes to server.", bytesSent);
+
+                // Signal that all bytes have been sent.
+                sendDone.Set();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+        }
+        private void ReadUserData(byte[] byteArray)
+        {
+            try
+            {
+                //message has successfully been received
+                MemoryStream ms = new MemoryStream(byteArray);
+
+                object obj = DeserializeFromStream(ms);
+
+                if (obj is playerData)
+                {
+                    playerData player = (playerData)obj;
+
+                    Console.Write("Server Message: \n");
+                    Console.Write(player.Name + "'s Position X:" + player.PositionX.ToString() + "\t");
+                    Console.Write("Position Y:" + player.PositionY.ToString() + "\n");
+                    Console.Write("----------------\n");
+                }
+            }
+            catch
+            {
+                Console.Write("Incoming bytecode conversion error \n");
             }
         }
         
-        public static void Listen_Callback(IAsyncResult ar)
-        {
-            Socket s = (Socket)ar.AsyncState;
-            Socket s2 = s.EndAccept(ar);
-            StateObject so2 = new StateObject();
-            so2.workSocket = s2;
-            s2.BeginReceive(so2.buffer, 0, StateObject.BufferSize, 0,
-                                  new AsyncCallback(Read_Callback), so2);
-        }
-        
-        public static void Read_Callback(IAsyncResult ar)
-        {
-            StateObject so = (StateObject)ar.AsyncState;
-            Socket s = so.workSocket;
-
-            int read = s.EndReceive(ar);
-
-            if (read > 0)
-            {
-                so.sb.Append(Encoding.ASCII.GetString(so.buffer, 0, read));
-                s.BeginReceive(so.buffer, 0, StateObject.BufferSize, 0,
-                                         new AsyncCallback(Read_Callback), so);
-            }
-            else
-            {
-                if (so.sb.Length > 1)
-                {
-                    //All of the data has been read, so displays it to the console 
-                    string strContent;
-                    strContent = so.sb.ToString();
-                    Console.WriteLine(String.Format("Read {0} byte from socket" +
-                                     "data = {1} ", strContent.Length, strContent));
-
-                    //ReadUserDataStream(so);
-                }
-                s.Close();
-            }
-        }
-
         // Wouter's methods
 
         //reading network data
