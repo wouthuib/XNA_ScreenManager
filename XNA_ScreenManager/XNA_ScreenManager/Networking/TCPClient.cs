@@ -66,7 +66,7 @@ namespace XNA_ScreenManager.Networking
                 // Establish the remote endpoint for the socket.
                 // This example uses port 11000 on the local computer.
                 IPHostEntry ipHostInfo = Dns.GetHostEntry(ServerProperties.xmlgetvalue("address").ToString());
-                IPAddress ipAddress = ipHostInfo.AddressList[1];
+                IPAddress ipAddress = LocalIPAddress();
                 IPEndPoint remoteEP = new IPEndPoint(ipAddress, Convert.ToInt32(ServerProperties.xmlgetvalue("port")));
 
                 // Create a TCP/IP  socket.
@@ -75,7 +75,7 @@ namespace XNA_ScreenManager.Networking
 
                 // Connect to the remote endpoint.
                 sender.BeginConnect(remoteEP,
-                    new AsyncCallback(ConnectCallback), sender);
+                        new AsyncCallback(ConnectCallback), sender);
                 connectDone.WaitOne();
 
                 // setup client listener
@@ -225,6 +225,23 @@ namespace XNA_ScreenManager.Networking
         
         // Wouter's methods
 
+        //public get local IP function
+        public static IPAddress LocalIPAddress()
+        {
+            IPHostEntry host;
+            IPAddress localIP = null;
+            host = Dns.GetHostEntry(Dns.GetHostName());
+            foreach (IPAddress ip in host.AddressList)
+            {
+                if (ip.AddressFamily.ToString() == "InterNetwork")
+                {
+                    localIP = ip;
+                    return localIP;
+                }
+            }
+            return localIP;
+        }
+
         //reading network data
         private void ReadUserDataXml(byte[] byteArray)
         {
@@ -337,6 +354,8 @@ namespace XNA_ScreenManager.Networking
                     incomingAccountData(obj as AccountData);
                 else if (obj is EffectData)
                     incomingEffectData(obj as EffectData);
+                else
+                    obj = obj;
             }
             catch (Exception ee)
             {
@@ -386,17 +405,17 @@ namespace XNA_ScreenManager.Networking
                 {
                     sprite.State = (EntityState)Enum.Parse(typeof(EntityState), player.spritestate);
                     sprite.Position = new Vector2(player.PositionX, player.PositionY);
-                    sprite.PLAYER_SPEED = 190;
+                    //sprite.PLAYER_SPEED = 190;
                 }
-                else if (Math.Abs(sprite.Position.X - player.PositionX) >= 2) // avoid lag
+                else if (Math.Abs(sprite.Position.X - player.PositionX) >= 1) // avoid lag
                 {
                     if (sprite.spriteEffect == SpriteEffects.None)
                         sprite.PLAYER_SPEED += (int)(sprite.Position.X - player.PositionX) * 2;
                     else
                         sprite.PLAYER_SPEED -= (int)(sprite.Position.X - player.PositionX) * 2;
+
+                        Clamp(sprite.PLAYER_SPEED, 165, 265);
                 }
-                else if (Math.Abs(sprite.Position.X - player.PositionX) <= 2)
-                    sprite.PLAYER_SPEED = 190;
             }
             else if (player.Name != PlayerStore.Instance.activePlayer.Name) // Networkplayer
             {
@@ -419,7 +438,7 @@ namespace XNA_ScreenManager.Networking
                         sprite.Position = new Vector2(player.PositionX, player.PositionY);
                         sprite.spriteEffect = (SpriteEffects)Enum.Parse(typeof(SpriteEffects), player.spriteEffect);
                         sprite.Direction = NetworkPlayerSprite.getVector(player.direction);
-                        sprite.PLAYER_SPEED = 190;
+                        //sprite.PLAYER_SPEED = 190;
                     }
                     else if (Math.Abs(sprite.Position.X - player.PositionX) >= 2) // avoid lag
                     {
@@ -427,9 +446,9 @@ namespace XNA_ScreenManager.Networking
                             sprite.PLAYER_SPEED += (int)(sprite.Position.X - player.PositionX) * 2;
                         else
                             sprite.PLAYER_SPEED -= (int)(sprite.Position.X - player.PositionX) * 2;
+
+                        Clamp(sprite.PLAYER_SPEED, 165, 265);
                     }
-                    else if (Math.Abs(sprite.Position.X - player.PositionX) <= 2)
-                        sprite.PLAYER_SPEED = 190;
                 }
                 else
                 {
@@ -475,6 +494,8 @@ namespace XNA_ScreenManager.Networking
                                     monster.WALK_SPEED += (int)(monster.Position.X - mobdata.PositionX) * 2;
                                 else
                                     monster.WALK_SPEED -= (int)(monster.Position.X - mobdata.PositionX) * 2;
+
+                                Clamp(monster.WALK_SPEED, 50, 170);
                             }
                             else
                                 monster.WALK_SPEED = 97;
@@ -562,6 +583,10 @@ namespace XNA_ScreenManager.Networking
                 Convert.ToInt32(values[1]),
                 Convert.ToInt32(values[2]),
                 Convert.ToInt32(values[3]));
+        }
+        private int Clamp(int value, int min, int max)
+        {
+            return (value < min) ? min : (value > max) ? max : value;
         }
 
         // create and initialize a crypto algorithm
