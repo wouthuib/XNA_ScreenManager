@@ -313,14 +313,14 @@ namespace XNA_ScreenManager.CharacterClasses
                             previousDiedTimeSec = (int)gameTime.ElapsedGameTime.TotalSeconds + RESPAWN_TIME;
 
                             // Monster Item Drops
-                            foreach (var drop in ItemDrop)
-                            {
-                                // drop[0] = item, drop[1] = chance in %
-                                if (Randomizer.generateRandom(0, 100) <= drop[1])
-                                    GameWorld.GetInstance.newEffect.Add(new ItemSprite(
-                                        new Vector2(Randomizer.generateRandom((int)this.position.X + 20, (int)this.position.X + this.spriteFrame.Width - 20),
-                                            (int)(this.position.Y + this.spriteFrame.Height * 0.70f)), drop[0]));
-                            }
+                            //foreach (var drop in ItemDrop)
+                            //{
+                            //    // drop[0] = item, drop[1] = chance in %
+                            //    if (Randomizer.generateRandom(0, 100) <= drop[1])
+                            //        GameWorld.GetInstance.newEffect.Add(new ItemSprite(
+                            //            new Vector2(Randomizer.generateRandom((int)this.position.X + 20, (int)this.position.X + this.spriteFrame.Width - 20),
+                            //                (int)(this.position.Y + this.spriteFrame.Height * 0.70f)), drop[0]));
+                            //}
 
                             // Give player EXP
                             PlayerStore.Instance.activePlayer.Exp += this.EXP;

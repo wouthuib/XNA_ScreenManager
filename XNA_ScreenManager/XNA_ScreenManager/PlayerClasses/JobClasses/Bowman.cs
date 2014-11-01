@@ -233,14 +233,14 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
                                     curving += new Vector2(0, 0.1f);
 
                                 // create and release an arrow
-                                if (spriteEffect == SpriteEffects.FlipHorizontally)
-                                    world.newEffect.Add(new Arrow(Content.Load<Texture2D>(@"gfx\gameobjects\arrow"),
-                                        new Vector2(this.Position.X, this.Position.Y + this.SpriteFrame.Height * 0.6f),
-                                        800, new Vector2(1, 0), curving));
-                                else
-                                    world.newEffect.Add(new Arrow(Content.Load<Texture2D>(@"gfx\gameobjects\arrow"),
-                                        new Vector2(this.Position.X, this.Position.Y + this.SpriteFrame.Height * 0.6f),
-                                        800, new Vector2(-1, 0), curving));
+                                //if (spriteEffect == SpriteEffects.FlipHorizontally)
+                                //    world.newEffect.Add(new Arrow(Content.Load<Texture2D>(@"gfx\gameobjects\arrow"),
+                                //        new Vector2(this.Position.X, this.Position.Y + this.SpriteFrame.Height * 0.6f),
+                                //        800, new Vector2(1, 0), curving));
+                                //else
+                                //    world.newEffect.Add(new Arrow(Content.Load<Texture2D>(@"gfx\gameobjects\arrow"),
+                                //        new Vector2(this.Position.X, this.Position.Y + this.SpriteFrame.Height * 0.6f),
+                                //        800, new Vector2(-1, 0), curving));
                             }
 
                             // Skill is finished reset state
@@ -282,14 +282,14 @@ namespace XNA_ScreenManager.PlayerClasses.JobClasses
                         arrow_count--;
                         curving += new Vector2(0, 0.05f);
 
-                        if (spriteEffect == SpriteEffects.FlipHorizontally)
-                            world.newEffect.Add(new Arrow(Content.Load<Texture2D>(@"gfx\gameobjects\arrow"),
-                                new Vector2(this.Position.X, this.Position.Y + this.SpriteFrame.Height * 0.6f),
-                                800, new Vector2(1, 0), curving));
-                        else
-                            world.newEffect.Add(new Arrow(Content.Load<Texture2D>(@"gfx\gameobjects\arrow"),
-                                new Vector2(this.Position.X, this.Position.Y + this.SpriteFrame.Height * 0.6f),
-                                800, new Vector2(-1, 0), curving));
+                        //if (spriteEffect == SpriteEffects.FlipHorizontally)
+                        //    world.newEffect.Add(new Arrow(Content.Load<Texture2D>(@"gfx\gameobjects\arrow"),
+                        //        new Vector2(this.Position.X, this.Position.Y + this.SpriteFrame.Height * 0.6f),
+                        //        800, new Vector2(1, 0), curving));
+                        //else
+                        //    world.newEffect.Add(new Arrow(Content.Load<Texture2D>(@"gfx\gameobjects\arrow"),
+                        //        new Vector2(this.Position.X, this.Position.Y + this.SpriteFrame.Height * 0.6f),
+                        //        800, new Vector2(-1, 0), curving));
 
                         // Set the timer for cooldown
                         previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.1f;

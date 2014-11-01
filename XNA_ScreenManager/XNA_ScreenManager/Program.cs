@@ -1,4 +1,5 @@
 using System;
+using XNA_ScreenManager.Networking;
 
 namespace XNA_ScreenManager
 {
@@ -13,6 +14,16 @@ namespace XNA_ScreenManager
             using (Game1 game = new Game1())
             {
                 game.Run();
+            }
+            
+            // Properly close the Socket connection
+            if (TCPClient.instance != null)
+            {
+                if (TCPClient.instance.Connected)
+                    TCPClient.instance.Disconnect();
+
+                if (TCPClient.instance.sendloop.IsAlive)
+                    TCPClient.instance.sendloop.Abort();
             }
         }
     }

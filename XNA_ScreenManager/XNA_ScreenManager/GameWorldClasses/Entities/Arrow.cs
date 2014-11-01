@@ -15,11 +15,12 @@ namespace XNA_ScreenManager.PlayerClasses
         private float Speed;
         private Vector2 Direction, Curving;
 
-        public Arrow(Texture2D texture, Vector2 position, float speed, Vector2 direction, Vector2 curving)
+        public Arrow(Texture2D texture, string instance, Vector2 position, float speed, Vector2 direction, Vector2 curving)
             : base()
         {
             // Derived properties
             sprite = texture;
+            instanceID = instance;
             SpriteFrame = new Rectangle(0, 0, sprite.Width, sprite.Height);
             Position = position;
             Speed = speed;
@@ -41,7 +42,7 @@ namespace XNA_ScreenManager.PlayerClasses
             // Arrow speed
             Position += (Direction + Curving) * Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            CollisionCheck();
+            //CollisionCheck();
 
             // base Effect Update
             base.Update(gameTime);

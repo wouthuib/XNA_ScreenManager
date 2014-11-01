@@ -345,27 +345,31 @@ namespace XNA_ScreenManager
                             {
                                 if (spriteframe > 2)
                                 {
-                                    // make sure the world is connected
-                                    if (world == null)
-                                        world = GameWorld.GetInstance;
+                                    // Update server to release arrow
+                                    NetworkGameData.Instance.sendPlayerData("Release", getPlayer());
+                                    spriteframe = 0;
 
-                                    // create and release an arrow
-                                    if (spriteEffect == SpriteEffects.FlipHorizontally)
-                                        world.newEffect.Add(new Arrow(Content.Load<Texture2D>(@"gfx\gameobjects\arrow"),
-                                            new Vector2(this.Position.X, this.Position.Y + this.SpriteFrame.Height * 0.6f),
-                                            800, new Vector2(1, 0), Vector2.Zero));
-                                    else
-                                        world.newEffect.Add(new Arrow(Content.Load<Texture2D>(@"gfx\gameobjects\arrow"),
-                                            new Vector2(this.Position.X, this.Position.Y + this.SpriteFrame.Height * 0.6f),
-                                            800, new Vector2(-1, 0), Vector2.Zero));
+                                    //// make sure the world is connected
+                                    //if (world == null)
+                                    //    world = GameWorld.GetInstance;
 
-                                    // Set the timer for cooldown
-                                    previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.10f;
+                                    //// create and release an arrow
+                                    //if (spriteEffect == SpriteEffects.FlipHorizontally)
+                                    //    world.newEffect.Add(new Arrow(Content.Load<Texture2D>(@"gfx\gameobjects\arrow"),
+                                    //        new Vector2(this.Position.X, this.Position.Y + this.SpriteFrame.Height * 0.6f),
+                                    //        800, new Vector2(1, 0), Vector2.Zero));
+                                    //else
+                                    //    world.newEffect.Add(new Arrow(Content.Load<Texture2D>(@"gfx\gameobjects\arrow"),
+                                    //        new Vector2(this.Position.X, this.Position.Y + this.SpriteFrame.Height * 0.6f),
+                                    //        800, new Vector2(-1, 0), Vector2.Zero));
+
+                                    //// Set the timer for cooldown
+                                    //previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.10f;
 
                                     // reset sprite frame and change state
                                     // start cooldown
                                     spriteFrame.X = 0;
-                                    state = EntityState.Cooldown;
+                                    //state = EntityState.Cooldown;
                                 }
                             }
                         }
@@ -630,6 +634,8 @@ namespace XNA_ScreenManager
                         }
                         else if (keyboardStateCurrent.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.LeftAlt) && !HoldPosition)
                         {
+                            NetworkGameData.Instance.sendPlayerData("Action", getPlayer());
+
                             // check if weapon is equiped
                             if (getPlayer().equipment.item_list.FindAll(delegate(Item item) { return item.Type == ItemType.Weapon; }).Count > 0)
                             {
@@ -638,10 +644,9 @@ namespace XNA_ScreenManager
                                 // check the weapon type
                                 if (weapontype == WeaponType.Bow)
                                 {
-                                    previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerStore.activePlayer.ASPD * 12) * 0.0006f) + 0.05f;
-
+                                    //previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + (float)((350 - playerStore.activePlayer.ASPD * 12) * 0.0006f) + 0.05f;
                                     spriteframe = 0;
-                                    state = EntityState.Shoot;
+                                    //state = EntityState.Shoot;
                                 }
                                 else
                                 {

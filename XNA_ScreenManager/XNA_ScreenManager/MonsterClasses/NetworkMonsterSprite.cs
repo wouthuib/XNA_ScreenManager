@@ -35,7 +35,7 @@ namespace XNA_ScreenManager.MonsterClasses
         public List<spriteOffset> list_offsets = new List<spriteOffset>();
         public SpriteEffects spriteEffect = SpriteEffects.None;
         private float transperancy = 0;
-        private bool debug = true;
+        private bool debug = false;
 
         // Respawn properties
         private Vector2 resp_pos = Vector2.Zero,                                                    // Respawn Position
@@ -135,6 +135,7 @@ namespace XNA_ScreenManager.MonsterClasses
         {
             if (this.state != ServerUpdate_state)
             {
+                this.previousState = this.state;
                 this.state = ServerUpdate_state;
                 this.position = ServerUpdate_position;
                 this.spriteEffect = ServerUpdate_spriteEffect;
@@ -152,8 +153,8 @@ namespace XNA_ScreenManager.MonsterClasses
                     Direction = Vector2.Zero;
 
                     // Check if Monster is steady standing
-                    //if (Position.Y > OldPosition.Y)
-                    //    state = EntityState.Falling;
+                    if (previousState == EntityState.Frozen)
+                        spritename = "stand_" + spriteframe.ToString();
 
                     // Move the Monster
                     OldPosition = Position;
@@ -338,6 +339,8 @@ namespace XNA_ScreenManager.MonsterClasses
                     break;
                 #endregion
             }
+
+            this.previousState = this.state;
         }
         #endregion
 

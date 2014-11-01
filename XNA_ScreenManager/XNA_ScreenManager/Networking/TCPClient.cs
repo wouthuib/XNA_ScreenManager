@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Net.Sockets;
 using System.Text;
-using System.Xml.Serialization;
-using System.Xml.Linq;
 using System.IO;
 using System.Threading;
 using Microsoft.Xna.Framework;
@@ -20,6 +18,7 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using MapleLibrary;
 using System.Net;
+using System.Collections.Generic;
 
 namespace XNA_ScreenManager.Networking
 {
@@ -29,6 +28,7 @@ namespace XNA_ScreenManager.Networking
     /// <param name="portNr">http://msdn.microsoft.com/en-us/library/bew39x2a(v=vs.110).aspx</param>
     public class TCPClient
     {
+        #region properties
         Socket sender;
 
         // ManualResetEvent instances signal completion.
@@ -41,12 +41,16 @@ namespace XNA_ScreenManager.Networking
 
         //Byte array that is populated when a user receives data
         private byte[] readBuffer = new byte[StateObject.BufferSize];
+        private List<byte[]> objectList = new List<byte[]>();
+        private bool Sending = false;
 
         public static TCPClient instance;
         private object lockstream = new Object();
+        public Thread sendloop;
 
         public bool Connected = false;
         public bool encryption = false;
+        #endregion
 
         public TCPClient()
         {
@@ -54,7 +58,7 @@ namespace XNA_ScreenManager.Networking
             StartInstance();
         }
 
-        private void Disconnect()
+        public void Disconnect()
         {
             sender.Close();
             Connected = false;
@@ -65,8 +69,7 @@ namespace XNA_ScreenManager.Networking
             {
                 // Establish the remote endpoint for the socket.
                 // This example uses port 11000 on the local computer.
-                IPHostEntry ipHostInfo = Dns.GetHostEntry(ServerProperties.xmlgetvalue("address").ToString());
-                IPAddress ipAddress = LocalIPAddress();
+                IPAddress ipAddress = IPAddress.Parse(ServerProperties.xmlgetvalue("address").ToString());
                 IPEndPoint remoteEP = new IPEndPoint(ipAddress, Convert.ToInt32(ServerProperties.xmlgetvalue("port")));
 
                 // Create a TCP/IP  socket.
@@ -81,6 +84,10 @@ namespace XNA_ScreenManager.Networking
                 // setup client listener
                 StartListening();
 
+                // start send loop
+                sendloop = new Thread(new ThreadStart(this.SendingLoop));
+                sendloop.Start();
+
                 Connected = true;
             }
             catch
@@ -94,14 +101,35 @@ namespace XNA_ScreenManager.Networking
         {
             if (Connected)
             {
-
                 lock (lockstream)
                 {
-                    Send(sender, SerializeToStream(obj).ToArray());
+                    objectList.Add(SerializeToStream(obj).ToArray());
                 }
             }
             else
                 ScreenManager.Instance.activeScreen.topmessage.Display("Cannot connect with server.", Color.PaleVioletRed, 5.0f);
+        }
+
+        public void SendingLoop()
+        {
+            while (true)
+            {
+                if (!Sending)
+                {
+                    if(objectList.Count > 0)
+                    {
+                        lock(lockstream)
+                        {
+                            Sending = true;
+                            byte[] bytestream = new byte[objectList[0].Length];
+                            bytestream = objectList[0];         //pick oldest from list
+                            objectList.Remove(bytestream);      //remove from list
+                            Send(sender, bytestream);
+                        }
+                    }
+                }            
+                Thread.Sleep(10);
+            }
         }
 
         private void ConnectCallback(IAsyncResult ar)
@@ -166,7 +194,7 @@ namespace XNA_ScreenManager.Networking
                 StartListening();
 
                 // read incoming data
-                ReadUserDataStream(data);
+                ReadDataStream(data);
             }
             catch (Exception e)
             {
@@ -175,9 +203,17 @@ namespace XNA_ScreenManager.Networking
         }
         private void Send(Socket client, byte[] byteData)
         {
-            // Begin sending the data to the remote device.
-            client.BeginSend(byteData, 0, byteData.Length, 0,
-                new AsyncCallback(SendCallback), client);
+            try
+            {
+                // Begin sending the data to the remote device.
+                client.BeginSend(byteData, 0, byteData.Length, 0,
+                    new AsyncCallback(SendCallback), client);
+                sendDone.WaitOne();
+            }
+            catch (SocketException ee)
+            {
+                SocketErrorHandler(ee.ErrorCode);
+            }
         }
         private void SendCallback(IAsyncResult ar)
         {
@@ -192,6 +228,9 @@ namespace XNA_ScreenManager.Networking
 
                 // Signal that all bytes have been sent.
                 sendDone.Set();
+
+                //Sending Done
+                Sending = false;
             }
             catch (Exception e)
             {
@@ -222,117 +261,22 @@ namespace XNA_ScreenManager.Networking
                 Console.Write("Incoming bytecode conversion error \n");
             }
         }
+        private void SocketErrorHandler(int errorcode)
+        {
+            switch (errorcode)
+            {
+                case 10054:     // connection was forecely closed
+                case 10060:     // connection timeout
+                default:        // other socket exceptions
+                    Disconnect();
+                    break;
+            }
+        }
         
         // Wouter's methods
 
-        //public get local IP function
-        public static IPAddress LocalIPAddress()
-        {
-            IPHostEntry host;
-            IPAddress localIP = null;
-            host = Dns.GetHostEntry(Dns.GetHostName());
-            foreach (IPAddress ip in host.AddressList)
-            {
-                if (ip.AddressFamily.ToString() == "InterNetwork")
-                {
-                    localIP = ip;
-                    return localIP;
-                }
-            }
-            return localIP;
-        }
-
         //reading network data
-        private void ReadUserDataXml(byte[] byteArray)
-        {
-            string s = System.Text.Encoding.UTF8.GetString(byteArray);
-
-            //message has successfully been received
-            string bytestring = new ASCIIEncoding().GetString(byteArray, 0, byteArray.Length);
-
-            if (encryption)
-            {
-                bytestring = decryptString(bytestring.ToString(), "Assesjode");
-            }
-
-            XDocument[] docs = new XDocument[60];
-            int count = 0;
-
-            try
-            {
-                // fetch all data within the incoming networkstream
-                for (int val = 0; val < bytestring.Split('?').Length - 1; val++)
-                {
-                    string content = "<?" + bytestring.Split('?')[val + 1].ToString() + "?" + bytestring.Split('?')[val + 2].ToString();
-
-                    char last = content[content.Length - 1];
-                    if (last == '<')
-                        content = content.Substring(0, content.Length - 1);
-                    try
-                    {
-                        docs[count] = XDocument.Parse(content);
-                    }
-                    catch
-                    {
-                        break;
-                    }
-                    finally
-                    {
-                        count++;
-                        val++;
-                    }
-                }
-            }
-            catch (Exception ee)
-            {
-                string error = ee.ToString();
-            }
-
-            try
-            {
-                foreach (var doc in docs)
-                {
-                    if (doc != null)
-                    {
-                        string rootelement = doc.Root.Name.ToString();
-                        Type elementType = Type.GetType("XNA_ScreenManager.Networking.ServerClasses." + rootelement);
-
-                        //Object obj = DeserializeFromXml<Object>(new ASCIIEncoding().GetString(byteArray, 0, byteArray.Length), elementType);
-                        
-                        StringBuilder builder = new StringBuilder();
-                        using (TextWriter writer = new StringWriter(builder))
-                        {
-                            doc.Save(writer);
-                        }
-                        
-                        Object obj = DeserializeFromXml<Object>(builder.ToString(), elementType);
-
-                        if (obj is playerData)
-                        {
-                            if (ScreenManager.Instance.activeScreen == ScreenManager.Instance.actionScreen)
-                                incomingPlayerData(obj as playerData);
-                            else if (ScreenManager.Instance.activeScreen == ScreenManager.Instance.selectCharScreen)
-                                incomingCharSelect(obj as playerData);
-                        }
-                        else if (obj is ChatData)
-                            incomingChatData(obj as ChatData);
-                        else if (obj is MonsterData)
-                            incomingMonsterData(obj as MonsterData);
-                        else if (obj is AccountData)
-                            incomingAccountData(obj as AccountData);
-                        else if (obj is EffectData)
-                            incomingEffectData(obj as EffectData);
-                        else
-                            break;
-                    }
-                }
-            }
-            catch(Exception ee) 
-            {
-                string error = ee.ToString();
-            }
-        }
-        private void ReadUserDataStream(byte[] byteArray)
+        private void ReadDataStream(byte[] byteArray)
         {
             try
             {
@@ -354,23 +298,11 @@ namespace XNA_ScreenManager.Networking
                     incomingAccountData(obj as AccountData);
                 else if (obj is EffectData)
                     incomingEffectData(obj as EffectData);
-                else
-                    obj = obj;
             }
             catch (Exception ee)
             {
                 string error = ee.ToString();
             }
-        }
-        public static T DeserializeFromXml<T>(string xml, Type type)
-        {
-            T result;
-            XmlSerializer ser = new XmlSerializer(type);
-            using (TextReader tr = new StringReader(xml))
-            {
-                result = (T)ser.Deserialize(tr);
-            }
-            return result;
         }
 
         // reading object data
@@ -400,22 +332,25 @@ namespace XNA_ScreenManager.Networking
                 PlayerSprite sprite = GameWorld.GetInstance.playerSprite;
 
                 if (sprite.State.ToString() != player.spritestate ||
-                    sprite.State == EntityState.Ladder || 
+                    sprite.State == EntityState.Ladder ||
                     sprite.State == EntityState.Rope)
                 {
                     sprite.State = (EntityState)Enum.Parse(typeof(EntityState), player.spritestate);
                     sprite.Position = new Vector2(player.PositionX, player.PositionY);
                     //sprite.PLAYER_SPEED = 190;
                 }
-                else if (Math.Abs(sprite.Position.X - player.PositionX) >= 1) // avoid lag
+                else if (Math.Abs(sprite.Position.X - player.PositionX) >= 1 &&
+                         Math.Abs(sprite.Position.X - player.PositionX) <= 80) // avoid lag
                 {
                     if (sprite.spriteEffect == SpriteEffects.None)
                         sprite.PLAYER_SPEED += (int)(sprite.Position.X - player.PositionX) * 2;
                     else
                         sprite.PLAYER_SPEED -= (int)(sprite.Position.X - player.PositionX) * 2;
 
-                        Clamp(sprite.PLAYER_SPEED, 165, 265);
+                    sprite.PLAYER_SPEED = Clamp(sprite.PLAYER_SPEED, 165, 265);
                 }
+                else if (Math.Abs(sprite.Position.X - player.PositionX) > 80)
+                    sprite.Position = new Vector2(player.PositionX, player.PositionY);
             }
             else if (player.Name != PlayerStore.Instance.activePlayer.Name) // Networkplayer
             {
@@ -440,15 +375,18 @@ namespace XNA_ScreenManager.Networking
                         sprite.Direction = NetworkPlayerSprite.getVector(player.direction);
                         //sprite.PLAYER_SPEED = 190;
                     }
-                    else if (Math.Abs(sprite.Position.X - player.PositionX) >= 2) // avoid lag
+                    else if (Math.Abs(sprite.Position.X - player.PositionX) >= 1 &&
+                            Math.Abs(sprite.Position.X - player.PositionX) <= 80) // avoid lag
                     {
                         if (sprite.spriteEffect == SpriteEffects.None)
                             sprite.PLAYER_SPEED += (int)(sprite.Position.X - player.PositionX) * 2;
                         else
                             sprite.PLAYER_SPEED -= (int)(sprite.Position.X - player.PositionX) * 2;
 
-                        Clamp(sprite.PLAYER_SPEED, 165, 265);
+                        sprite.PLAYER_SPEED = Clamp(sprite.PLAYER_SPEED, 165, 265);
                     }
+                    else if (Math.Abs(sprite.Position.X - player.PositionX) > 80)
+                        sprite.Position = new Vector2(player.PositionX, player.PositionY);
                 }
                 else
                 {
@@ -495,7 +433,7 @@ namespace XNA_ScreenManager.Networking
                                 else
                                     monster.WALK_SPEED -= (int)(monster.Position.X - mobdata.PositionX) * 2;
 
-                                Clamp(monster.WALK_SPEED, 50, 170);
+                                monster.WALK_SPEED = Clamp(monster.WALK_SPEED, 50, 170);
                             }
                             else
                                 monster.WALK_SPEED = 97;
@@ -567,6 +505,43 @@ namespace XNA_ScreenManager.Networking
                     new Vector2(effectdata.PositionX, effectdata.PositionY),
                         effectdata.Value_01));
             }
+            else if (effectdata.Name == "AddArrow")
+            {
+                // temporary static sprite (can be changed later in time)
+                Texture2D sprite = ResourceManager.GetInstance.Content.Load<Texture2D>(@"gfx\gameobjects\arrow");
+
+                if (effectdata.Value_01 == 1)
+                    GameWorld.GetInstance.newEffect.Add(new Arrow(
+                        sprite, effectdata.InstanceID, new Vector2(effectdata.PositionX, effectdata.PositionY + sprite.Height * 0.6f),
+                        800, new Vector2(1, 0), Vector2.Zero));
+                else
+                    GameWorld.GetInstance.newEffect.Add(new Arrow(
+                        sprite, effectdata.InstanceID ,new Vector2(effectdata.PositionX, effectdata.PositionY + sprite.Height * 0.6f),
+                        800, new Vector2(-1, 0), Vector2.Zero));
+
+            }
+            else if (effectdata.Name == "DeleteArrow")
+            {
+                if (GameWorld.GetInstance.listEffect.FindAll(x => x.instanceID == effectdata.InstanceID).Count > 0)
+                {
+                    Arrow arrow = GameWorld.GetInstance.listEffect.Find(x => x.instanceID == effectdata.InstanceID) as Arrow;
+                    arrow.KeepAliveTimer = 0;
+                }
+            }
+            else if (effectdata.Name == "AddItemSprite")
+            {
+                GameWorld.GetInstance.newEffect.Add(new ItemSprite(
+                    new Vector2(effectdata.PositionX, effectdata.PositionY),
+                        effectdata.Value_01, effectdata.InstanceID));
+            }
+            else if (effectdata.Name == "DeleteItemSprite")
+            {
+                if (GameWorld.GetInstance.listEffect.FindAll(x => x.instanceID == effectdata.InstanceID).Count > 0)
+                {
+                    ItemSprite item = GameWorld.GetInstance.listEffect.Find(x => x.instanceID == effectdata.InstanceID) as ItemSprite;
+                    item.KeepAliveTimer = 0;
+                }
+            }
         }
 
         // conversions
@@ -628,10 +603,12 @@ namespace XNA_ScreenManager.Networking
         // memory stream serializations
         public static MemoryStream SerializeToStream(object o)
         {
-            MemoryStream stream = new MemoryStream();
-            IFormatter formatter = new BinaryFormatter();
-            formatter.Serialize(stream, o);
-            return stream;
+            using (MemoryStream stream = new MemoryStream(new byte[2048]))
+            {
+                IFormatter formatter = new BinaryFormatter();
+                formatter.Serialize(stream, o);
+                return stream;
+            }
         }
         public static object DeserializeFromStream(MemoryStream stream)
         {
@@ -656,6 +633,96 @@ namespace XNA_ScreenManager.Networking
         //    //server.GetStream().BeginRead(readBuffer, 0, StateObject.BufferSize, StreamReceived, null);
         //    sender.BeginReceive(readBuffer, 0, StateObject.BufferSize, 0,
         //                   new AsyncCallback(Read_Callback), so2);
+        //}
+
+        //private void ReadUserDataXml(byte[] byteArray)
+        //{
+        //    string s = System.Text.Encoding.UTF8.GetString(byteArray);
+
+        //    //message has successfully been received
+        //    string bytestring = new ASCIIEncoding().GetString(byteArray, 0, byteArray.Length);
+
+        //    if (encryption)
+        //    {
+        //        bytestring = decryptString(bytestring.ToString(), "Assesjode");
+        //    }
+
+        //    XDocument[] docs = new XDocument[60];
+        //    int count = 0;
+
+        //    try
+        //    {
+        //        // fetch all data within the incoming networkstream
+        //        for (int val = 0; val < bytestring.Split('?').Length - 1; val++)
+        //        {
+        //            string content = "<?" + bytestring.Split('?')[val + 1].ToString() + "?" + bytestring.Split('?')[val + 2].ToString();
+
+        //            char last = content[content.Length - 1];
+        //            if (last == '<')
+        //                content = content.Substring(0, content.Length - 1);
+        //            try
+        //            {
+        //                docs[count] = XDocument.Parse(content);
+        //            }
+        //            catch
+        //            {
+        //                break;
+        //            }
+        //            finally
+        //            {
+        //                count++;
+        //                val++;
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ee)
+        //    {
+        //        string error = ee.ToString();
+        //    }
+
+        //    try
+        //    {
+        //        foreach (var doc in docs)
+        //        {
+        //            if (doc != null)
+        //            {
+        //                string rootelement = doc.Root.Name.ToString();
+        //                Type elementType = Type.GetType("XNA_ScreenManager.Networking.ServerClasses." + rootelement);
+
+        //                //Object obj = DeserializeFromXml<Object>(new ASCIIEncoding().GetString(byteArray, 0, byteArray.Length), elementType);
+
+        //                StringBuilder builder = new StringBuilder();
+        //                using (TextWriter writer = new StringWriter(builder))
+        //                {
+        //                    doc.Save(writer);
+        //                }
+
+        //                Object obj = DeserializeFromXml<Object>(builder.ToString(), elementType);
+
+        //                if (obj is playerData)
+        //                {
+        //                    if (ScreenManager.Instance.activeScreen == ScreenManager.Instance.actionScreen)
+        //                        incomingPlayerData(obj as playerData);
+        //                    else if (ScreenManager.Instance.activeScreen == ScreenManager.Instance.selectCharScreen)
+        //                        incomingCharSelect(obj as playerData);
+        //                }
+        //                else if (obj is ChatData)
+        //                    incomingChatData(obj as ChatData);
+        //                else if (obj is MonsterData)
+        //                    incomingMonsterData(obj as MonsterData);
+        //                else if (obj is AccountData)
+        //                    incomingAccountData(obj as AccountData);
+        //                else if (obj is EffectData)
+        //                    incomingEffectData(obj as EffectData);
+        //                else
+        //                    break;
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ee)
+        //    {
+        //        string error = ee.ToString();
+        //    }
         //}
 
         /// <summary>
@@ -703,12 +770,23 @@ namespace XNA_ScreenManager.Networking
         //    //Listen for new data
         //    StartListening();
         //}
+
+        //public static T DeserializeFromXml<T>(string xml, Type type)
+        //{
+        //    T result;
+        //    XmlSerializer ser = new XmlSerializer(type);
+        //    using (TextReader tr = new StringReader(xml))
+        //    {
+        //        result = (T)ser.Deserialize(tr);
+        //    }
+        //    return result;
+        //}
     }
 
     public class StateObject
     {
         public Socket workSocket = null;
-        public const int BufferSize = 1024;
+        public const int BufferSize = 40000;
         public byte[] buffer = new byte[BufferSize];
         public StringBuilder sb = new StringBuilder();
     }

@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using XNA_ScreenManager.CharacterClasses;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using XNA_ScreenManager.MapClasses;
-using Microsoft.Xna.Framework.Content;
 using XNA_ScreenManager.PlayerClasses;
 using XNA_ScreenManager.GameWorldClasses.Effects;
 
@@ -27,7 +21,7 @@ namespace XNA_ScreenManager.ItemClasses
         private bool angledirection = false;
         #endregion
 
-        public ItemSprite(Vector2 position, int itemID) : 
+        public ItemSprite(Vector2 position, int itemID, string Guid) : 
             base()
         {
             // Link properties to instance
@@ -37,6 +31,9 @@ namespace XNA_ScreenManager.ItemClasses
 
             // get item information from general DB
             item = itemDB.getItem(itemID);
+
+            // create instance ID with server GUID
+            this.instanceID = Guid;
 
             // general properties
             this.sprite = world.Content.Load<Texture2D>(@"" + item.itemSpritePath);
