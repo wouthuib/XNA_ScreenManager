@@ -298,6 +298,8 @@ namespace XNA_ScreenManager.Networking
                     incomingAccountData(obj as AccountData);
                 else if (obj is EffectData)
                     incomingEffectData(obj as EffectData);
+                else if (obj is ItemData)
+                    incomingItemData(obj as ItemData);
             }
             catch (Exception ee)
             {
@@ -541,6 +543,25 @@ namespace XNA_ScreenManager.Networking
                     ItemSprite item = GameWorld.GetInstance.listEffect.Find(x => x.instanceID == effectdata.InstanceID) as ItemSprite;
                     item.KeepAliveTimer = 0;
                 }
+            }
+        }
+        private void incomingItemData(ItemData itemdata)
+        {
+            switch (itemdata.action)
+            {
+                case "AddInventory":
+                    if (ItemStore.Instance.item_list.FindAll(x => x.itemID == itemdata.ID).Count > 0)
+                    {
+                        Item item = ItemStore.Instance.item_list.Find(x => x.itemID == itemdata.ID);
+                        PlayerStore.Instance.activePlayer.inventory.addItem(item);
+                    }
+                    break;
+                case "DelInventory":
+                    if (PlayerStore.Instance.activePlayer.inventory.item_list.FindAll(x => x.itemID == itemdata.ID).Count > 0)
+                    {
+                        PlayerStore.Instance.activePlayer.inventory.removeItem(itemdata.ID);
+                    }
+                    break;
             }
         }
 

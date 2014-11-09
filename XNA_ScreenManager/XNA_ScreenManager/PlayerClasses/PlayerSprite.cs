@@ -348,28 +348,7 @@ namespace XNA_ScreenManager
                                     // Update server to release arrow
                                     NetworkGameData.Instance.sendPlayerData("Release", getPlayer());
                                     spriteframe = 0;
-
-                                    //// make sure the world is connected
-                                    //if (world == null)
-                                    //    world = GameWorld.GetInstance;
-
-                                    //// create and release an arrow
-                                    //if (spriteEffect == SpriteEffects.FlipHorizontally)
-                                    //    world.newEffect.Add(new Arrow(Content.Load<Texture2D>(@"gfx\gameobjects\arrow"),
-                                    //        new Vector2(this.Position.X, this.Position.Y + this.SpriteFrame.Height * 0.6f),
-                                    //        800, new Vector2(1, 0), Vector2.Zero));
-                                    //else
-                                    //    world.newEffect.Add(new Arrow(Content.Load<Texture2D>(@"gfx\gameobjects\arrow"),
-                                    //        new Vector2(this.Position.X, this.Position.Y + this.SpriteFrame.Height * 0.6f),
-                                    //        800, new Vector2(-1, 0), Vector2.Zero));
-
-                                    //// Set the timer for cooldown
-                                    //previousGameTimeMsec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.10f;
-
-                                    // reset sprite frame and change state
-                                    // start cooldown
                                     spriteFrame.X = 0;
-                                    //state = EntityState.Cooldown;
                                 }
                             }
                         }
