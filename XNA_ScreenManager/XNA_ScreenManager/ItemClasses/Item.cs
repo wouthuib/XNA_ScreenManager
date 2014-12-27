@@ -10,7 +10,8 @@ namespace XNA_ScreenManager.ItemClasses
         Weapon,
         Armor,
         Accessory,
-        KeyItem
+        KeyItem,
+        Equipable = ItemType.Weapon | ItemType.Armor | ItemType.Accessory
     };
 
     public enum WeaponType

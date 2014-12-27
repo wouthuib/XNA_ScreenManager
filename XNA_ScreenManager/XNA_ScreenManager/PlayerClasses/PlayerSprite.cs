@@ -987,11 +987,14 @@ namespace XNA_ScreenManager
             // temporary global function buttons 
             // should be handles by singleton class keyboard manager
             if (CheckKey(Keys.Q) && !HoldPosition)
-                getPlayer().inventory.addItem(itemStore.getItem(new Random().Next(1100, 1114)));
+                NetworkGameData.Instance.sendItemData(new Random().Next(1100, 1114), "AddItem");
+                //getPlayer().inventory.addItem(itemStore.getItem(new Random().Next(1100, 1114)));
             else if (CheckKey(Keys.W) && !HoldPosition)
-                getPlayer().inventory.addItem(itemStore.getItem(XNA_ScreenManager.ScreenClasses.MainClasses.ResourceManager.randomizer.Instance.generateRandom(1300, 1303)));
+                NetworkGameData.Instance.sendItemData(new Random().Next(1300, 1303), "AddItem");
+                //getPlayer().inventory.addItem(itemStore.getItem(XNA_ScreenManager.ScreenClasses.MainClasses.ResourceManager.randomizer.Instance.generateRandom(1300, 1303)));
             else if (CheckKey(Keys.E) && !HoldPosition)
-                getPlayer().inventory.addItem(itemStore.getItem(XNA_ScreenManager.ScreenClasses.MainClasses.ResourceManager.randomizer.Instance.generateRandom(2300, 2308)));
+                NetworkGameData.Instance.sendItemData(new Random().Next(2300, 2308), "AddItem");
+                //getPlayer().inventory.addItem(itemStore.getItem(XNA_ScreenManager.ScreenClasses.MainClasses.ResourceManager.randomizer.Instance.generateRandom(2300, 2308)));
             // temporary
             #endregion
                         

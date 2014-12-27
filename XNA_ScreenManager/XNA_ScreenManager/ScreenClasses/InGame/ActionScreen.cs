@@ -6,6 +6,7 @@ using XNA_ScreenManager.MapClasses;
 using XNA_ScreenManager.ScreenClasses;
 using XNA_ScreenManager.CharacterClasses;
 using XNA_ScreenManager.ScreenClasses.InGame;
+using XNA_ScreenManager.GameAssets;
 
 namespace XNA_ScreenManager
 {
@@ -63,6 +64,9 @@ namespace XNA_ScreenManager
             if (hud.Active)
                 hud.Position = ViewPort();
 
+            if(MenuManager.Instance.Active)
+                MenuManager.Instance.SetViewport(ViewPort());
+
             if (topmessage.Active)
                 topmessage.Position = ViewPort();
 
@@ -70,6 +74,7 @@ namespace XNA_ScreenManager
             {
                 world.Paused = true;
                 hud.Active = false;
+                MenuManager.Instance.Active = false;
                 screenManager.ScreenViewport(ViewPort(), "MessagePopupScreen");
             }
             else
@@ -78,6 +83,8 @@ namespace XNA_ScreenManager
                     world.Paused = false;
                 if (hud.Active == false)
                     hud.Active = true;
+                if (!MenuManager.Instance.Active)                   
+                    MenuManager.Instance.Active = true;
             }
         }
 

@@ -217,7 +217,8 @@ namespace XNA_ScreenManager.ScreenClasses
                 {
                     case 0:
                         activeScreen.Hide();
-                        itemMenuScreen.updateItemList();
+                        //itemMenuScreen.updateItemList(); // -> move to TCPClient itemData finish inventory
+                        itemMenuScreen.ServerReqInventory();
                         activeScreen = itemMenuScreen;
                         activeScreen.Show();
                         break;
@@ -284,9 +285,12 @@ namespace XNA_ScreenManager.ScreenClasses
             }
             else if (CheckKey(Keys.Back) || CheckKey(Keys.Escape))
             {
-                activeScreen.Hide();
-                activeScreen = ingameMenuScreen;
-                activeScreen.Show();
+                if (!itemMenuScreen.serverRequest)
+                {
+                    activeScreen.Hide();
+                    activeScreen = ingameMenuScreen;
+                    activeScreen.Show();
+                }
             }
         }
 

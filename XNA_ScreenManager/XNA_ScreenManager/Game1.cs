@@ -6,6 +6,8 @@ using XNA_ScreenManager.ScreenClasses.InGame;
 using XNA_ScreenManager.ScreenClasses.Menus;
 using XNA_ScreenManager.MapClasses;
 using XNA_ScreenManager.ScreenClasses.MainClasses;
+using XNA_ScreenManager.GameAssets;
+using XNA_ScreenManager.GameAssets.InGame;
 
 namespace XNA_ScreenManager
 {
@@ -17,6 +19,9 @@ namespace XNA_ScreenManager
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         ResourceManager resourcemanager;
+
+        // Game Assets
+        MouseManager mousemanager;
 
         // screens are drawble game objects
         StartScreen startScreen;
@@ -33,17 +38,22 @@ namespace XNA_ScreenManager
         LoadingScreen loadingScreen;
         LoginScreen loginScreen; // new
 
+        // in Game Menus
+        ItemMenu itemMenu; // new
+
         SpriteFont normalFont;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            IsMouseVisible = true;
         }
 
         protected override void Initialize()
         {
             ScreenManager.Instance.game = this;
+            MenuManager.Instance.game = this;
             base.Initialize();
         }
 
@@ -126,6 +136,19 @@ namespace XNA_ScreenManager
 
             // Create Screen Manager
             ScreenManager.Instance.StartManager();
+
+            // Create Mouse Manager
+            mousemanager = MouseManager.Instance;
+            mousemanager.StartManager();
+            Components.Add(mousemanager);
+
+            // Create Menu Manager
+            itemMenu = new ItemMenu(this);
+            Components.Add(itemMenu);
+            MenuManager.Instance.listmenu.Add(itemMenu);
+
+            MenuManager.Instance.StartManager();
+
         }
 
         /// <summary>

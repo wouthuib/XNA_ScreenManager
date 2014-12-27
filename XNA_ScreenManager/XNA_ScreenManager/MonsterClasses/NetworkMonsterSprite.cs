@@ -44,11 +44,13 @@ namespace XNA_ScreenManager.MonsterClasses
         // Sprite Animation Properties
         Color color = Color.White;                                                                  // Sprite color
         private Vector2 Direction = Vector2.Zero;                                                   // Sprite Move direction
+        private Vector2 Velocity = Vector2.Zero;                                                    // Jump Movement
         private float Speed;                                                                        // Speed used in functions
         float previousAnimateTimeSec;                                                               // Animation in Miliseconds
 
         // Movement properties
         public int WALK_SPEED = 97;                                                                 // The actual speed of the entity
+        public int RUN_SPEED = 133;                                                                 // The actual speed of the entity
         const int ANIMATION_SPEED = 120;                                                            // Animation speed, 120 = default
         Border Borders = new Border(0, 0);                                                          // max tiles to walk from center (avoid falling)
 
@@ -133,11 +135,12 @@ namespace XNA_ScreenManager.MonsterClasses
 
         private void get_server_update()
         {
-            if (this.state != ServerUpdate_state)
+            if (this.state != ServerUpdate_state || 
+                this.spriteEffect != ServerUpdate_spriteEffect)
             {
                 this.previousState = this.state;
                 this.state = ServerUpdate_state;
-                this.position = ServerUpdate_position;
+                this.position.X = ServerUpdate_position.X;
                 this.spriteEffect = ServerUpdate_spriteEffect;
             }
         }
@@ -246,12 +249,12 @@ namespace XNA_ScreenManager.MonsterClasses
                     if (Position.X <= Borders.Min)
                     {
                         Position = OldPosition;
-                        spriteEffect = SpriteEffects.FlipHorizontally;
+                        //spriteEffect = SpriteEffects.FlipHorizontally; // replaced by server update
                     }
                     else if (Position.X >= Borders.Max)
                     {
                         Position = OldPosition;
-                        spriteEffect = SpriteEffects.None;
+                        //spriteEffect = SpriteEffects.None; // replaced by server update
                     }
 
                     break;
@@ -336,6 +339,85 @@ namespace XNA_ScreenManager.MonsterClasses
                     if (transperancy < 1)
                         transperancy += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
+                    break;
+                #endregion
+                #region agressive
+                case EntityState.Agressive:
+
+                    Speed = 0;
+                    Direction = Vector2.Zero;
+
+                    if (spriteEffect == SpriteEffects.FlipHorizontally)
+                    {
+                        // walk right
+                        this.Direction.X = 1;
+                        this.Speed = RUN_SPEED;
+                    }
+                    else
+                    {
+                        // walk left
+                        this.Direction.X = -1;
+                        this.Speed = RUN_SPEED;
+                    }
+
+                    // reduce timer
+                    previousAnimateTimeSec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                    // set sprite frames
+                    if (previousAnimateTimeSec < 0)
+                    {
+                        previousAnimateTimeSec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.05f; // faster animation
+                        spriteframe++;
+                    }
+
+                    if (spriteframe > list_offsets.FindAll(x => x.Name.StartsWith("move_")).Count - 1)
+                        spriteframe = 0;
+
+                    // Player animation
+                    if (prevspriteframe != spriteframe)
+                    {
+                        prevspriteframe = spriteframe;
+                        spritename = "move_" + spriteframe.ToString();
+                        spriteOfset = getoffset();
+                    }
+
+                    // Update the Position Monster
+                    OldPosition = Position;
+
+                    // Walk speed
+                    Position += Direction * Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                    // Apply Gravity 
+                    Position += new Vector2(0, 1) * 200 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                    break;
+                #endregion
+                #region attacking
+                case EntityState.Attacking:
+
+                    // Move the Character
+                    OldPosition = Position;
+
+                    // reduce timer
+                    previousAnimateTimeSec -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                    // set sprite frames
+                    if (previousAnimateTimeSec < 0)
+                    {
+                        previousAnimateTimeSec = (float)gameTime.ElapsedGameTime.TotalSeconds + 0.05f; // faster animation
+                        spriteframe++;
+                    }
+
+                    if (spriteframe > list_offsets.FindAll(x => x.Name.StartsWith("move_")).Count - 1)
+                        spriteframe = 0;
+
+                    // Player animation
+                    if (prevspriteframe != spriteframe)
+                    {
+                        prevspriteframe = spriteframe;
+                        spritename = "move_" + spriteframe.ToString();
+                        spriteOfset = getoffset();
+                    }
                     break;
                 #endregion
             }

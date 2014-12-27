@@ -12,6 +12,8 @@ using System.Text.RegularExpressions;
 using XNA_ScreenManager.ScriptClasses;
 using XNA_ScreenManager.CharacterClasses;
 using System;
+using MapleLibrary;
+using XNA_ScreenManager.Networking;
 
 namespace XNA_ScreenManager.ScreenClasses
 {
@@ -51,6 +53,7 @@ namespace XNA_ScreenManager.ScreenClasses
         int width, height;
         int selectedCategory = 0, SetItemSlot = 1;
         bool itemOptions = false, itemSelection = true, itemQuickSlotOption = false;
+        public bool serverRequest = false;
 
         #endregion
 
@@ -169,6 +172,12 @@ namespace XNA_ScreenManager.ScreenClasses
         }
 
         public override void Update(GameTime gameTime)
+        {
+            if (!serverRequest)
+                ScreenUpdate(gameTime);
+        }
+
+        public void ScreenUpdate(GameTime gameTime)
         {
             KeyboardState newState = Keyboard.GetState();
 
@@ -399,22 +408,26 @@ namespace XNA_ScreenManager.ScreenClasses
                 ItemStore.Instance.getItem(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemID).Type == ItemType.Armor ||
                 ItemStore.Instance.getItem(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemID).Type == ItemType.Accessory)
             {
-                if (playerStore.activePlayer.equipment.getEquip(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].Slot) == null)
-                {
-                    playerStore.activePlayer.equipment.addItem(itemlist.menuItemsnoDupes[itemlist.SelectedIndex]);
-                    playerStore.activePlayer.inventory.removeItem(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemID);
-                }
-                else
-                {
-                    Item getequip = playerStore.activePlayer.equipment.getEquip(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].Slot);
-                    Item getinvent = itemlist.menuItemsnoDupes[itemlist.SelectedIndex];
+                //if (playerStore.activePlayer.equipment.getEquip(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].Slot) == null)
+                //{
+                //    playerStore.activePlayer.equipment.addItem(itemlist.menuItemsnoDupes[itemlist.SelectedIndex]);
+                //    playerStore.activePlayer.inventory.removeItem(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemID);
+                //}
+                //else
+                //{
+                //    Item getequip = playerStore.activePlayer.equipment.getEquip(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].Slot);
+                //    Item getinvent = itemlist.menuItemsnoDupes[itemlist.SelectedIndex];
 
-                    playerStore.activePlayer.equipment.removeItem(getinvent.Slot);
-                    playerStore.activePlayer.equipment.addItem(getinvent);
+                //    playerStore.activePlayer.equipment.removeItem(getinvent.Slot);
+                //    playerStore.activePlayer.equipment.addItem(getinvent);
 
-                    playerStore.activePlayer.inventory.removeItem(getinvent.itemID);
-                    playerStore.activePlayer.inventory.addItem(getequip);
-                }
+                //    playerStore.activePlayer.inventory.removeItem(getinvent.itemID);
+                //    playerStore.activePlayer.inventory.addItem(getequip);
+                //}
+                //playerStore.activePlayer.inventory.removeItem(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemID);
+                
+                NetworkGameData.Instance.sendItemData(itemlist.menuItemsnoDupes[itemlist.SelectedIndex].itemID, "EquipItem");
+                serverRequest = true;
             }
 
             updateItemList();       // update item menu
@@ -496,6 +509,18 @@ namespace XNA_ScreenManager.ScreenClasses
                 options.StartIndex = 3;
                 options.SelectedIndex = 3;
             }
+        }
+
+        public void ServerReqInventory()
+        {
+            serverRequest = true;
+            NetworkGameData.Instance.sendItemData(0, "ReqInventory");
+        }
+
+        public void ServerReqFinish()
+        {
+            serverRequest = false;
+            updateItemList();
         }
 
         #endregion

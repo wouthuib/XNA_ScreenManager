@@ -133,6 +133,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EffectClasses\EffectStore.cs" />
+    <Compile Include="GameAssets\Button.cs" />
+    <Compile Include="GameAssets\InGame\ItemMenu.cs" />
+    <Compile Include="GameAssets\Menu.cs" />
+    <Compile Include="GameAssets\MenuManager.cs" />
+    <Compile Include="GameAssets\MouseManager.cs" />
     <Compile Include="GameWorldClasses\Effects\CastEffect.cs" />
     <Compile Include="GameWorldClasses\Effects\ChatBalloon.cs" />
     <Compile Include="GameWorldClasses\Effects\WeaponHitEffect.cs" />

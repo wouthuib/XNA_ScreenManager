@@ -300,6 +300,8 @@ namespace XNA_ScreenManager.Networking
                     incomingEffectData(obj as EffectData);
                 else if (obj is ItemData)
                     incomingItemData(obj as ItemData);
+                else if (obj is HudData)
+                    incomingHudData(obj as HudData);
             }
             catch (Exception ee)
             {
@@ -439,6 +441,15 @@ namespace XNA_ScreenManager.Networking
                             }
                             else
                                 monster.WALK_SPEED = 97;
+                        } 
+                        if (mobdata.Action == "Agressive_Update")
+                        {
+                            monster.RUN_SPEED = 122;
+                            monster.update_server(
+                                new Vector2(mobdata.PositionX, mobdata.PositionY),
+                                (EntityState)Enum.Parse(typeof(EntityState), mobdata.spritestate),
+                                (SpriteEffects)Enum.Parse(typeof(SpriteEffects), mobdata.spriteEffect));
+
                         }
                         else if (mobdata.Action == "Died")
                         {
@@ -492,8 +503,15 @@ namespace XNA_ScreenManager.Networking
                 player.hair_sprite = playerdata.hairspr;
                 player.hair_color = getColor(playerdata.hailcol);
 
-                player.equipment.addItem(ItemStore.Instance.item_list.Find(x => x.itemName == playerdata.armor));
-                player.equipment.addItem(ItemStore.Instance.item_list.Find(x => x.itemName == playerdata.weapon));
+                if (playerdata.armor != null)
+                    if (ItemStore.Instance.item_list.FindAll(x => x.itemName == playerdata.armor).Count > 0)
+                        player.equipment.addItem(ItemStore.Instance.item_list.Find(x => x.itemName == playerdata.armor));
+                if (playerdata.weapon != null)
+                    if (ItemStore.Instance.item_list.FindAll(x => x.itemName == playerdata.weapon).Count > 0)
+                        player.equipment.addItem(ItemStore.Instance.item_list.Find(x => x.itemName == playerdata.weapon));
+                if (playerdata.headgear != null)
+                    if (ItemStore.Instance.item_list.FindAll(x => x.itemName == playerdata.headgear).Count > 0)
+                        player.equipment.addItem(ItemStore.Instance.item_list.Find(x => x.itemName == playerdata.headgear));
 
                 PlayerStore.Instance.addPlayer(player);
             }
@@ -562,7 +580,73 @@ namespace XNA_ScreenManager.Networking
                         PlayerStore.Instance.activePlayer.inventory.removeItem(itemdata.ID);
                     }
                     break;
+                case "FinInventory":
+                    ScreenManager.Instance.itemMenuScreen.ServerReqFinish();
+                    break;
+                case "ResInventory":
+                    PlayerStore.Instance.activePlayer.inventory.item_list.Clear();
+                    break;
+                case "AddEquipment":
+                    if (ItemStore.Instance.item_list.FindAll(x => x.itemID == itemdata.ID).Count > 0)
+                    {
+                        Item item = ItemStore.Instance.item_list.Find(x => x.itemID == itemdata.ID);
+                        PlayerStore.Instance.activePlayer.equipment.addItem(item);
+                    }
+                    break;
+                case "FinEquipment":
+                    ScreenManager.Instance.itemMenuScreen.ServerReqFinish();
+                    break;
+                case "ResEquipment":
+                    PlayerStore.Instance.activePlayer.equipment.item_list.Clear();
+                    break;
+                case "SwitchEquipment":
+                    if (itemdata.player_name != PlayerStore.Instance.activePlayer.Name)
+                    {
+                        // Bind item
+                        Item item = ItemStore.Instance.item_list.Find(x => x.itemID == itemdata.ID);
+
+                        // find network player with matching name
+                        NetworkPlayerSprite player = null;
+
+                        if (GameWorld.GetInstance.listEntity.FindAll(x => x.EntityName == itemdata.player_name).Count > 0)
+                            player = GameWorld.GetInstance.listEntity.Find(x => x.EntityName == itemdata.player_name) as NetworkPlayerSprite;
+
+                        if (player != null)
+                        {
+                            switch (item.Slot)
+                            {
+                                case ItemSlot.Bodygear:
+                                    player.armor_name = item.itemName;
+                                    break;
+                                case ItemSlot.Weapon:
+                                    player.weapon_name = item.itemName;
+                                    break;
+                                case ItemSlot.Headgear:
+                                    player.headgear_name = item.itemName;
+                                    break;
+                            }
+                        }
+                    }
+                    break;
             }
+        }
+        private void incomingHudData(HudData huddata)
+        {
+            PlayerInfo player = null;
+            player = Array.Find(PlayerStore.Instance.playerlist, x => x.Name == huddata.player_name);
+
+            switch (huddata.action)
+            {
+                case "EXP":
+                    player.Exp += huddata.value;
+                    break;
+                case "HP":
+                    player.HP += huddata.value;
+                    break;
+                default:
+                    break;
+            }
+
         }
 
         // conversions

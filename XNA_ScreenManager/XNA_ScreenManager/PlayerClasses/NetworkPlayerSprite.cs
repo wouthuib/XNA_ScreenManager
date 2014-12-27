@@ -19,7 +19,7 @@ namespace XNA_ScreenManager.PlayerClasses
         private const int MOVE_LEFT = -1;                                                         // player moving directions
         private const int MOVE_RIGHT = 1;                                                         // player moving directions
 
-        private string
+        public string
             armor_name,                 // Armor and Costume Sprite (4)
             //accessorry_top_name,        // Accessory top Sprite (Sunglasses, Ear rings) (5)
             //accessorry_bottom_name,     // Accessory bottom Sprite (mouth items, capes) (6)
@@ -79,7 +79,7 @@ namespace XNA_ScreenManager.PlayerClasses
 
         public override void Update(GameTime gameTime)
         {
-            //#region update from server
+            #region update from server
             //foreach (var entity in GameWorld.GetInstance.listEntity)
             //{
             //    if (entity is NetworkPlayerSprite)
@@ -124,7 +124,7 @@ namespace XNA_ScreenManager.PlayerClasses
             //        }
             //    }
             //}
-            //#endregion
+            #endregion
 
             switch (state)
             {

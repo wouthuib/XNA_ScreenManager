@@ -87,6 +87,17 @@ namespace XNA_ScreenManager.Networking
             tcpclient.SendData(c);
         }
 
+        public void sendItemData(int id, string str)
+        {
+            ItemData i = new ItemData()
+            {
+                ID = id,
+                action = str
+            };
+
+            tcpclient.SendData(i);
+        }
+
         public void sendScreenData(string newscreen)
         {
             ScreenData c = new ScreenData()
