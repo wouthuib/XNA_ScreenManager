@@ -98,12 +98,12 @@ namespace XNA_ScreenManager.Networking
             tcpclient.SendData(i);
         }
 
-        public void sendScreenData(string newscreen)
+        public void sendScreenData(string newscreen, string phase = "")
         {
             ScreenData c = new ScreenData()
             {
                 MainScreenName = newscreen,
-                MainScreenPhase = "",
+                MainScreenPhase = phase,
                 MainScreenMenu = "",
                 SubScreenName = "",
                 SubScreenPhase = "",

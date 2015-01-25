@@ -76,9 +76,12 @@ namespace XNA_ScreenManager.GameAssets
                 mouseButtonMaps[button](priviousMouseState) == ButtonState.Pressed;
         }
 
-        public Rectangle MousePosition()
+        public Rectangle MousePosition
         {
-            return new Rectangle((int)Mouse.GetState().X, (int)Mouse.GetState().Y, 1, 1);
+            get
+            {
+                return new Rectangle((int)currentMouseState.X, (int)currentMouseState.Y, 1, 1);
+            }
         }
     }
 

@@ -134,6 +134,8 @@
   <ItemGroup>
     <Compile Include="EffectClasses\EffectStore.cs" />
     <Compile Include="GameAssets\Button.cs" />
+    <Compile Include="GameAssets\DraggableObject.cs" />
+    <Compile Include="GameAssets\InGame\EquipMenu.cs" />
     <Compile Include="GameAssets\InGame\ItemMenu.cs" />
     <Compile Include="GameAssets\Menu.cs" />
     <Compile Include="GameAssets\MenuManager.cs" />

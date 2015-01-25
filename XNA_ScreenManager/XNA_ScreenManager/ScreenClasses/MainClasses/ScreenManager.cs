@@ -617,12 +617,21 @@ namespace XNA_ScreenManager.ScreenClasses
                         selectCharScreen.menu.SelectedIndex = 0;
                         selectCharScreen.menu.StartIndex = 0;
                         selectCharScreen.menu.EndIndex = 3;
+                        
+                        GameWorld.GetInstance.LoadObjects(); // load client gameworld
                         GameWorld.GetInstance.ChangeJobClass(PlayerStore.Instance.activePlayer);
-                        NetworkGameData.Instance.sendScreenData("worldmap"); // inform server
+
                         NetworkGameData.Instance.sendPlayerData("Online", PlayerStore.Instance.activePlayer);
+                        NetworkGameData.Instance.sendScreenData("worldmap", "loading"); // inform server
+
                         activeScreen.Hide();
-                        activeScreen = actionScreen;
+                        activeScreen = loadingScreen; // new
                         activeScreen.Show();
+
+                        // the rest is handled by the TCPclient screendata
+
+                        //NetworkGameData.Instance.sendPlayerData("Online", PlayerStore.Instance.activePlayer);
+                        //activeScreen = actionScreen;
                         break;
                     case 4:
                         selectCharScreen.menu.SelectedIndex = 0;
@@ -657,6 +666,9 @@ namespace XNA_ScreenManager.ScreenClasses
 
             switch (screenName)
             {
+                case "loginScreen":
+                    activeScreen = loginScreen;
+                    break;
                 case "itemMenuScreen":
                     activeScreen = itemMenuScreen;
                     break;

@@ -5,6 +5,7 @@ namespace XNA_ScreenManager.ItemClasses
 {
     public enum ItemType
     {
+        Cash,
         Collectable,
         Consumable,
         Weapon,

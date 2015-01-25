@@ -78,7 +78,11 @@ namespace XNA_ScreenManager.MapClasses
             this.Active = false; // start disabled
             
             cam = camref;
-            LoadObjects();
+            //LoadObjects();
+
+            ItemStore.Instance.loadItems(Content.RootDirectory + @"\tables\", "itemtable.bin");
+            MonsterStore.Instance.loadMonster(Content.RootDirectory + @"\tables\", "monstertable.bin");
+            SkillStore.Instance.loadSkills(Content.RootDirectory + @"\tables\", "skilltable.bin");
         }
 
         public static GameWorld CreateInstance(Game game, Camera2d camref)
@@ -105,7 +109,7 @@ namespace XNA_ScreenManager.MapClasses
             }
         }
 
-        protected void LoadObjects()
+        public void LoadObjects()
         {
             //map = Map.Load(Path.Combine(Content.RootDirectory, @"maps\victoria01.tmx"), Content);
             map = Map.Load(Path.Combine(Content.RootDirectory, @"maps\henesys.tmx"), Content);
@@ -124,9 +128,6 @@ namespace XNA_ScreenManager.MapClasses
 
             listEntity.Add(playerSprite);
 
-            ItemStore.Instance.loadItems(Content.RootDirectory + @"\tables\", "itemtable.bin");
-            MonsterStore.Instance.loadMonster(Content.RootDirectory + @"\tables\", "monstertable.bin");
-            SkillStore.Instance.loadSkills(Content.RootDirectory + @"\tables\", "skilltable.bin");
             LoadEntities();
         }
         #endregion
@@ -781,6 +782,18 @@ namespace XNA_ScreenManager.MapClasses
 
             // Add new player Instance to worldmap
             listEntity.Add(playerSprite);
+        }
+
+        public void UnloadEntities()
+        {
+            foreach (var entity in listEntity)
+                entity.KeepAliveTime = 0;
+            foreach (var entity in listEffect)
+                entity.KeepAliveTimer = 0;
+            foreach (var entity in newEntity)
+                entity.KeepAliveTime = 0;
+            foreach (var entity in newEffect)
+                entity.KeepAliveTimer = 0;
         }
 
         #endregion

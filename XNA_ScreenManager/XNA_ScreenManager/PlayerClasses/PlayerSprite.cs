@@ -657,16 +657,21 @@ namespace XNA_ScreenManager
                             prevspriteframe = spriteframe;
                             for (int i = 0; i < spritepath.Length; i++)
                             {
-                                Item weapon = getPlayer().equipment.item_list.Find(x => x.Slot == ItemSlot.Weapon);
+                                if (getPlayer().equipment.item_list.FindAll(x => x.Slot == ItemSlot.Weapon).Count > 0)
+                                {
+                                    Item weapon = getPlayer().equipment.item_list.Find(x => x.Slot == ItemSlot.Weapon);
 
-                                if(weapon.WeaponType == WeaponType.Two_handed_Axe ||
-                                   weapon.WeaponType == WeaponType.Two_handed_Spear ||
-                                   weapon.WeaponType == WeaponType.Two_handed_Sword)
-                                    spritename = "stand2_" + spriteframe.ToString();
+                                    if (weapon.WeaponType == WeaponType.Two_handed_Axe ||
+                                       weapon.WeaponType == WeaponType.Two_handed_Spear ||
+                                       weapon.WeaponType == WeaponType.Two_handed_Sword)
+                                        spritename = "stand2_" + spriteframe.ToString();
+                                    else
+                                        spritename = "stand1_" + spriteframe.ToString();
+                                }
                                 else
                                     spritename = "stand1_" + spriteframe.ToString();
 
-                                playerStore.activePlayer.spriteOfset[i] = getoffset(i);
+                                    playerStore.activePlayer.spriteOfset[i] = getoffset(i);
                             }
                         }
 

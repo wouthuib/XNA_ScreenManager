@@ -26655,17 +26655,17 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\hud\item inventory\active tab.png">
+    <Compile Include="gfx\hud\ingame_menus\inventory\active tab.png">
       <Name>active tab</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\hud\item inventory\menu.png">
+    <Compile Include="gfx\hud\ingame_menus\inventory\menu.png">
       <Name>menu</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="gfx\hud\item inventory\tab names.png">
+    <Compile Include="gfx\hud\ingame_menus\inventory\tab names.png">
       <Name>tab names</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
@@ -26689,8 +26689,15 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="gfx\hud\equipment\equip_menu.png">
-      <Name>equip_menu</Name>
+    <Compile Include="gfx\hud\ingame_menus\equipment\menu.png">
+      <Name>menu</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="gfx\screens\screenobjects\LoadingCircle.png">
+      <Name>LoadingCircle</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

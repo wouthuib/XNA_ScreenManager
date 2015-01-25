@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace XNA_ScreenManager.GameAssets
@@ -27,7 +23,7 @@ namespace XNA_ScreenManager.GameAssets
             get { return new Rectangle((int)Position.X, (int)Position.Y, Width, Height); }
         }
               
-        public static Button create(string name)
+        public static Button createButton(string name)
         {
             var results = new Button();
             
@@ -40,8 +36,9 @@ namespace XNA_ScreenManager.GameAssets
         {
             get
             {
-                if(MouseManager.Instance.MouseButtonWasClicked(MouseButtons.Left) &&
-                   MouseManager.Instance.MousePosition().Intersects(Bounderies))
+                if (
+                    MouseManager.Instance.MouseButtonWasClicked(MouseButtons.Left) &&
+                    MouseManager.Instance.MousePosition.Intersects(Bounderies))
                 {
                     sprite = spr_click;
                     ButtonOnclick(this); // trigger event
@@ -56,7 +53,7 @@ namespace XNA_ScreenManager.GameAssets
         {
             get
             {
-                if (MouseManager.Instance.MousePosition().Intersects(Bounderies))
+                if (MouseManager.Instance.MousePosition.Intersects(Bounderies))
                 {
                     sprite = spr_onhover;
                     ButtonOnhover(this); // trigger event

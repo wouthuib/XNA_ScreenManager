@@ -19,6 +19,8 @@ using System.Runtime.Serialization.Formatters.Binary;
 using MapleLibrary;
 using System.Net;
 using System.Collections.Generic;
+using XNA_ScreenManager.GameAssets;
+using XNA_ScreenManager.GameAssets.InGame;
 
 namespace XNA_ScreenManager.Networking
 {
@@ -77,9 +79,19 @@ namespace XNA_ScreenManager.Networking
                     SocketType.Stream, ProtocolType.Tcp);
 
                 // Connect to the remote endpoint.
-                sender.BeginConnect(remoteEP,
+                IAsyncResult result = sender.BeginConnect(remoteEP,
                         new AsyncCallback(ConnectCallback), sender);
-                connectDone.WaitOne();
+                //connectDone.WaitOne();
+
+                bool success = result.AsyncWaitHandle.WaitOne(5000, true);
+
+                if (!success)
+                {
+                    // NOTE, MUST CLOSE THE SOCKET
+
+                    sender.Close();
+                    throw new ApplicationException("Failed to connect server.");
+                }
 
                 // setup client listener
                 StartListening();
@@ -93,21 +105,39 @@ namespace XNA_ScreenManager.Networking
             catch
             {
                 ScreenManager.Instance.activeScreen.topmessage.Display("Cannot connect with server.", Color.PaleVioletRed, 5.0f);
-                ScreenManager.Instance.actionScreen.hud.chatbarInput.updateTextlog("[System]", "Cannot connect with server.");
                 Connected = false;
             }
         }
         public void SendData(Object obj)
         {
+            if (!Connected || !sender.Connected)
+            {
+                // reset GameWorld and go back to logonscreen
+                if (ScreenManager.Instance.activeScreen != ScreenManager.Instance.loginScreen)
+                {
+                    ScreenManager.Instance.setScreen("loginScreen");
+                    GameWorld.GetInstance.UnloadEntities();
+                }
+
+                // close existing sending thread
+                if(sendloop != null)
+                    sendloop.Abort();
+
+                // close connection and reconnect
+                if (sender.Connected)
+                    sender.Close();
+
+                StartInstance();
+            }
+
             if (Connected)
             {
+                //send data to the server
                 lock (lockstream)
                 {
                     objectList.Add(SerializeToStream(obj).ToArray());
                 }
             }
-            else
-                ScreenManager.Instance.activeScreen.topmessage.Display("Cannot connect with server.", Color.PaleVioletRed, 5.0f);
         }
 
         public void SendingLoop()
@@ -120,11 +150,16 @@ namespace XNA_ScreenManager.Networking
                     {
                         lock(lockstream)
                         {
-                            Sending = true;
-                            byte[] bytestream = new byte[objectList[0].Length];
-                            bytestream = objectList[0];         //pick oldest from list
-                            objectList.Remove(bytestream);      //remove from list
-                            Send(sender, bytestream);
+                            try
+                            {
+                                Sending = true;
+                                byte[] bytestream = new byte[objectList[0].Length];
+                                bytestream = objectList[0];         //pick oldest from list
+                                objectList.Remove(bytestream);      //remove from list
+                                Send(sender, bytestream);
+                            }
+                            catch
+                            { }
                         }
                     }
                 }            
@@ -302,6 +337,8 @@ namespace XNA_ScreenManager.Networking
                     incomingItemData(obj as ItemData);
                 else if (obj is HudData)
                     incomingHudData(obj as HudData);
+                else if (obj is ScreenData)
+                    incomingScreenData(obj as ScreenData);
             }
             catch (Exception ee)
             {
@@ -572,16 +609,34 @@ namespace XNA_ScreenManager.Networking
                     {
                         Item item = ItemStore.Instance.item_list.Find(x => x.itemID == itemdata.ID);
                         PlayerStore.Instance.activePlayer.inventory.addItem(item);
+
+                        // new update item menu
+                        ItemMenu menu = MenuManager.Instance.Components.Find(x => x is ItemMenu) as ItemMenu;
+                        menu.placeDraggable(item);
                     }
                     break;
                 case "DelInventory":
                     if (PlayerStore.Instance.activePlayer.inventory.item_list.FindAll(x => x.itemID == itemdata.ID).Count > 0)
                     {
+                        Item item = ItemStore.Instance.item_list.Find(x => x.itemID == itemdata.ID);
                         PlayerStore.Instance.activePlayer.inventory.removeItem(itemdata.ID);
+
+                        // new update item menu
+                        ItemMenu menu = MenuManager.Instance.Components.Find(x => x is ItemMenu) as ItemMenu;
+                        menu.removeDraggable(item);
                     }
                     break;
                 case "FinInventory":
-                    ScreenManager.Instance.itemMenuScreen.ServerReqFinish();
+                    if (ScreenManager.Instance.activeScreen == ScreenManager.Instance.itemMenuScreen)
+                        ScreenManager.Instance.itemMenuScreen.ServerReqFinish();
+                    else // if (ScreenManager.Instance.activeScreen == ScreenManager.Instance.actionScreen)
+                    {
+                        if (MenuManager.Instance.Components.FindAll(x => x is ItemMenu).Count > 0)
+                        {
+                            ItemMenu itemmenu = MenuManager.Instance.Components.Find(x => x is ItemMenu) as ItemMenu;
+                            //itemmenu.ServerReqFinish();
+                        }
+                    }
                     break;
                 case "ResInventory":
                     PlayerStore.Instance.activePlayer.inventory.item_list.Clear();
@@ -594,7 +649,8 @@ namespace XNA_ScreenManager.Networking
                     }
                     break;
                 case "FinEquipment":
-                    ScreenManager.Instance.itemMenuScreen.ServerReqFinish();
+                    if (ScreenManager.Instance.activeScreen == ScreenManager.Instance.itemMenuScreen)
+                        ScreenManager.Instance.itemMenuScreen.ServerReqFinish();
                     break;
                 case "ResEquipment":
                     PlayerStore.Instance.activePlayer.equipment.item_list.Clear();
@@ -647,6 +703,32 @@ namespace XNA_ScreenManager.Networking
                     break;
             }
 
+        }
+        private void incomingScreenData(ScreenData screen)
+        {
+            ScreenManager manager = ScreenManager.Instance;
+
+            if (screen.MainScreenName == "worldmap")
+            {
+                if (screen.MainScreenPhase == "loading")
+                {
+                    if (manager.activeScreen == manager.loadingScreen)
+                    {
+                        ItemMenu menu = MenuManager.Instance.Components.Find(x => x is ItemMenu) as ItemMenu;
+
+                        while (menu.Loading)
+                        { Thread.Sleep(1000); }
+
+                        NetworkGameData.Instance.sendScreenData("worldmap", "finish"); // inform server
+                    }
+                }
+                else if (screen.MainScreenPhase == "finish")
+                {
+                    manager.activeScreen.Hide();
+                    manager.activeScreen = manager.actionScreen;
+                    manager.activeScreen.Show();
+                }
+            }
         }
 
         // conversions

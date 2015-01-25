@@ -38,9 +38,6 @@ namespace XNA_ScreenManager
         LoadingScreen loadingScreen;
         LoginScreen loginScreen; // new
 
-        // in Game Menus
-        ItemMenu itemMenu; // new
-
         SpriteFont normalFont;
 
         public Game1()
@@ -53,7 +50,7 @@ namespace XNA_ScreenManager
         protected override void Initialize()
         {
             ScreenManager.Instance.game = this;
-            MenuManager.Instance.game = this;
+            //MenuManager.Instance.game = this;
             base.Initialize();
         }
 
@@ -142,12 +139,7 @@ namespace XNA_ScreenManager
             mousemanager.StartManager();
             Components.Add(mousemanager);
 
-            // Create Menu Manager
-            itemMenu = new ItemMenu(this);
-            Components.Add(itemMenu);
-            MenuManager.Instance.listmenu.Add(itemMenu);
-
-            MenuManager.Instance.StartManager();
+            Components.Add(MenuManager.CreateInstance(this));
 
         }
 

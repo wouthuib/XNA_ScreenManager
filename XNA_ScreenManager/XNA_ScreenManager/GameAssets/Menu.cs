@@ -16,25 +16,25 @@ namespace XNA_ScreenManager.GameAssets
         protected GraphicsDevice gfxdevice;
 
         protected Texture2D sprite;
-
         public Vector2 Position, OldPosition;
         public Vector2 Viewport;
 
-        Rectangle Bounderies
+        public Rectangle Bounderies
         {
             get { return new Rectangle((int)Position.X, (int)Position.Y, sprite.Width, sprite.Height); }
         }
 
         public string Name;
         public List<Button> listbutton = new List<Button>();
-
+        public List<DraggableObject> listdraggables = new List<DraggableObject>();
 
         public bool DragLock = false;
         Vector2 DragPoint;
+        public float LockTime = 0;
 
         private List<GameComponent> childComponents;
 
-        public Menu(Game game)
+        public Menu(Game game, float locktime)
             : base(game)
         {
             spritebatch = ResourceManager.GetInstance.spriteBatch;
@@ -44,6 +44,7 @@ namespace XNA_ScreenManager.GameAssets
             childComponents = new List<GameComponent>();
             Visible = false;
             Enabled = false;
+            LockTime = locktime;
         }
 
         public List<GameComponent> Components
@@ -58,27 +59,32 @@ namespace XNA_ScreenManager.GameAssets
 
         public override void Update(GameTime gameTime)
         {
-            foreach (GameComponent child in childComponents)
+            if (!MenuManager.Instance.itemdragged)
             {
-                if (child.Enabled)
+                if (isDragged) /// check menu.
                 {
-                    child.Update(gameTime);
+                    MenuManager.Instance.menudragged = true; // set item dragged in menu manager.
                 }
             }
+            else
+                MenuManager.Instance.itemdragged = true; // set item dragged in menu manager.
+
+            if (DragLock)
+                LockTime = (float)gameTime.TotalGameTime.TotalSeconds;
 
             base.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime)
         {
-            foreach (GameComponent child in childComponents)
-            {
-                if ((child is DrawableGameComponent) &&
-                ((DrawableGameComponent)child).Visible)
-                {
-                    ((DrawableGameComponent)child).Draw(gameTime);
-                }
-            }
+            //foreach (GameComponent child in childComponents)
+            //{
+            //    if ((child is DrawableGameComponent) &&
+            //    ((DrawableGameComponent)child).Visible)
+            //    {
+            //        ((DrawableGameComponent)child).Draw(gameTime);
+            //    }
+            //}
             base.Draw(gameTime);
         }
 
@@ -96,13 +102,28 @@ namespace XNA_ScreenManager.GameAssets
 
         protected Button create_button(string name)
         {
-            Button button = Button.create(name);
+            Button button = Button.createButton(name);
             listbutton.Add(button);
             button.ButtonOnclick += new ButtonOnClick(event_buttonOnClick);
             return button;
         }
+
+        protected Button create_draggable(string name, object obj, string menu)
+        {
+            DraggableObject button = DraggableObject.createDraggable(name, obj, menu);
+            listdraggables.Add(button);
+            button.ButtonOnDrag += new ButtonOnDrag(event_buttonOnDrag);
+            button.ButtonOnRelease += new ButtonOnRelease(
+               DraggableObject.event_releaseDraggable); // new event
+            return button;
+        }
         
         protected virtual void event_buttonOnClick(object btn)
+        {
+            // write events here based on the button
+        }
+
+        protected virtual void event_buttonOnDrag(object btn)
         {
             // write events here based on the button
         }
@@ -112,13 +133,16 @@ namespace XNA_ScreenManager.GameAssets
             get 
             {
                 if (MouseManager.Instance.MouseButtonIsDown(MouseButtons.Left) &&
-                    MouseManager.Instance.MousePosition().Intersects(Bounderies) ||
+                    MouseManager.Instance.MousePosition.Intersects(Bounderies) ||
                     DragLock)
                 {
                     // sometimes the mouse pointer gets outside the menu, 
                     // but as long as left button is pressed the menu keeps moving
-                    if (!MouseManager.Instance.MouseButtonIsDown(MouseButtons.Left))
+                    if (!MouseManager.Instance.MouseButtonIsDown(MouseButtons.Left) ||
+                        MenuManager.Instance.active_menu(this) == true ||
+                        MenuManager.Instance.itemdragged == true)
                     {
+                        MenuManager.Instance.menudragged = false; // unset menu manager.
                         DragLock = false;
                         return false;
                     }
@@ -128,13 +152,13 @@ namespace XNA_ScreenManager.GameAssets
 
                     if (!DragLock)
                     {
-                        this.DragPoint = new Vector2(MouseManager.Instance.MousePosition().X - this.Position.X,
-                            MouseManager.Instance.MousePosition().Y - this.Position.Y);
+                        this.DragPoint = new Vector2(MouseManager.Instance.MousePosition.X - this.Position.X,
+                            MouseManager.Instance.MousePosition.Y - this.Position.Y);
                         DragLock = true;
                     }
 
-                    this.Position = new Vector2(MouseManager.Instance.MousePosition().X - this.DragPoint.X,
-                            MouseManager.Instance.MousePosition().Y - this.DragPoint.Y);
+                    this.Position = new Vector2(MouseManager.Instance.MousePosition.X - this.DragPoint.X,
+                            MouseManager.Instance.MousePosition.Y - this.DragPoint.Y);
 
                     if (Bounderies.Top > gfxdevice.Viewport.Height - 5 || Bounderies.Bottom < 5 ||
                         Bounderies.Left > gfxdevice.Viewport.Width - 5 || Bounderies.Right < 5)
@@ -143,6 +167,8 @@ namespace XNA_ScreenManager.GameAssets
                     // Update button positions
                     foreach (var button in listbutton)
                         button.Position += (Position - OldPosition);
+                    foreach (var button in listdraggables)
+                        button.Position += (Vector2)((Position - OldPosition) / 2);
 
                     return true;
                 }

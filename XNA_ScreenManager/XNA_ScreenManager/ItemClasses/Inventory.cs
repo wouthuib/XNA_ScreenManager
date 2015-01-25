@@ -43,7 +43,9 @@ namespace XNA_ScreenManager.ItemClasses
 
         public void addItem(Item addItem)
         {
-            ScreenManager.Instance.actionScreen.topmessage.Display(addItem, "added");
+            if (ScreenManager.Instance.activeScreen == ScreenManager.Instance.actionScreen)
+                ScreenManager.Instance.actionScreen.topmessage.Display(addItem, "added");
+
             item_list.Add(addItem);
         }
 
