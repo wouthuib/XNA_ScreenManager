@@ -38,6 +38,18 @@ namespace XNA_ScreenManager.GameAssets
                     return -1;
 
             }
+            set 
+            {
+                if (attached_object is Item)
+                {
+                    Item item = new Item();
+
+                    item = attached_object as Item;
+                    item.itemID = value;
+                    attached_object = item;
+
+                }
+            } // new 06-07-2015
         }
 
         public static DraggableObject createDraggable(string name, object obj, string menu)
@@ -115,9 +127,18 @@ namespace XNA_ScreenManager.GameAssets
                 }
             }
             else if (source_menu == "equipmenu" && itemmenu.Enabled &&
-                MouseManager.Instance.MousePosition.Intersects(itemmenu.Bounderies))
+                !MouseManager.Instance.MousePosition.Intersects(equipmenu.Bounderies))
             {
-                // move item from item menu to equipment
+                // remove item from equipment
+
+                if (obj.attached_object is Item)
+                {
+                    Item item = obj.attached_object as Item;
+
+                    // move item from item menu to equipment
+
+                    NetworkGameData.Instance.sendItemData(item.itemID, "UnEquipItem");
+                }
             }
         }
     }

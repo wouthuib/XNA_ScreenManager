@@ -645,12 +645,35 @@ namespace XNA_ScreenManager.Networking
                     if (ItemStore.Instance.item_list.FindAll(x => x.itemID == itemdata.ID).Count > 0)
                     {
                         Item item = ItemStore.Instance.item_list.Find(x => x.itemID == itemdata.ID);
-                        PlayerStore.Instance.activePlayer.equipment.addItem(item);
+
+                        if (PlayerStore.Instance.activePlayer.equipment.item_list.FindAll(x => x.Slot == item.Slot).Count == 0)
+                            PlayerStore.Instance.activePlayer.equipment.addItem(item);
+
+                        // new update equip menu
+                        // EquipMenu menu = MenuManager.Instance.Components.Find(x => x is EquipMenu) as EquipMenu;
+                        // menu.placeDraggable(item);
+                    }
+                    break;
+                case "DelEquipment":
+                    if (PlayerStore.Instance.activePlayer.equipment.item_list.FindAll(x => x.itemID == itemdata.ID).Count > 0)
+                    {
+                        Item item = ItemStore.Instance.item_list.Find(x => x.itemID == itemdata.ID);
+                        PlayerStore.Instance.activePlayer.equipment.removeItem(item.Slot);
+
+                        // new update equip menu
+                        // EquipMenu menu = MenuManager.Instance.Components.Find(x => x is EquipMenu) as EquipMenu;
+                        // menu.sortDraggable();
                     }
                     break;
                 case "FinEquipment":
                     if (ScreenManager.Instance.activeScreen == ScreenManager.Instance.itemMenuScreen)
                         ScreenManager.Instance.itemMenuScreen.ServerReqFinish();
+                    else
+                    {
+                        // new update equip menu
+                        EquipMenu menu = MenuManager.Instance.Components.Find(x => x is EquipMenu) as EquipMenu;
+                        menu.sortDraggable();
+                    }
                     break;
                 case "ResEquipment":
                     PlayerStore.Instance.activePlayer.equipment.item_list.Clear();
