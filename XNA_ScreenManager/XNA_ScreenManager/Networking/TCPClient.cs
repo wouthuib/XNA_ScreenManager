@@ -604,6 +604,7 @@ namespace XNA_ScreenManager.Networking
         {
             switch (itemdata.action)
             {
+                #region inventory
                 case "AddInventory":
                     if (ItemStore.Instance.item_list.FindAll(x => x.itemID == itemdata.ID).Count > 0)
                     {
@@ -611,7 +612,7 @@ namespace XNA_ScreenManager.Networking
                         PlayerStore.Instance.activePlayer.inventory.addItem(item);
 
                         // new update item menu
-                        ItemMenu menu = MenuManager.Instance.Components.Find(x => x is ItemMenu) as ItemMenu;
+                        ItemMenu menu = MenuManager.Instance.Components.Find(x => x is ItemMenu && !(x is ShopMenu)) as ItemMenu;
                         menu.placeDraggable(item);
                     }
                     break;
@@ -622,7 +623,7 @@ namespace XNA_ScreenManager.Networking
                         PlayerStore.Instance.activePlayer.inventory.removeItem(itemdata.ID);
 
                         // new update item menu
-                        ItemMenu menu = MenuManager.Instance.Components.Find(x => x is ItemMenu) as ItemMenu;
+                        ItemMenu menu = MenuManager.Instance.Components.Find(x => x is ItemMenu && !(x is ShopMenu)) as ItemMenu;
                         menu.removeDraggable(item);
                     }
                     break;
@@ -633,7 +634,7 @@ namespace XNA_ScreenManager.Networking
                     {
                         if (MenuManager.Instance.Components.FindAll(x => x is ItemMenu).Count > 0)
                         {
-                            ItemMenu itemmenu = MenuManager.Instance.Components.Find(x => x is ItemMenu) as ItemMenu;
+                            ItemMenu itemmenu = MenuManager.Instance.Components.Find(x => x is ItemMenu && !(x is ShopMenu)) as ItemMenu;
                             //itemmenu.ServerReqFinish();
                         }
                     }
@@ -641,6 +642,8 @@ namespace XNA_ScreenManager.Networking
                 case "ResInventory":
                     PlayerStore.Instance.activePlayer.inventory.item_list.Clear();
                     break;
+                #endregion
+                #region equipment
                 case "AddEquipment":
                     if (ItemStore.Instance.item_list.FindAll(x => x.itemID == itemdata.ID).Count > 0)
                     {
@@ -648,10 +651,6 @@ namespace XNA_ScreenManager.Networking
 
                         if (PlayerStore.Instance.activePlayer.equipment.item_list.FindAll(x => x.Slot == item.Slot).Count == 0)
                             PlayerStore.Instance.activePlayer.equipment.addItem(item);
-
-                        // new update equip menu
-                        // EquipMenu menu = MenuManager.Instance.Components.Find(x => x is EquipMenu) as EquipMenu;
-                        // menu.placeDraggable(item);
                     }
                     break;
                 case "DelEquipment":
@@ -659,10 +658,6 @@ namespace XNA_ScreenManager.Networking
                     {
                         Item item = ItemStore.Instance.item_list.Find(x => x.itemID == itemdata.ID);
                         PlayerStore.Instance.activePlayer.equipment.removeItem(item.Slot);
-
-                        // new update equip menu
-                        // EquipMenu menu = MenuManager.Instance.Components.Find(x => x is EquipMenu) as EquipMenu;
-                        // menu.sortDraggable();
                     }
                     break;
                 case "FinEquipment":
@@ -707,6 +702,41 @@ namespace XNA_ScreenManager.Networking
                         }
                     }
                     break;
+                #endregion
+                #region shopmenu
+                case "InitShop":
+
+                    // new update item menu
+                    ShopMenu shopmenu = MenuManager.Instance.Components.Find(x => x is ShopMenu) as ShopMenu;
+                    lock (shopmenu.item_list)
+                    {
+                        shopmenu.item_list.Clear();
+                    }
+                    break;
+
+                case "AddShopItem":
+                    if (ItemStore.Instance.item_list.FindAll(x => x.itemID == itemdata.ID).Count > 0)
+                    {
+                        Item item = ItemStore.Instance.item_list.Find(x => x.itemID == itemdata.ID);
+
+                        // new update item menu
+                        shopmenu = MenuManager.Instance.Components.Find(x => x is ShopMenu) as ShopMenu;
+                        lock (shopmenu.item_list)
+                        {
+                            shopmenu.item_list.Add(item);
+                        }
+                    }
+                    break;
+
+                case "OpenShop":
+
+                    // new update item menu
+                    shopmenu = MenuManager.Instance.Components.Find(x => x is ShopMenu) as ShopMenu;
+                    shopmenu.SortShopItems();
+                    shopmenu.Show();
+                    break;
+
+                #endregion
             }
         }
         private void incomingHudData(HudData huddata)

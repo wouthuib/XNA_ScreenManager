@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using XNA_ScreenManager.GameAssets.InGame;
+using Microsoft.Xna.Framework.Input;
+using XNA_ScreenManager.Networking;
 
 namespace XNA_ScreenManager.GameAssets
 {
@@ -13,6 +15,9 @@ namespace XNA_ScreenManager.GameAssets
 
         public bool itemdragged = false; // when an item is dragged, freeze menu's
         public bool menudragged = false; // when an item is dragged, freeze menu's
+
+        // Keyboard- and Mousestate
+        protected KeyboardState keyboardStateCurrent, keyboardStatePrevious;
 
         bool active;
 
@@ -33,6 +38,7 @@ namespace XNA_ScreenManager.GameAssets
         {
             Components.Add(new EquipMenu(game, 0.01f));
             Components.Add(new ItemMenu(game, 0.02f));
+            Components.Add(new ShopMenu(game, 0.03f));
         }
 
         public static MenuManager CreateInstance(Game game)
@@ -81,10 +87,12 @@ namespace XNA_ScreenManager.GameAssets
             {
                 active = value;
 
-                if(active)
+                if (active)
                 {
-                    foreach (Menu menu in listmenu)
-                        menu.Show();
+                    // disabled to avoid opening all menu's when NPC chat is finished
+
+                    // foreach (Menu menu in listmenu)
+                    //    menu.Show();
                 }
                 else
                 {
@@ -115,7 +123,35 @@ namespace XNA_ScreenManager.GameAssets
                 }
             }
 
+            Readkeys(); // short keys to open and close menu's
+
             base.Update(gameTime);
+        }
+
+        private void Readkeys()
+        {
+            keyboardStateCurrent = Keyboard.GetState();
+
+            if (keyboardStateCurrent.IsKeyDown(Keys.LeftControl))
+            {
+                if (CheckKey(Keys.I))
+                {
+                    Menu menu = Components.Find(x => x is ItemMenu) as ItemMenu;
+                    menu.Trigger();
+                }
+                else if (CheckKey(Keys.E))
+                {
+                    Menu menu = Components.Find(x => x is EquipMenu) as EquipMenu;
+                    menu.Trigger();
+                }
+                else if (CheckKey(Keys.S))
+                {
+                    Menu menu = Components.Find(x => x is ShopMenu) as ShopMenu;
+                    NetworkGameData.Instance.sendNPCData(0, "OpenShop", 1000000); // <= ID will be trigger from NPC
+                }
+            }
+
+            keyboardStatePrevious = keyboardStateCurrent;
         }
 
         #endregion
@@ -148,6 +184,12 @@ namespace XNA_ScreenManager.GameAssets
                 return true;
 
             return false;
+        }
+
+        public bool CheckKey(Microsoft.Xna.Framework.Input.Keys theKey)
+        {
+            KeyboardState keyboardStateCurrent = Keyboard.GetState();
+            return keyboardStatePrevious.IsKeyDown(theKey) && keyboardStateCurrent.IsKeyUp(theKey);
         }
 
         #endregion

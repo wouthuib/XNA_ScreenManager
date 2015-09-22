@@ -22,6 +22,7 @@ namespace XNA_ScreenManager.GameAssets
 
         public object attached_object;
         public string menuname;
+        public string storetype; // shop, inventory or equip
 
         public Rectangle sprite_source_rec;
         public int amount;

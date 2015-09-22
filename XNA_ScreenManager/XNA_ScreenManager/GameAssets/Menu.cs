@@ -100,6 +100,14 @@ namespace XNA_ScreenManager.GameAssets
             Enabled = false;
         }
 
+        public virtual void Trigger()
+        {
+            if (Enabled)
+                Hide();
+            else
+                Show();
+        }
+
         protected Button create_button(string name)
         {
             Button button = Button.createButton(name);

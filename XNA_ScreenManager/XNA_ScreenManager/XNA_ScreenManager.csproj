@@ -137,6 +137,7 @@
     <Compile Include="GameAssets\DraggableObject.cs" />
     <Compile Include="GameAssets\InGame\EquipMenu.cs" />
     <Compile Include="GameAssets\InGame\ItemMenu.cs" />
+    <Compile Include="GameAssets\InGame\ShopMenu.cs" />
     <Compile Include="GameAssets\Menu.cs" />
     <Compile Include="GameAssets\MenuManager.cs" />
     <Compile Include="GameAssets\MouseManager.cs" />

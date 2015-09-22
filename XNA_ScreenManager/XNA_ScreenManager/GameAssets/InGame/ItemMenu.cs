@@ -130,7 +130,7 @@ namespace XNA_ScreenManager.GameAssets.InGame
             base.Draw(gameTime);
         }
 
-        private void Drawitems(GameTime gameTime)
+        public void Drawitems(GameTime gameTime)
         {
             Vector2 DrawPosition = Viewport + Position;
 
@@ -157,7 +157,7 @@ namespace XNA_ScreenManager.GameAssets.InGame
         #region functions
 
         // Fetch Invetory and place this in Menu Item list
-        private List<Item> filterItemList()
+        protected List<Item> filterItemList()
         {
             // created sorted list based on the item ID
             var sort = PlayerStore.Instance.activePlayer.inventory.item_list;
@@ -181,7 +181,7 @@ namespace XNA_ScreenManager.GameAssets.InGame
         }
 
         // Fetch Item Store and place this in Menu Item list
-        private List<Item> filterItemTypes()
+        protected List<Item> filterItemTypes()
         {
             ItemStore store = ItemStore.Instance;
 
@@ -219,7 +219,7 @@ namespace XNA_ScreenManager.GameAssets.InGame
             serverRequest = false;
         }
 
-        private void SortMenuItems()
+        public void SortMenuItems()
         {
             sorting = true;
 

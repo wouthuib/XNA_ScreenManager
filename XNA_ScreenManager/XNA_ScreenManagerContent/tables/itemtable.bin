@@ -1,10 +1,10 @@
 ﻿atkModifier; defModifier; equipSpritePath; itemClass; itemDescription; itemID; itemName; itemSlot; itemSpritePath; itemType; magicModifier; RefinementBonus; speedModifier; SpriteFrameX; SpriteFrameY; Value; WeaponLevel
 1000; None;"";"";""; 0; 0; 0; 0; 0; 0; 0; 0; 0; Weapon; All; Weapon; Dagger;
-800; Red Potion;"A potion made from ground Red Herbs that restores about 45 HP.";"gfx\effects\itemicons\items01";""; 0; 2; 0; 0; 0; 0; 10; 0; 0; Consumable; All; None; None;"{ heal(100,50). effect(heal).}";
-801; Orange Potion;"A potion made from ground Red and Yellow Herbs that restores about 105 HP.";"gfx\effects\itemicons\items01";""; 4; 0; 0; 0; 0; 0; 10; 0; 0; Consumable; All; None; None;"{}";
-802; Yellow Potion;"A potion made from ground Yellow Herbs that restores about 175 HP.";"gfx\effects\itemicons\items01";""; 4; 0; 0; 0; 0; 0; 10; 0; 0; Consumable; All; None; None;"{}";
-803; White Potion;"A potion made from ground White Herbs that restores about 325 HP.";"gfx\effects\itemicons\items01";""; 4; 0; 0; 0; 0; 0; 10; 0; 0; Consumable; All; None; None;"{}";
-804; Blue Potion;"A potion made from ground Blue Herbs that restores about 60 SP.";"gfx\effects\itemicons\items01";""; 4; 0; 0; 0; 0; 0; 10; 0; 0; Consumable; All; None; None;"{}";
+800; Red Potion;"A potion made from red herbs that restores 45 HP.";"gfx\effects\itemicons\items01";""; 0; 2; 0; 0; 0; 0; 1000; 0; 0; Consumable; All; None; None;"{ heal(100,50). effect(heal).}";
+801; Orange Potion;"A potion made from orange herbs that restores 105 HP.";"gfx\effects\itemicons\items01";""; 4; 0; 0; 0; 0; 0; 2000; 0; 0; Consumable; All; None; None;"{}";
+802; Yellow Potion;"A potion made from yellow herbs that restores 175 HP.";"gfx\effects\itemicons\items01";""; 4; 0; 0; 0; 0; 0; 3000; 0; 0; Consumable; All; None; None;"{}";
+803; White Potion;"A potion made from white herbs that restores 325 HP.";"gfx\effects\itemicons\items01";""; 4; 0; 0; 0; 0; 0; 4000; 0; 0; Consumable; All; None; None;"{}";
+804; Blue Potion;"A potion made from blue herbs that restores 60 SP.";"gfx\effects\itemicons\items01";""; 1; 2; 0; 0; 0; 0; 5000; 0; 0; Consumable; All; None; None;"{}";
 1100; Shell;"A hard shell that used to protect a monster.";"gfx\effects\itemicons\items01";""; 2; 0; 0; 0; 0; 0; 20; 0; 0; Collectable; All; None; None;"{}";
 1101; Shining Scale;"A shimmering, reflective scale.";"gfx\effects\itemicons\items01";""; 3; 0; 0; 0; 0; 0; 60; 0; 0; Collectable; All; None; None;"{}";
 1102; Shoot;"A delicate and fragile plant that is still in the early stages of growth.";"gfx\effects\itemicons\items01";""; 1; 0; 0; 0; 0; 0; 30; 0; 0; Collectable; All; None; None;"{}";

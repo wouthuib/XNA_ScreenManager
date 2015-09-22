@@ -98,6 +98,18 @@ namespace XNA_ScreenManager.Networking
             tcpclient.SendData(i);
         }
 
+        public void sendNPCData(int id, string str, int shop)
+        {
+            NPCData i = new NPCData()
+            {
+                ID = id,
+                action = str,
+                shopID = shop
+            };
+
+            tcpclient.SendData(i);
+        }
+
         public void sendScreenData(string newscreen, string phase = "")
         {
             ScreenData c = new ScreenData()

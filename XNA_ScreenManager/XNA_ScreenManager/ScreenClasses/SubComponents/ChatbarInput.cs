@@ -25,8 +25,8 @@ namespace XNA_ScreenManager.ScreenClasses.SubComponents
         {
             newState = Keyboard.GetState();
 
-            if(CheckKey(Keys.LeftControl))
-                this.Active = !Active;
+            //if(CheckKey(Keys.LeftControl))
+            //    this.Active = !Active;
 
             if (CheckKey(Keys.Enter) && this.Active)
                 createBaloon();

@@ -10,7 +10,7 @@ namespace XNA_ScreenManager.GameAssets.InGame
 {
     class EquipMenu : Menu
     {
-        private bool serverRequest = false, sorting = false; //, initialRequest = false;
+        private bool serverRequest = false;
 
         public EquipMenu(Game game, float locktime)
             : base(game, locktime)
@@ -171,8 +171,6 @@ namespace XNA_ScreenManager.GameAssets.InGame
 
         public void sortDraggable()
         {
-            sorting = true;
-
             lock (listdraggables)
             {
                 List<Item> templist = new List<Item>();
@@ -185,8 +183,6 @@ namespace XNA_ScreenManager.GameAssets.InGame
                 foreach (var newdrag in templist)
                     placeDraggable(newdrag);
             }
-
-            sorting = false;
         }
         
         #endregion
